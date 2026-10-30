@@ -75,8 +75,8 @@ version: "1.0"
 | `label` | `React.ReactNode` | — | Выбранное значение |
 | `placeholder` | `React.ReactNode` | — | Отображается, пока нет `label` |
 | `loading` | `boolean` | `false` | Вместо каретки — лоадер; клик и клавиатура не открывают блок |
-| `onClear` | `() => void` | — | Если передан, в постфиксе появляется кнопка очистки |
-| `prefix` / `postfix` | `React.ReactNode` | — | Слоты `FormFieldPrefix` / `FormFieldPostfix`. Постфикс идёт **после** каретки |
+| `onClear` | `React.MouseEventHandler<HTMLButtonElement>` | — | Если передан, в постфиксе появляется кнопка очистки |
+| `prefix` / `postfix` | `React.ReactNode` | — | Слоты `FormFieldPrefix` / `FormFieldPostfix`. Постфикс идёт **после** каретки. Обработка событий — см. «Ограничения» |
 | `size` | `EComponentSize` | `EComponentSize.MD` | Размер поля. Определяет размер каретки и лоадера |
 | `status` | `EFormFieldStatus` | `EFormFieldStatus.DEFAULT` | Визуальное состояние. `DISABLED` блокирует открытие |
 
@@ -94,7 +94,8 @@ version: "1.0"
 - `SelectExtendedFieldDropdown` — не `forwardRef`-компонент. Ссылка передаётся через `forwardedRef`.
 - Выпадающий блок компонент не рендерит сам и не знает, открыт ли он визуально: `opened` нужно передать в `SelectExtendedFieldDropdown` (или в свою разметку) самостоятельно.
 - Компонент не хранит выбранное значение и не знает про опции. Значение — целиком забота потребителя.
-- Клик по кнопке очистки (`onClear`) не раскрывает выпадающий блок: `SelectExtendedFieldTarget` останавливает всплытие в обработчике `FormFieldClear`. Без этого событие дошло бы до `onClick` на `FormField` и переключило `opened` — так же гасят всплытие `Chip.Select` и `Chip.DatePicker`. Не убирать: затрагивает `SelectField` и `MultiselectField.Target`, которые рендерят тот же `Target`.
+- Клик по фокусируемым элементам внутри поля (`tabIndex >= 0`: кнопка очистки, `HelpBox`, кнопки тегов в значении) и по содержимому порталов (Tooltip) не переключает выпадающий блок; Enter / Space на них не открывают блок и не отменяют их нативный клик. Клик по остальному содержимому поля, включая элементы с `tabIndex < 0` (`<button tabIndex={-1}>`, `div` с `onClick` без `tabIndex`), блок переключает. Затрагивает `SelectField` и `MultiselectField.Target`.
+- Клик по кнопке очистки (`onClear`) не всплывает: `onClick` поля и обработчики внешних элементов его не получают.
 
 ---
 
@@ -135,7 +136,7 @@ version: "1.0"
 
 - `SelectExtendedFieldTarget` выставляет на корневом элементе `aria-haspopup="listbox"` и `aria-expanded`, отражающий `opened`.
 - Роли `listbox` / `option` и клавиатурную навигацию по опциям (`ArrowUp` / `ArrowDown`, выбор по `Enter` / `Space`) даёт `DropdownList` — то есть `SelectExtendedField.Dropdown.List`. Если выпадающий блок не список, эти роли не появляются и навигацию организует потребитель.
-- Клавиши открытия на поле выбора: `Space`, `Enter`, `ArrowDown`, `ArrowUp`. Обработчик вызывает `preventDefault` (чтобы страница не прокручивалась) и `stopPropagation` — иначе то же нажатие поймает документный обработчик `DropdownListItem` и список сразу выберет опцию.
+- Клавиши открытия на поле выбора: `Space`, `Enter`, `ArrowDown`, `ArrowUp` (только когда фокус на самом поле). Обработчик вызывает `preventDefault` (чтобы страница не прокручивалась) и `stopPropagation` — иначе то же нажатие поймает документный обработчик `DropdownListItem` и список сразу выберет опцию.
 - В состояниях `loading` и `status={EFormFieldStatus.DISABLED}` поле не реагирует ни на клик, ни на клавиатуру; `onClick` / `onKeyDown` потребителя в этих состояниях тоже не вызываются.
 - `Escape` закрывает блок из любого места страницы — слушатель `KeyDownListener` висит на `window`.
 - `Tab` закрывает блок только при `closeOnTab`. Фокус компонент не перехватывает и не возвращает: focus trap, если нужен, добавляет потребитель.
@@ -206,3 +207,4 @@ version: "1.0"
 | 2026-08-07 | AI-рефакторинг (TRI-74): `onOpen` / `onClose` сравнивают предыдущее значение `opened` вместо флага «смонтирован» — колбэки больше не срабатывают ложно при двойном маунте в React 18 StrictMode. Удалены ссылки на несуществующие CSS-классы в `SelectExtendedFieldTarget` (в `class` попадал литерал `undefined`). Клик по кнопке очистки больше не раскрывает выпадающий блок — всплытие останавливается, как в `Chip.Select`. Слушатель `mousedown` навешивается только пока блок открыт, callback-ref стабилизирован через `useCallback`, убран мёртвый внутренний `targetRef` в `SelectExtendedFieldTarget`, дедуплицирован список опций десктопной и мобильной версий в `SelectExtendedFieldDropdownDefault`. JSDoc на всех props, unit-тесты разбиты по субкомпонентам и расширены с 42 до 69 кейсов. Stories переведены на modern pattern. Публичный API не изменён. |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`Chip`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
 | 2026-10-21 | **Breaking** (TRIPLEX-961): prop `mobileViewProps`, унаследованный `SelectExtendedField.Dropdown` от `Dropdown`, переименован в `pullerProps`. |
+| 2026-10-29 | TRIPLEX-1028: `SelectExtendedField.Target` переключает выпадающий блок только по событиям самого поля — см. «Ограничения». `onClear` получает событие клика. |

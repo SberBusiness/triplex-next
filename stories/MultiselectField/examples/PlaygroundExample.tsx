@@ -127,11 +127,6 @@ export const PlaygroundExample = ({
         const handleTagFocus = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagBlur = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagClick = (event: React.MouseEvent<HTMLSpanElement>) => event.stopPropagation();
-        const handleTagKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
-            if (event.code === "Enter" || event.code === "Space") {
-                event.stopPropagation();
-            }
-        };
 
         if (!selectedOptions.length) {
             return null;
@@ -145,7 +140,6 @@ export const PlaygroundExample = ({
                     onFocus={handleTagFocus}
                     onBlur={handleTagBlur}
                     onClick={handleTagClick}
-                    onKeyDown={handleTagKeyDown}
                     onRemove={handleClearAll}
                 >
                     {`Выбрано ${selectedOptions.length} значения`}
@@ -163,7 +157,6 @@ export const PlaygroundExample = ({
                         onFocus={handleTagFocus}
                         onBlur={handleTagBlur}
                         onClick={handleTagClick}
-                        onKeyDown={handleTagKeyDown}
                         onRemove={() => handleToggle(opt, false)}
                     >
                         {opt.label}

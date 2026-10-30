@@ -5,3 +5,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 <Title>v1.54.0</Title>
 
 <Heading>Изменения</Heading>
+
+**MultiselectField / SelectExtendedField.Target / SelectField**
+
+- Исправлено: Enter / Space на кнопке очистки, `HelpBox`, кнопках тегов в значении и других фокусируемых элементах внутри поля открывали выпадающий блок вместо нажатия на элемент. `stopPropagation` в `onKeyDown` тегов `MultiselectField` для этого больше не нужен.
+- Исправлено: клик по `HelpBox`, кнопкам тегов в значении и другим фокусируемым элементам внутри поля, а также события из их Tooltip переключали выпадающий блок.
+- Изменено: `ArrowDown` / `ArrowUp` открывают выпадающий блок, только когда фокус на самом поле, а не на вложенном элементе.
+- Изменено: `onClear` получает событие клика (`React.MouseEventHandler<HTMLButtonElement>`).

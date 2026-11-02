@@ -1,7 +1,7 @@
 ---
 component: Puller
 category: Puller
-related: [Overlay, ButtonIcon, LoaderSmall, Badge, FormField]
+related: [Overlay, Portal, ButtonIcon, LoaderSmall, Badge, FormField]
 tokens:
   - Puller.Backdrop
   - Puller.Body_Background
@@ -46,7 +46,11 @@ version: "1.0"
 
 #### Опциональные props
 
-Нет, кроме HTML-атрибутов `<div>`.
+| Prop | Тип | По умолчанию | Описание |
+|---|---|---|---|
+| `renderContainer` | `Element \| DocumentFragment` | `document.body` | DOM-узел, в который рендерится шторка |
+
+Остальные — HTML-атрибуты `<div>`.
 
 ### Субкомпоненты
 
@@ -64,7 +68,8 @@ version: "1.0"
 
 ### Ограничения
 
-- `Puller` не выносит себя в `Portal`: предок с `transform`, `filter`, `perspective`, `contain` или собственным stacking context сдвинет, обрежет или перекроет шторку (`.pullerWrapper` — `position: fixed`). При прямом использовании оберни `Puller` в `<Portal container={document.body}>`; `pullerProps` у `Dropdown` оборачивать не нужно.
+- `.pullerWrapper` — `position: fixed`: `transform`, `filter`, `perspective`, `contain` или собственный stacking context у `renderContainer` и его родителей сдвинут, обрежут или перекроют шторку.
+- Пока шторка открыта, скролл блокируется на `body`, а не на `renderContainer`.
 - Шторка не закрывается по `Escape` и не перехватывает фокус — это добавляет потребитель (как `MultiselectField.Dropdown` и `DatePickerExtended`).
 - Высота ограничена `50vh`: длинное содержимое кладётся в прокручиваемый `PullerBody`.
 
@@ -92,6 +97,7 @@ PullerList.Selected_Background
 ## Инварианты
 
 - `forwardRef` на `Puller` и всех субкомпонентах, кроме `PullerLoader`, — не убирать. Ref `Puller` указывает на контентный `<div>` (`.puller`), а не на wrapper. На это опирается `Dropdown`: его ref в мобильном режиме ведёт сюда.
+- `Puller` рендерится через `Portal`, по умолчанию в `document.body`. Смена контейнера по умолчанию — breaking change для потребителей, которые ищут шторку в DOM.
 - В закрытом состоянии (`opened`, `opening` и `closing` равны `false`) `PullerInner` возвращает `null`. Анимация закрытия доигрывает до `transitionend` на подложке и только потом снимает разметку.
 - Непрозрачность подложки задаётся альфа-каналом токена `Puller.Backdrop`; `opacity` подложки только анимирует появление (0 → 1).
 - Анимация открытия требует сначала отрендерить шторку закрытой: `openingState` / `openedState` выставляются через `setTimeout`. Не заменять на синхронную установку, иначе переход не проиграется.
@@ -115,6 +121,7 @@ PullerList.Selected_Background
 ## Связанные компоненты
 
 - `Overlay` — семейство, к которому относится `OverlayBase`: `Puller` рендерит `OverlayBase` с `direction={EOverlayDirection.BOTTOM}` и получает от него флаги `opening` / `closing` и сеттеры анимации.
+- `Portal` — выносит шторку из дерева родителя, см. «Инварианты».
 - `ButtonIcon` — база `PullerClose`, `IPullerCloseProps` расширяет `IButtonIconProps`.
 - `LoaderSmall` — рендерится в `PullerLoader` (тема `BRAND`, SM) и в элементе-лоадере `PullerList` (MD). `IPullerLoaderProps` расширяет `ILoaderSmallProps`.
 - `Badge` — `Badge.Dot` в углу `PullerListItem` при `showNotificationIcon`.
@@ -130,7 +137,7 @@ PullerList.Selected_Background
 Основные истории: `stories/Puller/Puller.stories.tsx`
 Файлы примеров: `stories/Puller/examples/`
 
-Примеры рендерят `Puller` в `<Portal container={document.body}>` и стартуют закрытыми. Шторку открывает `play`; на docs-странице (`viewMode === "docs"`) он ничего не делает.
+Примеры стартуют закрытыми. Шторку открывает `play`; на docs-странице (`viewMode === "docs"`) он ничего не делает.
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
@@ -138,7 +145,7 @@ PullerList.Selected_Background
 | `Default` | `Default.tsx` | Кнопка открывает шторку: шапка с заголовком и `PullerClose`, тело, футер с кнопкой |
 | `WithList` | `WithList.tsx` | `PullerList` с выбранным элементом, значком уведомления и `loading`; выбор закрывает шторку |
 | `WithInput` | `WithInput.tsx` | Шапка с `PullerInput`, `PullerLoader` и `PullerClose` — раскладка мобильного suggest |
-| `SMSPuller` («Example: SMSPuller») | `SMSPuller.tsx` | Подтверждение операции СМС-кодом: `SMSField` с обратным отсчётом в `PullerBody` |
+| `RenderContainer` («Render container») | `RenderContainer.tsx` | Рендер шторки в заданный контейнер через `renderContainer` |
 | `VisualTests` | `VisualTests.tsx` | Длинный заголовок, лоадер, скролл длинного списка, выбранный элемент, значок, футер с двумя кнопками |
 
 ---
@@ -148,3 +155,4 @@ PullerList.Selected_Background
 | Дата | Изменение |
 |---|---|
 | 2026-10-21 | Создан документ (TRIPLEX-961). |
+| 2026-10-31 | **Breaking**: `Puller` сам рендерится через `Portal`: по умолчанию в `document.body`, контейнер задаёт новый prop `renderContainer` (TRIPLEX-961). |

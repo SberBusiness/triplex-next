@@ -7,8 +7,8 @@ import {
     DefaultSource,
     IPlaygroundProps,
     PlaygroundRender,
-    SMSPullerRender,
-    SMSPullerSource,
+    RenderContainerRender,
+    RenderContainerSource,
     VisualTestsRender,
     WithInputRender,
     WithInputSource,
@@ -159,21 +159,21 @@ export const WithInput: StoryObj<typeof Puller> = {
     play: openPuller,
 };
 
-export const SMSPuller: StoryObj<typeof Puller> = {
-    name: "Example: SMSPuller",
-    render: SMSPullerRender,
+export const RenderContainer: StoryObj<typeof Puller> = {
+    name: "Render container",
+    render: RenderContainerRender,
     parameters: {
         controls: { disable: true },
         docs: {
             description: {
-                story: "Подтверждение операции СМС-кодом: при открытии шторки запускается отсчёт до повторного запроса, отправка кода закрывает шторку.",
+                story: "Рендер шторки в заданный DOM-элемент вместо document.body, например в элемент с классом темы или корень микрофронтенда.",
             },
             source: {
-                code: SMSPullerSource,
+                code: RenderContainerSource,
                 language: "tsx",
             },
         },
-        // Обратный отсчёт меняет иконку SMSField.Refresh каждую секунду — скриншот был бы нестабильным.
+        // Скриншот повторил бы Default: контейнер не меняет вид шторки.
         testRunner: { skip: true },
     },
     play: openPuller,

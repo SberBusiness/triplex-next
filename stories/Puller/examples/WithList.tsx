@@ -4,7 +4,6 @@ import {
     EButtonTheme,
     EComponentSize,
     ETextSize,
-    Portal,
     Puller,
     PullerBody,
     PullerClose,
@@ -40,30 +39,28 @@ export const WithList = () => {
             >
                 Open
             </Button>
-            <Portal container={document.body}>
-                <Puller opened={opened} setOpened={setOpened} role="dialog" aria-labelledby="puller-with-list-title">
-                    <PullerHeader controlButtons={<PullerClose aria-label="Close" onClick={() => setOpened(false)} />}>
-                        <Text id="puller-with-list-title" size={ETextSize.B1}>
-                            Select a value
-                        </Text>
-                    </PullerHeader>
-                    <PullerBody>
-                        <PullerList loading aria-labelledby="puller-with-list-title">
-                            {OPTIONS.map((option) => (
-                                <PullerListItem
-                                    key={option.id}
-                                    id={option.id}
-                                    selected={option.id === selectedId}
-                                    showNotificationIcon={option.hasNotifications}
-                                    onSelect={() => handleSelect(option.id)}
-                                >
-                                    {option.label}
-                                </PullerListItem>
-                            ))}
-                        </PullerList>
-                    </PullerBody>
-                </Puller>
-            </Portal>
+            <Puller opened={opened} setOpened={setOpened} role="dialog" aria-labelledby="puller-with-list-title">
+                <PullerHeader controlButtons={<PullerClose aria-label="Close" onClick={() => setOpened(false)} />}>
+                    <Text id="puller-with-list-title" size={ETextSize.B1}>
+                        Select a value
+                    </Text>
+                </PullerHeader>
+                <PullerBody>
+                    <PullerList loading aria-labelledby="puller-with-list-title">
+                        {OPTIONS.map((option) => (
+                            <PullerListItem
+                                key={option.id}
+                                id={option.id}
+                                selected={option.id === selectedId}
+                                showNotificationIcon={option.hasNotifications}
+                                onSelect={() => handleSelect(option.id)}
+                            >
+                                {option.label}
+                            </PullerListItem>
+                        ))}
+                    </PullerList>
+                </PullerBody>
+            </Puller>
         </div>
     );
 };

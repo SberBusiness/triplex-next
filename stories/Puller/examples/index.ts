@@ -5,6 +5,6 @@ export { WithList as WithListRender } from "./WithList";
 export { default as WithListSource } from "./WithList?raw";
 export { WithInput as WithInputRender } from "./WithInput";
 export { default as WithInputSource } from "./WithInput?raw";
-export { SMSPuller as SMSPullerRender } from "./SMSPuller";
-export { default as SMSPullerSource } from "./SMSPuller?raw";
+export { RenderContainer as RenderContainerRender } from "./RenderContainer";
+export { default as RenderContainerSource } from "./RenderContainer?raw";
 export { VisualTests as VisualTestsRender } from "./VisualTests";

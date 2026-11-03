@@ -1,21 +1,20 @@
 import React from "react";
-import {
-    ListSortableItem,
-    IListSortableItemProps,
-} from "@sberbusiness/triplex-next/components/List/components/ListSortableItem";
-import { IListSortableItemControls } from "@sberbusiness/triplex-next/components/List/components/ListSortableItemControls";
-import { ColumnSettingsSortableListItemTarget } from "@sberbusiness/triplex-next/components/Table/TableBasicSettings/components/ColumnSettingsSortableListItemTarget";
-import { ExpandAnimation } from "@sberbusiness/triplex-next/components/ExpandAnimation/ExpandAnimation";
+import { ListSortableItem, IListSortableItemProps } from "../../../List/components/ListSortableItem";
+import { IListSortableItemControls } from "../../../List/components/ListSortableItemControls";
+import { ExpandAnimation } from "../../../ExpandAnimation/ExpandAnimation";
+import { ColumnSettingsSortableListItemTarget } from "./ColumnSettingsSortableListItemTarget";
 
 /** Свойства компонента ColumnSettingsSortableListItem. */
 export interface IColumnSettingsSortableListItemProps
-    extends Omit<IListSortableItemProps, "children">,
-        Pick<IListSortableItemControls, "children"> {
-    /** Статичное содержимое, скрывается при перетаскивании. */
+    extends Omit<IListSortableItemProps, "children">, Pick<IListSortableItemControls, "children"> {
+    /** Дополнительное содержимое, сворачивается при перетаскивании. Анимация создаётся только для truthy-значений. */
     staticContent?: React.ReactNode;
 }
 
-/** Элемент компонента ColumnSettingsSortableList. */
+/**
+ * Элемент настроек колонки: передаёт drag-listeners и activator-ref на target, а children защищает от начала drag.
+ * staticContent остаётся смонтированным при перетаскивании и сворачивается через ExpandAnimation. ref указывает на li.
+ */
 export const ColumnSettingsSortableListItem = React.forwardRef<HTMLLIElement, IColumnSettingsSortableListItemProps>(
     ({ children, staticContent, ...rest }, ref) => {
         return (

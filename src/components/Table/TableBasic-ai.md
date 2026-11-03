@@ -134,7 +134,7 @@ TableBasic.Background_Selected
   потребитель и возвращает новый `orderDirection` в колонке.
 - **Колонки публикуются в `MasterTableContext`** через `useEffect` с
   `isEqual`-сравнением — на нём держатся настройки колонок
-  (`TableBasicSettings` / `ColumnSettings`). Собирай `columns` стабильно
+  (`TableBasicSettings` / [ColumnSettings](./ColumnSettings-ai.md)). Собирай `columns` стабильно
   (по возможности вне рендера), иначе таблица будет лишний раз обновлять
   контекст.
 - **`loading` приходит только из контекста `MasterTable`**, собственного prop'а
@@ -176,6 +176,10 @@ TableBasic.Background_Selected
 - `LoaderMiddle` — рендерится в подвале, когда идёт загрузка и данных ещё нет.
 - `Text` — в него оборачивается содержимое заголовков и ячеек типа
   `ECellType.TEXT`.
+- [ColumnSettings](./ColumnSettings-ai.md) — потребитель опубликованных в контексте
+  колонок. Для управления порядком использует
+  [ColumnSettingsSortableList](./ColumnSettingsSortableList-ai.md); обновлённый
+  массив потребитель передаёт обратно в `TableBasic.columns`.
 
 ---
 
@@ -204,7 +208,7 @@ TableBasic.Background_Selected
 | `TableWithPaginationLoading` | `TableWithPaginationLoading.tsx` | Фильтры, таблица и пагинация в состоянии загрузки |
 | `TableWithPaginationExtended` | `TableWithPaginationExtended.tsx` | Таблица с `PaginationExtended` при неизвестном количестве данных |
 | `Example: production` | `ExampleProduction.tsx` | Композиция, приближённая к production: чипы-сегменты, фильтры, теги |
-| `VisualTests` | `VisualTests.tsx` | Статичные визуальные состояния в одном кадре |
+| `VisualTests` | `VisualTests.tsx` | Состояния таблицы, открытые настройки колонок через play, пустой и загружаемый списки настроек |
 
 ---
 
@@ -213,3 +217,4 @@ TableBasic.Background_Selected
 | Дата | Изменение |
 |---|---|
 | 2026-08-27 | Создан документ. AI-рефакторинг: `TableBasic` получил `forwardRef` на `<table>`, JSDoc на всех публичных полях, разбор подвала по состояниям, удалён неиспользуемый `TableBasicAdaptive.module.less`. Stories переведены на modern pattern, добавлены unit-тесты (46) |
+| 2026-11-03 | Добавлены ссылки на отдельные контракты `ColumnSettings` и `ColumnSettingsSortableList`; VisualTests раскрывает настройки и показывает состояния списка. |

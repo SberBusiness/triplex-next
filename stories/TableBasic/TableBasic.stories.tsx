@@ -362,7 +362,7 @@ export const ExampleProduction: Story = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },
@@ -370,5 +370,8 @@ export const VisualTests: Story = {
             canvas: { sourceState: "none" },
             codePanel: false,
         },
+    },
+    play: async ({ canvas, userEvent }) => {
+        await userEvent.click(await canvas.findByRole("link", { name: "Настройки" }));
     },
 };

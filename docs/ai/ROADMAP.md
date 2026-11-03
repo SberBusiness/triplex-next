@@ -256,8 +256,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ChipSuggestTarget | ⬜ | ◐ |
 | CollapsibleTreeExtendedNode | ⬜ | ◐ |
 | CollapsibleTreeNodeHeader | ⬜ | ◐ |
-| ColumnSettings | ⬜ | ◐ |
-| ColumnSettingsSortableList | ⬜ | ◐ |
+| ColumnSettings | ✅ | ✅ |
+| ColumnSettingsSortableList | ✅ | ✅ |
 | ColumnSettingsSortableListItem | ⬜ | ◐ |
 | ConfirmClose | ⬜ | ◐ |
 | DropdownDesktop | ⬜ | ◐ |
@@ -334,6 +334,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | TooltipTarget | ⬜ | ◐ |
 | TooltipXButton | ⬜ | ◐ |
 | UploadZoneInput | ⬜ | ◐ |
+
+Задачи атомов: ColumnSettings — TRI-179, ColumnSettingsSortableList — TRI-182.
 
 ### Фаза 2: MCP-сервер для потребителей (в разработке)
 Цель: AI-агенты, использующие дизайн-систему в своих проектах, смогут получать

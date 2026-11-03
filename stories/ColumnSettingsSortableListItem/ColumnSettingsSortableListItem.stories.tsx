@@ -21,6 +21,11 @@ export default meta;
 export const VisualTests: StoryObj<typeof ColumnSettings.SortableList.Item> = {
     render: VisualTestsRender,
     play: async ({ canvas, canvasElement }) => {
+        await canvasElement.ownerDocument.fonts.ready;
+        // Resize после смены viewport может прийти уже после forceRemount и отменить MouseSensor.
+        // Два кадра до mousedown дают браузеру доставить resize и обновить геометрию.
+        await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+
         const row = canvas.getByTestId("item-dragging");
         const staticContent = canvas.getByTestId("item-drag-static-content");
         // Target — первый элемент li; контент с checkbox защищён data-draggable="false".

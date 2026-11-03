@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useMemo, useRef } from "react";
 import clsx from "clsx";
 import { CaretdownStrokeSrvIcon16, CaretdownStrokeSrvIcon20, CaretdownStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
+import { mergeRefs } from "../../../utils/refs";
 import {
     EFormFieldStatus,
     FormField,
@@ -29,14 +30,17 @@ export interface ISelectExtendedFieldTargetProps extends Omit<IFormFieldProps, "
     opened: boolean;
     /** Текст или компонент, отображаемый вместо значения, пока значение не выбрано. */
     placeholder?: React.ReactNode;
-    /** Префикс поля. */
+    /**
+     * Префикс поля. Клик по неинтерактивному содержимому переключает выпадающий блок,
+     * клик и клавиши на фокусируемых элементах (tabIndex >= 0, например HelpBox) — нет.
+     */
     prefix?: React.ReactNode;
-    /** Постфикс поля. Отображается после каретки. */
+    /** Постфикс поля. Отображается после каретки. События обрабатываются так же, как у prefix. */
     postfix?: React.ReactNode;
     /** Функция открытия/закрытия выпадающего блока. */
     setOpened: (opened: boolean) => void;
     /** Функция очистки значения. Если передана, в поле отображается кнопка очистки. */
-    onClear?: () => void;
+    onClear?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 /** Соответствие размера поля иконке каретки. */
@@ -66,8 +70,8 @@ const OPEN_DROPDOWN_KEY_CODES = [
  * Видимая часть Select, при нажатии на которую открывается выпадающий блок.
  */
 export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelectExtendedFieldTargetProps>(
-    (props, ref) => {
-        const {
+    (
+        {
             className,
             label,
             placeholder,
@@ -86,35 +90,44 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
             children,
             tabIndex,
             fieldLabel,
-            ...rest
-        } = props;
+            ...restProps
+        },
+        ref,
+    ) => {
         const disabled = status === EFormFieldStatus.DISABLED;
         // В состоянии загрузки и в заблокированном поле выпадающий блок не открывается.
         const interactionBlocked = Boolean(loading) || disabled;
+        const fieldTargetRef = useRef<HTMLDivElement>(null);
+        // Стабильный колбэк-реф: иначе React на каждом рендере отвязывал бы и заново привязывал внешний ref.
+        const setFieldTargetRef = useMemo(() => mergeRefs(ref, fieldTargetRef), [ref]);
 
-        const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
             if (interactionBlocked) {
                 return;
             }
 
-            setOpened(!opened);
+            // Клик по вложенному фокусируемому элементу (HelpBox, тег) — его действие, а не клик по полю.
+            // События из портала (Tooltip) всплывают сюда по React-дереву, но их цель лежит вне DOM поля — они не свои.
+            let element = event.target as HTMLElement | null;
+
+            while (element && element !== event.currentTarget && element.tabIndex < 0) {
+                element = element.parentElement;
+            }
+
+            if (element && (element === event.currentTarget || element === fieldTargetRef.current)) {
+                setOpened(!opened);
+            }
+
             onClick?.(event);
         };
 
-        const handleClearClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-            // Кнопка очистки лежит внутри поля, у которого клик переключает выпадающий блок.
-            // Без остановки всплытия очистка значения заодно раскрывала бы список.
-            // Так же сделано в Chip.Select и Chip.DatePicker.
-            event.stopPropagation();
-            onClear?.();
-        };
-
-        const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (event) => {
             if (interactionBlocked) {
                 return;
             }
 
-            if (!opened && OPEN_DROPDOWN_KEY_CODES.includes(event.keyCode)) {
+            // Только с самого поля: на вложенной кнопке preventDefault отменил бы её нативный клик по Enter / Space.
+            if (!opened && OPEN_DROPDOWN_KEY_CODES.includes(event.keyCode) && event.target === fieldTargetRef.current) {
                 event.preventDefault();
                 // Предотвращение срабатывания keydown при открытии Dropdown в
                 // document.addEventListener("keydown", ...) в DropdownListItem.
@@ -125,12 +138,14 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
             onKeyDown?.(event);
         };
 
+        const handleClearClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+            // Клик по очистке не должен доходить до onClick поля и внешних обработчиков.
+            event.stopPropagation();
+            onClear?.(event);
+        };
+
         return (
             <FormField
-                onClick={handleClick}
-                onKeyDown={handleKeyDown}
-                status={status}
-                size={size}
                 className={clsx(
                     styles.selectExtendedFieldTarget,
                     { [styles.selectOpened]: opened, [styles.disabled]: disabled },
@@ -138,14 +153,18 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 )}
                 aria-expanded={opened}
                 aria-haspopup="listbox"
-                data-tx={process.env.npm_package_version}
+                size={size}
+                status={status}
                 active={opened}
-                {...rest}
+                onKeyDown={handleKeyDown}
+                onClick={handleClick}
+                {...restProps}
+                data-tx={process.env.npm_package_version}
             >
                 {prefix ? <FormFieldPrefix>{prefix}</FormFieldPrefix> : null}
 
                 <FormFieldLabel>{fieldLabel}</FormFieldLabel>
-                <FormFieldTarget ref={ref} className={styles.target} placeholder={placeholder}>
+                <FormFieldTarget className={styles.target} placeholder={placeholder} ref={setFieldTargetRef}>
                     {label}
                 </FormFieldTarget>
 

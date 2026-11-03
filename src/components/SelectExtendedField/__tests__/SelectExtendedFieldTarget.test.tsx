@@ -1,4 +1,5 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
@@ -13,13 +14,24 @@ const CARET_ICON_NAME_BY_SIZE = {
     [EComponentSize.LG]: "CaretdownStrokeSrvIcon24",
 };
 
+/** Props для renderTarget; в отличие от ISelectExtendedFieldTargetProps, включают ref. */
+type TTargetProps = Partial<React.ComponentProps<typeof SelectExtendedFieldTarget>>;
+
+/** Клавиши, открывающие выпадающий блок: [название, keyCode]. */
+const OPEN_DROPDOWN_KEYS: Array<[string, number]> = [
+    ["Space", EVENT_KEY_CODES.SPACE],
+    ["Enter", EVENT_KEY_CODES.ENTER],
+    ["ArrowDown", EVENT_KEY_CODES.ARROW_DOWN],
+    ["ArrowUp", EVENT_KEY_CODES.ARROW_UP],
+];
+
 describe("SelectExtendedFieldTarget", () => {
     const mockSetOpened = vi.fn();
     const mockOnClick = vi.fn();
     const mockOnKeyDown = vi.fn();
     const mockOnClear = vi.fn();
 
-    const renderTarget = (props: Partial<React.ComponentProps<typeof SelectExtendedFieldTarget>> = {}) =>
+    const renderTarget = (props: TTargetProps = {}) =>
         render(
             <SelectExtendedFieldTarget
                 fieldLabel="Заголовок поля"
@@ -31,6 +43,8 @@ describe("SelectExtendedFieldTarget", () => {
         );
 
     const getRoot = () => screen.getByTestId("target");
+    /** Фокусируемый элемент со значением: доступное имя поля принадлежит ему. */
+    const getValueElement = () => screen.getByLabelText("Заголовок поля");
 
     beforeEach(() => {
         vi.clearAllMocks();
@@ -167,15 +181,12 @@ describe("SelectExtendedFieldTarget", () => {
         expect(mockOnClick).not.toHaveBeenCalled();
     });
 
-    it.each([
-        ["Space", EVENT_KEY_CODES.SPACE],
-        ["Enter", EVENT_KEY_CODES.ENTER],
-        ["ArrowDown", EVENT_KEY_CODES.ARROW_DOWN],
-        ["ArrowUp", EVENT_KEY_CODES.ARROW_UP],
-    ])("Should open dropdown on %s key", (_name, keyCode) => {
+    it.each(OPEN_DROPDOWN_KEYS)("Should open dropdown on %s key", (_name, keyCode) => {
         renderTarget({ onKeyDown: mockOnKeyDown });
 
-        fireEvent.keyDown(getRoot(), { keyCode });
+        // keydown приходит от элемента в фокусе — элемента со значением.
+        // user-event не выставляет keyCode, по которому поле распознаёт клавишу, поэтому fireEvent.
+        fireEvent.keyDown(getValueElement(), { keyCode });
 
         expect(mockSetOpened).toHaveBeenCalledWith(true);
         expect(mockOnKeyDown).toHaveBeenCalledTimes(1);
@@ -184,7 +195,7 @@ describe("SelectExtendedFieldTarget", () => {
     it("Should not reopen dropdown by keyboard when it is already opened", () => {
         renderTarget({ opened: true, onKeyDown: mockOnKeyDown });
 
-        fireEvent.keyDown(getRoot(), { keyCode: EVENT_KEY_CODES.SPACE });
+        fireEvent.keyDown(getValueElement(), { keyCode: EVENT_KEY_CODES.SPACE });
 
         expect(mockSetOpened).not.toHaveBeenCalled();
         expect(mockOnKeyDown).toHaveBeenCalledTimes(1);
@@ -193,7 +204,7 @@ describe("SelectExtendedFieldTarget", () => {
     it("Should not respond to keyboard events when loading", () => {
         renderTarget({ loading: true, onKeyDown: mockOnKeyDown });
 
-        fireEvent.keyDown(getRoot(), { keyCode: EVENT_KEY_CODES.SPACE });
+        fireEvent.keyDown(getValueElement(), { keyCode: EVENT_KEY_CODES.SPACE });
 
         expect(mockSetOpened).not.toHaveBeenCalled();
         expect(mockOnKeyDown).not.toHaveBeenCalled();
@@ -202,7 +213,7 @@ describe("SelectExtendedFieldTarget", () => {
     it("Should not respond to keyboard events when disabled", () => {
         renderTarget({ status: EFormFieldStatus.DISABLED, onKeyDown: mockOnKeyDown });
 
-        fireEvent.keyDown(getRoot(), { keyCode: EVENT_KEY_CODES.SPACE });
+        fireEvent.keyDown(getValueElement(), { keyCode: EVENT_KEY_CODES.SPACE });
 
         expect(mockSetOpened).not.toHaveBeenCalled();
         expect(mockOnKeyDown).not.toHaveBeenCalled();
@@ -211,7 +222,7 @@ describe("SelectExtendedFieldTarget", () => {
     it("Should not open dropdown on unrelated key", () => {
         renderTarget({ onKeyDown: mockOnKeyDown });
 
-        fireEvent.keyDown(getRoot(), { keyCode: EVENT_KEY_CODES.X });
+        fireEvent.keyDown(getValueElement(), { keyCode: EVENT_KEY_CODES.X });
 
         expect(mockSetOpened).not.toHaveBeenCalled();
         expect(mockOnKeyDown).toHaveBeenCalledTimes(1);
@@ -220,7 +231,7 @@ describe("SelectExtendedFieldTarget", () => {
     it("Should prevent default scrolling on the keys that open the dropdown", () => {
         renderTarget();
 
-        const prevented = !fireEvent.keyDown(getRoot(), { keyCode: EVENT_KEY_CODES.SPACE });
+        const prevented = !fireEvent.keyDown(getValueElement(), { keyCode: EVENT_KEY_CODES.SPACE });
 
         expect(prevented).toBe(true);
     });
@@ -253,20 +264,95 @@ describe("SelectExtendedFieldTarget", () => {
         expect(ref.current).toHaveTextContent("Выбранное значение");
     });
 
-    it("Should render clear button and call onClear", () => {
-        renderTarget({ onClear: mockOnClear, label: "Выбранное значение" });
+    it("Should call onClear with the click event without propagating it to onClick", () => {
+        renderTarget({ onClear: mockOnClear, onClick: mockOnClick });
 
-        fireEvent.click(screen.getByRole("button"));
+        const clearButton = screen.getByRole("button");
+        fireEvent.click(clearButton);
 
-        expect(mockOnClear).toHaveBeenCalledTimes(1);
+        expect(mockOnClear).toHaveBeenCalledExactlyOnceWith(
+            expect.objectContaining({ type: "click", target: clearButton }),
+        );
+        expect(mockOnClick).not.toHaveBeenCalled();
     });
 
-    it("Should not open dropdown on clear button click", () => {
-        renderTarget({ onClear: mockOnClear, label: "Выбранное значение" });
+    describe.each<[string, TTargetProps]>([
+        ["clear button", { onClear: mockOnClear }],
+        ["postfix button", { postfix: <button type="button">Подсказка</button> }],
+        // Так устроены теги в MultiselectField: кнопка удаления тега лежит внутри элемента со значением.
+        ["button inside the value element", { label: <button type="button">Удалить</button> }],
+    ])("Nested %s", (_place, props) => {
+        it.each(OPEN_DROPDOWN_KEYS)("Should not intercept %s key", (_name, keyCode) => {
+            renderTarget({ ...props, onKeyDown: mockOnKeyDown });
 
-        fireEvent.click(screen.getByRole("button"));
+            const notPrevented = fireEvent.keyDown(screen.getByRole("button"), { keyCode });
 
-        expect(mockOnClear).toHaveBeenCalledTimes(1);
+            expect(notPrevented).toBe(true);
+            expect(mockSetOpened).not.toHaveBeenCalled();
+            expect(mockOnKeyDown).toHaveBeenCalledTimes(1);
+        });
+
+        it("Should not toggle dropdown on click", () => {
+            renderTarget(props);
+
+            fireEvent.click(screen.getByRole("button"));
+
+            expect(mockSetOpened).not.toHaveBeenCalled();
+        });
+    });
+
+    it.each<[string, TTargetProps, () => Element]>([
+        ["the value element", { label: "Выбранное значение" }, () => screen.getByText("Выбранное значение")],
+        ["the field label", {}, () => screen.getByText("Заголовок поля")],
+        // Каретка рендерится всегда, кроме состояния загрузки, — наличие проверяет тест "Should render caret icon".
+        ["the caret icon", {}, () => document.querySelector(`[name="${CARET_ICON_NAME_BY_SIZE[EComponentSize.MD]}"]`)!],
+        [
+            "non-interactive postfix content",
+            { postfix: <span data-testid="custom-postfix" /> },
+            () => screen.getByTestId("custom-postfix"),
+        ],
+        [
+            "postfix element with negative tabIndex",
+            {
+                postfix: (
+                    <button type="button" tabIndex={-1}>
+                        Подсказка
+                    </button>
+                ),
+            },
+            () => screen.getByRole("button"),
+        ],
+    ])("Should open dropdown on click at %s", (_place, props, getElement) => {
+        renderTarget(props);
+
+        fireEvent.click(getElement());
+
+        expect(mockSetOpened).toHaveBeenCalledWith(true);
+    });
+
+    it("Should not toggle dropdown on click inside a focusable non-button postfix element", () => {
+        renderTarget({
+            onClick: mockOnClick,
+            postfix: (
+                <span role="button" tabIndex={0}>
+                    <span data-testid="postfix-icon" />
+                </span>
+            ),
+        });
+
+        fireEvent.click(screen.getByTestId("postfix-icon"));
+
+        expect(mockSetOpened).not.toHaveBeenCalled();
+        expect(mockOnClick).toHaveBeenCalledTimes(1);
+    });
+
+    it("Should ignore events from postfix content rendered in a portal", () => {
+        renderTarget({ postfix: createPortal(<div data-testid="portal-content" />, document.body) });
+
+        const portalContent = screen.getByTestId("portal-content");
+        fireEvent.keyDown(portalContent, { keyCode: EVENT_KEY_CODES.ENTER });
+        fireEvent.click(portalContent);
+
         expect(mockSetOpened).not.toHaveBeenCalled();
     });
 
@@ -287,9 +373,7 @@ describe("SelectExtendedFieldTarget", () => {
     });
 
     it("Should pass through data attributes", () => {
-        renderTarget({ "data-custom": "target-value" } as Partial<
-            React.ComponentProps<typeof SelectExtendedFieldTarget>
-        >);
+        renderTarget({ "data-custom": "target-value" } as TTargetProps);
 
         expect(getRoot()).toHaveAttribute("data-custom", "target-value");
         expect(getRoot()).toHaveAttribute("data-tx");

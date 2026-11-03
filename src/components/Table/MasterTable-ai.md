@@ -2,6 +2,7 @@
 component: MasterTable
 category: Table
 related:
+  - ColumnSettings
   - TableBasic
   - Pagination
 tokens: []
@@ -59,7 +60,10 @@ version: "1.0"
 | `columns` | `TableBasic` в `useEffect`, из своего props `columns` | `ColumnSettings` — список колонок для настройки видимости |
 | `setColumns` | — | `TableBasic` |
 
-Из этого следует неочевидное: `ColumnSettings` показывает колонки, **только если** внутри того же `MasterTable` отрисован `TableBasic` — до его первого эффекта контекст пуст.
+Из этого следует неочевидное: children-функция `ColumnSettings` получает колонки,
+**только если** внутри того же `MasterTable` отрисован `TableBasic` — до его первого
+эффекта контекст пуст. Обычные children не зависят от контекста; сортируемому
+списку колонки можно передать напрямую через props.
 
 ---
 
@@ -103,6 +107,10 @@ version: "1.0"
 - `FilterPanel`, `ChipPanel` (`.Links`), `PaginationPanel`, `NoColumns` — тривиальные обёртки: `clsx(className)` + спред + собственный класс, без своей логики. Отличаются только стилями и тем, что `FilterPanel` и `PaginationPanel` выставляют `data-tx`. Все пробрасывают `ref` на свой корневой `<div>`; отдельных строк в `docs/ai/ROADMAP.md` у них нет — состояние учитывается здесь.
 - `TableFooter` — подвал поверх `FooterDescription`; `.Summary` даёт `.SelectedCount`, `.SelectAllButton` и `.Amount`, `.Controls` — это `FooterDescriptionControls` из семейства `Footer`.
 - `TableBasicSettings` — выпадающие настройки поверх `ButtonDropdownExtended`; внутри `ColumnSettings` читает `columns` из контекста и поддерживает children-функцию `({ columns }) => ...`. Его `ref` идёт на корневой `<div>`, который рисует `ButtonDropdownExtended`, — поэтому `forwardRef` пришлось добавить и туда.
+- [ColumnSettings](./ColumnSettings-ai.md) — публичная часть настроек, читает
+  колонки из контекста через children-функцию и предоставляет `.SortableList`
+  и `.StaticList`. [ColumnSettingsSortableList](./ColumnSettingsSortableList-ai.md)
+  получает массив явно и возвращает новый порядок через `onColumnsChange`.
 
 ---
 
@@ -129,3 +137,4 @@ version: "1.0"
 |---|---|
 | 2026-08-31 | Обёртки семейства (`FilterPanel`, `ChipPanel` + `.Links`, `NoColumns`, `PaginationPanel`, `TableFooter`, `TableBasicSettings`) переведены с `React.FC` на `forwardRef`, у составных статики — через `Object.assign`. Добавлены smoke-тесты на каждую. Ради `TableBasicSettings` `forwardRef` добавлен и в `ButtonDropdownExtended`. Набор props и DOM не изменились. |
 | 2026-08-27 | Создан документ. Компонент переведён с `React.FC` на `Object.assign(forwardRef(...), {...})` — теперь пробрасывает `ref` на корневой `<div>`; значение контекста мемоизировано. Публичный API не изменился. |
+| 2026-11-03 | Добавлены ссылки на AI.md настроек колонок и сортируемого списка; уточнена зависимость children-функции от контекста. |

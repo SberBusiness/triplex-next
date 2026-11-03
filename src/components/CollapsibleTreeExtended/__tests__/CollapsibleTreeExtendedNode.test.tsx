@@ -1,10 +1,12 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { render, screen, fireEvent, act } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { CollapsibleTreeExtended } from "../CollapsibleTreeExtended";
 import {
+    CollapsibleTreeExtendedNode,
     ICollapsibleTreeExtendedNodeBodyProvideProps,
     ICollapsibleTreeExtendedNodeHeaderProvideProps,
+    ICollapsibleTreeExtendedNodeProps,
 } from "../components/CollapsibleTreeExtendedNode";
 
 /**
@@ -17,18 +19,18 @@ const renderNode = ({
     toggle,
     onToggle,
     withChildren = true,
-}: {
-    opened?: boolean;
-    toggle?: (opened: boolean) => void;
-    onToggle?: (opened: boolean) => void;
-    withChildren?: boolean;
-}) => {
+    ...nodeProps
+}: Omit<Partial<ICollapsibleTreeExtendedNodeProps>, "children" | "renderBody" | "renderHeader"> &
+    React.RefAttributes<CollapsibleTreeExtendedNode> & {
+        withChildren?: boolean;
+    }) => {
     const headerProps = { current: null as ICollapsibleTreeExtendedNodeHeaderProvideProps | null };
     const bodyProps = { current: null as ICollapsibleTreeExtendedNodeBodyProvideProps | null };
 
     const ui = (currentOpened: boolean | undefined) => (
         <CollapsibleTreeExtended>
             <CollapsibleTreeExtended.Node
+                {...nodeProps}
                 id="branch"
                 opened={currentOpened}
                 toggle={toggle}
@@ -222,6 +224,95 @@ describe("CollapsibleTreeExtendedNode", () => {
             const { headerProps } = renderNode({ opened: true, withChildren: false });
 
             expect(headerProps.current?.hasChildNodes).toBe(false);
+        });
+
+        it("toggle из renderBody делегирует изменение controlled-состояния", () => {
+            const toggle = vi.fn();
+            const { bodyProps } = renderNode({ opened: true, toggle });
+
+            act(() => bodyProps.current?.toggle(false));
+
+            expect(toggle).toHaveBeenCalledTimes(1);
+            expect(toggle).toHaveBeenCalledWith(false);
+            expect(getBranchTreeItem()).toHaveAttribute("aria-expanded", "true");
+        });
+
+        it("toggle из renderBody меняет uncontrolled-состояние и обновляет обе render-функции", () => {
+            const { bodyProps, headerProps } = renderNode({});
+
+            act(() => bodyProps.current?.toggle(true));
+
+            expect(getBranchTreeItem()).toHaveAttribute("aria-expanded", "true");
+            expect(headerProps.current?.opened).toBe(true);
+            expect(bodyProps.current?.opened).toBe(true);
+        });
+    });
+
+    describe("проброс props и ref", () => {
+        it("ref указывает на экземпляр класса ноды", () => {
+            const ref = React.createRef<CollapsibleTreeExtendedNode>();
+
+            renderNode({ ref });
+
+            expect(ref.current).toBeInstanceOf(CollapsibleTreeExtendedNode);
+        });
+
+        it("пробрасывает className, HTML-атрибуты и обработчик клика в li", () => {
+            const onClick = vi.fn();
+            renderNode({ className: "custom-node", "aria-label": "Ветка", title: "Описание", onClick });
+
+            const node = getBranchTreeItem();
+            expect(node.tagName).toBe("LI");
+            expect(node).toHaveClass("treeViewNode", "custom-node");
+            expect(node).toHaveAttribute("id", "branch");
+            expect(node).toHaveAttribute("aria-label", "Ветка");
+            expect(node).toHaveAttribute("title", "Описание");
+
+            fireEvent.click(node);
+
+            expect(onClick).toHaveBeenCalledTimes(1);
+            expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click", target: node }));
+        });
+    });
+
+    describe("завершение анимации", () => {
+        beforeEach(() => {
+            vi.useFakeTimers();
+        });
+
+        afterEach(() => {
+            vi.useRealTimers();
+        });
+
+        it("вызывает onToggle после анимации раскрытия и сворачивания", () => {
+            const onToggle = vi.fn();
+            const { headerProps, bodyProps } = renderNode({ onToggle });
+
+            fireEvent.click(screen.getByRole("button", { name: "header" }));
+
+            expect(onToggle).not.toHaveBeenCalled();
+            expect(headerProps.current?.animating).toBe(true);
+            expect(bodyProps.current?.animating).toBe(true);
+
+            act(() => vi.runAllTimers());
+
+            expect(onToggle).toHaveBeenCalledTimes(1);
+            expect(onToggle).toHaveBeenLastCalledWith(true);
+            expect(headerProps.current?.animating).toBe(false);
+            expect(bodyProps.current?.animating).toBe(false);
+
+            fireEvent.click(screen.getByRole("button", { name: "header" }));
+
+            expect(onToggle).toHaveBeenCalledTimes(1);
+            expect(headerProps.current?.animating).toBe(true);
+            expect(bodyProps.current?.animating).toBe(true);
+
+            act(() => vi.runAllTimers());
+
+            expect(onToggle).toHaveBeenCalledTimes(2);
+            expect(onToggle).toHaveBeenLastCalledWith(false);
+            expect(headerProps.current?.animating).toBe(false);
+            expect(bodyProps.current?.animating).toBe(false);
         });
     });
 

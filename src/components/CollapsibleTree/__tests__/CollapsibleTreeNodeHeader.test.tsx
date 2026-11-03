@@ -1,5 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 import { CollapsibleTreeNodeHeader, ICollapsibleTreeNodeHeaderProps } from "../components/CollapsibleTreeNodeHeader";
 
@@ -26,6 +27,39 @@ const renderHeader = (props: TRenderProps = {}, children: React.ReactNode = "Lab
     );
 
 describe("CollapsibleTreeNodeHeader", () => {
+    // Первым рендерим полный набор provide-props: React дедуплицирует предупреждения о неизвестных атрибутах.
+    it("Не передаёт служебные provide-props в DOM и сохраняет HTML, ARIA и data-атрибуты", () => {
+        const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+
+        try {
+            render(
+                <CollapsibleTreeNodeHeader
+                    {...getDefaultProps()}
+                    activeNode
+                    animating
+                    isLastNode
+                    id="node-header-1"
+                    title="Folder"
+                    aria-label="Folder 1"
+                    aria-controls="folder-1-children"
+                    data-node-id="folder-1"
+                />,
+            );
+
+            const button = screen.getByRole("button", { name: "Folder 1" });
+            expect(button).not.toHaveAttribute("activenode");
+            expect(button).not.toHaveAttribute("animating");
+            expect(button).not.toHaveAttribute("islastnode");
+            expect(button).toHaveAttribute("id", "node-header-1");
+            expect(button).toHaveAttribute("title", "Folder");
+            expect(button).toHaveAttribute("aria-controls", "folder-1-children");
+            expect(button).toHaveAttribute("data-node-id", "folder-1");
+            expect(consoleError).not.toHaveBeenCalled();
+        } finally {
+            consoleError.mockRestore();
+        }
+    });
+
     it("Рендерит children внутри button", () => {
         renderHeader({}, "Folder 1");
 
@@ -58,9 +92,10 @@ describe("CollapsibleTreeNodeHeader", () => {
             expect(screen.getByRole("button")).toHaveAttribute("aria-expanded", "true");
         });
 
-        it("Рендерит svg-шеврон", () => {
+        it("Рендерит декоративный svg-шеврон, не меняющий доступное имя кнопки", () => {
             renderHeader({ hasChildNodes: true });
-            expect(screen.getByRole("button").querySelector("svg")).not.toBeNull();
+            const button = screen.getByRole("button", { name: "Label" });
+            expect(button.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
         });
 
         it("Шеврон получает класс opened когда opened=true", () => {
@@ -94,6 +129,12 @@ describe("CollapsibleTreeNodeHeader", () => {
             renderHeader({ hasChildNodes: false });
             expect(screen.getByRole("button").querySelector("svg")).toBeNull();
         });
+
+        it("Не получает active даже при opened=true", () => {
+            renderHeader({ hasChildNodes: false, opened: true });
+
+            expect(screen.getByRole("button")).not.toHaveClass("active");
+        });
     });
 
     describe("disabled=true", () => {
@@ -116,13 +157,14 @@ describe("CollapsibleTreeNodeHeader", () => {
             expect(screen.getByRole("button")).toHaveAttribute("aria-expanded", "false");
         });
 
-        it("Не вызывает toggle (даже при программном click)", () => {
+        it("Не вызывает toggle и onClick при click на disabled-кнопке", () => {
             const toggle = vi.fn();
-            renderHeader({ hasChildNodes: true, disabled: true, toggle });
+            const onClick = vi.fn();
+            renderHeader({ hasChildNodes: true, disabled: true, toggle, onClick });
 
-            // Программный click игнорирует disabled, поэтому проверяем именно ветку handleClick.
             fireEvent.click(screen.getByRole("button"));
             expect(toggle).not.toHaveBeenCalled();
+            expect(onClick).not.toHaveBeenCalled();
         });
     });
 
@@ -145,23 +187,42 @@ describe("CollapsibleTreeNodeHeader", () => {
             expect(toggle).toHaveBeenCalledWith(false);
         });
 
-        it("Не вызывает toggle когда hasChildNodes=false (даже при программном click)", () => {
-            const toggle = vi.fn();
-            renderHeader({ hasChildNodes: false, toggle });
-
-            // Программный click игнорирует disabled, поэтому проверяем именно ветку handleClick.
-            fireEvent.click(screen.getByRole("button"));
-            expect(toggle).not.toHaveBeenCalled();
-        });
-
-        it("Пробрасывает кастомный onClick параллельно с toggle", () => {
+        it("Не вызывает toggle и onClick когда hasChildNodes=false", () => {
             const toggle = vi.fn();
             const onClick = vi.fn();
-            renderHeader({ hasChildNodes: true, opened: false, toggle, onClick });
+            renderHeader({ hasChildNodes: false, toggle, onClick });
 
             fireEvent.click(screen.getByRole("button"));
+            expect(toggle).not.toHaveBeenCalled();
+            expect(onClick).not.toHaveBeenCalled();
+        });
+
+        it("Передаёт исходное событие в onClick после toggle", () => {
+            const toggle = vi.fn();
+            const onClick = vi.fn((event: React.MouseEvent<HTMLButtonElement>) => event.currentTarget);
+            renderHeader({ hasChildNodes: true, opened: false, toggle, onClick });
+
+            const button = screen.getByRole("button");
+            const event = new MouseEvent("click", { bubbles: true });
+            fireEvent(button, event);
+
             expect(onClick).toHaveBeenCalledTimes(1);
-            expect(onClick.mock.calls[0][0]).toMatchObject({ type: "click" });
+            expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ nativeEvent: event, type: "click" }));
+            expect(onClick).toHaveReturnedWith(button);
+            expect(toggle).toHaveBeenCalledWith(true);
+            expect(onClick.mock.invocationCallOrder[0]).toBeGreaterThan(toggle.mock.invocationCallOrder[0]);
+        });
+
+        it.each(["{Enter}", " "])("Активирует кнопку клавишей %s", async (key) => {
+            const user = userEvent.setup();
+            const toggle = vi.fn();
+            renderHeader({ toggle });
+
+            await user.tab();
+            expect(screen.getByRole("button")).toHaveFocus();
+            await user.keyboard(key);
+
+            expect(toggle).toHaveBeenCalledTimes(1);
             expect(toggle).toHaveBeenCalledWith(true);
         });
     });

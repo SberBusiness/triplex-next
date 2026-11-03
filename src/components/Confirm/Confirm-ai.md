@@ -1,7 +1,7 @@
 ---
 component: Confirm
 category: Confirm
-related: [Island, Button, Title, Text, TriggerClickOnKeyDownEvent]
+related: [ConfirmClose, Island, Button, Title, Text, TriggerClickOnKeyDownEvent]
 tokens: []
 stories: stories/Confirm/Confirm.stories.tsx
 version: "1.0"
@@ -78,6 +78,8 @@ version: "1.0"
 
 ### Закрытие по Esc (`Confirm.Close`)
 
+Полный контракт кнопки — [ConfirmClose-ai.md](./ConfirmClose-ai.md).
+
 `clickByEsc` — обязательный prop `Confirm.Close`. При `true` компонент оборачивается в
 `TriggerClickOnKeyDownEvent`, который слушает `keydown` на `window` (через `KeyDownListener`) и
 вызывает `click()` по кнопке.
@@ -90,6 +92,8 @@ version: "1.0"
   `offsetParent !== null`. В jsdom `offsetParent` всегда `null`, поэтому в unit-тестах его
   мокают (`__tests__/ConfirmClose.test.tsx`).
 - Совпадение клавиши проверяется по `event.keyCode` (`EVENT_KEY_CODES.ESCAPE`), а не по `key`.
+- `disabled` блокирует нативный клик, включая Escape. Один `loading` этого не делает:
+  он задаёт визуальную загрузку и `tabIndex=-1`, но не нативный `disabled`.
 
 ---
 
@@ -158,6 +162,8 @@ version: "1.0"
 
 ### Контракты (в `related`)
 
+- [ConfirmClose](./ConfirmClose-ai.md) — публичная часть `.Close`: кнопка-крестик,
+  глобальный Escape, DOM-ref и наследуемые состояния `Button`.
 - `Island` — корневая карточка. `IConfirmProps extends IIslandProps`, поэтому добавление prop в
   `Island` расширяет публичный API `Confirm` без правок в его коде. Confirm задаёт
   `type={EIslandType.TYPE_1}` и кладёт `children` в `Island.Body`.
@@ -168,12 +174,12 @@ version: "1.0"
 - `Text` — основа `Confirm.Content.SubTitle` (дефолт `size=B2`, `tag="div"`).
 - `TriggerClickOnKeyDownEvent` — обёртка, дающая `Confirm.Close` реакцию на Esc при `clickByEsc`.
 
-### Части Confirm (своего AI.md не имеют)
+### Остальные части Confirm (своего AI.md не имеют)
 
 - `ConfirmContent` (`Confirm.Content`) и его части `ConfirmContentTitle` (`.Title`),
   `ConfirmContentSubTitle` (`.SubTitle`).
 - `ConfirmControls` (`Confirm.Controls`).
-- `ConfirmClose` (`Confirm.Close`) и внутренний `ConfirmCloseButton`.
+- Внутренний `ConfirmCloseButton` — визуальная основа `.Close`, описан в AI.md `ConfirmClose`.
 
 ### Контейнеры, в которых открывают Confirm (в `related` не входят — связи по коду нет)
 
@@ -210,3 +216,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-09-15 | Создан документ. AI-рефакторинг: `Confirm`, `Confirm.Content`, `Confirm.Content.Title`, `Confirm.Content.SubTitle`, `Confirm.Controls` и `Confirm.Close` переведены с `React.FC` на `forwardRef` (статики сохранены через `Object.assign`), JSDoc на props, значениях `EConfirmParentComponent` и компонентах, `className` больше не идёт перед базовыми классами в `clsx`. Добавлены unit-тесты (34) и stories `stories/Confirm/`. Публичный API не изменён. |
+| 2026-11-03 | Добавлена ссылка на отдельный AI.md `ConfirmClose`; уточнено различие loading и disabled при Escape. |

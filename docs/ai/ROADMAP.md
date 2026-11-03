@@ -239,6 +239,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 родителя. Отдельные stories для каждой части не являются условием завершения.
 В разделе Stories AI.md атома можно ссылаться на соответствующие примеры родителя.
 
+Задачи атомов: ColumnSettingsSortableListItem — TRI-183, ConfirmClose — TRI-185.
+
 | Компонент | AI.md | AI refactoring |
 |---|---|---|
 | AlertProcessSpoiler | ✅ | ✅ |
@@ -258,8 +260,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | CollapsibleTreeNodeHeader | ⬜ | ◐ |
 | ColumnSettings | ⬜ | ◐ |
 | ColumnSettingsSortableList | ⬜ | ◐ |
-| ColumnSettingsSortableListItem | ⬜ | ◐ |
-| ConfirmClose | ⬜ | ◐ |
+| ColumnSettingsSortableListItem | ✅ | ✅ |
+| ConfirmClose | ✅ | ✅ |
 | DropdownDesktop | ⬜ | ◐ |
 | DropdownList | ⬜ | ◐ |
 | DropdownListItem | ⬜ | ◐ |

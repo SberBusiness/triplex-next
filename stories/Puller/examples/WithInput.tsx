@@ -3,7 +3,6 @@ import {
     Button,
     EButtonTheme,
     EComponentSize,
-    Portal,
     Puller,
     PullerBody,
     PullerClose,
@@ -40,39 +39,33 @@ export const WithInput = () => {
             >
                 Open
             </Button>
-            <Portal container={document.body}>
-                <Puller opened={opened} setOpened={setOpened} role="dialog" aria-label="City search">
-                    <PullerHeader
-                        controlButtons={
-                            <>
-                                {/* В реальном сценарии лоадер показывается на время запроса подсказок. */}
-                                <PullerLoader />
-                                <PullerClose aria-label="Close" onClick={() => setOpened(false)} />
-                            </>
-                        }
-                    >
-                        <PullerInput
-                            value={inputValue}
-                            placeholder="Enter a city"
-                            aria-label="City"
-                            onChange={(event) => setInputValue(event.target.value)}
-                        />
-                    </PullerHeader>
-                    <PullerBody>
-                        <PullerList aria-label="Suggestions">
-                            {OPTIONS.map((option) => (
-                                <PullerListItem
-                                    key={option.id}
-                                    id={option.id}
-                                    onSelect={() => handleSelect(option.label)}
-                                >
-                                    {option.label}
-                                </PullerListItem>
-                            ))}
-                        </PullerList>
-                    </PullerBody>
-                </Puller>
-            </Portal>
+            <Puller opened={opened} setOpened={setOpened} role="dialog" aria-label="City search">
+                <PullerHeader
+                    controlButtons={
+                        <>
+                            {/* В реальном сценарии лоадер показывается на время запроса подсказок. */}
+                            <PullerLoader />
+                            <PullerClose aria-label="Close" onClick={() => setOpened(false)} />
+                        </>
+                    }
+                >
+                    <PullerInput
+                        value={inputValue}
+                        placeholder="Enter a city"
+                        aria-label="City"
+                        onChange={(event) => setInputValue(event.target.value)}
+                    />
+                </PullerHeader>
+                <PullerBody>
+                    <PullerList aria-label="Suggestions">
+                        {OPTIONS.map((option) => (
+                            <PullerListItem key={option.id} id={option.id} onSelect={() => handleSelect(option.label)}>
+                                {option.label}
+                            </PullerListItem>
+                        ))}
+                    </PullerList>
+                </PullerBody>
+            </Puller>
         </div>
     );
 };

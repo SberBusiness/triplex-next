@@ -50,6 +50,22 @@ describe("Puller", () => {
         expect(screen.queryByText("Puller content")).toBeNull();
     });
 
+    it("renders into document.body outside the parent container", () => {
+        const { container } = renderPuller();
+
+        expect(container).toBeEmptyDOMElement();
+        expect(document.querySelector(".pullerWrapper")?.parentElement).toBe(document.body);
+    });
+
+    it("renders into renderContainer instead of document.body", () => {
+        const renderContainer = document.createElement("div");
+
+        renderPuller({ renderContainer });
+
+        expect(renderContainer.querySelector(".pullerWrapper")).not.toBeNull();
+        expect(document.querySelector(".pullerWrapper")).toBeNull();
+    });
+
     it("forwards ref and html attributes to the content element", () => {
         const ref = React.createRef<HTMLDivElement>();
 

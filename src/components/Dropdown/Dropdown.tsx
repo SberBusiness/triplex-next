@@ -49,26 +49,24 @@ export const Dropdown = React.forwardRef<HTMLDivElement, IDropdownProps>(
             }
         }, [opened]);
 
-        return (
+        const desktopDropdown = (
             <Portal container={document.body}>
-                {pullerProps ? (
-                    <MobileView
-                        fallback={
-                            <DropdownDesktop opened={opened} setOpened={setOpened} {...desktopProps} ref={ref}>
-                                {children}
-                            </DropdownDesktop>
-                        }
-                    >
-                        <Puller opened={opened} setOpened={setOpened} {...pullerProps} ref={ref}>
-                            {pullerProps.children || children}
-                        </Puller>
-                    </MobileView>
-                ) : (
-                    <DropdownDesktop opened={opened} setOpened={setOpened} {...desktopProps} ref={ref}>
-                        {children}
-                    </DropdownDesktop>
-                )}
+                <DropdownDesktop opened={opened} setOpened={setOpened} {...desktopProps} ref={ref}>
+                    {children}
+                </DropdownDesktop>
             </Portal>
+        );
+
+        if (!pullerProps) {
+            return desktopDropdown;
+        }
+
+        return (
+            <MobileView fallback={desktopDropdown}>
+                <Puller opened={opened} setOpened={setOpened} {...pullerProps} ref={ref}>
+                    {pullerProps.children || children}
+                </Puller>
+            </MobileView>
         );
     },
 );

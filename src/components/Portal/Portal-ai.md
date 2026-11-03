@@ -86,9 +86,12 @@ version: "1.0"
 ## Связанные компоненты
 
 - `Dropdown` (`src/components/Dropdown/`) — рендерит выпадающий слой через
-  Portal в `document.body`.
+  Portal в `document.body`; мобильная версия — через `Puller`, в
+  `pullerProps.renderContainer ?? document.body`.
 - `Tooltip` (`src/components/Tooltip/`) — desktop- и mobile-реализации
-  рендерят тултип через Portal: mobile — всегда в `document.body`, desktop — в
+  рендерят тултип через Portal: mobile — через `Puller`, всегда в
+  `document.body`, desktop — в `renderContainer ?? document.body`.
+- `Puller` (`src/components/Puller/`) — рендерит шторку через Portal в
   `renderContainer ?? document.body`.
 
 ---

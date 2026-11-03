@@ -163,6 +163,16 @@ describe("Dropdown", () => {
             expect(screen.getByText("Dropdown content")).toBeInTheDocument();
         });
 
+        it("renders the mobile version into pullerProps.renderContainer", () => {
+            setMobileView(true);
+            const renderContainer = document.createElement("div");
+
+            render(<DropdownWithTarget pullerProps={{ renderContainer }} />);
+
+            expect(renderContainer.querySelector(".pullerWrapper")).not.toBeNull();
+            expect(document.querySelector(".pullerWrapper")).toBeNull();
+        });
+
         it("renders the desktop version on a narrow screen without pullerProps", () => {
             setMobileView(true);
 

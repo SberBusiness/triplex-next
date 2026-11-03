@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Tooltip } from "../Tooltip";
 import { ETooltipAlign, ETooltipSize } from "../enums";
+import { TEST_SCOPE_CLASS_NAME, ThemeContextWrapper } from "../../../../test-utils/theme";
 
 /** Подменяет matchMedia так, чтобы MobileView считал экран мобильным. */
 const mockMobileScreen = () => {
@@ -25,6 +26,7 @@ interface IRenderOptions {
     isOpen?: boolean;
     toggle?: (open: boolean) => void;
     onShow?: (node: HTMLDivElement) => void;
+    renderContainer?: Element;
     withHeader?: boolean;
     withClose?: boolean;
     withLink?: boolean;
@@ -34,6 +36,7 @@ const renderMobileTooltip = ({
     isOpen = true,
     toggle,
     onShow,
+    renderContainer,
     withHeader = false,
     withClose = false,
     withLink = false,
@@ -47,6 +50,7 @@ const renderMobileTooltip = ({
             isOpen={isOpen}
             toggle={toggle}
             onShow={onShow}
+            renderContainer={renderContainer}
             targetRef={targetRef}
         >
             <Tooltip.Target>
@@ -63,6 +67,7 @@ const renderMobileTooltip = ({
             {withClose ? <Tooltip.XButton aria-label="Закрыть подсказку" /> : null}
             {withHeader ? <Tooltip.MobileHeader>Заголовок подсказки</Tooltip.MobileHeader> : null}
         </Tooltip>,
+        { wrapper: ThemeContextWrapper },
     );
 };
 
@@ -80,6 +85,17 @@ describe("Tooltip (mobile)", () => {
 
         expect(screen.getByRole("button", { name: "Tooltip target" })).toBeInTheDocument();
         expect(screen.getByText("Текст подсказки")).toBeInTheDocument();
+    });
+
+    it("should render the mobile overlay and the theme class into document.body ignoring renderContainer", () => {
+        const renderContainer = document.createElement("div");
+
+        renderMobileTooltip({ renderContainer });
+
+        expect(screen.getByText("Текст подсказки")).toBeInTheDocument();
+        expect(document.body).toHaveClass(TEST_SCOPE_CLASS_NAME);
+        expect(renderContainer).toBeEmptyDOMElement();
+        expect(renderContainer).not.toHaveClass(TEST_SCOPE_CLASS_NAME);
     });
 
     it("should render the mobile header with the close button", () => {

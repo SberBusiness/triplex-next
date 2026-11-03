@@ -1,7 +1,7 @@
 ---
 component: CollapsibleTree
 category: CollapsibleTree
-related: [CollapsibleTreeExtended, TreeView]
+related: [CollapsibleTreeNodeHeader, CollapsibleTreeExtended, TreeView]
 tokens:
   - CollapsibleTree.Header_Background_Hover
   - CollapsibleTree.Header_Shadow_Focus
@@ -70,6 +70,10 @@ Type guard: `isCollapsibleTreeNodeLeaf(node)` — `"content" in node`.
 и все стандартные `React.ButtonHTMLAttributes<HTMLButtonElement>`. Внутри
 `CollapsibleTree` подставляется автоматически.
 
+Полный контракт — [CollapsibleTreeNodeHeader-ai.md](./CollapsibleTreeNodeHeader-ai.md).
+Служебные `animating`, `activeNode`, `isLastNode` принимаются как часть
+provide-props, но не передаются в DOM-кнопку.
+
 | Поведение | Условие |
 |---|---|
 | `disabled={true}` на `<button>` | `hasChildNodes === false` либо проп `disabled === true` |
@@ -77,11 +81,11 @@ Type guard: `isCollapsibleTreeNodeLeaf(node)` — `"content" in node`.
 | Шеврон отрендерен | `hasChildNodes === true` (в том числе при `disabled`) |
 | Класс `interactive` | `hasChildNodes === true && !disabled` |
 | Глобальный класс `hoverable` | всегда — управляет цветом шеврона через стили `@sberbusiness/icons-next` (как в `IconWrapper`) |
-| Глобальный класс `active` | `hasChildNodes === true && opened === true` — цвет шеврона раскрытого узла (у леаф-нод `opened` всегда `true` из-за хака `LeafNode`, поэтому им класс не ставится) |
+| Глобальный класс `active` | `hasChildNodes === true && opened === true` — цвет шеврона раскрытого узла; без детей класс отсутствует при любом `opened` |
 | Глобальный класс `disabled` | проп `disabled === true` — приглушает цвет шеврона |
 | Класс `chevron.opened` | `opened === true` |
 | `toggle(!opened)` вызывается | по клику, только при `hasChildNodes === true && !disabled` |
-| Кастомный `onClick` | вызывается всегда после `toggle` |
+| Кастомный `onClick` | вызывается после `toggle` при активации доступной кнопки; нативный `disabled` блокирует оба обработчика |
 
 Проп `disabled` (из `ButtonHTMLAttributes`) — единственный HTML-атрибут,
 который header интерпретирует сам: он добавляет визуальное disabled-состояние
@@ -169,9 +173,10 @@ CollapsibleTree.Header_Shadow_Focus
 - Семантика дерева наследуется от `TreeView` — корневой `<ul>`, узлы `<li>`,
   ветки оборачиваются в `<ul role="group">` через `TreeView.Group` при наличии
   детей.
-- Клавиатурная навигация по дереву (стрелки, Home/End, раскрытие/сворачивание)
-  обрабатывается на уровне `TreeView` — `CollapsibleTree` ничего не добавляет
-  сверху.
+- `TreeView` обрабатывает ArrowUp / ArrowDown при наличии активной ноды:
+  меняет `activeNode`, но не переносит DOM-фокус. Home / End и раскрытие по
+  ArrowLeft / ArrowRight не реализованы. Кнопка-заголовок активируется нативными
+  Enter / Space; `CollapsibleTree` не добавляет других обработчиков.
 - `CollapsibleTreeNodeHeader` рендерит нативный `<button>` с
   `aria-expanded={opened}` для веток с детьми; для веток без детей и листьев
   кнопка `disabled` и `aria-expanded` не выставляется.
@@ -192,7 +197,7 @@ CollapsibleTree.Header_Shadow_Focus
 - [`CollapsibleTreeExtended`](../CollapsibleTreeExtended/CollapsibleTreeExtended-ai.md)
   — низкоуровневая база с произвольным `renderHeader`/`renderBody`.
   `CollapsibleTree` — типовая обёртка над ней.
-- `CollapsibleTreeNodeHeader` (этот же barrel) — кнопка-заголовок с шевроном,
+- [`CollapsibleTreeNodeHeader`](./CollapsibleTreeNodeHeader-ai.md) (этот же barrel) — кнопка-заголовок с шевроном,
   доступна для использования в кастомном `renderHeader` у `CollapsibleTreeExtended`.
 - `CollapsibleTreeNodeLabel` (этот же barrel) — типографика заголовка
   (`Text` со span-тегом, дефолты B1 / SEMIBOLD). Используй внутри `label`
@@ -233,3 +238,4 @@ CollapsibleTree.Header_Shadow_Focus
 | 2026-09-17 | TRI-22: инвариант про отсутствие `forwardRef` переформулирован — `CollapsibleTreeExtended` и `TreeView` под ним теперь пробрасывают `ref` на корневой `<ul>`, поэтому прежнее обоснование не действует, а `CollapsibleTree` остаётся долгом |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`CollapsibleTreeNodeHeader`, `CollapsibleTreeNodeLabel`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
 | 2026-10-16 | При сверке ROADMAP с публичными экспортами внутренний `AccordionBase` исключён из `related`; описание зависимости сохранено в «Связанные компоненты». |
+| 2026-11-03 | Добавлена ссылка на AI.md заголовка; уточнены фильтрация provide-props, disabled-callbacks и клавиатурный контракт. |

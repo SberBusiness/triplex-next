@@ -5,7 +5,6 @@ import {
     EButtonTheme,
     EComponentSize,
     ETextSize,
-    Portal,
     Puller,
     PullerBody,
     PullerClose,
@@ -60,48 +59,41 @@ const PlaygroundContent = ({ opened: initialOpened, title, listLoading, withFoot
             >
                 Open
             </Button>
-            <Portal container={document.body}>
-                <Puller
-                    opened={opened}
-                    setOpened={handleSetOpened}
-                    role="dialog"
-                    aria-labelledby="puller-playground-title"
+            <Puller opened={opened} setOpened={handleSetOpened} role="dialog" aria-labelledby="puller-playground-title">
+                <PullerHeader
+                    controlButtons={<PullerClose aria-label="Close" onClick={() => handleSetOpened(false)} />}
                 >
-                    <PullerHeader
-                        controlButtons={<PullerClose aria-label="Close" onClick={() => handleSetOpened(false)} />}
-                    >
-                        <Text id="puller-playground-title" size={ETextSize.B1}>
-                            {title}
-                        </Text>
-                    </PullerHeader>
-                    <PullerBody>
-                        <PullerList loading={listLoading} aria-labelledby="puller-playground-title">
-                            {OPTIONS.map((option) => (
-                                <PullerListItem
-                                    key={option.id}
-                                    id={option.id}
-                                    selected={option.id === selectedId}
-                                    onSelect={() => handleSelect(option.id)}
-                                >
-                                    {option.label}
-                                </PullerListItem>
-                            ))}
-                        </PullerList>
-                    </PullerBody>
-                    {withFooter && (
-                        <PullerFooter>
-                            <Button
-                                theme={EButtonTheme.GENERAL}
-                                size={EComponentSize.MD}
-                                block
-                                onClick={() => handleSetOpened(false)}
+                    <Text id="puller-playground-title" size={ETextSize.B1}>
+                        {title}
+                    </Text>
+                </PullerHeader>
+                <PullerBody>
+                    <PullerList loading={listLoading} aria-labelledby="puller-playground-title">
+                        {OPTIONS.map((option) => (
+                            <PullerListItem
+                                key={option.id}
+                                id={option.id}
+                                selected={option.id === selectedId}
+                                onSelect={() => handleSelect(option.id)}
                             >
-                                Done
-                            </Button>
-                        </PullerFooter>
-                    )}
-                </Puller>
-            </Portal>
+                                {option.label}
+                            </PullerListItem>
+                        ))}
+                    </PullerList>
+                </PullerBody>
+                {withFooter && (
+                    <PullerFooter>
+                        <Button
+                            theme={EButtonTheme.GENERAL}
+                            size={EComponentSize.MD}
+                            block
+                            onClick={() => handleSetOpened(false)}
+                        >
+                            Done
+                        </Button>
+                    </PullerFooter>
+                )}
+            </Puller>
         </div>
     );
 };

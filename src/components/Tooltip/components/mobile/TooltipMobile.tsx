@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, useRef } from "react";
 import clsx from "clsx";
 import { TooltipContext } from "../../TootlipContext";
-import { Portal } from "../../../Portal/Portal";
 import { TooltipMobileCloseButton } from "./components/TooltipMobileCloseButton";
 import { ITooltipProps } from "../../types";
 import { Puller } from "../../../Puller/Puller";
@@ -21,8 +20,9 @@ export interface ITooltipMobileProps extends Omit<ITooltipProps, "preferPlace" |
  * Рендерится в document.body поверх страницы как нижний оверлей (Puller).
  */
 export const TooltipMobile: React.FC<ITooltipMobileProps> = ({
-    // children, renderContainer, targetRef, disableAdaptiveMode, size и alignTip не нужны мобильной
-    // версии и не должны попадать в DOM — исключаются из rest, который спредится на Puller.
+    // children, targetRef, disableAdaptiveMode, size и alignTip не нужны мобильной версии и не должны
+    // попасть в DOM. renderContainer не передаётся в Puller: в мобильном режиме тема ставится
+    // на document.body (см. Tooltip.tsx).
     children,
     renderContainer,
     targetRef,
@@ -59,23 +59,21 @@ export const TooltipMobile: React.FC<ITooltipMobileProps> = ({
     return (
         <>
             {elements.target}
-            <Portal container={document.body}>
-                <Puller
-                    className={classNames}
-                    tabIndex={-1}
-                    opened={isOpen}
-                    setOpened={setTooltipOpen}
-                    {...rest}
-                    ref={tooltipRef}
-                >
-                    {elements.mobileHeader}
-                    <PullerBody className={styles.tooltipMobileContent}>
-                        {elements.body}
-                        {elements.link}
-                        {elements.mobileHeader === null && renderCloseButton()}
-                    </PullerBody>
-                </Puller>
-            </Portal>
+            <Puller
+                className={classNames}
+                tabIndex={-1}
+                opened={isOpen}
+                setOpened={setTooltipOpen}
+                {...rest}
+                ref={tooltipRef}
+            >
+                {elements.mobileHeader}
+                <PullerBody className={styles.tooltipMobileContent}>
+                    {elements.body}
+                    {elements.link}
+                    {elements.mobileHeader === null && renderCloseButton()}
+                </PullerBody>
+            </Puller>
         </>
     );
 };

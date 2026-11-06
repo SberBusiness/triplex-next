@@ -1,0 +1,45 @@
+import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
+
+<Meta title="release-notes/v1/1.54.0" />
+
+<Title>v1.54.0</Title>
+
+<Heading>Ломающие изменения</Heading>
+
+**Puller**
+
+- `Puller` сам рендерится через `Portal`, по умолчанию в `document.body`. Что проверить:
+    - обёртку `<Portal container={document.body}>` можно убрать;
+    - если шторка обёрнута в `Portal` с другим контейнером, передайте этот контейнер в новый prop `renderContainer`;
+    - если шторка рендерилась без `Portal`:
+        - внутри элемента с классом темы — передайте этот элемент в `renderContainer`;
+        - нативные проверки вида `parent.contains(event.target)` (например, свой обработчик клика снаружи) считают клик по шторке внешним;
+        - CSS-селекторы, завязанные на родителя (вида `.my-container .pullerWrapper`), к ней не применяются.
+
+<Heading>Изменения</Heading>
+
+**ChipSelect / ChipSelectTarget**
+
+- Проведён AI-рефакторинг `ChipSelectTarget`.
+- Исправлено: при `disabled` и выбранном значении кнопка очистки оставалась доступной с клавиатуры и сбрасывала значение.
+
+**ChipSuggest / ChipSuggestTarget**
+
+- Проведён AI-рефакторинг `ChipSuggestTarget`, добавлен `displayName`.
+- Исправлено: `onKeyDown` (в том числе `ChipSuggest.targetProps.onKeyDown`) вызывался только для Enter / Space, остальные клавиши до обработчика не доходили.
+- Исправлено: при `disabled` и выбранном значении кнопка очистки оставалась доступной с клавиатуры и сбрасывала значение.
+
+**Dropdown / MultiselectField.Dropdown / SelectExtendedField.Dropdown**
+
+- Добавлено: мобильную версию можно отрендерить в свой контейнер через `pullerProps.renderContainer`.
+
+**MultiselectField / SelectExtendedField.Target / SelectField**
+
+- Исправлено: Enter / Space на кнопке очистки, `HelpBox`, кнопках тегов в значении и других фокусируемых элементах внутри поля открывали выпадающий блок вместо нажатия на элемент. `stopPropagation` в `onKeyDown` тегов `MultiselectField` для этого больше не нужен.
+- Исправлено: клик по `HelpBox`, кнопкам тегов в значении и другим фокусируемым элементам внутри поля, а также события из их Tooltip переключали выпадающий блок.
+- Изменено: `ArrowDown` / `ArrowUp` открывают выпадающий блок, только когда фокус на самом поле, а не на вложенном элементе.
+- Изменено: `onClear` получает событие клика (`React.MouseEventHandler<HTMLButtonElement>`).
+
+**Tooltip**
+
+- Рефакторинг `TooltipMobile` без изменений поведения.

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { lockBodyScroll } from "../../utils/scroll/bodyScrollLock";
 import { EOverlayDirection, IOverlayChildrenProvideProps, OverlayBase } from "../Overlay/OverlayBase";
+import { IPortalProps, Portal } from "../Portal/Portal";
 import { PullerInner } from "./PullerInner";
 import styles from "./styles/Puller.module.less";
 
@@ -10,14 +11,16 @@ export interface IPullerProps extends React.HTMLAttributes<HTMLDivElement> {
     opened: boolean;
     /** Устанавливает флаг opened. */
     setOpened: (opened: boolean) => void;
+    /** DOM-узел, в который рендерится шторка. По умолчанию document.body. */
+    renderContainer?: IPortalProps["container"];
 }
 
 /**
  * Нижняя шторка (bottom sheet). Пока открыта, блокирует скролл body.
- * В Portal себя не выносит: при прямом использовании оберните в Portal.
+ * Рендерится через Portal в renderContainer.
  */
 export const Puller = React.forwardRef<HTMLDivElement, IPullerProps>(
-    ({ children, opened, setOpened, ...restProps }, ref) => {
+    ({ children, opened, setOpened, renderContainer = document.body, ...restProps }, ref) => {
         useEffect(() => {
             if (opened) {
                 return lockBodyScroll(styles.pullerScrollLock);
@@ -25,13 +28,15 @@ export const Puller = React.forwardRef<HTMLDivElement, IPullerProps>(
         }, [opened]);
 
         return (
-            <OverlayBase setOpened={setOpened} opened={opened} direction={EOverlayDirection.BOTTOM}>
-                {(props: IOverlayChildrenProvideProps) => (
-                    <PullerInner {...props} {...restProps} ref={ref} data-tx={process.env.npm_package_version}>
-                        {children}
-                    </PullerInner>
-                )}
-            </OverlayBase>
+            <Portal container={renderContainer}>
+                <OverlayBase setOpened={setOpened} opened={opened} direction={EOverlayDirection.BOTTOM}>
+                    {(props: IOverlayChildrenProvideProps) => (
+                        <PullerInner {...props} {...restProps} ref={ref} data-tx={process.env.npm_package_version}>
+                            {children}
+                        </PullerInner>
+                    )}
+                </OverlayBase>
+            </Portal>
         );
     },
 );

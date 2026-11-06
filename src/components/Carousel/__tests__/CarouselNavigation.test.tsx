@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { CarouselPrevButton, CarouselNextButton } from "../CarouselButton";
@@ -243,19 +243,20 @@ describe("Carousel Navigation (Buttons & Context)", () => {
 
     describe("Context Fallbacks", () => {
         it("should consume default context functions safely without throwing exceptions", () => {
-            const contexts: ICarouselContext[] = [];
-            const ContextReader: React.FC = () => {
-                contexts.push(useContext(CarouselContext));
-                return null;
-            };
-
-            render(<ContextReader />);
-            const context = contexts[0];
-            expect(() => {
-                context.nextSlide();
-                context.prevSlide();
-                context.goToSlide(0);
-            }).not.toThrow();
+            // Consumer вместо renderHook: в release-0 (React 17) запинен @testing-library/react 12,
+            // где renderHook ещё не экспортируется.
+            expect(() =>
+                render(
+                    <CarouselContext.Consumer>
+                        {({ nextSlide, prevSlide, goToSlide }) => {
+                            nextSlide();
+                            prevSlide();
+                            goToSlide(0);
+                            return null;
+                        }}
+                    </CarouselContext.Consumer>,
+                ),
+            ).not.toThrow();
         });
     });
 });

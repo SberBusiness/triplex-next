@@ -173,13 +173,13 @@ version: "1.0"
 |---|---|---|
 | `Enter`, `Space` | на чипсе | Открывает и закрывает список. `Space` не прокручивает страницу (`preventDefault` в `Chip`) |
 | `Enter`, `Space` | на кнопке очистки | Сбрасывает значение нативным click'ом кнопки. Всплытие останавливается, чтобы список не переключился заодно |
-| `Enter` | на опции списка | Выбор опции (`keyCodesForSelection` у `DropdownListItem`) |
+| `ArrowUp`, `ArrowDown` | в поле фильтрации | Перемещение по опциям (`DropdownList`, клавиши передаёт `Suggest`) |
+| `Enter` | в поле фильтрации | Выбор активной опции (`keyCodesForSelection` у `DropdownListItem`); пробел остаётся вводом |
 | `Escape` | внутри компонента | Закрывает список и возвращает в поле фильтрации `label` текущего значения (обработка в `Suggest`). Закрытым списком событие всплывает выше — так `ChipSuggest` уживается внутри модальных окон |
 
 Связь списка и поля: `id` списка (`dropdownListId` из `SuggestContext`) проставляется на
-`DropdownList` и в `aria-controls` поля фильтрации. `aria-activedescendant` поле принимает,
-но библиотека `activeDescendant` не выставляет — клавиатурная навигация по опциям остаётся
-на `DropdownList`.
+`DropdownList` и в `aria-controls` поля фильтрации, `aria-activedescendant` поля — `id` активной
+опции из `SuggestContext` (его заполняет `DropdownList` через провайдер в `Suggest`).
 
 Текстов компонент не хардкодит: `label`, `placeholder` и `noOptionsText` задаёт потребитель.
 `noOptionsText` показывается в `Tooltip` у поля фильтрации, пока поле в фокусе и потребитель
@@ -243,3 +243,4 @@ version: "1.0"
 |---|---|
 | 2026-09-07 | Создан документ (AI-рефакторинг ChipSuggest, TRI-134) |
 | 2026-10-21 | **Breaking** (TRIPLEX-961): prop `mobileViewProps` в `dropdownProps` переименован в `pullerProps`. |
+| 2026-11-05 | Исправлено (TRIPLEX-1039): поле фильтрации получает `aria-activedescendant` активной опции. Клавиши списку передаёт `Suggest`. |

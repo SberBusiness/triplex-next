@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Dropdown } from "@sberbusiness/triplex-next/components/Dropdown/Dropdown";
 import { isKey } from "@sberbusiness/triplex-next/utils/keyboard";
 import { DropdownList } from "@sberbusiness/triplex-next/components/Dropdown/desktop/DropdownList";
+import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
+import { useDropdownListKeyboard } from "@sberbusiness/triplex-next/components/Dropdown/useDropdownListKeyboard";
 import clsx from "clsx";
 import styles from "./styles/ButtonDropdownExtended.module.less";
 
@@ -11,6 +13,8 @@ export interface IButtonDropdownExtendedButtonProvideProps {
     opened: boolean;
     /** Функция, контролирующая состояние открытости. */
     setOpened: (opened: boolean) => void;
+    /** Идентификатор активного элемента DropdownList. Для aria-activedescendant кнопки. */
+    activeDescendant?: string;
 }
 
 /** Свойства встроенного выпадающего блока. */
@@ -60,10 +64,21 @@ export interface IButtonDropdownExtendedComponent extends React.ForwardRefExotic
  * Позволяет кастомизировать кнопку открытия Dropdown и сам Dropdown через render-функции.
  * Пока блок открыт, слушает документ и закрывает его по Escape, по Tab (при closeOnTab)
  * и по клику вне кнопки и вне выпадающего блока.
+ * Связывает кнопку с DropdownList внутри блока: клавиши, нажатые на кнопке, передаются открытому списку.
  */
 export const ButtonDropdownExtended: IButtonDropdownExtendedComponent = Object.assign(
     React.forwardRef<HTMLDivElement, IButtonDropdownExtendedProps>(function ButtonDropdownExtended(props, ref) {
-        const { className, opened, setOpened, renderButton, renderDropdown, dropdownRef, closeOnTab, ...rest } = props;
+        const {
+            className,
+            opened,
+            setOpened,
+            renderButton,
+            renderDropdown,
+            dropdownRef,
+            closeOnTab,
+            onKeyDown,
+            ...rest
+        } = props;
 
         // Корневой элемент нужен самому компоненту (клик снаружи) и потребителю через forwarded ref.
         const containerRef = useRef<HTMLDivElement | null>(null);
@@ -132,17 +147,39 @@ export const ButtonDropdownExtended: IButtonDropdownExtendedComponent = Object.a
             };
         }, [computedOpened, closeOnTab, dropdownRef, handleOpenedChange]);
 
+        const {
+            context: dropdownListContext,
+            activeDescendant,
+            handleKeyDown: handleDropdownListKeyDown,
+        } = useDropdownListKeyboard();
+
+        // Клавиши, всплывшие от кнопки, передаются открытому списку — в фазе bubble, не capture
+        // (почему — Dropdown-ai.md → «Инварианты»).
+        const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+            if (!dropdownRef.current?.contains(event.target as Node)) {
+                handleDropdownListKeyDown(event);
+            }
+
+            onKeyDown?.(event);
+        };
+
         const classNames = clsx(styles.buttonDropdownExtended, className);
 
         return (
-            <div className={classNames} ref={setContainerRef} {...rest}>
-                {renderButton({ opened: computedOpened, setOpened: handleOpenedChange })}
-                {renderDropdown({
-                    className: styles.buttonDropdownExtendedBlock,
-                    opened: computedOpened,
-                    setOpened: handleOpenedChange,
-                })}
-            </div>
+            <DropdownListContext.Provider value={dropdownListContext}>
+                <div className={classNames} ref={setContainerRef} {...rest} onKeyDown={handleKeyDown}>
+                    {renderButton({
+                        opened: computedOpened,
+                        setOpened: handleOpenedChange,
+                        activeDescendant,
+                    })}
+                    {renderDropdown({
+                        className: styles.buttonDropdownExtendedBlock,
+                        opened: computedOpened,
+                        setOpened: handleOpenedChange,
+                    })}
+                </div>
+            </DropdownListContext.Provider>
         );
     }),
     {

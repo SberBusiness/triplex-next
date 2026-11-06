@@ -3,10 +3,12 @@ import {
     Button,
     Dropdown,
     DropdownList,
+    DropdownListContext,
     EButtonTheme,
     EComponentSize,
     EDropdownDirection,
     EDropdownWidth,
+    useDropdownListKeyboard,
 } from "@sberbusiness/triplex-next";
 
 const OPTIONS = [
@@ -17,6 +19,7 @@ const OPTIONS = [
 export const Loading = () => {
     const targetRef = useRef<HTMLButtonElement>(null);
     const [opened, setOpened] = useState(false);
+    const { context, activeDescendant, handleKeyDown } = useDropdownListKeyboard();
 
     return (
         <div>
@@ -26,6 +29,8 @@ export const Loading = () => {
                 aria-haspopup="listbox"
                 aria-expanded={opened}
                 onClick={() => setOpened(!opened)}
+                onKeyDown={handleKeyDown}
+                aria-activedescendant={activeDescendant}
                 ref={targetRef}
             >
                 Button text
@@ -38,13 +43,15 @@ export const Loading = () => {
                 direction={EDropdownDirection.BOTTOM}
                 width={EDropdownWidth.MIN_TARGET}
             >
-                <DropdownList loading dropdownOpened={opened} size={EComponentSize.MD}>
-                    {OPTIONS.map((option) => (
-                        <DropdownList.Item key={option.id} id={option.id} onSelect={() => setOpened(false)}>
-                            {option.label}
-                        </DropdownList.Item>
-                    ))}
-                </DropdownList>
+                <DropdownListContext.Provider value={context}>
+                    <DropdownList loading dropdownOpened={opened} size={EComponentSize.MD}>
+                        {OPTIONS.map((option) => (
+                            <DropdownList.Item key={option.id} id={option.id} onSelect={() => setOpened(false)}>
+                                {option.label}
+                            </DropdownList.Item>
+                        ))}
+                    </DropdownList>
+                </DropdownListContext.Provider>
             </Dropdown>
         </div>
     );

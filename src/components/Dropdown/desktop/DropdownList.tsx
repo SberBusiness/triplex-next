@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import {
     DropdownListItem,
@@ -9,12 +9,18 @@ import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropd
 import { LoaderSmall, ELoaderSmallTheme } from "@sberbusiness/triplex-next/components/Loader";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
-import { getSelectedListItemIndex, scrollListToItem, scrollListToTop } from "./utils";
+import {
+    getListItemProps,
+    getNextActiveListItemIndex,
+    getSelectedListItemIndex,
+    scrollListToItem,
+    scrollListToTop,
+} from "./utils";
 import styles from "../styles/DropdownDesktopList.module.less";
 
 /** Свойства компонента DropdownList. */
 export interface IDropdownListProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Dropdown открыт. При открытии список подписывается на клавиатурную навигацию. */
+    /** Dropdown открыт. Пока true, список принимает клавиши через DropdownListContext. */
     dropdownOpened: boolean;
     /** Объект для создания ссылки на html-элемент "список". */
     listRef?: React.RefObject<HTMLDivElement>;
@@ -36,12 +42,17 @@ export interface IDropdownListComponent extends React.FC<IDropdownListProps> {
 // Соответствие размера имени класса.
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
+/** Клавиши выбора активного элемента, если у элемента не задан keyCodesForSelection. */
+const KEY_CODES_FOR_SELECTION_DEFAULT = [EVENT_KEY_CODES.SPACE, EVENT_KEY_CODES.ENTER];
+
 /** Идентификатор служебного элемента списка с лоадером. */
 const LOADER_ITEM_ID = "dropdown-desktop-list-loader-item";
 
 /**
  * Компонент DropdownList.
- * Используется для обрамления вложенного списка и добавляет списку возможность навигации с клавиатуры.
+ * Используется для обрамления вложенного списка и добавляет списку возможность навигации с клавиатуры:
+ * ArrowUp / ArrowDown перемещают активный элемент, клавиши keyCodesForSelection активного элемента вызывают его onSelect.
+ * Рендерится внутри DropdownListContext.Provider со значением из useDropdownListKeyboard.
  * В качестве children принимает только DropdownList.Item.
  */
 export const DropdownList: IDropdownListComponent = (props) => {
@@ -56,7 +67,7 @@ export const DropdownList: IDropdownListComponent = (props) => {
     } = props;
     const classNames = clsx(styles.dropdownDesktopList, sizeToClassNameMap[size], className);
 
-    const { setActiveDescendant } = useContext(DropdownListContext);
+    const { setActiveDescendant, registerKeyDownHandler } = useContext(DropdownListContext);
 
     // Ref контейнера списка. Используется внутренний ref, если listRef не передан снаружи.
     const innerContainerRef = useRef<HTMLDivElement>(null);
@@ -64,12 +75,12 @@ export const DropdownList: IDropdownListComponent = (props) => {
     // Массив DOM-элементов списка.
     const listItemsRef = useRef<Array<HTMLDivElement | null>>([]);
 
-    // Индекс элемента, который становится активным при открытии: выбранный элемент либо первый.
-    const selectedListItemIndex = getSelectedListItemIndex(children);
-    const activeListItemIndexOnOpen = selectedListItemIndex ?? 0;
+    // У пустого списка — 0: первым активным станет первый элемент, подгруженный после открытия.
+    const getActiveListItemIndexOnOpen = () =>
+        getSelectedListItemIndex(children) ?? getNextActiveListItemIndex(children, undefined, "next") ?? 0;
 
-    const [activeListItemIndex, setActiveListItemIndex] = useState<TActiveListItemIndex>(
-        dropdownOpened ? activeListItemIndexOnOpen : undefined,
+    const [activeListItemIndex, setActiveListItemIndex] = useState<TActiveListItemIndex>(() =>
+        dropdownOpened ? getActiveListItemIndexOnOpen() : undefined,
     );
     const [prevDropdownOpened, setPrevDropdownOpened] = useState(dropdownOpened);
 
@@ -78,51 +89,62 @@ export const DropdownList: IDropdownListComponent = (props) => {
     // иначе список, оставленный смонтированным в закрытом виде, сохранял бы подсветку.
     if (dropdownOpened !== prevDropdownOpened) {
         setPrevDropdownOpened(dropdownOpened);
-        setActiveListItemIndex(dropdownOpened ? activeListItemIndexOnOpen : undefined);
+        setActiveListItemIndex(dropdownOpened ? getActiveListItemIndexOnOpen() : undefined);
     }
 
-    const childrenCount = React.Children.count(children);
+    const activeListItemProps = getListItemProps(children, activeListItemIndex);
 
-    // Подписка на keydown когда открыт, с актуальным индексом.
-    useEffect(() => {
+    // Без зависимостей: обработчик замыкает актуальные индекс и props активного элемента, а регистрация —
+    // лишь запись в ref. Layout-эффект — чтобы следующее нажатие не застало устаревший индекс
+    // (в React 17 пассивные эффекты выполняются после отрисовки).
+    useLayoutEffect(() => {
         if (!dropdownOpened) {
             return;
         }
 
-        const handleKeyDown = (event: KeyboardEvent) => {
-            let nextActiveListItemIndex: number | undefined;
+        return registerKeyDownHandler((event) => {
+            if (event.keyCode === EVENT_KEY_CODES.ARROW_DOWN || event.keyCode === EVENT_KEY_CODES.ARROW_UP) {
+                const nextActiveListItemIndex = getNextActiveListItemIndex(
+                    children,
+                    activeListItemIndex,
+                    event.keyCode === EVENT_KEY_CODES.ARROW_DOWN ? "next" : "previous",
+                );
 
-            if (event.keyCode === EVENT_KEY_CODES.ARROW_DOWN) {
-                nextActiveListItemIndex =
-                    activeListItemIndex === undefined || activeListItemIndex >= childrenCount - 1
-                        ? 0
-                        : activeListItemIndex + 1;
+                // В списке без элементов перемещаться некуда: клавиша остаётся управляющему элементу.
+                if (nextActiveListItemIndex === undefined) {
+                    return false;
+                }
+
                 event.preventDefault();
-            } else if (event.keyCode === EVENT_KEY_CODES.ARROW_UP) {
-                nextActiveListItemIndex =
-                    activeListItemIndex === undefined || activeListItemIndex <= 0
-                        ? childrenCount - 1
-                        : activeListItemIndex - 1;
-                event.preventDefault();
+
+                if (activeListItemIndex !== nextActiveListItemIndex) {
+                    scrollListToItem(containerRef.current, listItemsRef.current[nextActiveListItemIndex]);
+                    setActiveListItemIndex(nextActiveListItemIndex);
+                }
+
+                return true;
             }
 
-            if (nextActiveListItemIndex !== undefined && activeListItemIndex !== nextActiveListItemIndex) {
-                scrollListToItem(containerRef.current, listItemsRef.current[nextActiveListItemIndex]);
-                setActiveListItemIndex(nextActiveListItemIndex);
-            }
-        };
+            const keyCodesForSelection = activeListItemProps?.keyCodesForSelection ?? KEY_CODES_FOR_SELECTION_DEFAULT;
 
-        document.addEventListener("keydown", handleKeyDown);
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-        };
-    }, [dropdownOpened, activeListItemIndex, childrenCount, containerRef]);
+            if (activeListItemProps && keyCodesForSelection.includes(event.keyCode)) {
+                event.preventDefault();
+                activeListItemProps.onSelect?.();
+
+                return true;
+            }
+
+            return false;
+        });
+    });
 
     // Прокрутка списка к активному элементу при открытии.
     useEffect(() => {
         if (!dropdownOpened) {
             return;
         }
+
+        const selectedListItemIndex = getSelectedListItemIndex(children);
 
         if (selectedListItemIndex === undefined) {
             scrollListToTop(containerRef.current);
@@ -133,17 +155,12 @@ export const DropdownList: IDropdownListComponent = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dropdownOpened]);
 
-    // Синхронизация activeDescendant при изменении activeListItemIndex.
-    useEffect(() => {
-        if (dropdownOpened && activeListItemIndex !== undefined) {
-            setActiveDescendant(listItemsRef.current[activeListItemIndex]?.id);
-            return;
-        }
+    // Зависимость по id, а не по индексу: id меняется и без смены индекса, когда опции подгрузились после открытия.
+    const activeListItemId = activeListItemProps?.id;
 
-        if (!dropdownOpened) {
-            setActiveDescendant(undefined);
-        }
-    }, [dropdownOpened, activeListItemIndex, setActiveDescendant]);
+    useEffect(() => {
+        setActiveDescendant(dropdownOpened ? activeListItemId : undefined);
+    }, [dropdownOpened, activeListItemId, setActiveDescendant]);
 
     // Сброс activeDescendant при размонтировании списка.
     useEffect(

@@ -41,7 +41,7 @@ version: "1.0"
 
 | Prop | Тип | Описание |
 |---|---|---|
-| `renderTarget` | `(props: ISelectExtendedFieldTargetProvideProps) => React.ReactNode` | Рендер-функция поля выбора. Получает `opened` и `setOpened` |
+| `renderTarget` | `(props: ISelectExtendedFieldTargetProvideProps) => React.ReactNode` | Рендер-функция поля выбора. Получает `opened`, `setOpened` и `activeDescendant` |
 | `children` | `(props: ISelectExtendedFieldDropdownProvideProps) => React.ReactNode` | Рендер-функция выпадающего блока. Получает `opened`, `setOpened`, `targetRef`, `dropdownRef` |
 
 #### Опциональные props
@@ -59,6 +59,7 @@ version: "1.0"
 |---|---|---|
 | `opened` | обеим | Текущее состояние открытости |
 | `setOpened` | обеим | Сеттер состояния открытости. Стабилен между рендерами (сеттер `useState`) |
+| `activeDescendant` | `renderTarget` | Идентификатор активной опции открытого `DropdownList` — для `aria-activedescendant` поля выбора. `undefined`, пока список закрыт или активной опции нет |
 | `targetRef` | `children` | Ссылка на **корневой `<div>` компонента**, а не на поле ввода. По ней `Dropdown` считает своё положение |
 | `dropdownRef` | `children` | Ссылка, которую нужно повесить на контейнер выпадающего блока. По ней компонент отличает нажатие внутри блока от нажатия вне его |
 
@@ -76,6 +77,7 @@ version: "1.0"
 | `placeholder` | `React.ReactNode` | — | Отображается, пока нет `label` |
 | `loading` | `boolean` | `false` | Вместо каретки — лоадер; клик и клавиатура не открывают блок |
 | `onClear` | `React.MouseEventHandler<HTMLButtonElement>` | — | Если передан, в постфиксе появляется кнопка очистки |
+| `activeDescendant` | `string` | из `DropdownListContext` | Значение `aria-activedescendant`. Приходит спредом props `renderTarget`; если не передан, берётся из контекста `SelectExtendedField` |
 | `prefix` / `postfix` | `React.ReactNode` | — | Слоты `FormFieldPrefix` / `FormFieldPostfix`. Постфикс идёт **после** каретки. Обработка событий — см. «Ограничения» |
 | `size` | `EComponentSize` | `EComponentSize.MD` | Размер поля. Определяет размер каретки и лоадера |
 | `status` | `EFormFieldStatus` | `EFormFieldStatus.DEFAULT` | Визуальное состояние. `DISABLED` блокирует открытие |
@@ -136,11 +138,12 @@ version: "1.0"
 
 - `SelectExtendedFieldTarget` выставляет на корневом элементе `aria-haspopup="listbox"` и `aria-expanded`, отражающий `opened`.
 - Роли `listbox` / `option` и клавиатурную навигацию по опциям (`ArrowUp` / `ArrowDown`, выбор по `Enter` / `Space`) даёт `DropdownList` — то есть `SelectExtendedField.Dropdown.List`. Если выпадающий блок не список, эти роли не появляются и навигацию организует потребитель.
-- Клавиши открытия на поле выбора: `Space`, `Enter`, `ArrowDown`, `ArrowUp` (только когда фокус на самом поле). Обработчик вызывает `preventDefault` (чтобы страница не прокручивалась) и `stopPropagation` — иначе то же нажатие поймает документный обработчик `DropdownListItem` и список сразу выберет опцию.
+- Клавиши открытия на поле выбора: `Space`, `Enter`, `ArrowDown`, `ArrowUp` (только когда фокус на самом поле). Обработчик вызывает `preventDefault`, чтобы страница не прокручивалась.
+- `SelectExtendedField` оборачивает поле и блок в `DropdownListContext.Provider` (значение из `useDropdownListKeyboard`) и в корневом `onKeyDown` передаёт клавиши открытому `DropdownList`: стрелки перемещают активную опцию, `Enter` / `Space` выбирают её. Фаза — **bubble**, не capture (подробности — `Dropdown-ai.md` → «Инварианты»). События из самого выпадающего блока списку не передаются.
 - В состояниях `loading` и `status={EFormFieldStatus.DISABLED}` поле не реагирует ни на клик, ни на клавиатуру; `onClick` / `onKeyDown` потребителя в этих состояниях тоже не вызываются.
 - `Escape` закрывает блок из любого места страницы — слушатель `KeyDownListener` висит на `window`.
 - `Tab` закрывает блок только при `closeOnTab`. Фокус компонент не перехватывает и не возвращает: focus trap, если нужен, добавляет потребитель.
-- Связь поля со списком (`aria-controls`, `aria-activedescendant`) компонент **не выставляет** — это делает потребитель. `SelectField` передаёт `listId` в `SelectExtendedFieldDropdownDefault` именно для этого.
+- `aria-activedescendant` `SelectExtendedField.Target` выставляет сам — из `activeDescendant` (спред props `renderTarget`), а без него из `DropdownListContext`; явно переданный `aria-activedescendant` его перекрывает. Свой target в `renderTarget` ставит атрибут из `activeDescendant` сам (так делает `ChipSort`). `aria-controls` компонент **не выставляет** — это делает потребитель. `SelectField` передаёт `listId` в `SelectExtendedFieldDropdownDefault` именно для этого.
 - Компонент не хардкодит текстовые строки: `fieldLabel`, `placeholder`, `aria-label` для кнопки очистки и заголовок мобильной версии передаёт потребитель — библиотека мультиязычная.
 
 ---
@@ -208,3 +211,4 @@ version: "1.0"
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`Chip`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
 | 2026-10-21 | **Breaking** (TRIPLEX-961): prop `mobileViewProps`, унаследованный `SelectExtendedField.Dropdown` от `Dropdown`, переименован в `pullerProps`. |
 | 2026-10-29 | TRIPLEX-1028: `SelectExtendedField.Target` переключает выпадающий блок только по событиям самого поля — см. «Ограничения». `onClear` получает событие клика. |
+| 2026-11-05 | TRIPLEX-1039: компонент связывает поле с `DropdownList` в блоке — клавиши, нажатые в поле, передаются открытому списку через `useDropdownListKeyboard`, `renderTarget` получает `activeDescendant`, `SelectExtendedField.Target` выставляет из него (или из контекста) `aria-activedescendant`. `stopPropagation` на клавишах открытия убран. |

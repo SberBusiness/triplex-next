@@ -2,13 +2,15 @@ import React, { useState, useRef, useLayoutEffect, useCallback, useMemo } from "
 import { uniqueId } from "lodash-es";
 import { ISuggestOption, ISuggestProps } from "./types";
 import { isKey } from "@sberbusiness/triplex-next/utils";
+import { useDropdownListKeyboard } from "../Dropdown/useDropdownListKeyboard";
 
 /** Текст, отображаемый в поле ввода для выбранной опции. */
 const getOptionLabel = (option: ISuggestOption | undefined) => option?.label ?? "";
 
 /**
  * Состояние Suggest: значение поля ввода, видимость выпадающего списка и обработчики выбора,
- * фильтрации и клавиатуры. Результат раздаётся потомкам через SuggestContext.
+ * фильтрации и клавиатуры. Возвращает suggest — раздаётся потомкам через SuggestContext — и dropdownListContext:
+ * связку с DropdownList для DropdownListContext.
  */
 export const useSuggest = <T extends ISuggestOption = ISuggestOption>({
     value,
@@ -17,7 +19,11 @@ export const useSuggest = <T extends ISuggestOption = ISuggestOption>({
     onKeyDown,
 }: Pick<ISuggestProps<T>, "value" | "onSelect" | "onFilter" | "onKeyDown">) => {
     const [inputValue, setInputValue] = useState(() => getOptionLabel(value));
-    const [activeDescendant, setActiveDescendant] = useState<string>();
+    const {
+        context: dropdownListContext,
+        activeDescendant,
+        handleKeyDown: handleDropdownListKeyDown,
+    } = useDropdownListKeyboard();
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [prevValue, setPrevValue] = useState(value);
     const [dropdownListId] = useState(() => `dropdown-list-${uniqueId()}`);
@@ -36,7 +42,6 @@ export const useSuggest = <T extends ISuggestOption = ISuggestOption>({
 
     const closeDropdown = useCallback((newInputValue?: string) => {
         setInputValue(newInputValue ?? getOptionLabel(latestValueRef.current));
-        setActiveDescendant(undefined);
         setDropdownOpen(false);
     }, []);
 
@@ -63,13 +68,15 @@ export const useSuggest = <T extends ISuggestOption = ISuggestOption>({
             if (dropdownOpen && isKey(event.key, "ESCAPE")) {
                 event.stopPropagation();
                 closeDropdown();
+            } else {
+                handleDropdownListKeyDown(event);
             }
             onKeyDown?.(event);
         },
-        [dropdownOpen, closeDropdown, onKeyDown],
+        [dropdownOpen, closeDropdown, handleDropdownListKeyDown, onKeyDown],
     );
 
-    return useMemo(
+    const suggest = useMemo(
         () => ({
             inputValue,
             activeDescendant,
@@ -77,7 +84,6 @@ export const useSuggest = <T extends ISuggestOption = ISuggestOption>({
             dropdownListId,
             setInputValue,
             setDropdownOpen,
-            setActiveDescendant,
             closeDropdown,
             onSelect: handleSelect,
             onFilter: handleFilter,
@@ -94,4 +100,6 @@ export const useSuggest = <T extends ISuggestOption = ISuggestOption>({
             handleKeyDown,
         ],
     );
+
+    return { suggest, dropdownListContext };
 };

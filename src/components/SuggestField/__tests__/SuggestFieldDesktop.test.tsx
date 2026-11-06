@@ -105,7 +105,7 @@ describe("SuggestFieldDesktop", () => {
             expect(screen.getByRole("listbox").id).toBe(getInput().getAttribute("aria-controls"));
         });
 
-        it("aria-activedescendant follows the active option and resets on typing", async () => {
+        it("aria-activedescendant follows the active option, survives typing and resets on close", async () => {
             const user = userEvent.setup();
             renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
 
@@ -120,6 +120,10 @@ describe("SuggestFieldDesktop", () => {
             expect(getInput()).toHaveAttribute("aria-activedescendant", options[1].id);
 
             await user.type(getInput(), "f");
+
+            expect(getInput()).toHaveAttribute("aria-activedescendant", options[1].id);
+
+            await user.keyboard("{Escape}");
 
             expect(getInput()).not.toHaveAttribute("aria-activedescendant");
         });
@@ -144,6 +148,19 @@ describe("SuggestFieldDesktop", () => {
             await user.click(getInput());
             pressKey(EVENT_KEY_CODES.SPACE);
 
+            expect(onSelect).not.toHaveBeenCalled();
+        });
+
+        it("ignores keyboard events outside the input", async () => {
+            const user = userEvent.setup();
+            const onSelect = vi.fn();
+            renderField({ onSelect, onFilter: vi.fn() });
+
+            await user.click(getInput());
+            fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+            fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ENTER });
+
+            expect(getInput()).toHaveAttribute("aria-activedescendant", screen.getAllByRole("option")[0].id);
             expect(onSelect).not.toHaveBeenCalled();
         });
 

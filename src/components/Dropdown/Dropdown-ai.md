@@ -57,10 +57,12 @@ version: "1.0"
 ### Список опций — `DropdownList` и `DropdownList.Item`
 
 `Dropdown` не знает про списки: клавиатурную навигацию и роли `listbox` / `option` добавляет `DropdownList`.
+Фокус при этом остаётся на управляющем элементе (паттерн `aria-activedescendant`), поэтому клавиши списку передаёт он —
+через хук `useDropdownListKeyboard` (см. ниже).
 
 | Prop `DropdownList` | Тип | По умолчанию | Описание |
 |---|---|---|---|
-| `dropdownOpened` | `boolean` | — | Обязательный. Пока `true`, список слушает `ArrowUp` / `ArrowDown` на документе |
+| `dropdownOpened` | `boolean` | — | Обязательный. Пока `true`, список регистрирует свой клавиатурный обработчик в `DropdownListContext` |
 | `size` | `EComponentSize` | `MD` | Размер списка. Пробрасывается в каждый `DropdownList.Item` |
 | `loading` | `boolean` | `false` | Добавляет в конец списка служебный элемент с лоадером |
 | `listRef` | `React.RefObject<HTMLDivElement>` | — | Внешняя ссылка на контейнер списка. Если не передана, используется внутренняя |
@@ -68,17 +70,41 @@ version: "1.0"
 | Prop `DropdownList.Item` | Тип | По умолчанию | Описание |
 |---|---|---|---|
 | `id` | `string` | — | Обязательный и уникальный: используется как значение `aria-activedescendant` |
-| `onSelect` | `() => void` | — | Выбор элемента: по клику и по клавишам из `keyCodesForSelection`, когда элемент активен |
+| `onSelect` | `() => void` | — | Выбор элемента: по клику, а когда элемент активен — по клавишам из `keyCodesForSelection`, переданным списку через `useDropdownListKeyboard` |
 | `selected` | `boolean` | `false` | Элемент выбран: подсветка + `aria-selected`. При открытии меню активным становится именно он |
 | `active` | `boolean` | — | Активен при навигации с клавиатуры. **Проставляется самим `DropdownList`** — снаружи задавать не нужно |
-| `keyCodesForSelection` | `number[]` | `[SPACE, ENTER]` | Числовые `keyCode` клавиш выбора |
+| `keyCodesForSelection` | `number[]` | `[SPACE, ENTER]` | Числовые `keyCode` клавиш выбора. Читает `DropdownList`. Если клавиши приходят из поля ввода, задайте `[ENTER]`, иначе пробел выберет пункт вместо ввода |
 | `showNotificationIcon` | `boolean` | `false` | Значок новых уведомлений (`Badge.Dot`) в углу элемента |
+
+### Связка с управляющим элементом — `useDropdownListKeyboard`
+
+Хук создаёт значение `DropdownListContext` и обработчик клавиатуры для управляющего элемента:
+
+| Поле | Тип | Описание |
+|---|---|---|
+| `context` | `IDropdownListContext` | Значение `DropdownListContext.Provider`, внутри которого рендерится `DropdownList` |
+| `activeDescendant` | `string \| undefined` | `id` активного элемента — для `aria-activedescendant` управляющего элемента |
+| `handleKeyDown` | `(event: React.KeyboardEvent) => boolean` | Вызывается из `onKeyDown` управляющего элемента. Передаёт клавишу открытому списку; `true` — клавиша обработана (стрелки или выбор), у события уже вызван `preventDefault`. Пока список закрыт, возвращает `false` |
+
+```tsx
+const { context, activeDescendant, handleKeyDown } = useDropdownListKeyboard();
+
+<Button aria-activedescendant={activeDescendant} onKeyDown={handleKeyDown} onClick={() => setOpened(!opened)} ref={targetRef} />
+<Dropdown opened={opened} setOpened={setOpened} targetRef={targetRef}>
+    <DropdownListContext.Provider value={context}>
+        <DropdownList dropdownOpened={opened}>…</DropdownList>
+    </DropdownListContext.Provider>
+</Dropdown>
+```
+
+`ButtonDropdownExtended`, `SelectExtendedField` и `Suggest` подключают хук сами.
 
 ### Ограничения
 
 - `DropdownList` в качестве `children` принимает только `DropdownList.Item` — остальные узлы рендерятся как есть, но не участвуют в навигации и нумерации.
 - `DropdownList` — не `forwardRef`-компонент: ссылка на контейнер списка передаётся через prop `listRef`.
 - Закрытие по `Escape`, `Tab` и клику вне меню `Dropdown` **не реализует**. Это ответственность потребителя либо `ButtonDropdownExtended`.
+- Без `DropdownListContext.Provider` со значением из `useDropdownListKeyboard` клавиатурной навигации по списку нет: работают только клик и наведение.
 
 ---
 
@@ -106,23 +132,25 @@ DropdownList.Background_Selected
 - `Dropdown` рендерится в `document.body` через `Portal`. Смена контейнера портала — breaking change для потребителей, которые ищут меню в DOM. Мобильная версия рендерится туда же, если не задан `pullerProps.renderContainer`.
 - Публичные barrel-экспорты `src/components/Dropdown/index.ts`, `desktop/index.ts` должны сохраняться: компонент используется внутри `ButtonDropdown`, `SelectField`, `SelectExtendedField`, `SuggestField`, `MultiselectField`, `TabsLine`, `DatePickerExtended`, `Chip`, `List`.
 - `DropdownList` проставляет дочерним элементам `active`, `size`, `ref`, `onMouseOver` и `onMouseOut` через `cloneElement` — эти props у `DropdownList.Item` нельзя считать «пользовательскими».
-- Пока десктопное меню открыто, на `document.body` висит класс блокировки скролла, а на документе — обработчики `wheel` и `keydown`. Снятие обработчиков в cleanup эффекта обязательно. Класс вешается только через `lockBodyScroll` (`src/utils/scroll/bodyScrollLock.ts`): прямой `classList.remove` снял бы блокировку при другом открытом меню.
+- Пока десктопное меню открыто, на `document.body` висит класс блокировки скролла, а на документе — обработчики `wheel` и `keydown` (`DropdownDesktop`, только для блокировки прокрутки). Снятие обработчиков в cleanup эффекта обязательно. Класс вешается только через `lockBodyScroll` (`src/utils/scroll/bodyScrollLock.ts`): прямой `classList.remove` снял бы блокировку при другом открытом меню.
 - Числовой формат `keyCodesForSelection` (`number[]`, а не `KeyboardEvent.code`) — часть публичного API.
 - Хелперы из `desktop/utils.ts` внутренние: не экспортировать их через barrel.
-- `listRef` у `DropdownList` и `setActiveDescendant` из `DropdownListContext` должны быть стабильными между рендерами (ref из `useRef`, сеттер из `useState`). Нестабильные значения переподписывают клавиатурный обработчик и сбрасывают `aria-activedescendant` на каждый рендер.
+- `listRef` у `DropdownList`, `setActiveDescendant` и `registerKeyDownHandler` из `DropdownListContext` должны быть стабильными между рендерами (ref из `useRef`, функции из `useDropdownListKeyboard`). Нестабильный `setActiveDescendant` сбрасывает `aria-activedescendant` на каждый рендер.
+- `DropdownList` и `DropdownListItem` не подписываются на клавиатуру `document`. Клавиши передаёт управляющий элемент через `useDropdownListKeyboard`: иначе список ловит то же нажатие, которым его открыли (`Space` выберет первый пункт, `ArrowDown` перескочит на второй).
+- Контейнеры, связывающие список со своим управляющим элементом (`ButtonDropdownExtended`, `SelectExtendedField`), передают клавиши списку в фазе **bubble** корневого `onKeyDown`, не в capture: между нативными слушателями фаз capture и bubble браузер выполняет микротаски, React успевает закоммитить выбор пункта, и управляющий элемент видит уже закрытый список — `Enter` открыл бы его снова. В jsdom этот эффект не воспроизводится, его ловит e2e `e2e/tests/dropdownKeyboard.spec.ts`.
+- Один `DropdownList` на одно значение `DropdownListContext`: обработчик клавиатуры у контекста один, и при нескольких открытых списках клавиши получит только последний отрендеренный. Для второго списка нужен свой `useDropdownListKeyboard` и свой Provider.
 
 ---
 
 ## Accessibility
 
 - `DropdownList` рендерит контейнер с `role="listbox"`, `DropdownList.Item` — `role="option"` и `aria-selected`. В мобильной версии `PullerList` / `PullerListItem` — те же роли.
-- Клавиатурная навигация по списку: `ArrowDown` / `ArrowUp` перемещают активный элемент по кругу и прокручивают контейнер к нему, `Enter` / `Space` (или клавиши из `keyCodesForSelection`) вызывают `onSelect` активного элемента. Обработчики висят на `document`, пока `dropdownOpened === true`.
-- При открытии активным становится элемент с `selected`, иначе первый; список прокручивается к нему.
+- Клавиатурная навигация по списку: `ArrowDown` / `ArrowUp` перемещают активный элемент по кругу, пропуская children, которые не являются React-элементами (`null`, `false` из условного рендера), и прокручивают контейнер к нему, `Enter` / `Space` (или клавиши из `keyCodesForSelection` активного элемента) вызывают его `onSelect`. Клавиши приходят только с управляющего элемента — через `handleKeyDown` из `useDropdownListKeyboard`, пока `dropdownOpened === true`.
+- При открытии активным становится элемент с `selected`, иначе первый React-элемент среди children (`null` / `false` пропускаются); список прокручивается к нему.
 - Пока меню открыто, `DropdownDesktop` гасит клавиши прокрутки страницы (`Space`, `PageUp`, `PageDown`, `Home`, `End`, стрелки), но только если фокус на `document.body`.
-- `aria-activedescendant` компонент сам на триггер **не выставляет**: `DropdownList` публикует id активного элемента через `DropdownListContext.setActiveDescendant`, а связать его с триггером должен потребитель (см. `SelectField`, `ButtonDropdown`). Контекст сбрасывается при закрытии и размонтировании списка.
+- `aria-activedescendant` компонент сам на триггер **не выставляет**: `DropdownList` публикует id активного элемента через `DropdownListContext.setActiveDescendant`, а потребитель берёт его из `useDropdownListKeyboard().activeDescendant` (у `ButtonDropdownExtended` — из `activeDescendant` в `renderButton`, `SelectExtendedField.Target` выставляет его сам). `id` берётся из props активного элемента, поэтому значение обновляется и тогда, когда опции подгрузились уже после открытия. Контекст сбрасывается, когда активного элемента нет (курсор ушёл с элемента), при закрытии и размонтировании списка.
 - Потребитель отвечает за атрибуты триггера: `aria-haspopup`, `aria-expanded`, `aria-controls`, `aria-activedescendant`.
 - Компонент не хардкодит текстовые строки: `aria-label` для `PullerClose` и заголовки мобильной версии передаёт потребитель (библиотека мультиязычная).
-- **Известное ограничение:** при уходе курсора с элемента списка (`onMouseOut`) подсветка снимается, но `activeDescendant` в контексте не сбрасывается — `aria-activedescendant` на триггере продолжает указывать на последний наведённый пункт до следующей смены активного элемента или закрытия меню. Поведение унаследованное; его исправление меняет наблюдаемый контракт для `SelectField` / `ButtonDropdown` / `SuggestField` и требует отдельного решения.
 - Фокус компонент не перехватывает и не возвращает. Если нужен focus trap, его добавляет потребитель (так делает `MultiselectField.Dropdown`).
 
 ---
@@ -149,7 +177,8 @@ DropdownList.Background_Selected
 
 **Общее:**
 
-- `DropdownListContext` — контекст `activeDescendant` / `setActiveDescendant` между списком и триггером.
+- `DropdownListContext` — контекст между списком и триггером: `activeDescendant` / `setActiveDescendant` и регистрация клавиатурного обработчика списка (`registerKeyDownHandler`, возвращает функцию снятия).
+- `useDropdownListKeyboard` — хук, создающий значение `DropdownListContext` и `handleKeyDown` для управляющего элемента.
 - `Portal`, `MobileView`, `OverlayBase` — инфраструктура рендера.
 - `ButtonDropdown`, `ButtonDropdownExtended` — готовые кнопки с выпадающим блоком поверх `Dropdown`.
 
@@ -195,3 +224,4 @@ DropdownList.Background_Selected
 | 2026-10-21 | **Breaking** (TRIPLEX-961): мобильная версия выделена в компонент `Puller`, `DropdownMobile*` удалены без алиасов. Prop `mobileViewProps` переименован в `pullerProps`, группы токенов `DropdownMobile` / `DropdownMobileList` — в `Puller` / `PullerList` (ключ `Content_Background` → `Body_Background`). |
 | 2026-10-23 | Исправлено: закрытие одного из открытых `DropdownDesktop` снимало блокировку скролла страницы при другом открытом меню. **Breaking:** класс блокировки на `body` переименован `.dropdownDesktopOverflowHidden` → `.dropdownDesktopScrollLock`. |
 | 2026-10-31 | Мобильная версия рендерится в `pullerProps.renderContainer`, если он задан, иначе в `document.body` (TRIPLEX-961). |
+| 2026-11-05 | **Breaking** (TRIPLEX-1039): `DropdownList` / `DropdownListItem` больше не подписываются на `keydown` документа — клавиши передаёт управляющий элемент через новый хук `useDropdownListKeyboard`; в `IDropdownListContext` добавлено обязательное поле `registerKeyDownHandler`. Исправления клавиатурной навигации и `aria-activedescendant`. |

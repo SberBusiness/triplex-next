@@ -6,6 +6,14 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Ломающие изменения</Heading>
 
+**Dropdown / DropdownList / DropdownListItem / DropdownListContext**
+
+- `DropdownList` и `DropdownListItem` больше не подписываются на `keydown` документа: клавиши списку передаёт управляющий элемент через новый хук `useDropdownListKeyboard`. Что проверить:
+    - если `DropdownList` собран вручную со своим управляющим элементом (`Dropdown` + `DropdownList`), подключите хук: `context` — в `DropdownListContext.Provider` вокруг списка, `handleKeyDown` — в `onKeyDown` управляющего элемента, `activeDescendant` — в его `aria-activedescendant`. Без этого стрелки, `Enter` и `Space` в списке не работают;
+    - в `IDropdownListContext` добавлено обязательное поле `registerKeyDownHandler`: значение вида `{ activeDescendant, setActiveDescendant }` больше не компилируется — замените его на `context` из хука;
+    - `DropdownListItem` с `active` вне `DropdownList` больше не выбирается с клавиатуры;
+    - внутри `ButtonDropdownExtended`, `SelectExtendedField` (и построенных на нём `SelectField`, `MultiselectField`) и `Suggest` хук уже подключён — там менять ничего не нужно.
+
 **Puller**
 
 - `Puller` сам рендерится через `Portal`, по умолчанию в `document.body`. Что проверить:
@@ -18,6 +26,31 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**ButtonDropdown / ListItemControlsButtonDropdown**
+
+- Исправлено: `Space` на закрытой кнопке открывал список и сразу выбирал первый пункт, `ArrowDown` открывал список на втором пункте.
+- Изменено: `ListItemControlsButtonDropdown` — клавиши кнопки сравниваются по `event.code`, как в `ButtonDropdown`; `Space` переключает список явно.
+
+**ButtonDropdownExtended**
+
+- Добавлено: клавиши, нажатые на кнопке, передаются `ButtonDropdownExtended.DropdownList` в блоке, `renderButton` получает `activeDescendant` для `aria-activedescendant`.
+
+**ChipSort**
+
+- Добавлено: таргет выставляет `aria-activedescendant` активной опции открытого списка.
+
+**ChipSuggest / Suggest**
+
+- Исправлено: поле фильтрации `ChipSuggest` не получало `aria-activedescendant` активной опции. `Suggest` передаёт клавиши, всплывшие до корня, открытому `DropdownList`.
+
+**Dropdown**
+
+- Изменено: открытым списком управляют только клавиши с управляющего элемента — нажатия в других местах страницы больше не перемещают активный пункт и не выбирают его. Затрагивает все компоненты со списком `DropdownList`.
+- Исправлено: `aria-activedescendant` не обновлялся, если опции подгрузились уже после открытия списка.
+- Исправлено: `aria-activedescendant` не сбрасывался, когда курсор уходил с пункта, и указывал на пункт, который `Enter` уже не выберет.
+- Исправлено: `ArrowUp` / `ArrowDown` в пустом `DropdownList` больше не обрабатываются списком (не вызывают `preventDefault`) и остаются управляющему элементу; если активный индекс вышел за пределы списка, переход начинается с первого или последнего пункта.
+- Исправлено: `ArrowUp` / `ArrowDown` останавливались на «пустых» children (`null`, `false` из условного рендера) — без подсветки пункта; теперь такие children пропускаются, в том числе при выборе активного пункта на открытии списка.
+
 **Dropdown / MultiselectField.Dropdown / SelectExtendedField.Dropdown**
 
 - Добавлено: мобильную версию можно отрендерить в свой контейнер через `pullerProps.renderContainer`.
@@ -28,6 +61,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 - Исправлено: клик по `HelpBox`, кнопкам тегов в значении и другим фокусируемым элементам внутри поля, а также события из их Tooltip переключали выпадающий блок.
 - Изменено: `ArrowDown` / `ArrowUp` открывают выпадающий блок, только когда фокус на самом поле, а не на вложенном элементе.
 - Изменено: `onClear` получает событие клика (`React.MouseEventHandler<HTMLButtonElement>`).
+- Добавлено: `SelectExtendedField` передаёт клавиши поля `DropdownList` в блоке, `renderTarget` получает `activeDescendant`, а `SelectExtendedField.Target` выставляет из него `aria-activedescendant` активной опции.
+- Изменено: клавиши открытия на `SelectExtendedField.Target` больше не останавливают всплытие события.
+
+**SuggestField**
+
+- Изменено: `aria-activedescendant` больше не сбрасывается при вводе текста и всегда указывает на опцию, которую выберет `Enter`; сбрасывается при закрытии списка.
 
 **Tooltip**
 

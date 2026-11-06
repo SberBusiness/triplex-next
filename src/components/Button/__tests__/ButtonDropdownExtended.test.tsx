@@ -5,6 +5,7 @@ import { describe, it, expect, vi } from "vitest";
 import { ButtonDropdownExtended, IButtonDropdownExtendedProps } from "../ButtonDropdownExtended";
 import { Dropdown } from "../../Dropdown/Dropdown";
 import { DropdownList } from "../../Dropdown/desktop/DropdownList";
+import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 
 type THarnessProps = Omit<IButtonDropdownExtendedProps, "renderButton" | "renderDropdown" | "dropdownRef">;
 
@@ -41,6 +42,53 @@ const Harness = (props: THarnessProps) => {
 };
 
 const getTrigger = () => screen.getByRole("button", { name: /opened|closed/ });
+
+/** Сценарий со списком: DropdownList в выпадающем блоке и поле ввода над ним. */
+const ListHarness = ({ onSelect }: { onSelect: (id: string) => void }) => {
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    return (
+        <ButtonDropdownExtended
+            dropdownRef={dropdownRef}
+            renderButton={({ opened, setOpened, activeDescendant }) => (
+                <button
+                    type="button"
+                    ref={buttonRef}
+                    aria-activedescendant={activeDescendant}
+                    onClick={() => setOpened(!opened)}
+                >
+                    {opened ? "opened" : "closed"}
+                </button>
+            )}
+            renderDropdown={({ opened, setOpened, className }) => (
+                <ButtonDropdownExtended.Dropdown
+                    className={className}
+                    opened={opened}
+                    setOpened={setOpened}
+                    targetRef={buttonRef}
+                    ref={dropdownRef}
+                >
+                    <input aria-label="search" />
+                    <ButtonDropdownExtended.DropdownList dropdownOpened={opened}>
+                        {["opt-1", "opt-2"].map((id) => (
+                            <ButtonDropdownExtended.DropdownList.Item
+                                key={id}
+                                id={id}
+                                onSelect={() => {
+                                    onSelect(id);
+                                    setOpened(false);
+                                }}
+                            >
+                                {id}
+                            </ButtonDropdownExtended.DropdownList.Item>
+                        ))}
+                    </ButtonDropdownExtended.DropdownList>
+                </ButtonDropdownExtended.Dropdown>
+            )}
+        />
+    );
+};
 
 describe("ButtonDropdownExtended", () => {
     it("renders trigger and keeps dropdown closed by default", () => {
@@ -346,6 +394,59 @@ describe("ButtonDropdownExtended", () => {
 
         it("has displayName", () => {
             expect(ButtonDropdownExtended.displayName).toBe("ButtonDropdownExtended");
+        });
+    });
+
+    describe("DropdownList keyboard", () => {
+        it("passes keys pressed on the button to the opened list", () => {
+            const onSelect = vi.fn();
+            render(<ListHarness onSelect={onSelect} />);
+
+            fireEvent.click(getTrigger());
+            expect(getTrigger()).toHaveAttribute("aria-activedescendant", "opt-1");
+
+            fireEvent.keyDown(getTrigger(), { keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+            expect(getTrigger()).toHaveAttribute("aria-activedescendant", "opt-2");
+
+            const prevented = !fireEvent.keyDown(getTrigger(), { keyCode: EVENT_KEY_CODES.ENTER });
+
+            expect(prevented).toBe(true);
+            expect(onSelect).toHaveBeenCalledWith("opt-2");
+            expect(getTrigger()).toHaveTextContent("closed");
+        });
+
+        it("does not pass keys from inside the dropdown to the list", () => {
+            const onSelect = vi.fn();
+            render(<ListHarness onSelect={onSelect} />);
+
+            fireEvent.click(getTrigger());
+            const input = screen.getByRole("textbox", { name: "search" });
+
+            fireEvent.keyDown(input, { keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+            const prevented = !fireEvent.keyDown(input, { keyCode: EVENT_KEY_CODES.SPACE });
+
+            expect(prevented).toBe(false);
+            expect(getTrigger()).toHaveAttribute("aria-activedescendant", "opt-1");
+            expect(onSelect).not.toHaveBeenCalled();
+        });
+
+        it("does not handle keys while closed", () => {
+            const onSelect = vi.fn();
+            render(<ListHarness onSelect={onSelect} />);
+
+            const prevented = !fireEvent.keyDown(getTrigger(), { keyCode: EVENT_KEY_CODES.ENTER });
+
+            expect(prevented).toBe(false);
+            expect(getTrigger()).not.toHaveAttribute("aria-activedescendant");
+        });
+
+        it("calls onKeyDown passed by the consumer", () => {
+            const onKeyDown = vi.fn();
+            render(<Harness onKeyDown={onKeyDown} />);
+
+            fireEvent.keyDown(getTrigger(), { keyCode: EVENT_KEY_CODES.ENTER });
+
+            expect(onKeyDown).toHaveBeenCalledTimes(1);
         });
     });
 });

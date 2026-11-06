@@ -1,6 +1,11 @@
 import React from "react";
 import { describe, it, expect } from "vitest";
-import { getSelectedListItemIndex, scrollListToItem, scrollListToTop } from "../desktop/utils";
+import {
+    getNextActiveListItemIndex,
+    getSelectedListItemIndex,
+    scrollListToItem,
+    scrollListToTop,
+} from "../desktop/utils";
 import { DropdownListItem } from "../desktop/DropdownListItem";
 
 /** Создаёт элемент с подменённым getBoundingClientRect. */
@@ -49,6 +54,52 @@ describe("Dropdown utils", () => {
             const children = ["text", null, <DropdownListItem key="1" id="1" selected />];
 
             expect(getSelectedListItemIndex(children)).toBe(2);
+        });
+    });
+
+    describe("getNextActiveListItemIndex", () => {
+        const items = [
+            <DropdownListItem key="1" id="1" />,
+            <DropdownListItem key="2" id="2" />,
+            <DropdownListItem key="3" id="3" />,
+        ];
+
+        it.each([
+            [0, 1],
+            [1, 2],
+            [2, 0],
+        ])("moves next from %s to %s and wraps around", (activeIndex, expected) => {
+            expect(getNextActiveListItemIndex(items, activeIndex, "next")).toBe(expected);
+        });
+
+        it.each([
+            [2, 1],
+            [1, 0],
+            [0, 2],
+        ])("moves previous from %s to %s and wraps around", (activeIndex, expected) => {
+            expect(getNextActiveListItemIndex(items, activeIndex, "previous")).toBe(expected);
+        });
+
+        it.each([undefined, -1, 3, 5])("starts from the edge when the active index is %s", (activeIndex) => {
+            expect(getNextActiveListItemIndex(items, activeIndex, "next")).toBe(0);
+            expect(getNextActiveListItemIndex(items, activeIndex, "previous")).toBe(2);
+        });
+
+        it("skips children that are not valid elements", () => {
+            // Индексы как у React.Children.map: 0 — null, 1 — элемент, 2 — false, 3 — элемент.
+            const children = [null, <DropdownListItem key="1" id="1" />, false, <DropdownListItem key="2" id="2" />];
+
+            expect(getNextActiveListItemIndex(children, undefined, "next")).toBe(1);
+            expect(getNextActiveListItemIndex(children, 1, "next")).toBe(3);
+            expect(getNextActiveListItemIndex(children, 3, "next")).toBe(1);
+            expect(getNextActiveListItemIndex(children, 1, "previous")).toBe(3);
+            // Индекс «пустого» child считается незаданным.
+            expect(getNextActiveListItemIndex(children, 0, "previous")).toBe(3);
+        });
+
+        it("returns undefined when there are no elements", () => {
+            expect(getNextActiveListItemIndex(null, undefined, "next")).toBeUndefined();
+            expect(getNextActiveListItemIndex([null, false], 0, "previous")).toBeUndefined();
         });
     });
 

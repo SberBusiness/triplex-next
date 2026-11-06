@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import clsx from "clsx";
 import { TestProps } from "../../../types/CoreTypes";
 import { EComponentSize } from "../../../enums";
-import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { Badge } from "../../Badge/Badge";
 import styles from "../styles/DropdownDesktopList.module.less";
 
@@ -12,11 +11,11 @@ export interface IDropdownListItemProps extends React.HTMLAttributes<HTMLDivElem
     active?: boolean;
     /** Идентификатор элемента. */
     id: string;
-    /** Обработчик выбора текущего элемента. Выбор осуществляется по клику либо при нажатии на пробел. */
+    /** Обработчик выбора текущего элемента. Вызывается по клику, а когда элемент активен — по клавишам keyCodesForSelection. */
     onSelect?: () => void;
     /** Флаг - текущий элемент выбран. */
     selected?: boolean;
-    /** Коды клавиш для выбора элемента с помощью клавиатуры. */
+    /** Коды клавиш для выбора элемента с помощью клавиатуры. По умолчанию [SPACE, ENTER]. Обрабатывает DropdownList. */
     keyCodesForSelection?: number[];
     /** Флаг отображения значка новых уведомлений. */
     showNotificationIcon?: boolean;
@@ -24,18 +23,15 @@ export interface IDropdownListItemProps extends React.HTMLAttributes<HTMLDivElem
     size?: EComponentSize;
 }
 
-const KEY_CODES_FOR_SELECTION_DEFAULT = [EVENT_KEY_CODES.SPACE, EVENT_KEY_CODES.ENTER];
-
 /**
- * Элемент выпадающего списка.
- * Пока элемент активен (active), слушает клавиатуру документа и вызывает onSelect
- * при нажатии клавиш из keyCodesForSelection.
+ * Элемент выпадающего списка. Выбирается по клику, с клавиатуры — через DropdownList.
  */
 export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListItemProps>(
     (
         {
             active,
-            keyCodesForSelection = KEY_CODES_FOR_SELECTION_DEFAULT,
+            // Клавиши выбора читает DropdownList, в DOM они не передаются.
+            keyCodesForSelection,
             children,
             className,
             onClick,
@@ -51,27 +47,6 @@ export const DropdownListItem = React.forwardRef<HTMLDivElement, IDropdownListIt
             onSelect?.();
             onClick?.(event);
         };
-
-        // Подписка на ввод с клавиатуры для выбора активного пункта.
-        useEffect(() => {
-            if (!active) {
-                return;
-            }
-
-            const handleKeyDown = (event: KeyboardEvent) => {
-                // По умолчанию при нажатии Enter или Space выбирается текущий пункт.
-                if (keyCodesForSelection.includes(event.keyCode)) {
-                    event.preventDefault();
-                    onSelect?.();
-                }
-            };
-
-            document.addEventListener("keydown", handleKeyDown);
-
-            return () => {
-                document.removeEventListener("keydown", handleKeyDown);
-            };
-        }, [active, keyCodesForSelection, onSelect]);
 
         return (
             <div

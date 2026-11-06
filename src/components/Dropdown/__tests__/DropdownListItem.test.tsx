@@ -100,7 +100,7 @@ describe("DropdownListItem", () => {
         expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click" }));
     });
 
-    it("calls onSelect on Enter and Space while active", () => {
+    it("does not handle keyboard on its own even when active", () => {
         const onSelect = vi.fn();
 
         render(
@@ -109,89 +109,21 @@ describe("DropdownListItem", () => {
             </DropdownListItem>,
         );
 
-        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ENTER });
-        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.SPACE });
+        const prevented = !fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ENTER });
+        fireEvent.keyDown(screen.getByRole("option"), { keyCode: EVENT_KEY_CODES.SPACE });
 
-        expect(onSelect).toHaveBeenCalledTimes(2);
-    });
-
-    it("does not call onSelect on keyboard while inactive", () => {
-        const onSelect = vi.fn();
-
-        render(
-            <DropdownListItem id="item-1" onSelect={onSelect}>
-                Option 1
-            </DropdownListItem>,
-        );
-
-        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ENTER });
-
+        expect(prevented).toBe(false);
         expect(onSelect).not.toHaveBeenCalled();
     });
 
-    it("prevents default browser behaviour for selection keys", () => {
+    it("does not pass keyCodesForSelection to the DOM", () => {
         render(
-            <DropdownListItem id="item-1" active onSelect={vi.fn()}>
+            <DropdownListItem id="item-1" keyCodesForSelection={[EVENT_KEY_CODES.ENTER]}>
                 Option 1
             </DropdownListItem>,
         );
 
-        const prevented = !fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.SPACE });
-
-        expect(prevented).toBe(true);
-    });
-
-    it("respects a custom keyCodesForSelection list", () => {
-        const onSelect = vi.fn();
-
-        render(
-            <DropdownListItem id="item-1" active onSelect={onSelect} keyCodesForSelection={[EVENT_KEY_CODES.ENTER]}>
-                Option 1
-            </DropdownListItem>,
-        );
-
-        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.SPACE });
-        expect(onSelect).not.toHaveBeenCalled();
-
-        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ENTER });
-        expect(onSelect).toHaveBeenCalledTimes(1);
-    });
-
-    it("uses the latest onSelect after rerender", () => {
-        const firstOnSelect = vi.fn();
-        const secondOnSelect = vi.fn();
-
-        const { rerender } = render(
-            <DropdownListItem id="item-1" active onSelect={firstOnSelect}>
-                Option 1
-            </DropdownListItem>,
-        );
-
-        rerender(
-            <DropdownListItem id="item-1" active onSelect={secondOnSelect}>
-                Option 1
-            </DropdownListItem>,
-        );
-
-        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ENTER });
-
-        expect(firstOnSelect).not.toHaveBeenCalled();
-        expect(secondOnSelect).toHaveBeenCalledTimes(1);
-    });
-
-    it("unsubscribes from keyboard on unmount", () => {
-        const onSelect = vi.fn();
-
-        const { unmount } = render(
-            <DropdownListItem id="item-1" active onSelect={onSelect}>
-                Option 1
-            </DropdownListItem>,
-        );
-
-        unmount();
-        fireEvent.keyDown(document, { keyCode: EVENT_KEY_CODES.ENTER });
-
-        expect(onSelect).not.toHaveBeenCalled();
+        expect(screen.getByRole("option")).not.toHaveAttribute("keycodesforselection");
     });
 
     it("renders notification icon only with showNotificationIcon", () => {

@@ -24,7 +24,7 @@ version: "1.0"
 
 | Prop | Тип | Описание |
 |---|---|---|
-| `renderButton` | `(props: IButtonDropdownExtendedButtonProvideProps) => React.ReactNode` | Отрисовка кнопки-триггера. Получает `opened` и `setOpened` |
+| `renderButton` | `(props: IButtonDropdownExtendedButtonProvideProps) => React.ReactNode` | Отрисовка кнопки-триггера. Получает `opened`, `setOpened` и `activeDescendant` — `id` активного элемента `DropdownList` для `aria-activedescendant` |
 | `renderDropdown` | `(props: IButtonDropdownExtendedDropdownProvideProps) => React.ReactNode` | Отрисовка выпадающего блока. Дополнительно получает `className` внутреннего позиционирующего класса |
 | `dropdownRef` | `React.RefObject<HTMLElement>` | Ссылка на DOM-элемент выпадающего блока. Нужна для click-outside: клик внутри этого элемента не закрывает блок |
 
@@ -68,6 +68,7 @@ version: "1.0"
 - `renderDropdown` обязан применить переданный `className` к выпадающему блоку. Но не считай, что на нём держится раскладка: стили этого класса объявлены вложенным селектором внутри `.buttonDropdownExtended` и при рендере блока в портале (штатный путь через `ButtonDropdownExtended.Dropdown`) не применяются — см. раздел «Дизайн-токены».
 - Корневой DOM-элемент — `<div>` с классом `buttonDropdownExtended`; на нём же живут `containerRef` и forwarded ref.
 - Слушатели `keydown` / `mousedown` / `touchstart` вешаются на `document` только пока блок открыт.
+- Компонент оборачивает кнопку и блок в `DropdownListContext.Provider` (значение из `useDropdownListKeyboard`) и в корневом `onKeyDown` передаёт клавиши открытому `DropdownList`. Фаза — **bubble**, не capture (подробности — `Dropdown-ai.md` → «Инварианты»). События из самого выпадающего блока (`dropdownRef`) списку не передаются. `onKeyDown` потребителя вызывается после.
 
 ---
 
@@ -76,6 +77,7 @@ version: "1.0"
 - Компонент не рендерит собственной разметки кроме контейнера `<div>` и **не выставляет ARIA-атрибутов**. Роли и связки — зона ответственности `renderButton` / `renderDropdown`.
 - Потребитель обязан сам проставить на триггере `aria-haspopup`, `aria-expanded={opened}` и при необходимости `aria-controls` (см. `ButtonDropdown` как эталонную реализацию).
 - Клавиатура, обрабатываемая самим компонентом: `Escape` закрывает блок всегда, `Tab` — только при `closeOnTab`. Обработчик висит на `document`, поэтому срабатывает независимо от того, где находится фокус.
+- Если в блоке есть `ButtonDropdownExtended.DropdownList`, клавиши, нажатые на кнопке, получает он: `ArrowUp` / `ArrowDown` перемещают активный пункт, `Enter` / `Space` выбирают его. Обработанное списком событие помечено `preventDefault`, поэтому нативный click кнопки по `Enter` не срабатывает. `aria-activedescendant` триггер берёт из `activeDescendant` в `renderButton`.
 - Фокус компонент не перемещает: при открытии фокус не уходит в блок, при закрытии не возвращается на триггер. Если продукту нужен focus trap или возврат фокуса — реализуй это в render-функциях.
 - Текстовых строк компонент не содержит, хардкода языка нет.
 
@@ -86,7 +88,7 @@ version: "1.0"
 - `ButtonDropdown` (`src/components/Button/ButtonDropdown.tsx`) — готовая кнопка со списком действий, построена поверх `ButtonDropdownExtended`.
 - `Button` (`src/components/Button/Button.tsx`) — обычный триггер для `renderButton`.
 - `Dropdown` (`src/components/Dropdown`) — выпадающий блок, доступен как `ButtonDropdownExtended.Dropdown`; рендерится в портале, позиционируется по `targetRef`.
-- `DropdownList` (`src/components/Dropdown/desktop/DropdownList.tsx`) — список с клавиатурной навигацией, доступен как `ButtonDropdownExtended.DropdownList`.
+- `DropdownList` (`src/components/Dropdown/desktop/DropdownList.tsx`) — список с клавиатурной навигацией, доступен как `ButtonDropdownExtended.DropdownList`. Связку с кнопкой (`useDropdownListKeyboard`) компонент подключает сам.
 - Внутренние потребители в библиотеке: `ListItemControlsButtonDropdown`, `TableBasicSettings` — при изменении поведения проверяй их.
 
 ---
@@ -119,3 +121,4 @@ version: "1.0"
 | 2026-08-31 | Компонент переведён с `React.FC` на `Object.assign(forwardRef(...), {...})` — теперь пробрасывает `ref` на корневой `<div>`, форвард мерджится с внутренним `containerRef`. Базовый тип `IButtonDropdownExtendedComponent` изменился с `React.FC` на `React.ForwardRefExoticComponent`; набор props, статики и DOM не изменились. Понадобилось для `TableBasicSettings`, который рендерит `ButtonDropdownExtended` корнем. |
 | 2026-07-29 | Создан документ AI-ready для `ButtonDropdownExtended`. AI-рефакторинг без изменения публичного API: режим управления переведён с ref на `useState` (устранены ошибки `react-hooks/refs`), убраны вырожденный тернарник в `useState` и мёртвые проверки `opened` внутри обработчиков, `setOpened && setOpened(...)` заменён на опциональный вызов, добавлены JSDoc. Добавлены unit-тесты и stories по modern pattern. |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`DropdownList`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-11-05 | TRIPLEX-1039: компонент связывает кнопку с `DropdownList` в блоке — клавиши, нажатые на кнопке, передаются открытому списку через `useDropdownListKeyboard`. В `IButtonDropdownExtendedButtonProvideProps` добавлено поле `activeDescendant`. |

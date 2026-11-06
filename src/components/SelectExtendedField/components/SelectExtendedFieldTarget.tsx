@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useContext, useMemo, useRef } from "react";
 import clsx from "clsx";
 import { CaretdownStrokeSrvIcon16, CaretdownStrokeSrvIcon20, CaretdownStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
@@ -14,6 +14,7 @@ import {
     IFormFieldProps,
 } from "../../FormField";
 import { FormFieldTarget } from "../../FormField/components/FormFieldTarget";
+import { DropdownListContext } from "../../Dropdown/DropdownListContext";
 import { IconWrapper } from "../../IconWrapper";
 import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
 import styles from "../styles/SelectExtendedFieldTarget.module.less";
@@ -41,6 +42,11 @@ export interface ISelectExtendedFieldTargetProps extends Omit<IFormFieldProps, "
     setOpened: (opened: boolean) => void;
     /** Функция очистки значения. Если передана, в поле отображается кнопка очистки. */
     onClear?: React.MouseEventHandler<HTMLButtonElement>;
+    /**
+     * Идентификатор активного элемента DropdownList для aria-activedescendant. Приходит из renderTarget;
+     * если не передан, берётся из DropdownListContext SelectExtendedField.
+     */
+    activeDescendant?: string;
 }
 
 /** Соответствие размера поля иконке каретки. */
@@ -78,6 +84,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
             onKeyDown,
             onClick,
             onClear,
+            activeDescendant,
             opened,
             postfix,
             prefix,
@@ -100,6 +107,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
         const fieldTargetRef = useRef<HTMLDivElement>(null);
         // Стабильный колбэк-реф: иначе React на каждом рендере отвязывал бы и заново привязывал внешний ref.
         const setFieldTargetRef = useMemo(() => mergeRefs(ref, fieldTargetRef), [ref]);
+        const dropdownListContext = useContext(DropdownListContext);
 
         const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
             if (interactionBlocked) {
@@ -129,9 +137,6 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
             // Только с самого поля: на вложенной кнопке preventDefault отменил бы её нативный клик по Enter / Space.
             if (!opened && OPEN_DROPDOWN_KEY_CODES.includes(event.keyCode) && event.target === fieldTargetRef.current) {
                 event.preventDefault();
-                // Предотвращение срабатывания keydown при открытии Dropdown в
-                // document.addEventListener("keydown", ...) в DropdownListItem.
-                event.stopPropagation();
                 setOpened(true);
             }
 
@@ -153,6 +158,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
                 )}
                 aria-expanded={opened}
                 aria-haspopup="listbox"
+                aria-activedescendant={activeDescendant ?? dropdownListContext.activeDescendant}
                 size={size}
                 status={status}
                 active={opened}

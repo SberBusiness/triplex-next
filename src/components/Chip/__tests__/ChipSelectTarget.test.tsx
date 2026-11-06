@@ -74,7 +74,10 @@ describe("ChipSelectTarget", () => {
         expect(onKeyDown).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ code, target }));
     });
 
-    it.each([false, true])("handles Tab without preventing focus traversal when opened=%s", (opened) => {
+    it.each([
+        { opened: false, expectedSetOpenedCalls: [] },
+        { opened: true, expectedSetOpenedCalls: [[false]] },
+    ])("handles Tab without preventing focus traversal when opened=$opened", ({ opened, expectedSetOpenedCalls }) => {
         const setOpened = vi.fn();
         const onKeyDown = vi.fn();
         renderTarget({ opened, setOpened, onKeyDown });
@@ -82,11 +85,7 @@ describe("ChipSelectTarget", () => {
 
         expect(fireEvent.keyDown(target, { code: "Tab" })).toBe(true);
 
-        if (opened) {
-            expect(setOpened).toHaveBeenCalledExactlyOnceWith(false);
-        } else {
-            expect(setOpened).not.toHaveBeenCalled();
-        }
+        expect(setOpened.mock.calls).toEqual(expectedSetOpenedCalls);
         expect(onKeyDown).toHaveBeenCalledExactlyOnceWith(
             expect.objectContaining({ code: "Tab", target, defaultPrevented: false }),
         );
@@ -173,6 +172,18 @@ describe("ChipSelectTarget", () => {
         expect(getTarget()).toHaveAttribute("tabindex", "-1");
         await user.tab();
         expect(getTarget()).not.toHaveFocus();
+    });
+
+    it("disables the clear button of a disabled selected target and excludes it from Tab", async () => {
+        const user = userEvent.setup();
+        const onClear = vi.fn();
+        renderTarget({ disabled: true, selected: true, onClear });
+
+        expect(getClearButton()).toBeDisabled();
+        await user.tab();
+        expect(document.body).toHaveFocus();
+        await user.click(getClearButton());
+        expect(onClear).not.toHaveBeenCalled();
     });
 
     it("renders inherited prefix and a custom postfix instead of automatic clear", () => {

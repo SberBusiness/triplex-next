@@ -35,18 +35,16 @@ import { ChipSuggestTarget, type IChipSuggestTargetProps, type ISuggestOption } 
 
 `IChipSuggestTargetProps<T>` наследует `IChipProps` без `prefix` / `postfix`
 и добавляет опциональный `clearSelected`. Обязательных custom-props нет.
-Параметр `T` сохраняется для совместимости generic-вызовов, хотя не используется
-в теле интерфейса props.
 
 | Prop | По умолчанию | Назначение и ограничения |
 |---|---|---|
 | `children` | — | Подпись. Target не подставляет `value.label`: это делает `ChipSuggest` либо потребитель своей композиции |
 | `clearSelected` | — | Вызывается без аргументов встроенной очисткой. Значение `Suggest.value` обновляет потребитель; без callback кнопка остаётся без действия |
 | `onClick` | — | Получает React mouse event после `setDropdownOpen(!dropdownOpen)` |
-| `onKeyDown` | — | Вызывается после переключения только для Enter / Space; ограничение для остальных клавиш описано ниже |
+| `onKeyDown` | — | Получает все дошедшие до target события клавиатуры, кроме Enter / Space на встроенной очистке; Enter / Space — после переключения |
 | `size` | `EComponentSize.MD` | SM / MD / LG; передаётся в `Chip`, стрелку и очистку |
 | `type` | `EChipType.TYPE_1` | Визуальный тип `Chip`; при использовании через `ChipSuggest` задаётся на родителе |
-| `disabled` | `false` | CSS-блокировка указателя и исключение самого target из Tab; не нативный disabled |
+| `disabled` | `false` | Отключает target и встроенную очистку; ограничения — в Accessibility |
 | `showNotificationIcon` | `false` | Значок `Badge.Dot` через `Chip` |
 | `className`, `style`, `id`, `data-*`, `aria-*`, прочие span-атрибуты | — | Передаются в корневой `<span>`; `className` объединяется с классами `Chip` |
 | `ref` | — | Указывает на `HTMLSpanElement` чипса, а не на корень `Suggest` или dropdown |
@@ -57,34 +55,20 @@ import { ChipSuggestTarget, type IChipSuggestTargetProps, type ISuggestOption } 
   Любое выбранное значение включает очистку и исходное `selected`-оформление.
 - Клик, Enter и Space переключают открытость в обе стороны. В отличие от
   `ChipSelectTarget`, уже открытый список по Enter / Space закрывается.
-- Очистка вызывает только `clearSelected?.()`; не сбрасывает контекстный `value`
-  сама и не переключает открытость. Новое значение должен передать потребитель.
 - Переключение target вызывает именно `setDropdownOpen`, а не `closeDropdown`:
   дополнительный сброс строки фильтрации принадлежит другим частям `Suggest`.
 
 Spread унаследованных props находится после внутренних `selected` и
 `aria-expanded`: они могут быть переопределены потребителем. Выбор автоматического
-postfix при этом по-прежнему зависит от `value` в контексте.
+postfix при этом зависит только от `value` в контексте.
 `prefix` / `postfix` исключены из TypeScript API target.
-
-Через `ChipSuggest.targetProps` учитывай порядок родителя: `targetProps.size`
-переопределяет размер, но `targetProps.type` перезаписывается prop `type` самого
-`ChipSuggest`. Это известное ограничение родителя, а не новый контракт target.
 
 ---
 
 ## Дизайн-токены
 
-Собственных стилей и токенов нет, поэтому `tokens: []`.
-Фоны, цвета и фокус приходят из `Chip`: например,
-`Chip.Background_Type1_Default`, `Chip.Background_Selected_Default`,
-`Chip.Color_Disabled` и `Chip.Shadow_Focus`. Очистка также использует
-`Chip.Shadow_Focus`; стрелка окрашивается палитрой `@sberbusiness/icons-next`.
-
-Полный перечень — в [Chip-ai.md](Chip-ai.md#дизайн-токены), значения —
-`src/components/DesignTokens/components/Chip.ts`. Переопределение через
-`ThemeProvider.tokens` описано в
-[ThemeProvider-ai.md](../ThemeProvider/ThemeProvider-ai.md#как-переопределять-токены).
+Собственных стилей и токенов у target нет, поэтому `tokens: []`.
+Внешний вид наследуется от `Chip`: см. [Chip-ai.md](Chip-ai.md#дизайн-токены).
 
 ---
 
@@ -113,19 +97,18 @@ postfix при этом по-прежнему зависит от `value` в к�
   не combobox. Имя задают `children` или ARIA-атрибуты потребителя.
 - Enter / Space переключают список; Space не прокручивает страницу благодаря
   `preventDefault()` в `Chip`. Синтетический click на самом span не создаётся.
-- **Известное ограничение:** `onKeyDown` target вызывается только для Enter / Space.
-  Остальные события не передаются этому callback; они могут всплывать в `Suggest`.
-  Исправление меняет наблюдаемое поведение и требует отдельной задачи.
 - Escape, клик вне компонента и состояние фильтра обрабатывает `Suggest`.
   Сам target не переносит фокус: поле ввода, `FocusTrap` и возврат фокуса
   принадлежат dropdown-композиции `ChipSuggest`.
-- Встроенная очистка — нативная кнопка. Enter / Space на ней не переключают
-  список; нативный click вызывает `clearSelected`. Клик также не всплывает.
-- У встроенной очистки пока нет доступного имени и отдельного prop для него
+- Встроенная очистка — нативная кнопка: Enter / Space активируют её нативный
+  click и вызывают `clearSelected`.
+- У встроенной очистки нет доступного имени и отдельного prop для него
   (TRI-139). ARIA-имя самого target на вложенную кнопку не передаётся.
-- `disabled` означает CSS `pointer-events: none` и `tabIndex=-1` у `Chip`.
-  Он не проверяется в обработчиках и не передаётся встроенной очистке:
-  это существующее ограничение, а не нативное отключение всей композиции.
+- `disabled` означает CSS `pointer-events: none` и `tabIndex=-1` у `Chip`
+  и нативный `disabled` у встроенной очистки. В обработчиках target флаг
+  не проверяется: программно отправленные события не защищены.
+  Не передавай `tabIndex`: он перекрывает `-1`, target снова получит фокус,
+  и Enter / Space переключат список.
 - `aria-controls`, `aria-haspopup` и `aria-pressed` автоматически не создаются.
   Фокус оформляется через `Chip.Shadow_Focus`.
 
@@ -151,7 +134,7 @@ postfix при этом по-прежнему зависит от `value` в к�
 Основные истории: `stories/Chips/ChipSuggest.stories.tsx`
 Файлы примеров: `stories/Chips/examples/ChipSuggest/`
 
-Используются существующие истории родителя: отдельный stories-файл атому не нужен.
+Используются истории родителя: отдельный stories-файл атому не нужен.
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
@@ -165,11 +148,10 @@ postfix при этом по-прежнему зависит от `value` в к�
 
 `Default`, `Types`, `Sizes`, `States` и `VisualTests` имеют Linux/CI baseline
 на `xs` / `xl` в `__screenshots__/`. Фокус базового чипса проверяет
-`VisualTests` в stories `Chip`. Внешний вид и story IDs при рефакторинге сохранены.
+`VisualTests` в stories `Chip`.
 
-Контекст, callback/ref-контракт, размеры и клавиатурная очистка проверяются
-в `src/components/Chip/__tests__/ChipSuggestTarget.test.tsx`,
-интеграция со списком — в `ChipSuggest.test.tsx`.
+Контракт target покрывает `src/components/Chip/__tests__/ChipSuggestTarget.test.tsx`,
+интеграцию со списком — `ChipSuggest.test.tsx`.
 
 ---
 
@@ -177,4 +159,4 @@ postfix при этом по-прежнему зависит от `value` в к�
 
 | Дата | Изменение |
 |---|---|
-| 2026-10-29 | Создан документ. Типы событий приведены к span-target, добавлен displayName с сохранением generic-сигнатуры, расширены unit-тесты. |
+| 2026-10-29 | Создан документ. |

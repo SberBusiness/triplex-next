@@ -14,9 +14,16 @@ export interface IChipSelectTargetProps extends IChipProps {
     setOpened: (opened: boolean) => void;
 }
 
+/** Enter и Space на кнопке очистки не должны дополнительно переключать выпадающий список родительского Chip. */
+const handleClearButtonKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
+        event.stopPropagation();
+    }
+};
+
 /** Target для ChipSelect: Chip со стрелкой или очисткой и управляемой открытостью списка. */
 export const ChipSelectTarget = React.forwardRef<HTMLSpanElement, IChipSelectTargetProps>((props, ref) => {
-    const { children, selected, onKeyDown, onClick, onClear, opened, setOpened, size, ...restProps } = props;
+    const { children, disabled, selected, onKeyDown, onClick, onClear, opened, setOpened, size, ...restProps } = props;
 
     const handleKeyDown = useCallback(
         (event: React.KeyboardEvent<HTMLSpanElement>) => {
@@ -40,14 +47,9 @@ export const ChipSelectTarget = React.forwardRef<HTMLSpanElement, IChipSelectTar
         [opened, setOpened, onClick],
     );
 
-    const handleClearButtonKeyDown = useCallback((event: React.KeyboardEvent<HTMLButtonElement>) => {
-        if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
-            event.stopPropagation();
-        }
-    }, []);
-
     const handleClearButtonClick = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>) => {
+            // Предотвращение нажатия на родительский элемент Chip.
             event.stopPropagation();
             onClear();
         },
@@ -55,7 +57,12 @@ export const ChipSelectTarget = React.forwardRef<HTMLSpanElement, IChipSelectTar
     );
 
     const targetPostfix = selected ? (
-        <ChipClearButton size={size} onClick={handleClearButtonClick} onKeyDown={handleClearButtonKeyDown} />
+        <ChipClearButton
+            size={size}
+            disabled={disabled}
+            onClick={handleClearButtonClick}
+            onKeyDown={handleClearButtonKeyDown}
+        />
     ) : (
         <ChipDropdownArrow size={size} rotated={opened} />
     );
@@ -63,6 +70,7 @@ export const ChipSelectTarget = React.forwardRef<HTMLSpanElement, IChipSelectTar
     return (
         <Chip
             postfix={targetPostfix}
+            disabled={disabled}
             selected={selected}
             aria-expanded={opened}
             onKeyDown={handleKeyDown}

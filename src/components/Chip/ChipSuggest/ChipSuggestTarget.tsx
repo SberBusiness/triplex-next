@@ -6,8 +6,15 @@ import { ChipClearButton } from "../ChipClearButton";
 import { ChipDropdownArrow } from "../ChipDropdownArrow";
 import { isKey } from "../../../utils/keyboard";
 
+/** Enter и Space на кнопке очистки не должны дополнительно переключать выпадающий список родительского Chip. */
+const handleClearButtonKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
+        event.stopPropagation();
+    }
+};
+
 const ChipSuggestTargetBase = <T extends ISuggestOption>(
-    { onKeyDown, onClick, clearSelected, size, ...restProps }: IChipSuggestTargetProps<T>,
+    { onKeyDown, onClick, clearSelected, disabled, size, ...restProps }: IChipSuggestTargetProps<T>,
     ref: React.ForwardedRef<HTMLSpanElement>,
 ) => {
     const { value, dropdownOpen, setDropdownOpen } = useSuggestContext<T>();
@@ -24,18 +31,12 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
         (event: React.KeyboardEvent<HTMLSpanElement>) => {
             if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
                 setDropdownOpen(!dropdownOpen);
-                onKeyDown?.(event);
             }
+
+            onKeyDown?.(event);
         },
         [dropdownOpen, setDropdownOpen, onKeyDown],
     );
-
-    /** Enter и Space на кнопке очистки не должны дополнительно переключать выпадающий список родительского Chip. */
-    const handleClearButtonKeyDown = useCallback((event: React.KeyboardEvent<HTMLButtonElement>) => {
-        if (isKey(event.code, "ENTER") || isKey(event.code, "SPACE")) {
-            event.stopPropagation();
-        }
-    }, []);
 
     const handleClearButtonClick = useCallback(
         (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -46,12 +47,16 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
         [clearSelected],
     );
 
-    // Пока значение не выбрано — стрелка выпадающего списка, после выбора — кнопка очистки.
     const targetPostfix =
         value === undefined ? (
             <ChipDropdownArrow rotated={dropdownOpen} size={size} />
         ) : (
-            <ChipClearButton onClick={handleClearButtonClick} onKeyDown={handleClearButtonKeyDown} size={size} />
+            <ChipClearButton
+                onClick={handleClearButtonClick}
+                onKeyDown={handleClearButtonKeyDown}
+                disabled={disabled}
+                size={size}
+            />
         );
 
     return (
@@ -61,6 +66,7 @@ const ChipSuggestTargetBase = <T extends ISuggestOption>(
             postfix={targetPostfix}
             onKeyDown={handleKeyDown}
             onClick={handleClick}
+            disabled={disabled}
             size={size}
             {...restProps}
             ref={ref}
@@ -72,11 +78,11 @@ const ChipSuggestTargetWithRef = React.forwardRef(ChipSuggestTargetBase);
 
 ChipSuggestTargetWithRef.displayName = "ChipSuggestTarget";
 
+// forwardRef стирает generic-параметр опции; assertion восстанавливает публичную generic-сигнатуру.
 /**
  * Target-элемент ChipSuggest: Chip, который открывает и закрывает выпадающий список.
  * Выбранное значение и видимость списка берёт из SuggestContext, поэтому рендерится только внутри Suggest.
  */
-// forwardRef стирает generic-параметр опции; assertion восстанавливает существующую публичную сигнатуру.
 export const ChipSuggestTarget = ChipSuggestTargetWithRef as <T extends ISuggestOption>(
     props: IChipSuggestTargetProps<T> & React.RefAttributes<HTMLSpanElement>,
 ) => JSX.Element;

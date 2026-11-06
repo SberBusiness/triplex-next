@@ -18,6 +18,17 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**ChipSelect / ChipSelectTarget**
+
+- Проведён AI-рефакторинг `ChipSelectTarget`.
+- Исправлено: при `disabled` и выбранном значении кнопка очистки оставалась доступной с клавиатуры и сбрасывала значение.
+
+**ChipSuggest / ChipSuggestTarget**
+
+- Проведён AI-рефакторинг `ChipSuggestTarget`, добавлен `displayName`.
+- Исправлено: `onKeyDown` (в том числе `ChipSuggest.targetProps.onKeyDown`) вызывался только для Enter / Space, остальные клавиши до обработчика не доходили.
+- Исправлено: при `disabled` и выбранном значении кнопка очистки оставалась доступной с клавиатуры и сбрасывала значение.
+
 **Dropdown / MultiselectField.Dropdown / SelectExtendedField.Dropdown**
 
 - Добавлено: мобильную версию можно отрендерить в свой контейнер через `pullerProps.renderContainer`.

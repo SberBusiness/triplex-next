@@ -7,7 +7,7 @@ import { ChipSuggestTarget } from "@sberbusiness/triplex-next/components/Chip/Ch
 import { IChipSuggestTargetProps } from "@sberbusiness/triplex-next/components/Chip/ChipSuggest/types";
 import { ISuggestOption } from "@sberbusiness/triplex-next/components/Suggest/types";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
-import { EChipType } from "../enums";
+import { EChipType } from "@sberbusiness/triplex-next/components/Chip/enums";
 
 const TARGET_TEST_ID = "chip-suggest-target";
 
@@ -59,9 +59,6 @@ describe("ChipSuggestTarget", () => {
         expect(getTarget()).toHaveClass("selected");
     });
 
-    // Стрелка выпадающего списка — <span> без семантики, отдельным unit-тестом не покрывается:
-    // её видимое состояние держит скриншот-регрессия (story VisualTests), а факт раскрытия
-    // списка проверяется ниже по aria-expanded в блоке «dropdown toggling».
     describe("postfix", () => {
         test("renders no clear button while value is not selected", () => {
             renderTarget();
@@ -107,12 +104,14 @@ describe("ChipSuggestTarget", () => {
             expect(getTarget()).toHaveAttribute("aria-expanded", "false");
         });
 
-        test("does not toggle dropdown on other keys", () => {
-            renderTarget();
+        test("forwards other keys to onKeyDown without toggling dropdown", () => {
+            const onKeyDown = vi.fn();
+            renderTarget({ onKeyDown });
 
             fireEvent.keyDown(getTarget(), { code: "ArrowDown" });
 
             expect(getTarget()).toHaveAttribute("aria-expanded", "false");
+            expect(onKeyDown).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ code: "ArrowDown" }));
         });
     });
 
@@ -127,70 +126,6 @@ describe("ChipSuggestTarget", () => {
             expect(getTarget()).toHaveAttribute("aria-expanded", "false");
         });
 
-        test.each([["Enter"], ["Space"]])("%s key on clear button does not toggle dropdown", (code) => {
-            renderTarget({ clearSelected: () => {} }, OPTIONS[0]);
-
-            fireEvent.keyDown(getClearButton(), { code });
-
-            expect(getTarget()).toHaveAttribute("aria-expanded", "false");
-        });
-    });
-
-    describe("props forwarding", () => {
-        test("forwards ref to the root span", () => {
-            const ref = React.createRef<HTMLSpanElement>();
-            renderTarget({}, undefined, ref);
-
-            expect(ref.current).toBeInstanceOf(HTMLSpanElement);
-            expect(ref.current).toBe(getTarget());
-        });
-
-        test("merges className and passes rest props to Chip", () => {
-            renderTarget({ className: "custom-target", disabled: true });
-
-            const target = getTarget();
-            expect(target).toHaveClass("chip", "custom-target", "disabled");
-            expect(target).toHaveAttribute("tabindex", "-1");
-        });
-
-        test.each([
-            { size: EComponentSize.SM, iconSize: 16 },
-            { size: EComponentSize.MD, iconSize: 20 },
-            { size: EComponentSize.LG, iconSize: 24 },
-        ])("passes $size to the chip and clear button", ({ size, iconSize }) => {
-            renderTarget({ size, "aria-controls": "options" }, OPTIONS[0]);
-
-            expect(getTarget()).toHaveClass(size);
-            expect(getTarget()).toHaveAttribute("aria-controls", "options");
-            expect(getClearButton().querySelector("svg")).toHaveAttribute("name", `CrossStrokeSrvIcon${iconSize}`);
-        });
-
-        test.each([
-            { type: EChipType.TYPE_1, className: "type1" },
-            { type: EChipType.TYPE_2, className: "type2" },
-        ])("passes chip type $type", ({ type, className }) => {
-            renderTarget({ type });
-            expect(getTarget()).toHaveClass(className);
-        });
-
-        test("keeps a callback ref attached while toggling and clears it on unmount", () => {
-            const ref = vi.fn();
-            const { unmount } = renderTarget({}, undefined, ref);
-            const target = getTarget();
-
-            fireEvent.click(target);
-            expect(ref).toHaveBeenCalledExactlyOnceWith(target);
-
-            unmount();
-            expect(ref).toHaveBeenLastCalledWith(null);
-        });
-
-        test("exposes a component displayName for React DevTools", () => {
-            expect(ChipSuggestTarget).toHaveProperty("displayName", "ChipSuggestTarget");
-        });
-    });
-
-    describe("native clear activation", () => {
         test.each(["{Enter}", "[Space]"])("%s clears without closing the open dropdown", async (key) => {
             const user = userEvent.setup();
             const clearSelected = vi.fn();
@@ -217,6 +152,18 @@ describe("ChipSuggestTarget", () => {
 
             expect(getTarget()).toHaveClass("selected");
             expect(getTarget()).toHaveAttribute("aria-expanded", "false");
+        });
+
+        test("disables the clear button of a disabled target and excludes it from Tab", async () => {
+            const user = userEvent.setup();
+            const clearSelected = vi.fn();
+            renderTarget({ clearSelected, disabled: true }, OPTIONS[0]);
+
+            expect(getClearButton()).toBeDisabled();
+            await user.tab();
+            expect(document.body).toHaveFocus();
+            await user.click(getClearButton());
+            expect(clearSelected).not.toHaveBeenCalled();
         });
 
         test("updates the postfix when the consumer clears the controlled context value", async () => {
@@ -247,6 +194,60 @@ describe("ChipSuggestTarget", () => {
             expect(queryClearButton()).not.toBeInTheDocument();
             expect(getTarget()).toHaveAttribute("aria-expanded", "false");
             expect(getTarget().querySelector("svg")).toHaveAttribute("name", "CaretdownStrokeSrvIcon20");
+        });
+    });
+
+    describe("props forwarding", () => {
+        test("forwards ref to the root span", () => {
+            const ref = React.createRef<HTMLSpanElement>();
+            renderTarget({}, undefined, ref);
+
+            expect(ref.current).toBeInstanceOf(HTMLSpanElement);
+            expect(ref.current).toBe(getTarget());
+        });
+
+        test("merges className and passes rest props to Chip", () => {
+            renderTarget({ className: "custom-target", disabled: true, "aria-controls": "options" });
+
+            const target = getTarget();
+            expect(target).toHaveClass("chip", "custom-target", "disabled");
+            expect(target).toHaveAttribute("tabindex", "-1");
+            expect(target).toHaveAttribute("aria-controls", "options");
+        });
+
+        test.each([
+            { size: EComponentSize.SM, iconSize: 16 },
+            { size: EComponentSize.MD, iconSize: 20 },
+            { size: EComponentSize.LG, iconSize: 24 },
+        ])("passes $size to the chip and clear button", ({ size, iconSize }) => {
+            renderTarget({ size }, OPTIONS[0]);
+
+            expect(getTarget()).toHaveClass(size);
+            expect(getClearButton().querySelector("svg")).toHaveAttribute("name", `CrossStrokeSrvIcon${iconSize}`);
+        });
+
+        test.each([
+            { type: EChipType.TYPE_1, className: "type1" },
+            { type: EChipType.TYPE_2, className: "type2" },
+        ])("passes chip type $type", ({ type, className }) => {
+            renderTarget({ type });
+            expect(getTarget()).toHaveClass(className);
+        });
+
+        test("keeps a callback ref attached while toggling and clears it on unmount", () => {
+            const ref = vi.fn();
+            const { unmount } = renderTarget({}, undefined, ref);
+            const target = getTarget();
+
+            fireEvent.click(target);
+            expect(ref).toHaveBeenCalledExactlyOnceWith(target);
+
+            unmount();
+            expect(ref).toHaveBeenLastCalledWith(null);
+        });
+
+        test("exposes a component displayName for React DevTools", () => {
+            expect(ChipSuggestTarget).toHaveProperty("displayName", "ChipSuggestTarget");
         });
     });
 });

@@ -1,7 +1,7 @@
 ---
 component: ChipSelectTarget
 category: Chips
-related: [ChipSelect, ChipSuggestTarget, Chip]
+related: [ChipSelect, ChipSuggestTarget, Chip, SelectExtendedField]
 tokens: []
 stories: stories/Chips/ChipSelect.stories.tsx
 version: "1.0"
@@ -46,7 +46,7 @@ import { ChipSelectTarget, type IChipSelectTargetProps } from "@sberbusiness/tri
 | `selected` | `false` | Управляемое оформление выбора. При `true` вместо стрелки появляется очистка |
 | `children` | — | Подпись фильтра или выбранной опции; target не вычисляет и не форматирует её |
 | `onClick` | — | Получает React mouse event после `setOpened(!opened)` |
-| `onKeyDown` | — | Получает дошедшие до target события клавиатуры после встроенной обработки, включая клавиши без действия target. Enter / Space на встроенной кнопке очистки не передаются: их всплытие останавливается |
+| `onKeyDown` | — | Получает все дошедшие до target события клавиатуры после встроенной обработки, кроме Enter / Space на встроенной очистке |
 
 `setOpened` — запрос к потребителю, а не локальный setter компонента. Пока
 потребитель не передаст новый `opened`, ARIA и стрелка сохранят прежнее состояние.
@@ -60,7 +60,7 @@ import { ChipSelectTarget, type IChipSelectTargetProps } from "@sberbusiness/tri
 |---|---|---|
 | `size` | `EComponentSize.MD` | SM / MD / LG; передаётся в `Chip`, стрелку и кнопку очистки |
 | `type` | `EChipType.TYPE_1` | Визуальный тип `Chip`: TYPE_1 / TYPE_2 |
-| `disabled` | `false` | CSS-блокировка указателя и исключение самого target из Tab; ограничения ниже |
+| `disabled` | `false` | Отключает target и встроенную очистку; ограничения — в Accessibility |
 | `prefix` | — | Унаследованный слот перед подписью |
 | `postfix` | Стрелка либо очистка | Переданное значение заменяет автоматический postfix; явно переданный `undefined` тоже заменяет его |
 | `showNotificationIcon` | `false` | Значок `Badge.Dot` через `Chip` |
@@ -77,15 +77,7 @@ Spread расположен после `postfix` и `aria-expanded`: потре�
 ## Дизайн-токены
 
 Собственных стилей и токенов у target нет, поэтому `tokens: []`.
-Фоны, цвета и фокус наследуются от `Chip`: например,
-`Chip.Background_Type1_Default`, `Chip.Background_Selected_Default`,
-`Chip.Color_Disabled` и `Chip.Shadow_Focus`. Очистка также использует
-`Chip.Shadow_Focus`, а стрелка — палитру `@sberbusiness/icons-next`.
-
-Полный перечень — в [Chip-ai.md](Chip-ai.md#дизайн-токены), значения —
-`src/components/DesignTokens/components/Chip.ts`. Переопределение через
-`ThemeProvider.tokens` описано в
-[ThemeProvider-ai.md](../ThemeProvider/ThemeProvider-ai.md#как-переопределять-токены).
+Внешний вид наследуется от `Chip`: см. [Chip-ai.md](Chip-ai.md#дизайн-токены).
 
 ---
 
@@ -103,7 +95,7 @@ Spread расположен после `postfix` и `aria-expanded`: потре�
   Очистка вызывает только `onClear()` и останавливает всплытие клика и Enter / Space.
 - `selected` влияет на автоматический postfix, `onClear` не получает DOM-событие.
 - Порядок spread, размеры и типы `Chip`, токены и story IDs сохраняются.
-  Рефакторинг остаётся совместимым с React 17.
+  Код остаётся совместимым с React 17.
 
 ---
 
@@ -118,14 +110,19 @@ Spread расположен после `postfix` и `aria-expanded`: потре�
   прокрутку страницы на Space. Tab закрывает открытый список, не отменяя Tab.
 - Escape, клики вне списка, навигация по опциям и перенос фокуса принадлежат
   композиции селекта, а не target. Сам target фокусом не управляет.
-- Встроенная очистка — нативная кнопка. Её клик и Enter / Space не всплывают
-  в target; клавиатура активирует нативный click и вызывает `onClear`.
-- У встроенной очистки пока нет доступного имени, отдельного prop для его
-  передачи тоже нет (TRI-139). Для своей именованной очистки доступен `postfix`;
-  обработчики пользовательского слота должен задать потребитель.
-- `disabled` ставит `tabIndex=-1` и CSS `pointer-events: none` на `Chip`,
-  но не проверяется в обработчиках и не передаётся встроенной кнопке очистки.
-  Это существующее ограничение, а не нативное отключение всей композиции.
+- Встроенная очистка — нативная кнопка: Enter / Space активируют её нативный
+  click и вызывают `onClear`.
+- У встроенной очистки нет доступного имени, отдельного prop для его
+  передачи тоже нет (TRI-139). Для своей именованной очистки доступен `postfix`.
+  Такая кнопка, как и встроенная, должна останавливать всплытие click и keydown
+  Enter / Space: иначе их обработает target, а `preventDefault()` может отменить
+  нативный click кнопки.
+- `disabled` ставит `tabIndex=-1` и CSS `pointer-events: none` на `Chip`
+  и нативный `disabled` на встроенную кнопку очистки. В обработчиках target
+  флаг не проверяется: программно отправленные события не защищены.
+  Не передавай `tabIndex`: он перекрывает `-1`, target снова получит фокус,
+  и Enter / Space откроют список.
+  Пользовательский `postfix` потребитель отключает сам.
 - `selected` сам не задаёт `aria-pressed`. Фокус оформляется через `Chip.Shadow_Focus`.
 
 ---
@@ -138,7 +135,8 @@ Spread расположен после `postfix` и `aria-expanded`: потре�
   с `SuggestContext`: читает выбор и открытость из контекста и иначе обрабатывает клавиши.
 - [Chip](Chip-ai.md) — непосредственно рендерится внутри; источник `IChipProps`,
   span-семантики и всех визуальных состояний.
-- `SelectExtendedField` — предоставляет `opened` / `setOpened` в `renderTarget`.
+- [SelectExtendedField](../SelectExtendedField/SelectExtendedField-ai.md) — предоставляет
+  `opened` / `setOpened` в `renderTarget`.
 - `ChipClearButton` и `ChipDropdownArrow` — автоматические варианты postfix;
   отдельная кнопка очистки принимает атрибуты `ButtonIcon`, включая `aria-label`.
 
@@ -149,7 +147,7 @@ Spread расположен после `postfix` и `aria-expanded`: потре�
 Основные истории: `stories/Chips/ChipSelect.stories.tsx`
 Файлы примеров: `stories/Chips/examples/ChipSelect/`
 
-Используются существующие истории родителя: он рендерит этот target.
+Используются истории родителя: он рендерит этот target.
 Отдельный stories-файл атому не требуется.
 
 | Story | Example file | Что демонстрирует |
@@ -165,7 +163,7 @@ Spread расположен после `postfix` и `aria-expanded`: потре�
 У семейства есть Linux/CI baseline на `xs` / `xl` в `__screenshots__/`;
 фокус базового чипса проверяет `VisualTests` в stories `Chip`.
 Контракт target проверяет `src/components/Chip/__tests__/ChipSelectTarget.test.tsx`,
-интеграцию выбора — `ChipSelect.test.tsx`. Внешний вид и story IDs при рефакторинге сохранены.
+интеграцию выбора — `ChipSelect.test.tsx`.
 
 ---
 
@@ -173,5 +171,4 @@ Spread расположен после `postfix` и `aria-expanded`: потре�
 
 | Дата | Изменение |
 |---|---|
-| 2026-10-29 | Создан документ. Добавлены JSDoc и отдельные тесты; postfix вычисляется напрямую вместо немедленного вызова useCallback. API и поведение сохранены. |
-| 2026-10-29 | В описании onKeyDown и инвариантах уточнено исключение для Enter / Space встроенной кнопки очистки. |
+| 2026-10-29 | Создан документ. |

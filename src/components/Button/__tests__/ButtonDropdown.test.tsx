@@ -4,6 +4,7 @@ import { describe, it, expect, vi } from "vitest";
 import { ButtonDropdown } from "../ButtonDropdown";
 import { EButtonDotsTheme, EButtonTheme } from "../enums";
 import { EComponentSize } from "../../../enums/EComponentSize";
+import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 
 const options = [
     { id: "opt-1", label: "Option 1" },
@@ -322,6 +323,87 @@ describe("ButtonDropdown", () => {
         fireEvent.keyDown(button, { code: "ArrowDown" });
 
         expect(screen.getByRole("listbox")).toBeInTheDocument();
+    });
+
+    describe("keyboard navigation in the opened dropdown", () => {
+        /** Клавиша с code и keyCode, как у события из браузера. */
+        const KEYS = {
+            Space: { code: "Space", keyCode: EVENT_KEY_CODES.SPACE },
+            Enter: { code: "Enter", keyCode: EVENT_KEY_CODES.ENTER },
+            ArrowDown: { code: "ArrowDown", keyCode: EVENT_KEY_CODES.ARROW_DOWN },
+        };
+
+        const renderWithHandlers = () => {
+            const onSelectFirst = vi.fn();
+            const onSelectSecond = vi.fn();
+
+            render(
+                <ButtonDropdown
+                    theme={EButtonTheme.GENERAL}
+                    size={EComponentSize.MD}
+                    options={[
+                        { id: "opt-1", label: "Option 1", onSelect: onSelectFirst },
+                        { id: "opt-2", label: "Option 2", onSelect: onSelectSecond },
+                    ]}
+                >
+                    Actions
+                </ButtonDropdown>,
+            );
+
+            return { button: screen.getByRole("button"), onSelectFirst, onSelectSecond };
+        };
+
+        it("opens on Space without selecting an option", () => {
+            const { button, onSelectFirst } = renderWithHandlers();
+
+            fireEvent.keyDown(button, KEYS.Space);
+
+            expect(screen.getByRole("listbox")).toBeInTheDocument();
+            expect(button).toHaveAttribute("aria-activedescendant", "opt-1");
+            expect(onSelectFirst).not.toHaveBeenCalled();
+        });
+
+        it("opens on ArrowDown with the first option active", () => {
+            const { button } = renderWithHandlers();
+
+            fireEvent.keyDown(button, KEYS.ArrowDown);
+
+            expect(button).toHaveAttribute("aria-activedescendant", "opt-1");
+        });
+
+        it("moves the active option on ArrowDown", () => {
+            const { button } = renderWithHandlers();
+
+            fireEvent.click(button);
+            const prevented = !fireEvent.keyDown(button, KEYS.ArrowDown);
+
+            expect(prevented).toBe(true);
+            expect(button).toHaveAttribute("aria-activedescendant", "opt-2");
+            expect(screen.getByRole("listbox")).toBeInTheDocument();
+        });
+
+        it.each(["Space", "Enter"] as const)("selects the active option on %s and closes", (key) => {
+            const { button, onSelectFirst, onSelectSecond } = renderWithHandlers();
+
+            fireEvent.click(button);
+            fireEvent.keyDown(button, KEYS.ArrowDown);
+            const prevented = !fireEvent.keyDown(button, KEYS[key]);
+
+            expect(prevented).toBe(true);
+            expect(onSelectFirst).not.toHaveBeenCalled();
+            expect(onSelectSecond).toHaveBeenCalledTimes(1);
+            expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+        });
+
+        it("ignores keyboard events on the document", () => {
+            const { button, onSelectFirst } = renderWithHandlers();
+
+            fireEvent.click(button);
+            fireEvent.keyDown(document, KEYS.Enter);
+
+            expect(onSelectFirst).not.toHaveBeenCalled();
+            expect(screen.getByRole("listbox")).toBeInTheDocument();
+        });
     });
 
     it("does not leak option label into DOM attributes", () => {

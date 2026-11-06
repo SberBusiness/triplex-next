@@ -8,7 +8,7 @@ import { Tooltip, ETooltipSize } from "../../Tooltip";
 import { TextFieldBase } from "../../TextField/TextFieldBase";
 import { FormFieldInput, FormFieldClear, EFormFieldStatus } from "../../FormField";
 import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
-import { DropdownListContext } from "../../Dropdown";
+import { DropdownListContext, useDropdownListKeyboard } from "../../Dropdown";
 import { DataTestId } from "../../../consts/DataTestId";
 import { SuggestFieldDesktopDropdown } from "./SuggestFieldDesktopDropdown";
 
@@ -49,7 +49,11 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     // Флаг для предотвращения автоматического открытия Dropdown сразу после выбора значения.
     const [ignoreAutoOpen, setIgnoreAutoOpen] = useState(false);
     const [dropdownListId] = useState(() => uniqueId());
-    const [activeDescendant, setActiveDescendant] = useState<string>();
+    const {
+        context: dropdownListContext,
+        activeDescendant,
+        handleKeyDown: handleDropdownListKeyDown,
+    } = useDropdownListKeyboard();
 
     const [prevValue, setPrevValue] = useState(value);
     if (value?.id !== prevValue?.id) {
@@ -75,7 +79,6 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
 
     const closeDropdown = useCallback((nextIgnoreAutoOpen: boolean) => {
         setIgnoreAutoOpen(nextIgnoreAutoOpen);
-        setActiveDescendant(undefined);
         setDropdownOpen(false);
     }, []);
 
@@ -101,11 +104,13 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
                     event.stopPropagation();
                     closeDropdown(true);
                 }
+            } else {
+                handleDropdownListKeyDown(event);
             }
 
             inputProps.onKeyDown?.(event);
         },
-        [dropdownOpen, closeDropdown, inputProps],
+        [dropdownOpen, closeDropdown, handleDropdownListKeyDown, inputProps],
     );
 
     const handleInputMouseDown = useCallback<React.MouseEventHandler<HTMLInputElement>>(
@@ -123,7 +128,6 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     const handleInputChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
         (event) => {
             setIgnoreAutoOpen(false);
-            setActiveDescendant(undefined);
             setInputValue(event.target.value);
             onFilter(event.target.value);
             inputProps.onChange?.(event);
@@ -219,7 +223,7 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
                     onMouseDown={handleInputMouseDown}
                     onChange={handleInputChange}
                 />
-                <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
+                <DropdownListContext.Provider value={dropdownListContext}>
                     <Dropdown
                         value={value}
                         options={options}

@@ -3,10 +3,12 @@ import {
     Button,
     Dropdown,
     DropdownList,
+    DropdownListContext,
     EButtonTheme,
     EComponentSize,
     EDropdownDirection,
     EDropdownWidth,
+    useDropdownListKeyboard,
 } from "@sberbusiness/triplex-next";
 
 const OPTIONS = [
@@ -18,6 +20,7 @@ const OPTIONS = [
 export const WithSelectedOption = () => {
     const targetRef = useRef<HTMLButtonElement>(null);
     const [opened, setOpened] = useState(false);
+    const { context, activeDescendant, handleKeyDown } = useDropdownListKeyboard();
     const [selectedId, setSelectedId] = useState("selected-option-2");
 
     const handleSelect = (id: string) => {
@@ -33,6 +36,8 @@ export const WithSelectedOption = () => {
                 aria-haspopup="listbox"
                 aria-expanded={opened}
                 onClick={() => setOpened(!opened)}
+                onKeyDown={handleKeyDown}
+                aria-activedescendant={activeDescendant}
                 ref={targetRef}
             >
                 Button text
@@ -45,18 +50,20 @@ export const WithSelectedOption = () => {
                 direction={EDropdownDirection.BOTTOM}
                 width={EDropdownWidth.MIN_TARGET}
             >
-                <DropdownList dropdownOpened={opened} size={EComponentSize.MD}>
-                    {OPTIONS.map((option) => (
-                        <DropdownList.Item
-                            key={option.id}
-                            id={option.id}
-                            selected={option.id === selectedId}
-                            onSelect={() => handleSelect(option.id)}
-                        >
-                            {option.label}
-                        </DropdownList.Item>
-                    ))}
-                </DropdownList>
+                <DropdownListContext.Provider value={context}>
+                    <DropdownList dropdownOpened={opened} size={EComponentSize.MD}>
+                        {OPTIONS.map((option) => (
+                            <DropdownList.Item
+                                key={option.id}
+                                id={option.id}
+                                selected={option.id === selectedId}
+                                onSelect={() => handleSelect(option.id)}
+                            >
+                                {option.label}
+                            </DropdownList.Item>
+                        ))}
+                    </DropdownList>
+                </DropdownListContext.Provider>
             </Dropdown>
         </div>
     );

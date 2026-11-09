@@ -34,10 +34,11 @@ export const CollapsibleTreeNodeHeader = forwardRef<HTMLButtonElement, ICollapsi
         },
         ref,
     ) => {
+        const interactive = hasChildNodes && !disabled;
+
         const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-            if (hasChildNodes && !disabled) {
-                toggle(!opened);
-            }
+            // Нативный disabled блокирует click, поэтому дополнительная проверка не нужна.
+            toggle(!opened);
             onClick?.(event);
         };
 
@@ -48,13 +49,14 @@ export const CollapsibleTreeNodeHeader = forwardRef<HTMLButtonElement, ICollapsi
                 type="button"
                 // Глобальные классы @sberbusiness/icons-next "hoverable", "active" и "disabled" — задают цвет шеврона.
                 className={clsx(styles.collapsibleTreeNodeHeader, "hoverable", className, {
-                    [styles.interactive]: hasChildNodes && !disabled,
+                    [styles.interactive]: interactive,
+                    // У леаф-нод opened всегда true (хак LeafNode), поэтому active только при наличии детей.
                     active: hasChildNodes && opened,
                     disabled,
                 })}
                 onClick={handleClick}
                 aria-expanded={hasChildNodes ? opened : undefined}
-                disabled={disabled || !hasChildNodes}
+                disabled={!interactive}
             >
                 {hasChildNodes && (
                     <CaretrightStrokeSrvIcon24

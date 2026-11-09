@@ -1,14 +1,14 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach, type MockInstance } from "vitest";
 import { CollapsibleTreeNodeHeader, ICollapsibleTreeNodeHeaderProps } from "../components/CollapsibleTreeNodeHeader";
 
-type TRenderProps = Partial<ICollapsibleTreeNodeHeaderProps>;
+type TRenderProps = Partial<ICollapsibleTreeNodeHeaderProps> & { [key: `data-${string}`]: string };
 
 /**
- * Возвращает дефолтный набор пропов, имитирующий `ICollapsibleTreeExtendedNodeHeaderProvideProps`.
- * Тесты переопределяют интересующие поля.
+ * Возвращает полный набор provide-props из `ICollapsibleTreeExtendedNodeHeaderProvideProps`.
+ * Тесты переопределяют интересующие поля. Полнота набора нужна проверке утечки в `afterEach`.
  */
 const getDefaultProps = (): ICollapsibleTreeNodeHeaderProps => ({
     activeNode: false,
@@ -27,37 +27,37 @@ const renderHeader = (props: TRenderProps = {}, children: React.ReactNode = "Lab
     );
 
 describe("CollapsibleTreeNodeHeader", () => {
-    // Первым рендерим полный набор provide-props: React дедуплицирует предупреждения о неизвестных атрибутах.
-    it("Не передаёт служебные provide-props в DOM и сохраняет HTML, ARIA и data-атрибуты", () => {
-        const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+    // Утечку provide-props в DOM выдаёт предупреждение React. Оно выводится один раз на модуль,
+    // поэтому console.error проверяется после каждого теста — иначе результат зависел бы от порядка и фильтра тестов.
+    let consoleError: MockInstance<typeof console.error>;
 
+    beforeEach(() => {
+        consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+        // mockRestore в vitest 3 сбрасывает историю вызовов, поэтому проверка идёт до него.
         try {
-            render(
-                <CollapsibleTreeNodeHeader
-                    {...getDefaultProps()}
-                    activeNode
-                    animating
-                    isLastNode
-                    id="node-header-1"
-                    title="Folder"
-                    aria-label="Folder 1"
-                    aria-controls="folder-1-children"
-                    data-node-id="folder-1"
-                />,
-            );
-
-            const button = screen.getByRole("button", { name: "Folder 1" });
-            expect(button).not.toHaveAttribute("activenode");
-            expect(button).not.toHaveAttribute("animating");
-            expect(button).not.toHaveAttribute("islastnode");
-            expect(button).toHaveAttribute("id", "node-header-1");
-            expect(button).toHaveAttribute("title", "Folder");
-            expect(button).toHaveAttribute("aria-controls", "folder-1-children");
-            expect(button).toHaveAttribute("data-node-id", "folder-1");
             expect(consoleError).not.toHaveBeenCalled();
         } finally {
             consoleError.mockRestore();
         }
+    });
+
+    it("Пробрасывает HTML, ARIA и data-атрибуты на button", () => {
+        renderHeader({
+            id: "node-header-1",
+            title: "Folder",
+            "aria-label": "Folder 1",
+            "aria-controls": "folder-1-children",
+            "data-node-id": "folder-1",
+        });
+
+        const button = screen.getByRole("button", { name: "Folder 1" });
+        expect(button).toHaveAttribute("id", "node-header-1");
+        expect(button).toHaveAttribute("title", "Folder");
+        expect(button).toHaveAttribute("aria-controls", "folder-1-children");
+        expect(button).toHaveAttribute("data-node-id", "folder-1");
     });
 
     it("Рендерит children внутри button", () => {
@@ -199,16 +199,14 @@ describe("CollapsibleTreeNodeHeader", () => {
 
         it("Передаёт исходное событие в onClick после toggle", () => {
             const toggle = vi.fn();
-            const onClick = vi.fn((event: React.MouseEvent<HTMLButtonElement>) => event.currentTarget);
+            const onClick = vi.fn();
             renderHeader({ hasChildNodes: true, opened: false, toggle, onClick });
 
-            const button = screen.getByRole("button");
             const event = new MouseEvent("click", { bubbles: true });
-            fireEvent(button, event);
+            fireEvent(screen.getByRole("button"), event);
 
             expect(onClick).toHaveBeenCalledTimes(1);
             expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ nativeEvent: event, type: "click" }));
-            expect(onClick).toHaveReturnedWith(button);
             expect(toggle).toHaveBeenCalledWith(true);
             expect(onClick.mock.invocationCallOrder[0]).toBeGreaterThan(toggle.mock.invocationCallOrder[0]);
         });
@@ -235,14 +233,6 @@ describe("CollapsibleTreeNodeHeader", () => {
         expect(button.className).toMatch(/collapsibleTreeNodeHeader/);
     });
 
-    it("Пробрасывает прочие HTML-атрибуты на button", () => {
-        renderHeader({ "data-test-id": "header-1", id: "node-header-1" } as TRenderProps);
-
-        const button = screen.getByRole("button");
-        expect(button).toHaveAttribute("data-test-id", "header-1");
-        expect(button).toHaveAttribute("id", "node-header-1");
-    });
-
     it("Не позволяет переопределить инварианты button через {...props} (type, disabled, aria-expanded)", () => {
         renderHeader({
             hasChildNodes: false,
@@ -251,7 +241,7 @@ describe("CollapsibleTreeNodeHeader", () => {
             type: "submit",
             disabled: false,
             "aria-expanded": "true",
-        } as TRenderProps);
+        });
 
         const button = screen.getByRole("button");
         expect(button).toHaveAttribute("type", "button");

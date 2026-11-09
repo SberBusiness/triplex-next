@@ -109,14 +109,26 @@ describe("CollapsibleTreeExtendedNode", () => {
             expect(getBranchTreeItem()).toHaveAttribute("aria-expanded", "false");
         });
 
-        it("не вызывает props.toggle, если новое значение совпадает с текущим", () => {
+        it("передаёт в props.toggle и значение, совпадающее с текущим", () => {
             const toggle = vi.fn();
             const { headerProps } = renderNode({ opened: true, toggle });
 
-            // Эмулируем вызов toggle(true) при текущем opened=true.
             headerProps.current?.toggle(true);
 
-            expect(toggle).not.toHaveBeenCalled();
+            expect(toggle).toHaveBeenCalledTimes(1);
+            expect(toggle).toHaveBeenCalledWith(true);
+        });
+
+        it("передаёт в props.toggle все последовательные вызовы из одного рендера", () => {
+            const toggle = vi.fn();
+            const { headerProps } = renderNode({ opened: false, toggle });
+            const nodeToggle = headerProps.current!.toggle;
+
+            nodeToggle(true);
+            nodeToggle(false);
+
+            // props.opened до перерендера устаревший, поэтому последний запрос не должен теряться.
+            expect(toggle.mock.calls).toEqual([[true], [false]]);
         });
     });
 
@@ -137,6 +149,20 @@ describe("CollapsibleTreeExtendedNode", () => {
             expect(getBranchTreeItem()).toHaveAttribute("aria-expanded", "true");
 
             fireEvent.click(screen.getByRole("button", { name: "header" }));
+
+            expect(headerProps.current?.opened).toBe(false);
+            expect(getBranchTreeItem()).toHaveAttribute("aria-expanded", "false");
+        });
+
+        it("последовательные вызовы toggle из одного рендера применяются по актуальному состоянию", () => {
+            const { headerProps } = renderNode({});
+            const toggle = headerProps.current!.toggle;
+
+            act(() => {
+                toggle(true);
+                // Сравнение идёт с актуальным состоянием ноды, а не с opened=false из рендера.
+                toggle(false);
+            });
 
             expect(headerProps.current?.opened).toBe(false);
             expect(getBranchTreeItem()).toHaveAttribute("aria-expanded", "false");

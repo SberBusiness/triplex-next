@@ -74,7 +74,7 @@ controlled/uncontrolled-состояние) через `CollapsibleTreeExtended.
 | Поле | Описание |
 |---|---|
 | `opened` | Текущее состояние раскрытия |
-| `toggle(opened)` | Функция смены `opened` (no-op при совпадении значений) |
+| `toggle(opened)` | Функция смены `opened`. Controlled — передаёт каждый запрос во внешний `toggle`; uncontrolled — значение, совпадающее с текущим, пропускается |
 | `animating` | Идёт ли анимация раскрытия (из `AccordionBase`) |
 | `activeNode` | Текущая активная нода дерева (из `TreeView`) |
 | `hasChildNodes` | Есть ли у текущей ноды дочерние |
@@ -199,4 +199,4 @@ controlled/uncontrolled-состояние) через `CollapsibleTreeExtended.
 | 2026-08-26 | В `related` добавлен `TreeViewNode` — у узла появился собственный AI.md, и он точный адресат наследования `ICollapsibleTreeExtendedNodeProps` |
 | 2026-09-17 | TRI-22: `CollapsibleTreeExtended` обёрнут `forwardRef` — `ref` отдаёт корневой `<ul>`; тип переименован в `ICollapsibleTreeExtendedFC`, старое имя оставлено deprecated-алиасом |
 | 2026-10-16 | При сверке ROADMAP с публичными экспортами внутренний `AccordionBase` исключён из `related`; описание зависимости сохранено в «Связанные компоненты». |
-| 2026-11-03 | Добавлена ссылка на AI.md узла; уточнены instance-ref, `isLastNode` и фактические границы клавиатурной навигации. |
+| 2026-11-09 | TRI-180: `toggle` из render-props в controlled-режиме передаёт во внешний `toggle` каждый запрос, включая совпадающий с текущим `opened`; в uncontrolled-режиме последовательные вызовы применяются по актуальному состоянию ноды |

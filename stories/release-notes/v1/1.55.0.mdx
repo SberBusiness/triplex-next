@@ -9,7 +9,13 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **CollapsibleTreeExtendedNode**
 
 - Проведён AI-рефакторинг.
+- Исправлено: в uncontrolled-режиме повторный вызов `toggle` из того же рендера игнорировался, и нода оставалась в состоянии после первого вызова.
+- В controlled-режиме `toggle` из render-props передаёт во внешний `toggle` каждый запрос, включая значение, совпадающее с текущим `opened`. Раньше при нескольких вызовах в одном обработчике мог потеряться последний.
 
 **CollapsibleTreeNodeHeader**
 
 - Проведён AI-рефакторинг. Устранены предупреждения React о служебных свойствах `activeNode`, `animating` и `isLastNode` на HTML-кнопке.
+
+**TreeView.Node**
+
+- `setOpenedNode` в render-props пропускает текущее значение без перерисовки дерева.

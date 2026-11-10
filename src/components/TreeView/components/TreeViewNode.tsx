@@ -146,8 +146,15 @@ export class TreeViewNodeWithContext extends React.Component<ITreeViewNodePropsW
         onFocus?.(event);
     };
 
-    /** Устанавливает флаг opened ноды. Передается в render-функцию children. */
+    /**
+     * Устанавливает флаг opened ноды. Передается в render-функцию children.
+     * Сравнивает с актуальным состоянием узла, а не с openedNode из рендера, и пропускает установку того же значения.
+     */
     private setOpenedNode = (opened: boolean) => {
+        if (this.abstractNode.getOpened() === opened) {
+            return;
+        }
+
         this.props.treeViewContext.setOpenedNode(this.abstractNode, opened);
     };
 }

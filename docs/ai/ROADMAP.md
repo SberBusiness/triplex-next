@@ -256,8 +256,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ChipSuggestTarget | ✅ | ✅ |
 | CollapsibleTreeExtendedNode | ✅ | ✅ |
 | CollapsibleTreeNodeHeader | ✅ | ✅ |
-| ColumnSettings | ⬜ | ◐ |
-| ColumnSettingsSortableList | ⬜ | ◐ |
+| ColumnSettings | ✅ | ✅ |
+| ColumnSettingsSortableList | ✅ | ✅ |
 | ColumnSettingsSortableListItem | ⬜ | ◐ |
 | ConfirmClose | ⬜ | ◐ |
 | DropdownDesktop | ⬜ | ◐ |

@@ -144,7 +144,8 @@ version: "1.0"
   а `aria-expanded` при этом корректно сообщает, что список свёрнут.
 - `aria-activedescendant` отражает опцию, подсвеченную с клавиатуры. Значение поднимается снизу:
   `DropdownList` кладёт `id` активного элемента в `DropdownListContext`, провайдер которого
-  `SelectField` рендерит вокруг выпадающего блока. Без этого провайдера связка не работает.
+  рендерит `SelectExtendedField`, а `SelectExtendedField.Target` выставляет атрибут сам.
+  Клавиши, нажатые в поле, `SelectExtendedField` передаёт открытому списку.
 - `aria-expanded` и `aria-haspopup="listbox"` выставляет `SelectExtendedFieldTarget`;
   роли `listbox` / `option` и навигацию `ArrowUp` / `ArrowDown` — `DropdownList`.
 - Клавиши открытия списка: `Space`, `Enter`, `ArrowDown`, `ArrowUp` (только когда фокус на самом
@@ -171,7 +172,7 @@ version: "1.0"
 - `Chip` — `Chip.Select` и `Chip.Sort` решают ту же задачу в виде фильтр-чипа;
   `IChipSelectProps` собирается из `ISelectFieldProps`.
 - `Dropdown` — выпадающий блок, `DropdownList` / `DropdownListItem` и `DropdownListContext`,
-  через который поднимается активная опция для `aria-activedescendant`.
+  через который поднимается активная опция для `aria-activedescendant` (провайдер — в `SelectExtendedField`).
 - `FormField` — семейство строительных блоков поля: `SelectExtendedField.Target` собран на `FormFieldTarget`,
   поэтому лейбл, статусы и слоты приходят в публичный API `SelectField` оттуда.
 - `Pagination` — потребитель внутри библиотеки: `PaginationSelect` оборачивает `SelectField`
@@ -209,3 +210,4 @@ version: "1.0"
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`Chip`); добавлены обратные ссылки (`FormField`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
 | 2026-10-21 | Переход на `Puller` (TRIPLEX-961): мобильный элемент списка — `PullerListItem` (бывший `DropdownMobileListItem`). |
 | 2026-10-29 | TRIPLEX-1028: Enter / Space на кнопке очистки и других фокусируемых элементах внутри поля больше не открывают список, клик по таким элементам, кроме очистки, — не переключает. Клавиши открытия — см. «Accessibility». `targetProps.onClear` получает событие клика. |
+| 2026-11-05 | TRIPLEX-1039: связку поля со списком (`DropdownListContext`, `aria-activedescendant`) ведёт `SelectExtendedField`. |

@@ -4,11 +4,13 @@ import {
     Button,
     Dropdown,
     DropdownList,
+    DropdownListContext,
     EButtonTheme,
     EComponentSize,
     EDropdownAlignment,
     EDropdownDirection,
     EDropdownWidth,
+    useDropdownListKeyboard,
 } from "@sberbusiness/triplex-next";
 
 /** Свойства Playground-примера Dropdown. */
@@ -34,6 +36,7 @@ const OPTIONS = [
 export const Playground = ({ size = EComponentSize.MD, direction, alignment, width, loading }: IPlaygroundProps) => {
     const targetRef = useRef<HTMLButtonElement>(null);
     const [opened, setOpened] = useState(true);
+    const { context, activeDescendant, handleKeyDown } = useDropdownListKeyboard();
 
     return (
         <div style={{ display: "flex", justifyContent: "center", padding: "200px 0" }}>
@@ -43,6 +46,8 @@ export const Playground = ({ size = EComponentSize.MD, direction, alignment, wid
                 aria-haspopup="listbox"
                 aria-expanded={opened}
                 onClick={() => setOpened(!opened)}
+                onKeyDown={handleKeyDown}
+                aria-activedescendant={activeDescendant}
                 ref={targetRef}
             >
                 Button text
@@ -58,20 +63,22 @@ export const Playground = ({ size = EComponentSize.MD, direction, alignment, wid
                 onOpen={action("onOpen")}
                 onClose={action("onClose")}
             >
-                <DropdownList loading={loading} dropdownOpened={opened} size={size}>
-                    {OPTIONS.map((option) => (
-                        <DropdownList.Item
-                            key={option.id}
-                            id={option.id}
-                            onSelect={() => {
-                                action("onSelect")(option.id);
-                                setOpened(false);
-                            }}
-                        >
-                            {option.label}
-                        </DropdownList.Item>
-                    ))}
-                </DropdownList>
+                <DropdownListContext.Provider value={context}>
+                    <DropdownList loading={loading} dropdownOpened={opened} size={size}>
+                        {OPTIONS.map((option) => (
+                            <DropdownList.Item
+                                key={option.id}
+                                id={option.id}
+                                onSelect={() => {
+                                    action("onSelect")(option.id);
+                                    setOpened(false);
+                                }}
+                            >
+                                {option.label}
+                            </DropdownList.Item>
+                        ))}
+                    </DropdownList>
+                </DropdownListContext.Provider>
             </Dropdown>
         </div>
     );

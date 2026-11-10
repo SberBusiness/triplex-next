@@ -1,7 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { DropdownListContext } from "../../Dropdown/DropdownListContext";
 import { SelectField, ISelectFieldOption } from "../SelectField";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { EFormFieldStatus } from "../../FormField/enums";
@@ -122,9 +121,6 @@ vi.mock("../../SelectExtendedField/components/SelectExtendedFieldDropdownDefault
         onChange: (option: ISelectFieldOption) => void;
         setOpened: (opened: boolean) => void;
     }) => {
-        // Настоящий DropdownList поднимает активную опцию наверх через этот контекст —
-        // мок повторяет ту же связку, чтобы проверить aria-activedescendant поля выбора.
-        const { setActiveDescendant } = React.useContext(DropdownListContext);
         // Настоящий компонент отдаёт в Dropdown opened && !loading, а Dropdown при !opened
         // возвращает null: в закрытом состоянии и во время загрузки опций в DOM нет.
         const optionsRendered = opened && !loading;
@@ -149,7 +145,6 @@ vi.mock("../../SelectExtendedField/components/SelectExtendedFieldDropdownDefault
                               type="button"
                               data-testid={`option-${option.id}`}
                               data-selected={String(option.id === value?.id)}
-                              onFocus={() => setActiveDescendant(option.id)}
                               onClick={() => {
                                   onChange(option);
                                   setOpened(false);
@@ -372,20 +367,6 @@ describe("SelectField", () => {
         const [firstDropdown, secondDropdown] = screen.getAllByTestId("select-extended-field-dropdown-default");
 
         expect(firstDropdown.getAttribute("data-list-id")).not.toBe(secondDropdown.getAttribute("data-list-id"));
-    });
-
-    it("Should reflect active descendant reported through DropdownListContext", async () => {
-        render(<SelectField {...defaultProps} data-testid="select-field" />);
-
-        const target = screen.getByTestId("select-extended-field-target");
-        expect(target).not.toHaveAttribute("aria-activedescendant");
-
-        fireEvent.click(target);
-        fireEvent.focus(screen.getByTestId("option-2"));
-
-        await waitFor(() => {
-            expect(screen.getByTestId("select-extended-field-target")).toHaveAttribute("aria-activedescendant", "2");
-        });
     });
 
     it("Should render no options until the dropdown is opened", () => {

@@ -1,7 +1,7 @@
 ---
 component: Dropdown
 category: Dropdown
-related: [ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, Puller, LoaderSmall]
+related: [DropdownDesktop, ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, Puller, LoaderSmall]
 tokens:
   - Dropdown.Background
   - Dropdown.Shadow
@@ -129,17 +129,9 @@ DropdownList.Background_Selected
 
 ## Связанные компоненты
 
-Отдельного AI.md пока нет ни у одного субкомпонента семейства — они описаны здесь.
-Это область задачи TRI-35 («Scope: только Dropdown; соседние экспортируемые компоненты
-из `src/components/Dropdown/` — отдельные задачи»), а не вывод по критериям
-`docs/ai/CONTEXT.md` → «Когда создавать `{ComponentName}-ai.md`». По этим критериям
-`DropdownList` и `DropdownListItem`
-заслуживают собственных AI.md и отдельных строк в `docs/ai/ROADMAP.md` — как это
-сделано для семейства `List`. Решение о том, заводить ли их, за владельцем репозитория.
-
 **Десктоп (`src/components/Dropdown/desktop/`):**
 
-- `DropdownDesktop` — десктопное меню: позиционирование, блокировка скролла страницы. `Dropdown` рендерит его напрямую или как fallback `MobileView`.
+- [DropdownDesktop](DropdownDesktop-ai.md) — десктопный контейнер с позиционированием и блокировкой прокрутки страницы. `Dropdown` рендерит его напрямую или как fallback `MobileView`.
 - `DropdownList` — контейнер списка с клавиатурной навигацией, `role="listbox"`. Статическое свойство `DropdownList.Item`.
 - `DropdownListItem` — элемент списка, `role="option"`, выбор мышью и клавиатурой.
 

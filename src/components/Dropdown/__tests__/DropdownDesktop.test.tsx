@@ -88,6 +88,18 @@ describe("DropdownDesktop", () => {
         expect(ref.current).toBe(getDropdown());
     });
 
+    it("passes the root element to a callback ref and clears it on close", () => {
+        const dropdownRef = vi.fn<(element: HTMLDivElement | null) => void>();
+        const { rerender } = render(<DropdownWithTarget dropdownRef={dropdownRef} />);
+
+        expect(dropdownRef).toHaveBeenLastCalledWith(getDropdown());
+        expect(dropdownRef.mock.lastCall?.[0]).toBeInstanceOf(HTMLDivElement);
+
+        rerender(<DropdownWithTarget opened={false} dropdownRef={dropdownRef} />);
+
+        expect(dropdownRef).toHaveBeenLastCalledWith(null);
+    });
+
     it("passes html attributes to the root element", () => {
         render(<DropdownWithTarget id="dropdown-id" role="menu" />);
 

@@ -60,6 +60,16 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 - Исправлено: поле фильтрации `ChipSuggest` не получало `aria-activedescendant` активной опции. `Suggest` передаёт клавиши, всплывшие до корня, открытому `DropdownList`.
 
+**CollapsibleTreeExtendedNode**
+
+- Проведён AI-рефакторинг.
+- Исправлено: в uncontrolled-режиме повторный вызов `toggle` из того же рендера игнорировался, и нода оставалась в состоянии после первого вызова.
+- В controlled-режиме `toggle` из render-props передаёт во внешний `toggle` каждый запрос, включая значение, совпадающее с текущим `opened`. Раньше при нескольких вызовах в одном обработчике мог потеряться последний.
+
+**CollapsibleTreeNodeHeader**
+
+- Проведён AI-рефакторинг. Устранены предупреждения React о служебных свойствах `activeNode`, `animating` и `isLastNode` на HTML-кнопке.
+
 **Dropdown**
 
 - Изменено: открытым списком управляют только клавиши с управляющего элемента — нажатия в других местах страницы больше не перемещают активный пункт и не выбирают его. Затрагивает все компоненты со списком `DropdownList`.
@@ -79,3 +89,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **SuggestField**
 
 - Изменено: `aria-activedescendant` больше не сбрасывается при вводе текста и всегда указывает на опцию, которую выберет `Enter`; сбрасывается при закрытии списка.
+
+**TreeView.Node**
+
+- `setOpenedNode` в render-props пропускает текущее значение без перерисовки дерева.

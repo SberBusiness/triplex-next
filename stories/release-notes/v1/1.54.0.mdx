@@ -18,17 +18,27 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
-**CollapsibleTreeExtendedNode**
+**ChipSelect / ChipSelectTarget**
 
-- Проведён AI-рефакторинг.
+- Проведён AI-рефакторинг `ChipSelectTarget`.
+- Исправлено: при `disabled` и выбранном значении кнопка очистки оставалась доступной с клавиатуры и сбрасывала значение.
 
-**CollapsibleTreeNodeHeader**
+**ChipSuggest / ChipSuggestTarget**
 
-- Проведён AI-рефакторинг. Устранены предупреждения React о служебных свойствах `activeNode`, `animating` и `isLastNode` на HTML-кнопке.
+- Проведён AI-рефакторинг `ChipSuggestTarget`, добавлен `displayName`.
+- Исправлено: `onKeyDown` (в том числе `ChipSuggest.targetProps.onKeyDown`) вызывался только для Enter / Space, остальные клавиши до обработчика не доходили.
+- Исправлено: при `disabled` и выбранном значении кнопка очистки оставалась доступной с клавиатуры и сбрасывала значение.
 
 **Dropdown / MultiselectField.Dropdown / SelectExtendedField.Dropdown**
 
 - Добавлено: мобильную версию можно отрендерить в свой контейнер через `pullerProps.renderContainer`.
+
+**MultiselectField / SelectExtendedField.Target / SelectField**
+
+- Исправлено: Enter / Space на кнопке очистки, `HelpBox`, кнопках тегов в значении и других фокусируемых элементах внутри поля открывали выпадающий блок вместо нажатия на элемент. `stopPropagation` в `onKeyDown` тегов `MultiselectField` для этого больше не нужен.
+- Исправлено: клик по `HelpBox`, кнопкам тегов в значении и другим фокусируемым элементам внутри поля, а также события из их Tooltip переключали выпадающий блок.
+- Изменено: `ArrowDown` / `ArrowUp` открывают выпадающий блок, только когда фокус на самом поле, а не на вложенном элементе.
+- Изменено: `onClear` получает событие клика (`React.MouseEventHandler<HTMLButtonElement>`).
 
 **Tooltip**
 

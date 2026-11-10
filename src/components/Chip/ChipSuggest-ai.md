@@ -1,7 +1,7 @@
 ---
 component: ChipSuggest
 category: Chips
-related: [Chip, ChipSelect, Suggest, Dropdown, FormField]
+related: [ChipSuggestTarget, Chip, ChipSelect, Suggest, Dropdown, FormField]
 tokens: []
 stories: stories/Chips/ChipSuggest.stories.tsx
 version: "1.0"
@@ -57,7 +57,7 @@ version: "1.0"
 |---|---|---|---|
 | `type` | `EChipType` | `EChipType.TYPE_1` (дефолт `Chip`) | Тип чипса. Задавать только здесь: `targetProps.type` не работает — см. «Инварианты» |
 | `displayedValue` | `React.ReactNode` | — | Что показать на чипсе вместо `value.label`. Учитывается только при выбранном `value` |
-| `targetProps` | `IChipSuggestTargetProps<T>` | — | Props target-элемента. Через него передаётся `clearSelected`, а также props `Chip` (`disabled`, `className`, `data-*`, `onClick`, `size`). Два исключения — см. «Инварианты»: `targetProps.type` не применяется никогда, `targetProps.onKeyDown` вызывается только на `Enter`/`Space` |
+| `targetProps` | `IChipSuggestTargetProps<T>` | — | Props target-элемента. Через него передаётся `clearSelected`, а также props `Chip` (`disabled`, `className`, `data-*`, `onClick`, `size`). Исключение — см. «Инварианты»: `targetProps.type` не применяется никогда |
 | `dropdownProps` | `Omit<IChipSuggestDropdownProps<T>, "targetRef">` | — | Props выпадающего списка: props `Dropdown` (`onOpen`, `onClose`, `pullerProps`, …) плюс `focusTrapProps`. `targetRef` проставляет сам `ChipSuggest` |
 
 `className` попадает на корневой `<div>` (рядом с внутренним классом `chipGroupItem`),
@@ -106,23 +106,15 @@ version: "1.0"
 - **Известное ограничение, а не проектное решение:** `type` передаётся target-элементу
   **после** спреда `targetProps`, поэтому `targetProps.type` не применяется никогда — даже
   когда сам `type` не задан (тогда `Chip` уходит в свой дефолт). Тип чипса задавай prop'ом
-  `type` на самом `ChipSuggest`. Починка меняет наблюдаемое поведение, поэтому делается
-  отдельной задачей и с записью в release notes; тестом это поведение намеренно не
-  зафиксировано, чтобы падающий тест не выглядел поломкой контракта при починке.
-  Обрати внимание на асимметрию: `size` передаётся **до** спреда `targetProps`,
-  поэтому `targetProps.size` как раз работает.
-- **Известное ограничение, а не проектное решение:** `ChipSuggestTarget.handleKeyDown`
-  вызывает `targetProps.onKeyDown` только внутри ветки `Enter`/`Space`, поэтому на всех
-  остальных клавишах (стрелки, `Tab`, печатные символы) обработчик потребителя не
-  вызывается. Не рассчитывай на `targetProps.onKeyDown` для навигации по стрелкам.
-  Починка меняет наблюдаемое поведение → отдельная задача с записью в release notes.
+  `type` на самом `ChipSuggest`. При этом `size` передаётся **до** спреда `targetProps`,
+  поэтому `targetProps.size` работает.
 - `prefix` намеренно вырезается из props и не доходит до корневого `<div>`: он приходит
   из `React.HTMLAttributes` как RDFa-атрибут (то есть на `<div>` был бы валиден), но
   `ChipSuggest` его не поддерживает — `ChipSuggestTarget` задаёт только `postfix`.
 - `ChipSuggestDesktopDropdownField` — единственный компонент папки, оставленный
   `React.FC` без `forwardRef`: он не экспортируется из barrel, а очевидного ref-таргета
   у него нет (корень — `FormField`). Осознанное исключение из общего правила
-  `docs/ai/codestyle.md`, а не недосмотр; менять — отдельной задачей.
+  `docs/ai/codestyle.md`.
 - `dropdownProps.targetRef` исключён из типа: ссылку на корневой `<div>` подставляет сам
   `ChipSuggest`, иначе список потеряет привязку к чипсу.
 - `ChipSuggestDropdown` обязан класть ссылку на себя в `dropdownRef` из `SuggestContext` —
@@ -203,9 +195,9 @@ version: "1.0"
   `DropdownList` и `DropdownListItem`.
 - `FormField` — из его частей (`FormFieldLabel`, `FormFieldInput`, `FormFieldPostfix`,
   `FormFieldClear`) собрано поле фильтрации внутри десктопного списка.
-- `ChipSuggestTarget` — сам чипс-триггер. Экспортируется из barrel, но самостоятельного
+- [ChipSuggestTarget](ChipSuggestTarget-ai.md) — сам чипс-триггер. Экспортируется из barrel, но самостоятельного
   применения не имеет: `value` и `dropdownOpen` берёт из `SuggestContext`, поэтому работает
-  только внутри `Suggest`. Отдельного AI.md не имеет.
+  только внутри `Suggest`.
 - `ChipSuggestDropdown` — выпадающий список компонента: `FocusTrap` + поле фильтрации +
   `DropdownList` на десктопе, `SuggestMobileDropdownContent` на мобильной ширине. Из barrel
   не экспортируется (наружу уходит только тип props), отдельного AI.md не имеет.
@@ -243,3 +235,4 @@ version: "1.0"
 |---|---|
 | 2026-09-07 | Создан документ (AI-рефакторинг ChipSuggest, TRI-134) |
 | 2026-10-21 | **Breaking** (TRIPLEX-961): prop `mobileViewProps` в `dropdownProps` переименован в `pullerProps`. |
+| 2026-11-06 | Исправлено (TRI-0): `targetProps.onKeyDown` вызывается для всех клавиш, а не только для `Enter`/`Space`; `targetProps.disabled` отключает встроенную кнопку очистки. |

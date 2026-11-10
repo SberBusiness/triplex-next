@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 import clsx from "clsx";
 import { EDropdownAlignment, EDropdownDirection, EDropdownWidth } from "./enums";
 import { EComponentSize } from "../../../enums/EComponentSize";
+import { setForwardedRef } from "../../../helpers/setForwardedRef";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import { useToken } from "../../ThemeProvider/useToken";
 import { isKey } from "../../../utils/keyboard";
@@ -10,23 +11,23 @@ import styles from "../styles/DropdownDesktop.module.less";
 
 /** Свойства компонента DropdownDesktop. */
 export interface IDropdownDesktopProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Открыт. */
+    /** Управляемое состояние открытия меню. */
     opened: boolean;
-    /** Устанавливает флаг opened. */
+    /** Колбэк общего контракта с Dropdown. Вызывается мобильной веткой Dropdown, десктопная читает opened. */
     setOpened: (opened: boolean) => void;
-    /** Ссылка на управляющий элемент. */
+    /** Ссылка на управляющий элемент, относительно которого вычисляется положение меню. */
     targetRef: React.RefObject<HTMLElement>;
-    /** Размер дропдауна. */
+    /** Размер скругления меню. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
-    /** Направление выпадающего меню. */
+    /** Направление раскрытия меню. По умолчанию EDropdownDirection.AUTO. */
     direction?: EDropdownDirection;
-    /** Выравнивание списка относительно управляющего элемента. */
+    /** Горизонтальное выравнивание относительно управляющего элемента. По умолчанию EDropdownAlignment.LEFT. */
     alignment?: EDropdownAlignment;
-    /** Вариант расчёта ширины выпадающего списка. */
+    /** Способ расчёта ширины меню. По умолчанию EDropdownWidth.CONTENT. */
     width?: EDropdownWidth;
 }
 
-const sizeToClassNameMap = createSizeToClassNameMap(styles);
+const SIZE_TO_CLASS_NAME = createSizeToClassNameMap(styles);
 
 /** Отступ между управляющим элементом и выпадающим меню, px. */
 const TARGET_OFFSET = 4;
@@ -55,7 +56,7 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
     const dropdownRef = useRef<HTMLDivElement | null>(null);
 
     const { scopeClassName } = useToken();
-    const classNames = clsx(styles.dropdownDesktop, sizeToClassNameMap[size], scopeClassName, className);
+    const classNames = clsx(styles.dropdownDesktop, SIZE_TO_CLASS_NAME[size], scopeClassName, className);
 
     /** Блокировка скролла вне дропдауна. */
     const wheelHandler = useCallback((event: WheelEvent) => {
@@ -182,7 +183,7 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
         return () => observer.disconnect();
     }, [opened, targetRef, setPosition]);
 
-    /** Планирует перерасчет позиции дропдауна в следующем кадре. */
+    /** Планирует перерасчёт позиции меню после обработки текущего события. */
     const updatePosition = useCallback(() => {
         setTimeout(setPosition);
     }, [setPosition]);
@@ -206,11 +207,7 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
 
     const setRef = (instance: HTMLDivElement | null) => {
         dropdownRef.current = instance;
-        if (typeof ref === "function") {
-            ref(instance);
-        } else if (ref) {
-            ref.current = instance;
-        }
+        setForwardedRef(ref, instance);
     };
 
     if (!opened) {

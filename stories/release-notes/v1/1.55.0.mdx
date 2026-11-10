@@ -8,8 +8,34 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **Dropdown / DropdownList / DropdownListItem / DropdownListContext**
 
-- `DropdownList` и `DropdownListItem` больше не подписываются на `keydown` документа: клавиши списку передаёт управляющий элемент через новый хук `useDropdownListKeyboard`. Что проверить:
-    - если `DropdownList` собран вручную со своим управляющим элементом (`Dropdown` + `DropdownList`), подключите хук: `context` — в `DropdownListContext.Provider` вокруг списка, `handleKeyDown` — в `onKeyDown` управляющего элемента, `activeDescendant` — в его `aria-activedescendant`. Без этого стрелки, `Enter` и `Space` в списке не работают;
+- `DropdownList` и `DropdownListItem` больше не подписываются на `keydown` документа: клавиши списку передаёт управляющий элемент через новый хук `useDropdownListKeyboard`. Готовые компоненты со списком (`ButtonDropdown`, `ButtonDropdownExtended`, `MultiselectField`, `SelectExtendedField`, `SelectField`, `SuggestField` и др.) подключают хук сами. Что проверить:
+    - если `DropdownList` собран вручную со своим управляющим элементом (`Dropdown` + `DropdownList`), подключите этот хук: `context` — в `DropdownListContext.Provider` вокруг списка, `handleKeyDown` — в `onKeyDown` управляющего элемента, `activeDescendant` — в его `aria-activedescendant`. Без этого стрелки, `Enter` и `Space` в списке не работают. Пример (полный — в story `Components/Dropdown`):
+
+        ```tsx
+        const targetRef = useRef<HTMLButtonElement>(null);
+        const [opened, setOpened] = useState(false);
+        const { context, activeDescendant, handleKeyDown } = useDropdownListKeyboard();
+
+        return (
+            <>
+                <Button
+                    theme={EButtonTheme.SECONDARY}
+                    onClick={() => setOpened(!opened)}
+                    onKeyDown={handleKeyDown}
+                    aria-activedescendant={activeDescendant}
+                    ref={targetRef}
+                >
+                    Открыть список
+                </Button>
+                <Dropdown opened={opened} setOpened={setOpened} targetRef={targetRef}>
+                    <DropdownListContext.Provider value={context}>
+                        <DropdownList dropdownOpened={opened}>{/* DropdownList.Item */}</DropdownList>
+                    </DropdownListContext.Provider>
+                </Dropdown>
+            </>
+        );
+        ```
+
     - в `IDropdownListContext` добавлено обязательное поле `registerKeyDownHandler`: значение вида `{ activeDescendant, setActiveDescendant }` больше не компилируется — замените его на `context` из хука;
     - `DropdownList` больше не клонирует children и не передаёт им `active`, `size`, `ref`, `onMouseOver` и `onMouseOut`. Если пункт — свой компонент (например, `renderDropdownListItem` у `SuggestField`), он должен рендерить `DropdownListItem`. `id`, `selected`, `onSelect` и `keyCodesForSelection` задайте на самой обёртке и пробросьте в `DropdownListItem`: список читает их из props обёртки. `onSelect`, заданный только внутри обёртки, с клавиатуры не вызывается;
     - у `DropdownListItem` удалены props `active` и `size`, а из типов опций `IButtonDropdownOption` и `ISelectExtendedFieldDefaultOption` — `size`. Вне `DropdownList` пункт не подсвечивается, не выбирается с клавиатуры и имеет размер `MD`; для своей подсветки используйте `className`;
@@ -24,7 +50,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **ButtonDropdownExtended**
 
-- Добавлено: клавиши, нажатые на кнопке, передаются `ButtonDropdownExtended.DropdownList` в блоке, `renderButton` получает `activeDescendant` для `aria-activedescendant`.
+- Добавлено: клавиши, нажатые на кнопке, передаются `ButtonDropdownExtended.DropdownList` в блоке. `renderButton` получает `activeDescendant` — пробросьте его в `aria-activedescendant` своей кнопки, чтобы скринридер озвучивал активный пункт.
 
 **ChipSort**
 
@@ -47,7 +73,7 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 **MultiselectField / SelectExtendedField / SelectField**
 
-- Добавлено: `SelectExtendedField` передаёт клавиши поля `DropdownList` в блоке, `renderTarget` получает `activeDescendant`, а `SelectExtendedField.Target` выставляет из него `aria-activedescendant` активной опции.
+- Добавлено: `SelectExtendedField` передаёт клавиши поля `DropdownList` в блоке. `SelectExtendedField.Target` сам выставляет `aria-activedescendant` активной опции; если в `renderTarget` свой таргет, пробросьте в его `aria-activedescendant` значение `activeDescendant`.
 - Изменено: клавиши открытия на `SelectExtendedField.Target` больше не останавливают всплытие события.
 
 **SuggestField**

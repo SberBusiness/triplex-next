@@ -217,4 +217,3 @@ TableBasic.Background_Selected
 | Дата | Изменение |
 |---|---|
 | 2026-08-27 | Создан документ. AI-рефакторинг: `TableBasic` получил `forwardRef` на `<table>`, JSDoc на всех публичных полях, разбор подвала по состояниям, удалён неиспользуемый `TableBasicAdaptive.module.less`. Stories переведены на modern pattern, добавлены unit-тесты (46) |
-| 2026-11-03 | Добавлены ссылки на отдельные контракты `ColumnSettings` и `ColumnSettingsSortableList`; VisualTests раскрывает настройки и показывает состояния списка. |

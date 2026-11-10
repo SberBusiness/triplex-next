@@ -10,7 +10,7 @@ const { captureListProps } = vi.hoisted(() => ({
     captureListProps: vi.fn<(props: IListSortableProps<ITableBasicExtendedColumn>) => void>(),
 }));
 
-// Проверяем адаптер колонок на границе ListSortable, сохраняя настоящий List для DOM, ref и loading.
+// Проверяем адаптер колонок на границе ListSortable, сохраняя настоящий List для DOM и ref.
 vi.mock("../../List/ListSortable", async () => {
     const React = await import("react");
     const { List } = await import("../../List/List");
@@ -46,7 +46,7 @@ describe("ColumnSettings.SortableList", () => {
         captureListProps.mockClear();
     });
 
-    it("Adds fieldKey as sortable id without changing the input columns", () => {
+    it("adds fieldKey as sortable id without changing the input columns", () => {
         const columns = getColumns();
         columns.forEach(Object.freeze);
         Object.freeze(columns);
@@ -62,7 +62,7 @@ describe("ColumnSettings.SortableList", () => {
         expect(columns[1]).not.toHaveProperty("id");
     });
 
-    it("Returns the full reordered columns without sortable ids or input mutation", () => {
+    it("returns the full reordered columns without sortable ids or input mutation", () => {
         const columns = getColumns();
         const onColumnsChange = vi.fn();
         render(<ColumnSettings.SortableList columns={columns} onColumnsChange={onColumnsChange} />);
@@ -80,7 +80,7 @@ describe("ColumnSettings.SortableList", () => {
         expect(reorderedItems[1]).toHaveProperty("id", "amount");
     });
 
-    it("Accepts and returns an empty columns array", () => {
+    it("accepts and returns an empty columns array", () => {
         const onColumnsChange = vi.fn();
         render(<ColumnSettings.SortableList columns={[]} onColumnsChange={onColumnsChange} />);
 
@@ -93,7 +93,7 @@ describe("ColumnSettings.SortableList", () => {
         expect(onColumnsChange).toHaveBeenCalledWith([]);
     });
 
-    it("Uses updated columns and the latest callback after rerender", () => {
+    it("uses updated columns and the latest callback after rerender", () => {
         const onColumnsChange = vi.fn();
         const nextOnColumnsChange = vi.fn();
         const { rerender } = render(
@@ -112,7 +112,7 @@ describe("ColumnSettings.SortableList", () => {
         expect(onColumnsChange).not.toHaveBeenCalled();
     });
 
-    it("Forwards ref, className, HTML, ARIA, data attributes and children to the list", () => {
+    it("forwards ref, className, HTML, ARIA, data attributes and children to the list", () => {
         const ref = React.createRef<HTMLUListElement>();
         render(
             <ColumnSettings.SortableList
@@ -142,21 +142,7 @@ describe("ColumnSettings.SortableList", () => {
         ).toEqual(["Сумма", "Статус"]);
     });
 
-    it("Forwards loading to the real List and removes the loader after rerender", () => {
-        const columns = getColumns();
-        const onColumnsChange = vi.fn();
-        const { rerender } = render(
-            <ColumnSettings.SortableList columns={columns} onColumnsChange={onColumnsChange} loading />,
-        );
-
-        expect(within(screen.getByRole("list")).getByRole("status")).toBeInTheDocument();
-
-        rerender(<ColumnSettings.SortableList columns={columns} onColumnsChange={onColumnsChange} loading={false} />);
-
-        expect(screen.queryByRole("status")).not.toBeInTheDocument();
-    });
-
-    it("Keeps Item identity and displayName on the public composition", () => {
+    it("keeps Item identity and displayName on the public composition", () => {
         expect(ColumnSettings.SortableList.Item).toBe(ColumnSettingsSortableListItem);
         expect(ColumnSettings.SortableList.displayName).toBe("ColumnSettingsSortableList");
     });

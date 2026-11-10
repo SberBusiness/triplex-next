@@ -141,7 +141,7 @@ const MasterSettingsList = MasterTable.TableBasicSettings.ColumnSettings.Sortabl
 | `TableSettingsColumnExtended` | `TableSettingsColumnExtended.tsx` | Сортируемые колонки со вложенными статическими настройками |
 | `VisualTests` | `VisualTests.tsx` | Открытые настройки с чекбоксами, скрытой и заблокированной колонками; пустой список и загрузка |
 
-Преобразование данных, callbacks, ref, загрузка и HTML-атрибуты проверяются в
+Преобразование данных, callbacks, ref и HTML-атрибуты проверяются в
 `src/components/Table/__tests__/ColumnSettingsSortableList.test.tsx`. В этих
 unit-тестах подменяется граница `ListSortable`, а не эмулируется сторонний drag.
 

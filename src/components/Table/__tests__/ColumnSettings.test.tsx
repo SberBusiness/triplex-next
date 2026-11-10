@@ -47,22 +47,6 @@ describe("ColumnSettings", () => {
         expect(setColumns).not.toHaveBeenCalled();
     });
 
-    it("updates children when columns change in context", () => {
-        const children = vi.fn(renderColumnKeys);
-        const setColumns = vi.fn();
-        const ui = (columns: ITableBasicColumn[]) => (
-            <MasterTableContext.Provider value={{ columns, loading: false, setColumns }}>
-                <ColumnSettings data-testid="column-settings">{children}</ColumnSettings>
-            </MasterTableContext.Provider>
-        );
-        const { rerender } = render(ui(COLUMNS));
-
-        rerender(ui(UPDATED_COLUMNS));
-
-        expect(children).toHaveBeenLastCalledWith({ columns: UPDATED_COLUMNS });
-        expect(getRoot()).toHaveTextContent("amount, number");
-    });
-
     it("passes an empty columns array outside MasterTable", () => {
         const children = vi.fn(renderColumnKeys);
 

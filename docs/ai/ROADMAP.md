@@ -234,6 +234,9 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 
 ##### Атомы составных компонентов
 
+Задачи: [FormFieldCounter (TRI-194)](https://linear.app/triplex-next/issue/TRI-194/formfieldcounter-ai-ready-phase-1),
+[FormFieldDescription (TRI-195)](https://linear.app/triplex-next/issue/TRI-195/formfielddescription-ai-ready-phase-1).
+
 Для атомов отслеживаются **AI.md** и **AI refactoring**. Примеры использования
 и визуальные состояния проверяются в существующих stories компонента или его
 родителя. Отдельные stories для каждой части не являются условием завершения.
@@ -264,8 +267,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | DropdownList | ⬜ | ◐ |
 | DropdownListItem | ⬜ | ◐ |
 | FormFieldClear | ⬜ | ◐ |
-| FormFieldCounter | ⬜ | ◐ |
-| FormFieldDescription | ⬜ | ◐ |
+| FormFieldCounter | ✅ | ✅ |
+| FormFieldDescription | ✅ | ✅ |
 | FormFieldInput | ⬜ | ◐ |
 | FormFieldLabel | ⬜ | ◐ |
 | FormFieldMaskedInput | ⬜ | ◐ |

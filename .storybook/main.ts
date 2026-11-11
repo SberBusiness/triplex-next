@@ -2,6 +2,7 @@ import type { StorybookConfig } from "@storybook/react-vite";
 import { version } from "../package.json";
 import { withoutVitePlugins } from "@storybook/builder-vite";
 import generateScopedName from "../scripts/generate-scoped-name";
+import { deprecatedIconsPlugin } from "./deprecated-icons-plugin";
 
 const config: StorybookConfig = {
     addons: ["@storybook/addon-docs", "@storybook/addon-themes"],
@@ -43,6 +44,7 @@ const config: StorybookConfig = {
         };
 
         viteConfig.plugins = await withoutVitePlugins(viteConfig.plugins, ["vite:dts"]);
+        viteConfig.plugins.push(deprecatedIconsPlugin());
 
         return viteConfig;
     },

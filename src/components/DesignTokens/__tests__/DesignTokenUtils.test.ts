@@ -182,6 +182,72 @@ describe("DesignTokenUtils", () => {
             expect(result).toContain("--triplex-next-ColorBrand-0-1-0-0: #1F3336;");
             expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #21A19A;");
         });
+
+        describe("недопустимые символы", () => {
+            let warn: ReturnType<typeof vi.spyOn>;
+
+            beforeEach(() => {
+                warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+            });
+
+            afterEach(() => {
+                warn.mockRestore();
+            });
+
+            it.each([
+                ["точка с запятой", "red; color: blue"],
+                ["закрывающая скобка правила", "red } body { display: none"],
+                ["открывающая скобка правила", "red { color: blue"],
+                ["обратная косая черта", "red\\"],
+            ])("пропускает токен, если в значении есть %s", (_, value) => {
+                const tokens = { ColorBrand: { "0": { value }, "50": { value: "#21A19A" } } };
+
+                const result = DesignTokenUtils.getCSSVariableByTokenGroup(tokens, tokens as TDesignTokens);
+
+                expect(result).toBe("--triplex-next-ColorBrand-50-1-0-0: #21A19A;");
+                expect(warn).toHaveBeenCalledTimes(1);
+            });
+
+            it("пропускает токен, если недопустимое значение получено по ссылке", () => {
+                const tokens: Record<string, Record<string, TDesignTokenValue>> = {
+                    ColorBrand: {
+                        "0": { ref: "ColorBrand.50" },
+                        "40": { value: "#008985" },
+                        "50": { value: "red } body { display: none" },
+                    },
+                };
+
+                const result = DesignTokenUtils.getCSSVariableByTokenGroup(tokens, tokens as unknown as TDesignTokens);
+
+                expect(result).toBe("--triplex-next-ColorBrand-40-1-0-0: #008985;");
+                expect(warn).toHaveBeenCalledTimes(2);
+            });
+
+            it.each([
+                ["имени токена", { ColorBrand: { "0: red } body { display: none": { value: "#000" } } }],
+                ["имени группы", { "ColorBrand: red } body { display: none": { "0": { value: "#000" } } }],
+            ])("пропускает токен с недопустимыми символами в %s", (_, tokens) => {
+                const result = DesignTokenUtils.getCSSVariableByTokenGroup(tokens, tokens as unknown as TDesignTokens);
+
+                expect(result).toBe("");
+                expect(warn).toHaveBeenCalledTimes(1);
+            });
+
+            it.each([
+                "0 0 0 1px #E60037 inset",
+                "rgba(0, 0, 0, 0.5)",
+                "linear-gradient(90deg, #fff 0%, #000 100%)",
+                "'SB Sans Text', sans-serif",
+                "calc(100% - 16px)",
+            ])("не трогает обычное css-значение: %s", (value) => {
+                const tokens = { ColorBrand: { "0": { value } } };
+
+                const result = DesignTokenUtils.getCSSVariableByTokenGroup(tokens, tokens as TDesignTokens);
+
+                expect(result).toBe(`--triplex-next-ColorBrand-0-1-0-0: ${value};`);
+                expect(warn).not.toHaveBeenCalled();
+            });
+        });
     });
 
     describe("getStyleByTokens", () => {
@@ -249,6 +315,24 @@ describe("DesignTokenUtils", () => {
             const result = DesignTokenUtils.getStyle(ETriplexNextTheme.LIGHT, customTokens);
             expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #custom-color;");
             expect(result).toContain("--triplex-next-ColorBrand-0-1-0-0: #1F3336;");
+        });
+    });
+
+    describe("getStyle: недопустимые значения пользовательских токенов", () => {
+        it("не выводит в стили значение, выходящее за пределы объявления", () => {
+            const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+            const customTokens = {
+                ColorBrand: { "0": { value: "red } body { background: url(//example.test/x)" } },
+            };
+
+            const result = DesignTokenUtils.getStyle(ETriplexNextTheme.LIGHT, customTokens);
+
+            expect(result).not.toContain("body");
+            expect(result).not.toContain("}");
+            expect(result).not.toContain("--triplex-next-ColorBrand-0-");
+            // Остальные токены группы выводятся как обычно.
+            expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #21A19A;");
+            warn.mockRestore();
         });
     });
 

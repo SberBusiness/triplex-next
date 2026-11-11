@@ -13,7 +13,10 @@ import { DesignTokensComponentsThemeDark } from "./DesignTokensComponentsThemeDa
 import { TDesignTokenValue } from "./types/DesignTokenTypes";
 
 export interface IDesignTokenUtils {
-    /** Возвращает строку с css-переменными группы токенов, вида `--variable-name-1: "#000000"; --variable-name-2: "16px"`. */
+    /**
+     * Возвращает строку с css-переменными группы токенов, вида `--variable-name-1: "#000000"; --variable-name-2: "16px"`.
+     * Токены с недопустимыми символами в имени или значении пропускаются.
+     */
     getCSSVariableByTokenGroup: (tokenGroup: TDesignTokensGroupAbstract, tokens: TDesignTokens) => string;
     /** Возвращает токены, которые использует компонент. */
     getComponentTokens: (componentName: string) => { core: string[]; components: string[] };
@@ -58,6 +61,31 @@ const resolveTokenValue = (tokenValue: TDesignTokenValue, tokens: TDesignTokens,
     return "";
 };
 
+/** Допустимое имя группы токенов и токена: оно становится частью имени css-переменной. */
+const SAFE_TOKEN_NAME = /^[\w-]+$/;
+
+/**
+ * Символы, недопустимые в значении токена. `;`, `{` и `}` завершают объявление или правило,
+ * `\` экранирует завершающую `;` — после любого из них значение дописывает в стили своё.
+ */
+const UNSAFE_TOKEN_VALUE = /[;{}\\]/;
+
+/**
+ * Проверяет, что имя css-переменной и её значение можно вывести в стили. Значения токенов
+ * подставляются в текст css как есть, поэтому токен, выходящий за пределы своего объявления,
+ * не выводится — о нём сообщается в консоль.
+ */
+const isSafeCSSVariable = (tokenGroupTitle: string, tokenTitle: string, value: string): boolean => {
+    const isSafe =
+        SAFE_TOKEN_NAME.test(tokenGroupTitle) && SAFE_TOKEN_NAME.test(tokenTitle) && !UNSAFE_TOKEN_VALUE.test(value);
+
+    if (!isSafe) {
+        console.warn("DesignTokenUtils", `Токен ${tokenGroupTitle}.${tokenTitle} пропущен: недопустимые символы.`);
+    }
+
+    return isSafe;
+};
+
 export const DesignTokenUtils: IDesignTokenUtils = {
     getCSSVariableByTokenGroup: (tokenGroup, tokens) => {
         const tokenGroupTitle = Object.keys(tokenGroup)[0];
@@ -68,12 +96,14 @@ export const DesignTokenUtils: IDesignTokenUtils = {
         tokenVersion = tokenVersion.replace(/\./g, "-");
 
         return Object.keys(tokenGroup[tokenGroupTitle])
+            .map((tokenTitle) => ({
+                tokenTitle,
+                value: DesignTokenUtils.getTokenValue(tokenGroup[tokenGroupTitle][tokenTitle], tokens),
+            }))
+            .filter(({ tokenTitle, value }) => isSafeCSSVariable(tokenGroupTitle, tokenTitle, value))
             .map(
-                (tokenTitle) =>
-                    `--${tokenPrefix}-${tokenGroupTitle}-${tokenTitle}-${tokenVersion}: ${DesignTokenUtils.getTokenValue(
-                        tokenGroup[tokenGroupTitle][tokenTitle],
-                        tokens,
-                    )};`,
+                ({ tokenTitle, value }) =>
+                    `--${tokenPrefix}-${tokenGroupTitle}-${tokenTitle}-${tokenVersion}: ${value};`,
             )
             .join("\n");
     },

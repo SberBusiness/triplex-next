@@ -6,6 +6,27 @@ import { AmountConst } from "@sberbusiness/triplex-next/consts/AmountConst";
  */
 const AMOUNT_FORMATTER = /^([\d]+)$|^([\d]+)\.0*$|^([\d]+\.[0-9]*?)0*$/;
 
+/** Количество цифр в группе разрядов. */
+const GROUP_SIZE = 3;
+
+/**
+ * Разделяет целую часть числа на группы разрядов: "-1200000" -> "-1 200 000".
+ * Проход по строке вместо регулярного выражения с опережающей проверкой: то работало
+ * за квадратичное время и на длинной целой части блокировало поток.
+ */
+const separateIntegerGroups = (integerPart: string): string => {
+    const sign = integerPart.startsWith("-") ? "-" : "";
+    const digits = integerPart.slice(sign.length);
+    const groups: string[] = [];
+
+    // Первая группа — неполная (1–3 цифры), остальные — ровно по GROUP_SIZE.
+    for (let end = digits.length % GROUP_SIZE || GROUP_SIZE; end <= digits.length; end += GROUP_SIZE) {
+        groups.push(digits.slice(Math.max(end - GROUP_SIZE, 0), end));
+    }
+
+    return sign + groups.join(AmountConst.GroupSeparator);
+};
+
 /**
  * Форматирует число в читаемую форму 1200000,00 -> 1 200 000,00
  *
@@ -64,7 +85,7 @@ export function formatAmount(
         const parts = amount.split(AmountConst.DecimalPoint);
 
         if (separateGroups && parts.length > 0) {
-            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, AmountConst.GroupSeparator);
+            parts[0] = separateIntegerGroups(parts[0]);
         }
 
         return positiveSign + parts.join(AmountConst.DecimalComma);

@@ -92,9 +92,6 @@ version: "1.0"
   `offsetParent !== null`. В jsdom `offsetParent` всегда `null`, поэтому в unit-тестах его
   мокают (`__tests__/ConfirmClose.test.tsx`).
 - Совпадение клавиши проверяется по `event.keyCode` (`EVENT_KEY_CODES.ESCAPE`), а не по `key`.
-- `disabled` блокирует нативный клик, включая Escape. Один `loading` этого не делает:
-  он задаёт визуальную загрузку и по умолчанию `tabIndex=-1`; внешний `tabIndex`
-  может переопределить это значение. Нативный `disabled` при этом не выставляется.
 
 ---
 
@@ -217,4 +214,3 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-09-15 | Создан документ. AI-рефакторинг: `Confirm`, `Confirm.Content`, `Confirm.Content.Title`, `Confirm.Content.SubTitle`, `Confirm.Controls` и `Confirm.Close` переведены с `React.FC` на `forwardRef` (статики сохранены через `Object.assign`), JSDoc на props, значениях `EConfirmParentComponent` и компонентах, `className` больше не идёт перед базовыми классами в `clsx`. Добавлены unit-тесты (34) и stories `stories/Confirm/`. Публичный API не изменён. |
-| 2026-11-03 | Добавлена ссылка на отдельный AI.md `ConfirmClose`; уточнены различие loading/disabled при Escape и приоритет внешнего tabIndex. |

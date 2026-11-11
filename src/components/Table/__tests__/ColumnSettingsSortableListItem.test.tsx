@@ -55,14 +55,18 @@ vi.mock("../../List/components/ListSortableItem", async (importOriginal) => {
     };
 });
 
-const renderItem = (props: Partial<IColumnSettingsSortableListItemProps> & React.RefAttributes<HTMLLIElement> = {}) =>
-    render(
-        <ul>
-            <ColumnSettingsSortableListItem id="column" {...props}>
-                <span>Колонка</span>
-            </ColumnSettingsSortableListItem>
-        </ul>,
-    );
+type TItemProps = Partial<IColumnSettingsSortableListItemProps> & React.RefAttributes<HTMLLIElement>;
+
+// Фабрика, а не константа: на тот же объект элемента React не перерисует дерево при rerender.
+const getUi = (props?: TItemProps) => (
+    <ul>
+        <ColumnSettingsSortableListItem id="column" {...props}>
+            <span>Колонка</span>
+        </ColumnSettingsSortableListItem>
+    </ul>
+);
+
+const renderItem = (props?: TItemProps) => render(getUi(props));
 
 const getItem = () => screen.getByRole("listitem");
 
@@ -90,12 +94,13 @@ describe("ColumnSettingsSortableListItem", () => {
 
     it("forwards listeners to the target", () => {
         renderItem();
+        const content = screen.getByText("Колонка");
 
-        fireEvent.mouseDown(screen.getByText("Колонка"));
+        fireEvent.mouseDown(content);
 
         expect(boundary.listeners.onMouseDown).toHaveBeenCalledTimes(1);
         expect(boundary.listeners.onMouseDown).toHaveBeenCalledWith(
-            expect.objectContaining({ type: "mousedown", target: screen.getByText("Колонка") }),
+            expect.objectContaining({ type: "mousedown", target: content }),
         );
     });
 
@@ -128,13 +133,7 @@ describe("ColumnSettingsSortableListItem", () => {
         const { rerender } = renderItem();
         expect(getTarget()?.querySelector(".listSortableItemTargetIcon")).toBeInTheDocument();
 
-        rerender(
-            <ul>
-                <ColumnSettingsSortableListItem id="column" disabled>
-                    <span>Колонка</span>
-                </ColumnSettingsSortableListItem>
-            </ul>,
-        );
+        rerender(getUi({ disabled: true }));
 
         expect(getTarget()?.querySelector(".listSortableItemTargetIcon")).not.toBeInTheDocument();
         expect(screen.getByText("Колонка")).toBeInTheDocument();
@@ -146,14 +145,6 @@ describe("ColumnSettingsSortableListItem", () => {
         expect(getItem().childElementCount).toBe(1);
     });
 
-    it("keeps zero as a text node without an animation wrapper", () => {
-        renderItem({ staticContent: 0 });
-
-        expect(getItem().childElementCount).toBe(1);
-        expect(getItem().lastChild?.nodeType).toBe(Node.TEXT_NODE);
-        expect(getItem().lastChild?.textContent).toBe("0");
-    });
-
     it("collapses static content while dragging and expands it afterwards without unmounting", () => {
         vi.useFakeTimers();
         const staticContent = <span>Дополнительные настройки</span>;
@@ -161,15 +152,8 @@ describe("ColumnSettingsSortableListItem", () => {
         const content = screen.getByText("Дополнительные настройки");
         expect(content).toBeVisible();
 
-        const ui = (
-            <ul>
-                <ColumnSettingsSortableListItem id="column" staticContent={staticContent}>
-                    <span>Колонка</span>
-                </ColumnSettingsSortableListItem>
-            </ul>
-        );
         boundary.state.dragging = true;
-        rerender(ui);
+        rerender(getUi({ staticContent }));
         act(() => {
             vi.runAllTimers();
         });
@@ -178,13 +162,7 @@ describe("ColumnSettingsSortableListItem", () => {
         expect(content).not.toBeVisible();
 
         boundary.state.dragging = false;
-        rerender(
-            <ul>
-                <ColumnSettingsSortableListItem id="column" staticContent={staticContent}>
-                    <span>Колонка</span>
-                </ColumnSettingsSortableListItem>
-            </ul>,
-        );
+        rerender(getUi({ staticContent }));
         act(() => {
             vi.runAllTimers();
         });

@@ -120,9 +120,9 @@ const MasterSettingsList = MasterTable.TableBasicSettings.ColumnSettings.Sortabl
 
 - [ColumnSettings](./ColumnSettings-ai.md) — родитель и публичный путь
   `.SortableList`; предоставляет также альтернативный `.StaticList`.
-- `ColumnSettingsSortableListItem` — статическое `.Item`: DnD-строка с областью
-  управления и необязательным `staticContent`. Отдельный контракт отслеживается
-  в ROADMAP.
+- [ColumnSettingsSortableListItem](./ColumnSettingsSortableListItem-ai.md) —
+  статическое `.Item`: DnD-строка с областью управления и необязательным
+  `staticContent`.
 - [ListSortable](../List/ListSortable-ai.md) — рендерится внутри; предоставляет
   props списка, DnD-сенсоры и callback нового порядка.
 

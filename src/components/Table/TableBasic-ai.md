@@ -180,9 +180,6 @@ TableBasic.Background_Selected
   колонок. Для управления порядком использует
   [ColumnSettingsSortableList](./ColumnSettingsSortableList-ai.md); обновлённый
   массив потребитель передаёт обратно в `TableBasic.columns`.
-- [ColumnSettingsSortableListItem](./ColumnSettingsSortableListItem-ai.md) — строка
-  настроек колонок через `ColumnSettings.SortableList.Item`: `id` совпадает с
-  `fieldKey`, дополнительное содержимое сворачивается на время перетаскивания.
 
 ---
 
@@ -220,4 +217,3 @@ TableBasic.Background_Selected
 | Дата | Изменение |
 |---|---|
 | 2026-08-27 | Создан документ. AI-рефакторинг: `TableBasic` получил `forwardRef` на `<table>`, JSDoc на всех публичных полях, разбор подвала по состояниям, удалён неиспользуемый `TableBasicAdaptive.module.less`. Stories переведены на modern pattern, добавлены unit-тесты (46) |
-| 2026-11-03 | Добавлена ссылка на отдельный контракт `ColumnSettingsSortableListItem`. |

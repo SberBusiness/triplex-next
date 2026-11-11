@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { expect, waitFor } from "storybook/test";
 import { ColumnSettings } from "@sberbusiness/triplex-next";
 import { VisualTestsRender } from "./examples";
 
@@ -45,25 +46,13 @@ export const VisualTests: StoryObj<typeof ColumnSettings.SortableList.Item> = {
             new MouseEvent("mousemove", { bubbles: true, buttons: 1, ...position, clientY: position.clientY - 12 }),
         );
 
-        await new Promise<void>((resolve, reject) => {
-            const observer = new MutationObserver(check);
-            const timeout = setTimeout(() => {
-                observer.disconnect();
-                reject(
-                    new Error("ColumnSettingsSortableListItem: drag state or staticContent collapse did not settle"),
-                );
-            }, 3000);
-
-            function check() {
-                if (row.className.includes("dragging") && getComputedStyle(staticContent).visibility === "hidden") {
-                    clearTimeout(timeout);
-                    observer.disconnect();
-                    resolve();
-                }
-            }
-
-            observer.observe(row, { attributes: true, childList: true, subtree: true });
-            check();
-        });
+        // Снимок делается после того, как строка перешла в drag, а staticContent полностью свернулся.
+        await waitFor(
+            () => {
+                expect(row.className).toContain("dragging");
+                expect(staticContent).not.toBeVisible();
+            },
+            { timeout: 3000 },
+        );
     },
 };

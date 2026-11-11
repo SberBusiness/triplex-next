@@ -78,14 +78,12 @@ const SettingsItem = ColumnSettings.SortableList.Item;
 находится вне его области активации. События его интерактивных элементов не
 всплывают в target и не начинают перетаскивание этой строки.
 
-Для truthy `staticContent` всегда смонтирован `ExpandAnimation` с
+Для непустого `staticContent` всегда смонтирован `ExpandAnimation` с
 `expanded={!dragging}`. Контент сворачивается без размонтирования; вложенное
 состояние сохраняется. После завершения сворачивания содержимое скрывает
-`ExpandAnimation`, включая обычный Tab-переход.
-
-Сохраняется JavaScript truthiness: `0` отображается как текст без обёртки
-`ExpandAnimation`; `null`, `undefined`, `false` и пустая строка не создают эту
-обёртку. Не заменяй условие на проверку `!== undefined` без отдельной задачи.
+`ExpandAnimation`, включая обычный Tab-переход. `null`, `undefined`, `false` и
+пустая строка обёртку не создают. Число `0` не передавай: оно выводится текстом
+без обёртки.
 
 ---
 
@@ -122,8 +120,8 @@ TableBasic.TableBasicSettings_ListItem_Background_Dragging
 - Основные children — обычное содержимое и автоматически помещаются в
   `data-draggable="false"` controls-область.
 - `disabled` относится к drag; состояние вложенных контролов задаёт потребитель.
-- Сохранять truthiness-условие `staticContent` и анимацию `expanded={!dragging}`
-  без размонтирования дополнительного блока.
+- Сохранять анимацию `expanded={!dragging}` без размонтирования
+  дополнительного блока.
 - Сохранять три токена фона, CSS-классы и проброс HTML-атрибутов на `<li>`.
 
 ---
@@ -146,12 +144,13 @@ TableBasic.TableBasicSettings_ListItem_Background_Dragging
 
 ## Связанные компоненты
 
-- `ColumnSettingsSortableList` — публичный родитель `.Item`, преобразует
-  `fieldKey` колонок в DnD-id и сообщает новый порядок через `onColumnsChange`.
+- [ColumnSettingsSortableList](./ColumnSettingsSortableList-ai.md) — публичный
+  родитель `.Item`, преобразует `fieldKey` колонок в DnD-id и сообщает новый
+  порядок через `onColumnsChange`.
 - [ListSortableItem](../List/ListSortableItem-ai.md) — рендерится внутри,
   предоставляет props строки и состояние `useSortable`.
 - [ExpandAnimation](../ExpandAnimation/ExpandAnimation-ai.md) — рендерится при
-  truthy `staticContent`, сворачивает дополнительное содержимое на время drag.
+  непустом `staticContent`, сворачивает дополнительное содержимое на время drag.
 - `ColumnSettingsSortableListItemTarget` — внутренний target: оформление,
   индикатор и controls-область; отдельного публичного barrel-export нет.
 
@@ -184,4 +183,4 @@ story использует настоящую композицию списка;
 
 | Дата | Изменение |
 |---|---|
-| 2026-11-03 | Создан документ; подтверждены публичные пути, DnD-связи, refs, токены и семантика staticContent; указано ограничение controls для SVG-целей. |
+| 2026-11-03 | Создан документ. |

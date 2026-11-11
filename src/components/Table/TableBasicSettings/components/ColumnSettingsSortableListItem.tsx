@@ -7,7 +7,7 @@ import { ColumnSettingsSortableListItemTarget } from "./ColumnSettingsSortableLi
 /** Свойства компонента ColumnSettingsSortableListItem. */
 export interface IColumnSettingsSortableListItemProps
     extends Omit<IListSortableItemProps, "children">, Pick<IListSortableItemControls, "children"> {
-    /** Дополнительное содержимое, сворачивается при перетаскивании. Анимация создаётся только для truthy-значений. */
+    /** Дополнительное содержимое, сворачивается при перетаскивании. Анимация создаётся только для непустого значения. */
     staticContent?: React.ReactNode;
 }
 
@@ -16,9 +16,9 @@ export interface IColumnSettingsSortableListItemProps
  * staticContent остаётся смонтированным при перетаскивании и сворачивается через ExpandAnimation. ref указывает на li.
  */
 export const ColumnSettingsSortableListItem = React.forwardRef<HTMLLIElement, IColumnSettingsSortableListItemProps>(
-    ({ children, staticContent, ...rest }, ref) => {
+    ({ children, staticContent, ...restProps }, ref) => {
         return (
-            <ListSortableItem {...rest} ref={ref}>
+            <ListSortableItem {...restProps} ref={ref}>
                 {({ listeners, dragging, disabled, setActivatorNodeRef }) => (
                     <>
                         <ColumnSettingsSortableListItemTarget

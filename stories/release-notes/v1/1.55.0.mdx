@@ -1,0 +1,107 @@
+import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
+
+<Meta title="release-notes/v1/1.55.0" />
+
+<Title>v1.55.0</Title>
+
+<Heading>Ломающие изменения</Heading>
+
+**Dropdown / DropdownList / DropdownListItem / DropdownListContext**
+
+- `DropdownList` и `DropdownListItem` больше не подписываются на `keydown` документа: клавиши списку передаёт управляющий элемент через новый хук `useDropdownListKeyboard`. Готовые компоненты со списком (`ButtonDropdown`, `ButtonDropdownExtended`, `MultiselectField`, `SelectExtendedField`, `SelectField`, `SuggestField` и др.) подключают хук сами. Что проверить:
+    - если `DropdownList` собран вручную со своим управляющим элементом (`Dropdown` + `DropdownList`), подключите этот хук: `context` — в `DropdownListContext.Provider` вокруг списка, `handleKeyDown` — в `onKeyDown` управляющего элемента, `activeDescendant` — в его `aria-activedescendant`. Без этого стрелки, `Enter` и `Space` в списке не работают. Пример (полный — в story `Components/Dropdown`):
+
+        ```tsx
+        const targetRef = useRef<HTMLButtonElement>(null);
+        const [opened, setOpened] = useState(false);
+        const { context, activeDescendant, handleKeyDown } = useDropdownListKeyboard();
+
+        return (
+            <>
+                <Button
+                    theme={EButtonTheme.SECONDARY}
+                    onClick={() => setOpened(!opened)}
+                    onKeyDown={handleKeyDown}
+                    aria-activedescendant={activeDescendant}
+                    ref={targetRef}
+                >
+                    Открыть список
+                </Button>
+                <Dropdown opened={opened} setOpened={setOpened} targetRef={targetRef}>
+                    <DropdownListContext.Provider value={context}>
+                        <DropdownList dropdownOpened={opened}>{/* DropdownList.Item */}</DropdownList>
+                    </DropdownListContext.Provider>
+                </Dropdown>
+            </>
+        );
+        ```
+
+    - в `IDropdownListContext` добавлено обязательное поле `registerKeyDownHandler`: значение вида `{ activeDescendant, setActiveDescendant }` больше не компилируется — замените его на `context` из хука;
+    - `DropdownList` больше не клонирует children и не передаёт им `active`, `size`, `ref`, `onMouseOver` и `onMouseOut`. Если пункт — свой компонент (например, `renderDropdownListItem` у `SuggestField`), он должен рендерить `DropdownListItem`. `id`, `selected`, `onSelect` и `keyCodesForSelection` задайте на самой обёртке и пробросьте в `DropdownListItem`: список читает их из props обёртки. `onSelect`, заданный только внутри обёртки, с клавиатуры не вызывается;
+    - у `DropdownListItem` удалены props `active` и `size`, а из типов опций `IButtonDropdownOption` и `ISelectExtendedFieldDefaultOption` — `size`. Вне `DropdownList` пункт не подсвечивается, не выбирается с клавиатуры и имеет размер `MD`; для своей подсветки используйте `className`;
+    - если `onKeyDown` текстового `Suggest` останавливал всплытие `Space`, чтобы пробел вводился в поле, а не выбирал пункт, — это больше не помогает: список получает клавишу раньше этого обработчика. Задайте пунктам `keyCodesForSelection={[EVENT_KEY_CODES.ENTER]}`.
+
+<Heading>Изменения</Heading>
+
+**ButtonDropdown / ListItemControlsButtonDropdown**
+
+- Исправлено: `Space` на закрытой кнопке открывал список и сразу выбирал первый пункт, `ArrowDown` открывал список на втором пункте.
+- Изменено: `ListItemControlsButtonDropdown` — клавиши кнопки сравниваются по `event.code`, как в `ButtonDropdown`; `Space` переключает список явно.
+
+**ButtonDropdownExtended**
+
+- Добавлено: клавиши, нажатые на кнопке, передаются `ButtonDropdownExtended.DropdownList` в блоке. `renderButton` получает `activeDescendant` — пробросьте его в `aria-activedescendant` своей кнопки, чтобы скринридер озвучивал активный пункт.
+
+**ChipSort**
+
+- Добавлено: таргет выставляет `aria-activedescendant` активной опции открытого списка.
+
+**ChipSuggest / Suggest**
+
+- Исправлено: поле фильтрации `ChipSuggest` не получало `aria-activedescendant` активной опции. `Suggest` передаёт клавиши, всплывшие до корня, открытому `DropdownList`.
+
+**CollapsibleTreeExtendedNode**
+
+- Проведён AI-рефакторинг.
+- Исправлено: в uncontrolled-режиме повторный вызов `toggle` из того же рендера игнорировался, и нода оставалась в состоянии после первого вызова.
+- В controlled-режиме `toggle` из render-props передаёт во внешний `toggle` каждый запрос, включая значение, совпадающее с текущим `opened`. Раньше при нескольких вызовах в одном обработчике мог потеряться последний.
+
+**CollapsibleTreeNodeHeader**
+
+- Проведён AI-рефакторинг. Устранены предупреждения React о служебных свойствах `activeNode`, `animating` и `isLastNode` на HTML-кнопке.
+
+**ColumnSettings / ColumnSettings.SortableList**
+
+- Проведён AI-рефакторинг.
+
+**ColumnSettingsSortableListItem**
+
+- Проведён AI-рефакторинг.
+
+**ConfirmClose**
+
+- Проведён AI-рефакторинг.
+
+**Dropdown**
+
+- Изменено: открытым списком управляют только клавиши с управляющего элемента — нажатия в других местах страницы больше не перемещают активный пункт и не выбирают его. Затрагивает все компоненты со списком `DropdownList`.
+- Изменено: активный пункт хранится по `id`, а не по позиции: при фильтрации и подгрузке опций подсветка остаётся на той же опции, а если опция пропала — переходит на первую.
+- Исправлено: `aria-activedescendant` не обновлялся, если опции подгрузились уже после открытия списка.
+- Исправлено: `aria-activedescendant` не сбрасывался, когда курсор уходил с пункта, и указывал на пункт, который `Enter` уже не выберет.
+- Изменено: `DropdownListItem` подсвечивается по `mouseenter` / `mouseleave` вместо `mouseover` / `mouseout`.
+- Исправлено: уход курсора с пункта снимал подсветку, даже если клавиатура уже перевела её на другой пункт, — после этого `Enter` ничего не выбирал.
+- Исправлено: `ArrowUp` / `ArrowDown` в пустом `DropdownList` больше не обрабатываются списком (не вызывают `preventDefault`) и остаются управляющему элементу.
+- Исправлено: `ArrowUp` / `ArrowDown` останавливались на «пустых» children (`null`, `false` из условного рендера) — без подсветки пункта; теперь такие children пропускаются, в том числе при выборе активного пункта на открытии списка.
+
+**MultiselectField / SelectExtendedField / SelectField**
+
+- Добавлено: `SelectExtendedField` передаёт клавиши поля `DropdownList` в блоке. `SelectExtendedField.Target` сам выставляет `aria-activedescendant` активной опции; если в `renderTarget` свой таргет, пробросьте в его `aria-activedescendant` значение `activeDescendant`.
+- Изменено: клавиши открытия на `SelectExtendedField.Target` больше не останавливают всплытие события.
+
+**SuggestField**
+
+- Изменено: `aria-activedescendant` больше не сбрасывается при вводе текста и всегда указывает на опцию, которую выберет `Enter`; сбрасывается при закрытии списка.
+
+**TreeView.Node**
+
+- `setOpenedNode` в render-props пропускает текущее значение без перерисовки дерева.

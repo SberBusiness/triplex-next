@@ -1,15 +1,14 @@
 import React, { useMemo } from "react";
-import {
-    IColumnSettingsSortableListProps,
-    ITableBasicExtendedColumn,
-    ITableBasicColumn,
-} from "@sberbusiness/triplex-next/components/Table/TableBasic/types";
-import { ColumnSettingsSortableListItem } from "@sberbusiness/triplex-next/components/Table/TableBasicSettings/components/ColumnSettingsSortableListItem";
-import { ListSortable } from "@sberbusiness/triplex-next/components/List/ListSortable";
+import { IColumnSettingsSortableListProps, ITableBasicExtendedColumn, ITableBasicColumn } from "../../TableBasic/types";
+import { ColumnSettingsSortableListItem } from "./ColumnSettingsSortableListItem";
+import { ListSortable } from "../../../List/ListSortable";
 
-/** Список компонента ColumnSettings с поддержкой drag-n-drop. */
+/**
+ * Контролируемый список колонок с drag-and-drop: fieldKey служит идентификатором ListSortable.
+ * Элементы ColumnSettings.SortableList.Item рендерит потребитель; новый порядок возвращается в onColumnsChange.
+ */
 export const ColumnSettingsSortableList = Object.assign(
-    React.forwardRef<HTMLUListElement, IColumnSettingsSortableListProps>(function TableBasicSettingsList(
+    React.forwardRef<HTMLUListElement, IColumnSettingsSortableListProps>(function ColumnSettingsSortableList(
         { columns, onColumnsChange, ...rest },
         ref,
     ) {

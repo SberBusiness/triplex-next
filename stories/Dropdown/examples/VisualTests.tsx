@@ -4,6 +4,7 @@ import {
     Button,
     Dropdown,
     DropdownList,
+    DropdownListContext,
     EButtonTheme,
     EComponentSize,
     EDropdownAlignment,
@@ -11,6 +12,7 @@ import {
     EDropdownWidth,
     ETextSize,
     Text,
+    useDropdownListKeyboard,
 } from "@sberbusiness/triplex-next";
 
 const LONG_OPTIONS = Array.from({ length: 10 }, (_, index) => ({
@@ -24,6 +26,7 @@ const noop = () => {};
 const TogglableLongList = () => {
     const targetRef = useRef<HTMLButtonElement>(null);
     const [opened, setOpened] = useState(false);
+    const { context, activeDescendant, handleKeyDown } = useDropdownListKeyboard();
 
     return (
         <div>
@@ -33,6 +36,8 @@ const TogglableLongList = () => {
                 aria-haspopup="listbox"
                 aria-expanded={opened}
                 onClick={() => setOpened(!opened)}
+                onKeyDown={handleKeyDown}
+                aria-activedescendant={activeDescendant}
                 ref={targetRef}
             >
                 Открыть список
@@ -46,19 +51,21 @@ const TogglableLongList = () => {
                 alignment={EDropdownAlignment.LEFT}
                 width={EDropdownWidth.MIN_TARGET}
             >
-                <DropdownList dropdownOpened={opened} size={EComponentSize.MD}>
-                    {LONG_OPTIONS.map((option, index) => (
-                        <DropdownList.Item
-                            key={option.id}
-                            id={option.id}
-                            selected={index === 1}
-                            showNotificationIcon={index === 2}
-                            onSelect={() => action("onSelect")(option.id)}
-                        >
-                            {option.label}
-                        </DropdownList.Item>
-                    ))}
-                </DropdownList>
+                <DropdownListContext.Provider value={context}>
+                    <DropdownList dropdownOpened={opened} size={EComponentSize.MD}>
+                        {LONG_OPTIONS.map((option, index) => (
+                            <DropdownList.Item
+                                key={option.id}
+                                id={option.id}
+                                selected={index === 1}
+                                showNotificationIcon={index === 2}
+                                onSelect={() => action("onSelect")(option.id)}
+                            >
+                                {option.label}
+                            </DropdownList.Item>
+                        ))}
+                    </DropdownList>
+                </DropdownListContext.Provider>
             </Dropdown>
         </div>
     );

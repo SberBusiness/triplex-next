@@ -183,8 +183,20 @@ describe("DesignTokenUtils", () => {
             expect(result).toContain("--triplex-next-ColorBrand-50-1-0-0: #21A19A;");
         });
 
-        describe("недопустимые символы", () => {
+        describe("проверка токенов", () => {
             let warn: ReturnType<typeof vi.spyOn>;
+
+            const parseDeclarations = (declarations: string): CSSStyleDeclaration => {
+                const sheet = new CSSStyleSheet();
+                const index = sheet.insertRule(`.theme { ${declarations} }`, 0);
+                const rule = sheet.cssRules[index];
+
+                if (rule?.type !== CSSRule.STYLE_RULE) {
+                    throw new Error("Ожидалось правило с объявлениями токенов");
+                }
+
+                return (rule as CSSStyleRule).style;
+            };
 
             beforeEach(() => {
                 warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
@@ -199,6 +211,7 @@ describe("DesignTokenUtils", () => {
                 ["закрывающая скобка правила", "red } body { display: none"],
                 ["открывающая скобка правила", "red { color: blue"],
                 ["обратная косая черта", "red\\"],
+                ["CSS-экранирование", "r\\65 d"],
             ])("пропускает токен, если в значении есть %s", (_, value) => {
                 const tokens = { ColorBrand: { "0": { value }, "50": { value: "#21A19A" } } };
 
@@ -207,6 +220,33 @@ describe("DesignTokenUtils", () => {
                 expect(result).toBe("--triplex-next-ColorBrand-50-1-0-0: #21A19A;");
                 expect(warn).toHaveBeenCalledTimes(1);
             });
+
+            it.each(["red/*", '"red', "url(image.png", "calc(100% - 16px", "[red"])(
+                "сохраняет следующее объявление после незакрытого значения %s",
+                (value) => {
+                    const tokens = { ColorBrand: { "0": { value }, "50": { value: "#21A19A" } } };
+                    const result = DesignTokenUtils.getCSSVariableByTokenGroup(tokens, tokens as TDesignTokens);
+                    const style = parseDeclarations(result);
+
+                    expect(style.getPropertyValue("--triplex-next-ColorBrand-0-1-0-0")).toBe("");
+                    expect(style.getPropertyValue("--triplex-next-ColorBrand-50-1-0-0")).toBe("#21A19A");
+                    expect(warn).toHaveBeenCalledTimes(1);
+                },
+            );
+
+            it.each(['url("data:image/png;base64,AAAA")', "url(data:image/png;base64,AAAA)", '"a;b"'])(
+                "сохраняет значение с точкой с запятой: %s",
+                (value) => {
+                    const tokens = { Button: { General_Background_Default: { value } } };
+                    const result = DesignTokenUtils.getCSSVariableByTokenGroup(tokens, tokens as TDesignTokens);
+                    const style = parseDeclarations(result);
+
+                    expect(style.getPropertyValue("--triplex-next-Button-General_Background_Default-1-0-0")).toBe(
+                        value,
+                    );
+                    expect(warn).not.toHaveBeenCalled();
+                },
+            );
 
             it("пропускает токен, если недопустимое значение получено по ссылке", () => {
                 const tokens: Record<string, Record<string, TDesignTokenValue>> = {
@@ -239,6 +279,7 @@ describe("DesignTokenUtils", () => {
                 "linear-gradient(90deg, #fff 0%, #000 100%)",
                 "'SB Sans Text', sans-serif",
                 "calc(100% - 16px)",
+                "red /* комментарий */",
             ])("не трогает обычное css-значение: %s", (value) => {
                 const tokens = { ColorBrand: { "0": { value } } };
 

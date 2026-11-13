@@ -1,3 +1,4 @@
+import { tokenizer, TokenType } from "@csstools/css-tokenizer";
 import { defaultsDeep } from "lodash-es";
 import {
     TDesignTokens,
@@ -15,7 +16,7 @@ import { TDesignTokenValue } from "./types/DesignTokenTypes";
 export interface IDesignTokenUtils {
     /**
      * Возвращает строку с css-переменными группы токенов, вида `--variable-name-1: "#000000"; --variable-name-2: "16px"`.
-     * Токены с недопустимыми символами в имени или значении пропускаются.
+     * Токены с недопустимыми именами или значениями пропускаются.
      */
     getCSSVariableByTokenGroup: (tokenGroup: TDesignTokensGroupAbstract, tokens: TDesignTokens) => string;
     /** Возвращает токены, которые использует компонент. */
@@ -64,11 +65,52 @@ const resolveTokenValue = (tokenValue: TDesignTokenValue, tokens: TDesignTokens,
 /** Допустимое имя группы токенов и токена: оно становится частью имени css-переменной. */
 const SAFE_TOKEN_NAME = /^[\w-]+$/;
 
-/**
- * Символы, недопустимые в значении токена. `;`, `{` и `}` завершают объявление или правило,
- * `\` экранирует завершающую `;` — после любого из них значение дописывает в стили своё.
- */
-const UNSAFE_TOKEN_VALUE = /[;{}\\]/;
+/** Проверяет, что значение можно вставить в одно CSS-объявление. */
+const isSafeTokenValue = (value: string): boolean => {
+    if (/[{}\\]/.test(value)) {
+        return false;
+    }
+
+    let hasParseError = false;
+    const { nextToken } = tokenizer(
+        { css: value },
+        {
+            onParseError: () => {
+                hasParseError = true;
+            },
+        },
+    );
+    const closingTokens: TokenType[] = [];
+
+    while (!hasParseError) {
+        const [type] = nextToken();
+
+        switch (type) {
+            case TokenType.EOF:
+                return !hasParseError && closingTokens.length === 0;
+            case TokenType.Function:
+            case TokenType.OpenParen:
+                closingTokens.push(TokenType.CloseParen);
+                break;
+            case TokenType.OpenSquare:
+                closingTokens.push(TokenType.CloseSquare);
+                break;
+            case TokenType.CloseParen:
+            case TokenType.CloseSquare:
+                if (closingTokens.pop() !== type) {
+                    return false;
+                }
+                break;
+            case TokenType.Semicolon:
+                if (closingTokens.length === 0) {
+                    return false;
+                }
+                break;
+        }
+    }
+
+    return false;
+};
 
 /**
  * Проверяет, что имя css-переменной и её значение можно вывести в стили. Значения токенов
@@ -76,11 +118,13 @@ const UNSAFE_TOKEN_VALUE = /[;{}\\]/;
  * не выводится — о нём сообщается в консоль.
  */
 const isSafeCSSVariable = (tokenGroupTitle: string, tokenTitle: string, value: string): boolean => {
-    const isSafe =
-        SAFE_TOKEN_NAME.test(tokenGroupTitle) && SAFE_TOKEN_NAME.test(tokenTitle) && !UNSAFE_TOKEN_VALUE.test(value);
+    const isSafe = SAFE_TOKEN_NAME.test(tokenGroupTitle) && SAFE_TOKEN_NAME.test(tokenTitle) && isSafeTokenValue(value);
 
     if (!isSafe) {
-        console.warn("DesignTokenUtils", `Токен ${tokenGroupTitle}.${tokenTitle} пропущен: недопустимые символы.`);
+        console.warn(
+            "DesignTokenUtils",
+            `Токен ${tokenGroupTitle}.${tokenTitle} пропущен: недопустимое имя или значение.`,
+        );
     }
 
     return isSafe;

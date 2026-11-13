@@ -1,10 +1,13 @@
 import React, { useContext } from "react";
-import { IColumnSettingsProps } from "@sberbusiness/triplex-next/components/Table/TableBasic/types";
-import { MasterTableContext } from "@sberbusiness/triplex-next/components/Table/MasterTableContext";
-import { ColumnSettingsSortableList } from "@sberbusiness/triplex-next/components/Table/TableBasicSettings/components/ColumnSettingsSortableList";
-import { ColumnSettingsStaticList } from "@sberbusiness/triplex-next/components/Table/TableBasicSettings/components/ColumnSettingsStaticList";
+import { IColumnSettingsProps } from "../../TableBasic/types";
+import { MasterTableContext } from "../../MasterTableContext";
+import { ColumnSettingsSortableList } from "./ColumnSettingsSortableList";
+import { ColumnSettingsStaticList } from "./ColumnSettingsStaticList";
 
-/** Компонент, для настройки видимости колонок. */
+/**
+ * Контейнер настроек колонок: выводит статическое содержимое или передаёт текущие columns из MasterTableContext
+ * в render-функцию children. Видимость и порядок колонок меняет потребитель. ref указывает на корневой div.
+ */
 export const ColumnSettings = Object.assign(
     React.forwardRef<HTMLDivElement, IColumnSettingsProps>(function ColumnSettings(
         { children, className, ...rest },

@@ -2,6 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import { StoryObj, ArgTypes } from "@storybook/react";
 import * as iconModule from "@sberbusiness/icons-next";
+import deprecatedIcons from "virtual:deprecated-icons";
 
 const PALETTE_INDEXES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] as const;
 
@@ -21,6 +22,8 @@ import { DefaulticonStrokePrdIcon32 } from "@sberbusiness/icons-next";
 
 <DefaulticonStrokePrdIcon32 paletteIndex={0} />;
 \`\`\`
+
+Иконки с розовым фоном и зачёркнутым именем помечены \`@deprecated\`; замена, если она указана, — в подсказке при наведении на имя.
                 `,
             },
         },
@@ -68,12 +71,30 @@ interface IIconDisplayProps extends IIconItemProps {
     name: string;
 }
 
-const IconDisplay: React.FC<IIconDisplayProps> = ({ name, ...restProps }) => (
-    <div className="icon-display">
-        <IconItem className="icon-display-target" {...restProps} />
-        <div className="icon-display-name">{name}</div>
-    </div>
-);
+/** Подсказка для устаревшей иконки; `undefined`, если иконка не помечена `@deprecated`. */
+const getDeprecationTitle = (name: string): string | undefined => {
+    const replacement = deprecatedIcons.get(name);
+
+    if (replacement === undefined) {
+        return undefined;
+    }
+
+    return replacement ? `Иконка устарела, замена: ${replacement}` : "Иконка устарела";
+};
+
+const IconDisplay: React.FC<IIconDisplayProps> = ({ name, ...restProps }) => {
+    const title = getDeprecationTitle(name);
+    const deprecated = title !== undefined;
+
+    return (
+        <div className="icon-display">
+            <IconItem className={clsx("icon-display-target", { deprecated })} {...restProps} />
+            <div className={clsx("icon-display-name", { deprecated })} title={title}>
+                {name}
+            </div>
+        </div>
+    );
+};
 
 interface StoryArgs extends Pick<iconModule.ISingleColorIconProps, "paletteIndex"> {
     hoverable: boolean;

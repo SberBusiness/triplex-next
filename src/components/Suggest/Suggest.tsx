@@ -1,5 +1,6 @@
 import React, { useRef, useCallback, useEffect } from "react";
 import { ISuggestOption, ISuggestProps } from "./types";
+import { DropdownListContext } from "../Dropdown/DropdownListContext";
 import { SuggestContext } from "./SuggestContext";
 import { useSuggest } from "./useSuggest";
 
@@ -26,7 +27,7 @@ const SuggestBase = <T extends ISuggestOption = ISuggestOption>(
         onFilter: _onFilter,
         ...restProps
     } = props;
-    const suggest = useSuggest(props);
+    const { suggest, dropdownListContext } = useSuggest(props);
     const { dropdownOpen, closeDropdown, onKeyDown } = suggest;
     const suggestRef = useRef<HTMLDivElement | null>(null);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
@@ -62,6 +63,7 @@ const SuggestBase = <T extends ISuggestOption = ISuggestOption>(
     );
 
     return (
+        // Клавиши из выпадающего блока не отсекаются: в нём рендерится поле фильтрации ChipSuggest.
         <div {...restProps} onKeyDown={onKeyDown} ref={setRef}>
             <SuggestContext.Provider
                 value={{
@@ -79,7 +81,7 @@ const SuggestBase = <T extends ISuggestOption = ISuggestOption>(
                     ...suggest,
                 }}
             >
-                {children}
+                <DropdownListContext.Provider value={dropdownListContext}>{children}</DropdownListContext.Provider>
             </SuggestContext.Provider>
         </div>
     );
@@ -90,6 +92,7 @@ const SuggestBase = <T extends ISuggestOption = ISuggestOption>(
  * Собственной разметки не добавляет: рендерит div-обёртку и раздаёт потомкам через SuggestContext
  * состояние поля ввода, видимость выпадающего списка и обработчики выбора и фильтрации.
  * Управляющий элемент и выпадающий список пишет потребитель — как это делает ChipSuggest.
+ * Клавиши, всплывшие до корня, передаются открытому DropdownList.
  */
 export const Suggest = React.forwardRef(SuggestBase) as <T extends ISuggestOption = ISuggestOption>(
     props: ISuggestProps<T> & React.RefAttributes<HTMLDivElement>,

@@ -1,7 +1,7 @@
 {
     "extends": "./tsconfig.build.json",
     "compilerOptions": {
-        "types": ["@testing-library/jest-dom/vitest", "vitest/globals", "storybook/test"]
+        "types": ["node", "@testing-library/jest-dom/vitest", "vitest/globals", "storybook/test"]
     },
     "include": ["src", "stories", "test-utils"]
 }

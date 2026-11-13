@@ -9,7 +9,9 @@
             "@sberbusiness/triplex-next": ["./src"],
             "@sberbusiness/triplex-next/*": ["./src/*"]
         },
-        "types": ["@testing-library/jest-dom/vitest", "vitest/globals"],
+        // "node" — явно: компоненты читают process.env.NODE_ENV. До vitest 4 типы
+        // Node приезжали транзитивно через vitest/globals, теперь — нет.
+        "types": ["node", "@testing-library/jest-dom/vitest", "vitest/globals"],
         // Emit
         "outDir": "dist",
         // Language and Environment

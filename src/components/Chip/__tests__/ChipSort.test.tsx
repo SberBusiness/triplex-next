@@ -4,6 +4,7 @@ import { ChipSort } from "@sberbusiness/triplex-next/components/Chip/ChipSort";
 import { EChipType } from "@sberbusiness/triplex-next/components/Chip/enums";
 import { ISelectFieldOption } from "@sberbusiness/triplex-next/components/SelectField";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 
 describe("ChipSort", () => {
     const options: ISelectFieldOption[] = [
@@ -140,6 +141,22 @@ describe("ChipSort", () => {
 
             expect(first.getAttribute("aria-controls")).toBeTruthy();
             expect(first.getAttribute("aria-controls")).not.toBe(second.getAttribute("aria-controls"));
+        });
+
+        test("Should point aria-activedescendant to the option active in the opened list", () => {
+            renderChipSort();
+
+            const target = getTarget();
+            expect(target).not.toHaveAttribute("aria-activedescendant");
+
+            fireEvent.click(target);
+            expect(target).toHaveAttribute("aria-activedescendant", "chip-sort-1");
+
+            fireEvent.keyDown(target, { keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+            expect(target).toHaveAttribute("aria-activedescendant", "chip-sort-2");
+
+            fireEvent.click(target);
+            expect(target).not.toHaveAttribute("aria-activedescendant");
         });
     });
 

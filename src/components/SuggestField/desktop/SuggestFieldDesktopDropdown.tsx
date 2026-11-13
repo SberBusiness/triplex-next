@@ -9,7 +9,7 @@ import { DataTestId } from "../../../consts/DataTestId";
 const KEY_CODES_SELECTABLE = [EVENT_KEY_CODES.ENTER];
 
 /**
- * Выпадающий список десктопного SuggestField. Рендерится в портале, повторяет ширину поля ввода
+ * Выпадающий список десктопного SuggestField. Рендерится в портале, по умолчанию повторяет ширину поля ввода
  * и вызывает onScrollEnd при прокрутке списка до конца.
  *
  * @template T - тип опции, должен расширять ISuggestFieldOption
@@ -23,6 +23,7 @@ export const SuggestFieldDesktopDropdown = <T extends ISuggestFieldOption = ISug
     dataTestId,
     opened,
     listLoading,
+    width = EDropdownWidth.TARGET,
     onMouseDown,
     onSelect,
     onScrollEnd,
@@ -64,8 +65,8 @@ export const SuggestFieldDesktopDropdown = <T extends ISuggestFieldOption = ISug
                 targetRef={targetRef}
                 data-test-id={dataTestId && `${dataTestId}${DataTestId.Suggest.dropdown}`}
                 opened={opened}
+                width={width}
                 {...restProps}
-                width={EDropdownWidth.TARGET}
                 onMouseDown={handleMouseDown}
             >
                 <List id={listId} size={size} dropdownOpened={opened} loading={listLoading} onScroll={handleListScroll}>

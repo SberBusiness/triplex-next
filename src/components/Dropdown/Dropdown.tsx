@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { Portal } from "../Portal/Portal";
+import { useDropdownOpenCallbacks } from "./useDropdownOpenCallbacks";
 import { DropdownDesktop, IDropdownDesktopProps } from "./desktop/DropdownDesktop";
 import { MobileView } from "../MobileView/MobileView";
 import { Puller, IPullerProps } from "../Puller/Puller";
@@ -23,31 +24,7 @@ export interface IDropdownProps extends IDropdownDesktopProps {
  */
 export const Dropdown = React.forwardRef<HTMLDivElement, IDropdownProps>(
     ({ children, opened, setOpened, onOpen, onClose, pullerProps, ...desktopProps }, ref) => {
-        // Предыдущее состояние открытости. Сравнение со значением вместо флага "смонтирован"
-        // делает эффект идемпотентным: повторный маунт в StrictMode не вызывает колбэки.
-        const prevOpenedRef = useRef(opened);
-        // Актуальные колбэки хранятся в ref, чтобы эффект зависел только от opened
-        // и не вызывал onOpen/onClose при смене идентичности колбэков.
-        const callbacksRef = useRef({ onOpen, onClose });
-
-        useEffect(() => {
-            callbacksRef.current = { onOpen, onClose };
-        });
-
-        useEffect(() => {
-            // Колбэки вызываются только на смену состояния, но не на первом рендере.
-            if (prevOpenedRef.current === opened) {
-                return;
-            }
-
-            prevOpenedRef.current = opened;
-
-            if (opened) {
-                callbacksRef.current.onOpen?.();
-            } else {
-                callbacksRef.current.onClose?.();
-            }
-        }, [opened]);
+        useDropdownOpenCallbacks(opened, onOpen, onClose);
 
         const desktopDropdown = (
             <Portal container={document.body}>

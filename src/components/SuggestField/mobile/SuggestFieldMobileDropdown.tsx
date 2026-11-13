@@ -1,8 +1,8 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { ISuggestFieldOption } from "../types";
 import { ISuggestFieldMobileDropdownProps } from "./types";
-import { Dropdown } from "../../Dropdown";
 import {
+    Puller,
     PullerHeader,
     PullerInput,
     PullerLoader,
@@ -30,27 +30,29 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
         onSelect,
         onFilter,
         onScrollEnd,
+        ...restProps
     }: ISuggestFieldMobileDropdownProps<T>,
     ref: React.ForwardedRef<HTMLDivElement>,
 ) => {
-    const [inputValue, setInputValue] = useState(value?.label || "");
+    const valueLabel = value?.label ?? "";
+    const [inputValue, setInputValue] = useState(valueLabel);
 
-    const [prevValue, setPrevValue] = useState(value);
-    if (value?.id !== prevValue?.id) {
-        setPrevValue(value);
-        setInputValue(value?.label || "");
+    // Поле ввода возвращается к label при смене value.id и любой смене opened, а не на автофокусе:
+    // при повторном открытии во время анимации закрытия содержимое ещё смонтировано и автофокус не срабатывает.
+    const [prevState, setPrevState] = useState({ valueId: value?.id, opened });
+    if (value?.id !== prevState.valueId || opened !== prevState.opened) {
+        setPrevState({ valueId: value?.id, opened });
+        setInputValue(valueLabel);
     }
 
-    // Не используется в мобильном Dropdown, нужен как обязательное свойство Dropdown.
-    const targetRef = useRef<HTMLDivElement>(null);
-
+    // Как на десктопе: введённый запрос фокус не трогает,
+    // иначе поле разошлось бы с отфильтрованным списком.
     const handleInputFocus = useCallback(() => {
-        if (!clearInputOnFocus) {
-            setInputValue(value?.label || "");
-        } else {
+        if (clearInputOnFocus && inputValue.length !== 0) {
             setInputValue("");
+            onFilter("");
         }
-    }, [clearInputOnFocus, value?.label]);
+    }, [clearInputOnFocus, inputValue, onFilter]);
 
     const handleInputChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
         (event) => {
@@ -63,13 +65,6 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
     const handleCloseClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(() => {
         setOpened(false);
     }, [setOpened]);
-
-    // Закрытие без выбора значение не сбрасывает, поэтому и поле ввода возвращается к его label.
-    // Иначе при повторном открытии во время анимации закрытия (содержимое ещё смонтировано,
-    // автофокус не срабатывает) в поле остался бы прежний ввод.
-    const handleDropdownClose = useCallback(() => {
-        setInputValue(value?.label || "");
-    }, [value?.label]);
 
     const handleListScroll = useCallback<React.UIEventHandler<HTMLDivElement>>(
         (event) => {
@@ -87,58 +82,47 @@ const SuggestFieldMobileDropdownBase = <T extends ISuggestFieldOption = ISuggest
     );
 
     return (
-        <Dropdown
-            opened={opened}
-            setOpened={setOpened}
-            targetRef={targetRef}
-            onClose={handleDropdownClose}
-            pullerProps={{
-                children: (
+        <Puller {...restProps} opened={opened} setOpened={setOpened} ref={ref}>
+            <PullerHeader
+                controlButtons={
                     <>
-                        <PullerHeader
-                            controlButtons={
-                                <>
-                                    {loading && <PullerLoader />}
-                                    <PullerClose onClick={handleCloseClick} />
-                                </>
-                            }
-                        >
-                            <PullerInput
-                                value={inputValue}
-                                placeholder={placeholder}
-                                autoFocus={true}
-                                onFocus={handleInputFocus}
-                                onChange={handleInputChange}
-                            />
-                        </PullerHeader>
-
-                        <PullerBody className={styles.suggestFieldMobileBody} onScroll={handleListScroll}>
-                            {tooltipOpen ? (
-                                <SuggestFieldMobileDropdownHint>{tooltipHint}</SuggestFieldMobileDropdownHint>
-                            ) : (
-                                <PullerList loading={dropdownListLoading}>
-                                    {options.map((option) => (
-                                        <PullerListItem
-                                            key={option.id}
-                                            id={option.id}
-                                            selected={option.id === value?.id}
-                                            showNotificationIcon={option.showNotificationIcon}
-                                            onSelect={() => {
-                                                onSelect(option);
-                                                setOpened(false);
-                                            }}
-                                        >
-                                            {option.content || option.label}
-                                        </PullerListItem>
-                                    ))}
-                                </PullerList>
-                            )}
-                        </PullerBody>
+                        {loading && <PullerLoader />}
+                        <PullerClose onClick={handleCloseClick} />
                     </>
-                ),
-            }}
-            ref={ref}
-        />
+                }
+            >
+                <PullerInput
+                    value={inputValue}
+                    placeholder={placeholder}
+                    autoFocus={true}
+                    onFocus={handleInputFocus}
+                    onChange={handleInputChange}
+                />
+            </PullerHeader>
+
+            <PullerBody className={styles.suggestFieldMobileBody} onScroll={handleListScroll}>
+                {tooltipOpen ? (
+                    <SuggestFieldMobileDropdownHint>{tooltipHint}</SuggestFieldMobileDropdownHint>
+                ) : (
+                    <PullerList loading={dropdownListLoading}>
+                        {options.map((option) => (
+                            <PullerListItem
+                                key={option.id}
+                                id={option.id}
+                                selected={option.id === value?.id}
+                                showNotificationIcon={option.showNotificationIcon}
+                                onSelect={() => {
+                                    onSelect(option);
+                                    setOpened(false);
+                                }}
+                            >
+                                {option.content || option.label}
+                            </PullerListItem>
+                        ))}
+                    </PullerList>
+                )}
+            </PullerBody>
+        </Puller>
     );
 };
 

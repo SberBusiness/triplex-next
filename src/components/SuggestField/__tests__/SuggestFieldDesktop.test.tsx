@@ -1,11 +1,12 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, onTestFinished, vi } from "vitest";
 import { SuggestFieldDesktop } from "../desktop/SuggestFieldDesktop";
 import { ISuggestFieldDesktopProps } from "../desktop/types";
 import { ISuggestFieldOption } from "../types";
 import { EFormFieldStatus } from "../../FormField";
+import { EDropdownWidth } from "../../Dropdown";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 
 const OPTIONS: ISuggestFieldOption[] = [
@@ -38,6 +39,9 @@ const renderField = (props: TRenderProps) => {
 };
 
 const getInput = () => screen.getByRole("combobox");
+
+/** Контейнер выпадающего списка. Рендерится в портале, поэтому ищется по всему документу. */
+const getDropdown = () => document.querySelector('[data-test-id="suggest__dropdown"]');
 
 describe("SuggestFieldDesktop", () => {
     describe("rendering", () => {
@@ -510,6 +514,107 @@ describe("SuggestFieldDesktop", () => {
             expect(screen.getByTestId("custom-dropdown")).toHaveTextContent("true");
         });
 
+        it("dropdownProps are passed to the dropdown", async () => {
+            const user = userEvent.setup();
+            renderField({
+                "data-test-id": "suggest",
+                dropdownProps: { className: "custom-dropdown" },
+                onSelect: vi.fn(),
+                onFilter: vi.fn(),
+            });
+
+            await user.click(getInput());
+
+            expect(getDropdown()).toHaveClass("custom-dropdown");
+        });
+
+        it("dropdownProps.pullerProps are not passed to the DOM", async () => {
+            const user = userEvent.setup();
+            const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+            onTestFinished(() => consoleError.mockRestore());
+            renderField({
+                "data-test-id": "suggest",
+                dropdownProps: { pullerProps: { className: "custom-puller" } },
+                onSelect: vi.fn(),
+                onFilter: vi.fn(),
+            });
+
+            await user.click(getInput());
+
+            expect(getDropdown()).toBeInTheDocument();
+            // React сообщает о неизвестном DOM-атрибуте через console.error.
+            expect(consoleError).not.toHaveBeenCalled();
+        });
+
+        it("the dropdown matches the field width by default", async () => {
+            const user = userEvent.setup();
+            mockElementWidth(100);
+            renderField({ "data-test-id": "suggest", onSelect: vi.fn(), onFilter: vi.fn() });
+
+            await user.click(getInput());
+
+            expect(getDropdown()).toHaveStyle("width: 100px");
+        });
+
+        it("dropdownProps.width overrides the dropdown width", async () => {
+            const user = userEvent.setup();
+            mockElementWidth(100);
+            renderField({
+                "data-test-id": "suggest",
+                dropdownProps: { width: EDropdownWidth.MIN_TARGET },
+                onSelect: vi.fn(),
+                onFilter: vi.fn(),
+            });
+
+            await user.click(getInput());
+
+            expect(getDropdown()).toHaveStyle("min-width: 100px");
+            expect(getDropdown()).not.toHaveStyle("width: 100px");
+        });
+
+        it("dropdownProps.onOpen and onClose are called when the dropdown opens and closes", async () => {
+            const user = userEvent.setup();
+            const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+            onTestFinished(() => consoleError.mockRestore());
+            const onOpen = vi.fn();
+            const onClose = vi.fn();
+            renderField({ dropdownProps: { onOpen, onClose }, onSelect: vi.fn(), onFilter: vi.fn() });
+
+            expect(onOpen).not.toHaveBeenCalled();
+
+            await user.click(getInput());
+
+            expect(onOpen).toHaveBeenCalledTimes(1);
+            expect(onClose).not.toHaveBeenCalled();
+
+            await user.click(screen.getAllByRole("option")[0]);
+
+            expect(onOpen).toHaveBeenCalledTimes(1);
+            expect(onClose).toHaveBeenCalledTimes(1);
+            // Колбэки не уходят в DOM: React сообщил бы о неизвестном обработчике через console.error.
+            expect(consoleError).not.toHaveBeenCalled();
+        });
+
+        it("dropdownProps.onOpen is called only when the dropdown is actually shown", async () => {
+            const user = userEvent.setup();
+            const onOpen = vi.fn();
+            const { rerenderField } = renderField({
+                options: [],
+                dropdownProps: { onOpen },
+                onSelect: vi.fn(),
+                onFilter: vi.fn(),
+            });
+
+            // Без опций список не показывается, хотя поле в фокусе.
+            await user.click(getInput());
+
+            expect(onOpen).not.toHaveBeenCalled();
+
+            rerenderField({ options: OPTIONS });
+
+            expect(onOpen).toHaveBeenCalledTimes(1);
+        });
+
         it("status DISABLED disables the input", () => {
             renderField({ status: EFormFieldStatus.DISABLED, onSelect: vi.fn(), onFilter: vi.fn() });
 
@@ -536,4 +641,13 @@ function scrollListToEnd() {
     list.scrollTop = 200;
 
     fireEvent.scroll(list);
+}
+
+/** Задаёт всем элементам ширину: jsdom не считает размеры, а ширину списка Dropdown берёт у поля. */
+function mockElementWidth(width: number) {
+    const spy = vi
+        .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+        .mockReturnValue({ top: 0, bottom: 20, left: 0, right: width, width, height: 20 } as DOMRect);
+
+    onTestFinished(() => spy.mockRestore());
 }

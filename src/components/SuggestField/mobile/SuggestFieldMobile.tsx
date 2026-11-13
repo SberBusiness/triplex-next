@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { ISuggestFieldMobileProps } from "./types";
 import { ISuggestFieldOption } from "../types";
 import { EComponentSize } from "../../../enums";
@@ -7,6 +7,7 @@ import { TextFieldBase } from "../../TextField/TextFieldBase";
 import { DataTestId } from "../../../consts/DataTestId";
 import { FormFieldInput, FormFieldClear } from "../../FormField";
 import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
+import { useDropdownOpenCallbacks } from "../../Dropdown/useDropdownOpenCallbacks";
 
 /**
  * Мобильный SuggestField.
@@ -30,22 +31,23 @@ export const SuggestFieldMobile = <T extends ISuggestFieldOption = ISuggestField
     onScrollEnd,
     renderInput,
     inputProps,
+    // Из настроек выпадающего списка мобильному варианту нужны только pullerProps и колбэки открытия,
+    // остальное в restProps ушло бы в DOM.
+    dropdownProps: { pullerProps, onOpen: onDropdownOpen, onClose: onDropdownClose } = {},
     ...restProps
 }: ISuggestFieldMobileProps<T>) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const ref = useRef<HTMLInputElement>(null);
-    // Предыдущее состояние dropdownOpened.
-    const prevDropdownOpen = useRef(false);
     const Input = renderInput ?? FormFieldInput;
 
-    useEffect(() => {
-        // Дропдаун закрылся.
-        if (prevDropdownOpen.current && !dropdownOpen && ref.current) {
-            // Обратный скролл к инпуту т.к. при открытии Dropdown в iOS страница скроллится вверх.
-            ref.current.scrollIntoView({ block: "center" });
-        }
-        prevDropdownOpen.current = dropdownOpen;
-    }, [dropdownOpen]);
+    // Без useCallback: хук вызывает колбэки только на смену dropdownOpen, их идентичность ни на что не влияет.
+    const handleDropdownClose = () => {
+        // Обратный скролл к инпуту т.к. при открытии дропдауна в iOS страница скроллится вверх.
+        ref.current?.scrollIntoView({ block: "center" });
+        onDropdownClose?.();
+    };
+
+    useDropdownOpenCallbacks(dropdownOpen, onDropdownOpen, handleDropdownClose);
 
     const handleInputFocus = useCallback<React.FocusEventHandler<HTMLInputElement>>(
         (event) => {
@@ -97,6 +99,7 @@ export const SuggestFieldMobile = <T extends ISuggestFieldOption = ISuggestField
                 onFocus={handleInputFocus}
             />
             <SuggestFieldMobileDropdown
+                {...pullerProps}
                 value={value}
                 options={options}
                 placeholder={placeholder}

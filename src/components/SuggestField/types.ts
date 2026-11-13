@@ -1,6 +1,8 @@
 import React from "react";
 import { IFormFieldInputProps } from "../FormField";
 import { ITextFieldProps } from "../TextField";
+import { IDropdownProps } from "../Dropdown";
+import { IPullerProps } from "../Puller";
 import { DataAttributes } from "@sberbusiness/triplex-next/types/CoreTypes";
 
 /** Свойства компонента SuggestField. */
@@ -34,6 +36,21 @@ export interface ISuggestFieldProps<T extends ISuggestFieldOption = ISuggestFiel
     onClear?: React.MouseEventHandler<HTMLButtonElement>;
     /** Рендер-функция поля ввода. */
     renderInput?: (props: IFormFieldInputProps) => JSX.Element;
+    /**
+     * Свойства выпадающего списка.
+     * `children`, `opened`, `setOpened`, `targetRef`, `size` и `onSelect` компонент задаёт сам.
+     * На мобильной ширине применяются только `pullerProps`, `onOpen` и `onClose`: список открывается в шторке Puller.
+     */
+    dropdownProps?: ISuggestFieldDropdownProps;
+}
+
+/** Свойства выпадающего списка SuggestField. */
+export interface ISuggestFieldDropdownProps extends Omit<
+    IDropdownProps,
+    "children" | "opened" | "setOpened" | "targetRef" | "size" | "onSelect" | "pullerProps"
+> {
+    /** Свойства шторки Puller на мобильной ширине. Содержимое и состояние открытия компонент задаёт сам. */
+    pullerProps?: Omit<IPullerProps, "children" | "opened" | "setOpened" | "onSelect">;
 }
 
 /** Опция выпадающего списка SuggestField. */

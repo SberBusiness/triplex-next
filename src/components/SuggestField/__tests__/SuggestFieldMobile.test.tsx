@@ -1,8 +1,9 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, onTestFinished, vi } from "vitest";
 import { SuggestFieldMobile } from "../mobile/SuggestFieldMobile";
+import { SuggestFieldMobileDropdown } from "../mobile/SuggestFieldMobileDropdown";
 import { ISuggestFieldMobileProps } from "../mobile/types";
 import { ISuggestFieldOption } from "../types";
 
@@ -34,12 +35,12 @@ const mockScrollIntoView = () => {
     };
 };
 
-/** Подменяет matchMedia так, чтобы MobileView считал экран мобильным. */
-const mockMobileScreen = () => {
+/** Подменяет matchMedia так, чтобы MobileView считал экран мобильным (или десктопным при mobile = false). */
+const mockScreen = (mobile = true) => {
     vi.stubGlobal(
         "matchMedia",
         vi.fn().mockImplementation((query: string) => ({
-            matches: true,
+            matches: mobile,
             media: query,
             onchange: null,
             addEventListener: vi.fn(),
@@ -55,7 +56,7 @@ let restoreScrollIntoView: () => void;
 
 // Мобильная среда нужна всем тестам файла, поэтому настраивается один раз.
 beforeAll(() => {
-    mockMobileScreen();
+    mockScreen();
     restoreScrollIntoView = mockScrollIntoView();
 });
 
@@ -349,12 +350,14 @@ describe("SuggestFieldMobile", () => {
             expect(getDropdownInput()).toHaveValue(OPTIONS[0].label);
         });
 
-        it("clearInputOnFocus clears the dropdown input that is autofocused on open", () => {
-            renderField({ value: OPTIONS[0], clearInputOnFocus: true, onSelect: vi.fn(), onFilter: vi.fn() });
+        it("clearInputOnFocus clears the dropdown input that is autofocused on open and resets the filter", () => {
+            const onFilter = vi.fn();
+            renderField({ value: OPTIONS[0], clearInputOnFocus: true, onSelect: vi.fn(), onFilter });
 
             openDropdown();
 
             expect(getDropdownInput()).toHaveValue("");
+            expect(onFilter).toHaveBeenCalledWith("");
         });
 
         it("keeps the selected label in the dropdown input without clearInputOnFocus", () => {
@@ -364,6 +367,42 @@ describe("SuggestFieldMobile", () => {
             fireEvent.focus(getDropdownInput());
 
             expect(getDropdownInput()).toHaveValue(OPTIONS[0].label);
+        });
+
+        // Поле ввода и отфильтрованный список не должны расходиться после возврата фокуса.
+        it("refocusing the dropdown input keeps the typed query without clearInputOnFocus", () => {
+            const onFilter = vi.fn();
+            renderField({ value: OPTIONS[0], onSelect: vi.fn(), onFilter });
+
+            openDropdown();
+            fireEvent.change(getDropdownInput(), { target: { value: "sec" } });
+            onFilter.mockClear();
+            fireEvent.focus(getDropdownInput());
+
+            expect(getDropdownInput()).toHaveValue("sec");
+            expect(onFilter).not.toHaveBeenCalled();
+        });
+
+        it("refocusing the dropdown input with clearInputOnFocus clears the typed query and the filter", () => {
+            const onFilter = vi.fn();
+            renderField({ value: OPTIONS[0], clearInputOnFocus: true, onSelect: vi.fn(), onFilter });
+
+            openDropdown();
+            fireEvent.change(getDropdownInput(), { target: { value: "sec" } });
+            onFilter.mockClear();
+            fireEvent.focus(getDropdownInput());
+
+            expect(getDropdownInput()).toHaveValue("");
+            expect(onFilter).toHaveBeenCalledWith("");
+        });
+
+        it("clearInputOnFocus does not call onFilter when the dropdown input is already empty", () => {
+            const onFilter = vi.fn();
+            renderField({ onSelect: vi.fn(), onFilter, clearInputOnFocus: true });
+
+            openDropdown();
+
+            expect(onFilter).not.toHaveBeenCalled();
         });
 
         it("tooltipOpen shows the hint instead of the list", () => {
@@ -394,6 +433,109 @@ describe("SuggestFieldMobile", () => {
 
             expect(onScrollEnd).not.toHaveBeenCalled();
         });
+
+        it("dropdownProps.pullerProps are passed to the puller without replacing its content", () => {
+            renderField({
+                dropdownProps: { pullerProps: { className: "custom-puller" } },
+                onSelect: vi.fn(),
+                onFilter: vi.fn(),
+            });
+
+            openDropdown();
+
+            expect(document.querySelector(".custom-puller")).toBeInTheDocument();
+            expect(screen.getAllByRole("option")).toHaveLength(OPTIONS.length);
+        });
+
+        it("ignores desktop dropdownProps and does not pass them to the DOM", () => {
+            const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
+            onTestFinished(() => consoleError.mockRestore());
+            renderField({
+                dropdownProps: { className: "custom-dropdown" },
+                onSelect: vi.fn(),
+                onFilter: vi.fn(),
+            });
+
+            openDropdown();
+
+            // React сообщает о неизвестном DOM-атрибуте через console.error.
+            expect(consoleError).not.toHaveBeenCalled();
+            expect(document.querySelector(".custom-dropdown")).toBeNull();
+        });
+
+        it("dropdownProps.onOpen and onClose are called when the puller opens and closes", () => {
+            const onOpen = vi.fn();
+            const onClose = vi.fn();
+            renderField({ dropdownProps: { onOpen, onClose }, onSelect: vi.fn(), onFilter: vi.fn() });
+
+            expect(onOpen).not.toHaveBeenCalled();
+
+            openDropdown();
+
+            expect(onOpen).toHaveBeenCalledTimes(1);
+            expect(onClose).not.toHaveBeenCalled();
+
+            fireEvent.click(getDropdownCloseButton());
+
+            expect(onOpen).toHaveBeenCalledTimes(1);
+            expect(onClose).toHaveBeenCalledTimes(1);
+        });
+
+        it("opens the puller with options regardless of the screen width", () => {
+            mockScreen(false);
+            onTestFinished(() => mockScreen());
+            renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
+
+            openDropdown();
+
+            expect(screen.getAllByRole("option")).toHaveLength(OPTIONS.length);
+        });
+    });
+});
+
+describe("SuggestFieldMobileDropdown", () => {
+    const getDropdownProps = () => ({
+        value: OPTIONS[0],
+        options: OPTIONS,
+        tooltipHint: "Hint",
+        tooltipOpen: false,
+        setOpened: vi.fn(),
+        onSelect: vi.fn(),
+        onFilter: vi.fn(),
+    });
+
+    it("closing through the opened prop also returns the dropdown input to the label", () => {
+        // Закрытие снаружи, без setOpened: сброс поля ввода завязан на смену opened.
+        const props = getDropdownProps();
+        // Открываем из закрытого состояния, как это делает SuggestFieldMobile.
+        const { rerender } = render(<SuggestFieldMobileDropdown {...props} opened={false} />);
+        rerender(<SuggestFieldMobileDropdown {...props} opened={true} />);
+
+        fireEvent.change(getDropdownInput(), { target: { value: "" } });
+        rerender(<SuggestFieldMobileDropdown {...props} opened={false} />);
+
+        // До конца анимации закрытия содержимое шторки ещё смонтировано.
+        expect(getDropdownInput()).toHaveValue(OPTIONS[0].label);
+    });
+
+    it("keeps the typed query when the label of the same option changes while opened", () => {
+        const props = getDropdownProps();
+        const { rerender } = render(<SuggestFieldMobileDropdown {...props} opened={true} />);
+
+        fireEvent.change(getDropdownInput(), { target: { value: "sec" } });
+        rerender(<SuggestFieldMobileDropdown {...props} value={{ ...OPTIONS[0], label: "Renamed" }} opened={true} />);
+
+        expect(getDropdownInput()).toHaveValue("sec");
+    });
+
+    it("shows the updated label of the same option in the dropdown input on open", () => {
+        const props = getDropdownProps();
+        const renamedValue = { ...OPTIONS[0], label: "Renamed" };
+        const { rerender } = render(<SuggestFieldMobileDropdown {...props} opened={false} />);
+        rerender(<SuggestFieldMobileDropdown {...props} value={renamedValue} opened={false} />);
+        rerender(<SuggestFieldMobileDropdown {...props} value={renamedValue} opened={true} />);
+
+        expect(getDropdownInput()).toHaveValue("Renamed");
     });
 });
 

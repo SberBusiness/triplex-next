@@ -1,7 +1,7 @@
 ---
 component: Confirm
 category: Confirm
-related: [Island, Button, Title, Text, TriggerClickOnKeyDownEvent]
+related: [ConfirmClose, Island, Button, Title, Text, TriggerClickOnKeyDownEvent]
 tokens: []
 stories: stories/Confirm/Confirm.stories.tsx
 version: "1.0"
@@ -77,6 +77,8 @@ version: "1.0"
 остальные части идут потоком. Типичный порядок — `Content` → `Controls` → `Close`.
 
 ### Закрытие по Esc (`Confirm.Close`)
+
+Полный контракт кнопки — [ConfirmClose-ai.md](./ConfirmClose-ai.md).
 
 `clickByEsc` — обязательный prop `Confirm.Close`. При `true` компонент оборачивается в
 `TriggerClickOnKeyDownEvent`, который слушает `keydown` на `window` (через `KeyDownListener`) и
@@ -158,6 +160,8 @@ version: "1.0"
 
 ### Контракты (в `related`)
 
+- [ConfirmClose](./ConfirmClose-ai.md) — публичная часть `.Close`: кнопка-крестик,
+  глобальный Escape, DOM-ref и наследуемые состояния `Button`.
 - `Island` — корневая карточка. `IConfirmProps extends IIslandProps`, поэтому добавление prop в
   `Island` расширяет публичный API `Confirm` без правок в его коде. Confirm задаёт
   `type={EIslandType.TYPE_1}` и кладёт `children` в `Island.Body`.
@@ -168,12 +172,12 @@ version: "1.0"
 - `Text` — основа `Confirm.Content.SubTitle` (дефолт `size=B2`, `tag="div"`).
 - `TriggerClickOnKeyDownEvent` — обёртка, дающая `Confirm.Close` реакцию на Esc при `clickByEsc`.
 
-### Части Confirm (своего AI.md не имеют)
+### Остальные части Confirm (своего AI.md не имеют)
 
 - `ConfirmContent` (`Confirm.Content`) и его части `ConfirmContentTitle` (`.Title`),
   `ConfirmContentSubTitle` (`.SubTitle`).
 - `ConfirmControls` (`Confirm.Controls`).
-- `ConfirmClose` (`Confirm.Close`) и внутренний `ConfirmCloseButton`.
+- Внутренний `ConfirmCloseButton` — визуальная основа `.Close`, описан в AI.md `ConfirmClose`.
 
 ### Контейнеры, в которых открывают Confirm (в `related` не входят — связи по коду нет)
 

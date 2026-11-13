@@ -1,3 +1,4 @@
+import { tokenizer, TokenType } from "@csstools/css-tokenizer";
 import { defaultsDeep } from "lodash-es";
 import {
     TDesignTokens,
@@ -13,7 +14,10 @@ import { DesignTokensComponentsThemeDark } from "./DesignTokensComponentsThemeDa
 import { TDesignTokenValue } from "./types/DesignTokenTypes";
 
 export interface IDesignTokenUtils {
-    /** Возвращает строку с css-переменными группы токенов, вида `--variable-name-1: "#000000"; --variable-name-2: "16px"`. */
+    /**
+     * Возвращает строку с css-переменными группы токенов, вида `--variable-name-1: "#000000"; --variable-name-2: "16px"`.
+     * Токены с недопустимыми именами или значениями пропускаются.
+     */
     getCSSVariableByTokenGroup: (tokenGroup: TDesignTokensGroupAbstract, tokens: TDesignTokens) => string;
     /** Возвращает токены, которые использует компонент. */
     getComponentTokens: (componentName: string) => { core: string[]; components: string[] };
@@ -58,6 +62,74 @@ const resolveTokenValue = (tokenValue: TDesignTokenValue, tokens: TDesignTokens,
     return "";
 };
 
+/** Допустимое имя группы токенов и токена: оно становится частью имени css-переменной. */
+const SAFE_TOKEN_NAME = /^[\w-]+$/;
+
+/** Проверяет, что значение можно вставить в одно CSS-объявление. */
+const isSafeTokenValue = (value: string): boolean => {
+    if (/[{}\\]/.test(value)) {
+        return false;
+    }
+
+    let hasParseError = false;
+    const { nextToken } = tokenizer(
+        { css: value },
+        {
+            onParseError: () => {
+                hasParseError = true;
+            },
+        },
+    );
+    const closingTokens: TokenType[] = [];
+
+    while (!hasParseError) {
+        const [type] = nextToken();
+
+        switch (type) {
+            case TokenType.EOF:
+                return !hasParseError && closingTokens.length === 0;
+            case TokenType.Function:
+            case TokenType.OpenParen:
+                closingTokens.push(TokenType.CloseParen);
+                break;
+            case TokenType.OpenSquare:
+                closingTokens.push(TokenType.CloseSquare);
+                break;
+            case TokenType.CloseParen:
+            case TokenType.CloseSquare:
+                if (closingTokens.pop() !== type) {
+                    return false;
+                }
+                break;
+            case TokenType.Semicolon:
+                if (closingTokens.length === 0) {
+                    return false;
+                }
+                break;
+        }
+    }
+
+    return false;
+};
+
+/**
+ * Проверяет, что имя css-переменной и её значение можно вывести в стили. Значения токенов
+ * подставляются в текст css как есть, поэтому токен, выходящий за пределы своего объявления,
+ * не выводится — о нём сообщается в консоль.
+ */
+const isSafeCSSVariable = (tokenGroupTitle: string, tokenTitle: string, value: string): boolean => {
+    const isSafe = SAFE_TOKEN_NAME.test(tokenGroupTitle) && SAFE_TOKEN_NAME.test(tokenTitle) && isSafeTokenValue(value);
+
+    if (!isSafe) {
+        console.warn(
+            "DesignTokenUtils",
+            `Токен ${tokenGroupTitle}.${tokenTitle} пропущен: недопустимое имя или значение.`,
+        );
+    }
+
+    return isSafe;
+};
+
 export const DesignTokenUtils: IDesignTokenUtils = {
     getCSSVariableByTokenGroup: (tokenGroup, tokens) => {
         const tokenGroupTitle = Object.keys(tokenGroup)[0];
@@ -68,12 +140,14 @@ export const DesignTokenUtils: IDesignTokenUtils = {
         tokenVersion = tokenVersion.replace(/\./g, "-");
 
         return Object.keys(tokenGroup[tokenGroupTitle])
+            .map((tokenTitle) => ({
+                tokenTitle,
+                value: DesignTokenUtils.getTokenValue(tokenGroup[tokenGroupTitle][tokenTitle], tokens),
+            }))
+            .filter(({ tokenTitle, value }) => isSafeCSSVariable(tokenGroupTitle, tokenTitle, value))
             .map(
-                (tokenTitle) =>
-                    `--${tokenPrefix}-${tokenGroupTitle}-${tokenTitle}-${tokenVersion}: ${DesignTokenUtils.getTokenValue(
-                        tokenGroup[tokenGroupTitle][tokenTitle],
-                        tokens,
-                    )};`,
+                ({ tokenTitle, value }) =>
+                    `--${tokenPrefix}-${tokenGroupTitle}-${tokenTitle}-${tokenVersion}: ${value};`,
             )
             .join("\n");
     },

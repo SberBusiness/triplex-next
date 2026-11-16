@@ -1,4 +1,5 @@
 import React from "react";
+import { uniqueId } from "lodash-es";
 import { action } from "storybook/actions";
 import { Radio, RadioXGroup, EComponentSize, IRadioXGroupProps } from "@sberbusiness/triplex-next";
 
@@ -8,7 +9,7 @@ export interface IPlaygroundArgs extends Pick<IRadioXGroupProps, "indent"> {
 }
 
 export const Playground = ({ indent, radioSize, disabled }: IPlaygroundArgs) => {
-    const name = React.useId();
+    const [name] = React.useState(() => uniqueId("radio-x-group-playground-"));
 
     return (
         <RadioXGroup indent={indent} aria-label="Способ доставки">

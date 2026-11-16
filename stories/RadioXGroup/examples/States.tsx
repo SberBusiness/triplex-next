@@ -1,8 +1,9 @@
 import React from "react";
+import { uniqueId } from "lodash-es";
 import { Radio, RadioXGroup } from "@sberbusiness/triplex-next";
 
 export const States = () => {
-    const name = React.useId();
+    const [name] = React.useState(() => uniqueId("radio-x-group-states-"));
     const [value, setValue] = React.useState("second");
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);

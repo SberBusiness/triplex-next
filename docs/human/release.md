@@ -256,8 +256,12 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 ```bash
 git checkout release-0 && git pull origin release-0
-git merge origin/main
+git merge --no-commit --no-ff origin/main
 ```
+
+`--no-commit` останавливает слияние перед коммитом, даже если конфликтов нет:
+lock-файл и аудит из шага 4 должны войти в сам коммит слияния, а без флага
+git закоммитил бы результат раньше проверок.
 
 **4. Разрешить конфликты.** Общий принцип: из `main` берётся логика и
 поведение, из `release-0` сохраняется React 17-совместимость.
@@ -275,10 +279,14 @@ git merge origin/main
 разрешаем. Сначала разреши `package.json`, затем:
 
 ```bash
-git checkout --theirs package-lock.json   # при этом мерже theirs — это main
+git checkout origin/main -- package-lock.json
 npm install
 npm audit --audit-level=high
 ```
+
+Именно `origin/main --`, а не `--theirs`: `--theirs` выбирает сторону только
+у файла с конфликтом. Если git слил `package-lock.json` сам, `--theirs` молча
+оставит результат автослияния.
 
 Почему из `main`, а не «любая сторона». В lock-файле `main` лежат исправления
 вложенных зависимостей, которых нет в `package.json`: результат `npm audit fix`
@@ -287,24 +295,72 @@ npm audit --audit-level=high
 теряет. Так и вышло 13.11.2026: после перелития `npm audit` показал
 в `release-0` 47 находок, из них 10 high, при 34 без high в `main`.
 
-Если `npm audit --audit-level=high` завершился с ошибкой:
+Если `npm audit --audit-level=high` прошёл — проверка закончена. Если
+завершился с ошибкой:
 
 - запусти `npm audit fix` и повтори проверку; одного прохода бывает мало —
   повторяй, пока число находок не перестанет меняться;
 - `--force` в `release-0` не используй: он поднимает мажорные версии и может
-  сдвинуть React 17-зависимости. Находка, которая чинится только так, чинится
-  в `main` и приезжает следующим перелитием.
+  сдвинуть React 17-зависимости.
 
-Критерий — в `release-0` нет high и critical сверх того, что есть в `main`.
-Находки уровня moderate и low остаются; их число в обеих ветках обычно
-совпадает. Всё это делается **до** коммита слияния — по той же причине, что
-и в шаге 5: зелёный прогон CI должен стоять на вершине `release-0`.
+Если ошибка осталась, выясни, чьи это находки — только `release-0` или общие
+с `main`. Число находок для этого не годится: при том же количестве набор
+может быть другим. Сравнивай по пакету и идентификатору advisory:
+
+```bash
+# Находки high и critical в виде «пакет идентификатор-advisory», по одной на строку.
+audit_high() {
+  npm audit --json "$@" | node -e '
+    let s = "";
+    process.stdin.on("data", (d) => (s += d)).on("end", () => {
+      const found = new Set();
+      for (const v of Object.values(JSON.parse(s).vulnerabilities || {}))
+        for (const via of v.via)
+          if (typeof via === "object" && ["high", "critical"].includes(via.severity))
+            found.add(`${via.name} ${via.url.split("/").pop()}`);
+      console.log([...found].sort().join("\n"));
+    });' | LC_ALL=C sort
+}
+
+audit_high > /tmp/audit-release-0.txt
+
+BASE=$(mktemp -d)
+git show origin/main:package.json > "$BASE/package.json"
+git show origin/main:package-lock.json > "$BASE/package-lock.json"
+(cd "$BASE" && audit_high --package-lock-only) > /tmp/audit-main.txt
+
+# Находки high и critical, которые есть в release-0 и которых нет в main.
+LC_ALL=C comm -13 /tmp/audit-main.txt /tmp/audit-release-0.txt
+```
+
+Критерий — последняя команда ничего не выводит: в `release-0` нет high и
+critical сверх того, что есть в `main`.
+
+- **Вывод пуст.** Оставшиеся находки общие с `main`: они чинятся там и
+  приезжают следующим перелитием. Перелитие можно продолжать.
+- **Вывод не пуст.** Каждая строка — находка, которая есть только
+  в `release-0`. Вложенный пакет поднимается прицельно: `npm update <пакет>`.
+  Если находка сидит в пакете, версия которого закреплена ради React 17
+  (список — в таблице выше), в `main` её не починить: это решение мейнтейнера,
+  `--force` здесь тоже не выход.
+
+Находки уровня moderate и low в сравнение не входят.
+
+Когда конфликты разрешены и аудит пройден, закоммить слияние:
+
+```bash
+git commit
+```
+
+Всё выше делается **до** этого коммита — по той же причине, что и в шаге 5:
+зелёный прогон CI должен стоять на вершине `release-0`.
 
 Полная карта известных расхождений (полиморфные типы, `React.JSX`, `Portal`,
 тесты) — в `.agents/skills/release-react17/SKILL.md`, раздел «Что делает
 человек до релиза». Там же — grep-проверка на React 18-only API
-(`useId`, `createRoot`, `react-dom/client` и прочее), которую стоит прогнать
-после разрешения конфликтов.
+(`useId`, `createRoot`, `react-dom/client` и прочее). Она сравнивает
+`origin/release-0` с `HEAD`, поэтому запускается после коммита слияния и
+до пуша: до коммита диапазон пуст, и проверка ничего не найдёт.
 
 **5. (Опционально) Release notes для React 17.** По умолчанию workflow
 переносит текст `v1/1.44.0.mdx` → `v0/0.44.0.mdx` сам, меняя только

@@ -85,11 +85,38 @@ git merge origin/main
 | `package.json` — `version` | Не важно, перезапишется бампом на шаге 3 |
 | `package.json` — React-зависимости | **Всегда из `release-0`**: `react`/`react-dom` `17.0.2`, `@types/react`/`@types/react-dom` `17.0.2`, `@testing-library/react` `12.1.5`, `focus-trap-react` `10.3.0`, `react-resize-detector` `9.1.0`, `@types/react-transition-group` `4.4.9`, `peerDependencies` — `^16.8.0 \|\| ^17.0.0` |
 | `package.json` — всё остальное | Из main (новые/обновлённые зависимости, скрипты, конфиги) |
-| `package-lock.json` | Руками не разрешать. Взять любую сторону, затем перегенерировать: `npm install` |
+| `package-lock.json` | Руками не разрешать. Взять сторону main, перегенерировать `npm install`, затем проверить аудит — см. «Lock-файл и аудит» ниже |
 | `.github/workflows/release.yml`, `release-weekly.yml` | **Из main.** Копии в `release-0` не используются ни на одном пути: для события `release` GitHub берёт workflow из ветки по умолчанию, при `workflow_call` — из ветки вызывающего, а расписание живёт только в main. Брать main — значит сокращать расхождение |
 | `stories/release-notes/v0/*` | Из `release-0` (в main их нет) |
 | `stories/release-notes/v1/*` | Из main |
 | `src/**` | По принципу выше — см. известные адаптации ниже |
+
+### Lock-файл и аудит
+
+После того как `package.json` разрешён:
+
+```bash
+git checkout --theirs package-lock.json   # при этом мерже theirs — это main
+npm install
+npm audit --audit-level=high
+```
+
+Сторона main, а не любая: в её lock-файле лежат исправления вложенных
+зависимостей, которых нет в `package.json` (результат `npm audit fix` и
+обновлений Dependabot). `npm install` при готовом lock-файле оставляет
+зафиксированные версии как есть, поэтому сторона `release-0` эти исправления
+теряет. 13.11.2026 перелитие дало в `release-0` 47 находок `npm audit`
+(10 high) при 34 без high в main.
+
+Если проверка аудита завершилась с ошибкой — `npm audit fix` и повторная
+проверка, пока число находок не перестанет меняться (одного прохода бывает
+мало). `--force` в `release-0` не используется: он поднимает мажорные версии
+и может сдвинуть React 17-зависимости; находка, которая чинится только так,
+чинится в main и приезжает следующим перелитием.
+
+Критерий — в `release-0` нет high и critical сверх того, что есть в main;
+число находок moderate и low в обеих ветках обычно совпадает. Делается до
+коммита слияния: зелёный прогон CI должен стоять на вершине `release-0`.
 
 ### Известные React 17-адаптации в `src/`
 

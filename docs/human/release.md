@@ -266,10 +266,39 @@ git merge origin/main
 |---|---|
 | React-зависимости в `package.json` | всегда из `release-0` (`react` 17.0.2, `@testing-library/react` 12.1.5 и т.д.) |
 | Остальное в `package.json` | из `main` |
-| `package-lock.json` | любая сторона, затем `npm install` |
+| `package-lock.json` | из `main`, затем `npm install` и проверка аудита — см. ниже |
 | `.github/workflows/release.yml` | из `main` |
 | `stories/release-notes/v0/*` | из `release-0` |
 | `src/**` | логика из `main`, типовые адаптации из `release-0` |
+
+**Lock-файл: сторона `main` и проверка аудита.** Руками lock-файл не
+разрешаем. Сначала разреши `package.json`, затем:
+
+```bash
+git checkout --theirs package-lock.json   # при этом мерже theirs — это main
+npm install
+npm audit --audit-level=high
+```
+
+Почему из `main`, а не «любая сторона». В lock-файле `main` лежат исправления
+вложенных зависимостей, которых нет в `package.json`: результат `npm audit fix`
+и обновлений Dependabot. `npm install` при готовом lock-файле оставляет
+зафиксированные версии как есть, поэтому сторона `release-0` эти исправления
+теряет. Так и вышло 13.11.2026: после перелития `npm audit` показал
+в `release-0` 47 находок, из них 10 high, при 34 без high в `main`.
+
+Если `npm audit --audit-level=high` завершился с ошибкой:
+
+- запусти `npm audit fix` и повтори проверку; одного прохода бывает мало —
+  повторяй, пока число находок не перестанет меняться;
+- `--force` в `release-0` не используй: он поднимает мажорные версии и может
+  сдвинуть React 17-зависимости. Находка, которая чинится только так, чинится
+  в `main` и приезжает следующим перелитием.
+
+Критерий — в `release-0` нет high и critical сверх того, что есть в `main`.
+Находки уровня moderate и low остаются; их число в обеих ветках обычно
+совпадает. Всё это делается **до** коммита слияния — по той же причине, что
+и в шаге 5: зелёный прогон CI должен стоять на вершине `release-0`.
 
 Полная карта известных расхождений (полиморфные типы, `React.JSX`, `Portal`,
 тесты) — в `.agents/skills/release-react17/SKILL.md`, раздел «Что делает

@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { isKey, EVENT_KEY_CODES } from "../../utils/keyboard";
 import { KeyDownListener } from "../KeyDownListener";
 import { DropdownListContext, IDropdownListItemProps, useDropdownListKeyboard } from "../Dropdown";
+import { useDropdownOpenCallbacks } from "../Dropdown/useDropdownOpenCallbacks";
 import { SelectExtendedFieldTarget } from "./components/SelectExtendedFieldTarget";
 import { SelectExtendedFieldDropdown } from "./components/SelectExtendedFieldDropdown";
 import styles from "./styles/SelectExtendedField.module.less";
@@ -71,12 +72,8 @@ export const SelectExtendedField = Object.assign(
         const [opened, setOpened] = useState(false);
         const targetRef = useRef<HTMLDivElement | null>(null);
         const dropdownRef = useRef<HTMLDivElement>(null);
-        // Предыдущее состояние открытости. Сравнение со значением, а не флаг "смонтирован",
-        // делает эффект идемпотентным: повторный маунт в StrictMode не вызывает колбэки.
-        const prevOpenedRef = useRef(opened);
-        // Актуальные колбэки хранятся в ref, чтобы эффект зависел только от opened
-        // и не вызывал onOpen/onClose при смене идентичности колбэков между рендерами.
-        const callbacksRef = useRef({ onOpen, onClose });
+
+        useDropdownOpenCallbacks(opened, onOpen, onClose);
 
         const setTargetRef = useCallback(
             (instance: HTMLDivElement | null) => {
@@ -137,25 +134,6 @@ export const SelectExtendedField = Object.assign(
             return () => {
                 document.removeEventListener("mousedown", handleDocumentMouseDown);
             };
-        }, [opened]);
-
-        useEffect(() => {
-            callbacksRef.current = { onOpen, onClose };
-        });
-
-        useEffect(() => {
-            // Колбэки вызываются только на смену состояния, но не на первом рендере.
-            if (prevOpenedRef.current === opened) {
-                return;
-            }
-
-            prevOpenedRef.current = opened;
-
-            if (opened) {
-                callbacksRef.current.onOpen?.();
-            } else {
-                callbacksRef.current.onClose?.();
-            }
         }, [opened]);
 
         return (

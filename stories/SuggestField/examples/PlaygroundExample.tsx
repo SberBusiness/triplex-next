@@ -24,6 +24,7 @@ export interface PlaygroundArgs extends Pick<
     | "size"
     | "status"
     | "inputProps"
+    | "dropdownProps"
     | "placeholder"
     | "label"
     | "tooltipHint"

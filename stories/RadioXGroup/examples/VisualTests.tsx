@@ -1,11 +1,8 @@
 import React from "react";
-import { uniqueId } from "lodash-es";
 import { action } from "storybook/actions";
 import { Radio, RadioXGroup } from "@sberbusiness/triplex-next";
 
-export const VisualTests = () => {
-    const [name] = React.useState(() => uniqueId("radio-x-group-visual-tests-"));
-
+export const VisualTests = ({ name }: { name: string }) => {
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: 24, width: 480, maxWidth: "100%" }}>
             <div>

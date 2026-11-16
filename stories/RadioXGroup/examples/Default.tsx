@@ -1,10 +1,7 @@
 import React from "react";
-import { uniqueId } from "lodash-es";
 import { Radio, RadioXGroup } from "@sberbusiness/triplex-next";
 
-export const Default = () => {
-    const [name] = React.useState(() => uniqueId("radio-x-group-default-"));
-
+export const Default = ({ name }: { name: string }) => {
     return (
         <RadioXGroup aria-label="Способ доставки">
             <Radio name={name} value="courier" defaultChecked>

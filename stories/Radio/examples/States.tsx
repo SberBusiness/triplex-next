@@ -1,9 +1,7 @@
 import React from "react";
-import { uniqueId } from "lodash-es";
 import { Radio } from "@sberbusiness/triplex-next";
 
-export const States = () => {
-    const [name] = React.useState(() => uniqueId("radio-states-"));
+export const States = ({ name }: { name: string }) => {
     const [value, setValue] = React.useState("second");
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value);

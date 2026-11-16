@@ -1,12 +1,9 @@
 import React from "react";
-import { uniqueId } from "lodash-es";
 import { Radio, RadioXGroup, TIndentSize } from "@sberbusiness/triplex-next";
 
 const INDENTS = [12, 16, 20, 24, 28, 32] satisfies TIndentSize[];
 
-export const Indents = () => {
-    const [name] = React.useState(() => uniqueId("radio-x-group-indents-"));
-
+export const Indents = ({ name }: { name: string }) => {
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: 24, width: 480, maxWidth: "100%" }}>
             {INDENTS.map((indent) => (

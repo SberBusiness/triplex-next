@@ -79,7 +79,7 @@
         "@vitest/coverage-v8": "5.0.5",
         "autoprefixer": "10.6.2",
         "cross-env": "10.1.0",
-        "eslint": "9.39.5",
+        "eslint": "10.13.0",
         "eslint-config-prettier": "10.1.8",
         "eslint-plugin-prettier": "5.5.7",
         "eslint-plugin-react": "7.37.5",

@@ -25,6 +25,7 @@ env:
 
 jobs:
   deploy-storybook:
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release-')
     runs-on: ubuntu-latest
 
     steps:
@@ -56,10 +57,10 @@ jobs:
       - name: Get deploy dir
         id: vars
         run: |
-          ref="${GITHUB_REF##*/}"
+          ref="$GITHUB_REF_NAME"
           # Допускаем только безопасные символы для имени каталога,
           # чтобы исключить shell-инъекцию через имя ветки.
-          if [[ ! "$ref" =~ ^[A-Za-z0-9._-]+$ ]]; then
+          if [[ ! "$ref" =~ ^(main|release-[A-Za-z0-9._-]+)$ || "$ref" == *..* ]]; then
             echo "::error::Недопустимое имя ветки для preview_dir: $ref"
             exit 1
           fi

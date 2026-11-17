@@ -21,21 +21,30 @@ updates:
     # Мажоры в группы не входят намеренно: каждый приезжает отдельно и читается
     # отдельно, у них ломающие изменения. Исключение — группа vitest ниже.
     #
-    # Пакет попадает в первую подходящую группу, поэтому vitest объявлен
-    # раньше development: иначе development забрал бы его минорные обновления.
+    # Порядок групп в файле ни на что не влияет. Пакет, подходящий под несколько
+    # групп, Dependabot отдаёт самой «специфичной» (PatternSpecificityCalculator
+    # в dependabot-core): точное имя в patterns — 1000 очков, группа без
+    # patterns (production, development) — 500, маска вроде "@vitest/*" —
+    # меньше 100. Поэтому в группах ниже пакеты перечислены точными именами:
+    # маска проигрывает development, и пакет уходит из группы.
     groups:
       # vitest и @vitest/* держат друг друга на точной версии (peer
       # "vitest": "4.1.12", без ^): поставить можно только всех сразу, по одному
       # npm падает с ERESOLVE. Поэтому все обновления, включая мажоры, идут
       # одним PR. Мажор в группе — исключение из правила выше: одиночный PR
       # на мажор здесь не ставится в принципе.
+      #
+      # Добавляешь в devDependencies новый @vitest/* — допиши его сюда
+      # и в vitest-security. С 23.09 по 17.11.2026 здесь стояла маска
+      # "@vitest/*", и coverage-v8 каждую неделю приезжал отдельным PR,
+      # а группа поднимала один vitest: оба PR падали с ERESOLVE.
       vitest:
-        patterns: ["vitest", "@vitest/*"]
+        patterns: ["vitest", "@vitest/coverage-v8"]
       # То же для security-обновлений: без группы Dependabot пришлёт
       # обновление одного пакета, и оно упадёт с ERESOLVE.
       vitest-security:
         applies-to: security-updates
-        patterns: ["vitest", "@vitest/*"]
+        patterns: ["vitest", "@vitest/coverage-v8"]
       production:
         dependency-type: production
         update-types: ["minor", "patch"]

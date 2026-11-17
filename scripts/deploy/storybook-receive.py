@@ -48,7 +48,7 @@ def unpack(stream, destination):
             raise ValueError('Incomplete Storybook build: ' + required)
 
 
-def main():
+def main(scope, retain_assets_in_build=False):
     args = shlex.split(os.environ.get('SSH_ORIGINAL_COMMAND', ''))
     if len(args) == 2 and args[0] == 'remove' and re.fullmatch(r'pr-[1-9][0-9]*', args[1]):
         action, channel = args
@@ -56,6 +56,11 @@ def main():
         action, channel, revision = args
     else:
         raise ValueError('Only deploy CHANNEL SHA and remove pr-N are permitted')
+    if scope not in ('production', 'preview'):
+        raise ValueError('Unknown deployment scope')
+    is_preview = re.fullmatch(r'pr-[1-9][0-9]*', channel) is not None
+    if (scope == 'preview') != is_preview:
+        raise ValueError('Key is not authorized for this channel')
     os.umask(0o022)
     with (BASE / 'deploy.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
@@ -80,6 +85,10 @@ def main():
             # Keep content-hashed chunks used by browsers with the previous HTML.
             if (stage / 'assets').exists():
                 shutil.copytree(stage / 'assets', shared, dirs_exist_ok=True)
+            # The mirror has no shared-assets Nginx location. Keep old hashed
+            # chunks inside the new build too, using the same retained store.
+            if retain_assets_in_build and shared.exists():
+                shutil.copytree(shared, stage / 'assets', dirs_exist_ok=True)
             public.parent.mkdir(parents=True, exist_ok=True)
             link = public.with_name(public.name + '.next')
             link.unlink(missing_ok=True)
@@ -98,7 +107,12 @@ def main():
 
 if __name__ == '__main__':
     try:
-        main()
+        mirror = len(sys.argv) == 3 and sys.argv[2] == 'mirror'
+        if mirror:
+            PUBLIC = Path('/var/www/storybook/data')
+            BASE = PUBLIC / '.storybook-releases'
+            SHARED = BASE / 'shared'
+        main(sys.argv[1] if len(sys.argv) == 2 or mirror else None, mirror)
     except Exception as error:
         print(str(error), file=sys.stderr)
         sys.exit(1)

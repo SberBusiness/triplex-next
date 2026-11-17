@@ -1,222 +1,44 @@
 name: Deploy Storybook Preview
 
+# This workflow builds untrusted PR code. It never receives deployment keys.
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
-  workflow_dispatch:
-
-concurrency:
-  group: storybook-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: false
-
-env:
-  STORYBOOK_PREVIEW_BASE_TRIPLEX_DEV: "/var/www/storybook/data"
-  STORYBOOK_URL_BASE_TRIPLEX_DEV: "https://storybook.triplex-dev.ru"
-  STORYBOOK_PREVIEW_BASE_TRIPLEX_DESIGN: "/var/www/storybook/data"
-  STORYBOOK_URL_BASE_TRIPLEX_DESIGN: "https://triplex-design.ru/storybook"
+    types: [opened, synchronize, reopened]
+    branches: [main]
 
 permissions:
   contents: read
 
+concurrency:
+  group: storybook-build-pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
-  # Деплой только для PR из веток самого репозитория. GitHub и так не отдаёт
-  # секреты прогонам из форков, но здесь в ssh-agent грузятся ключи от двух
-  # боевых серверов — и цена ошибки такова, что условие стоит держать явным:
-  # оно переживёт и включённую кем-то передачу секретов в форки, и подмену
-  # триггера на pull_request_target.
-  #
-  # Боты (Dependabot) секретов тоже не получают: без этого условия каждый
-  # апдейт зависимостей давал бы красную джобу на загрузке ключей. Сверяем
-  # автора PR, а не актора события: допиши человек коммит в ветку Dependabot —
-  # на synchronize актором станет он, и превью всё-таки задеплоилось бы.
-  #
-  # Релизные ветки исключены: PR из prerelease-* живёт сорок минут и никем
-  # не читается, а деплой ради него каждую пятницу поднимал бы оба SSH-ключа.
   preview:
     if: >-
-      github.event.action != 'closed'
-      && github.event.pull_request.head.repo.full_name == github.repository
+      github.event.pull_request.head.repo.full_name == github.repository
       && github.event.pull_request.user.login != 'dependabot[bot]'
       && !startsWith(github.head_ref, 'prerelease-')
     runs-on: ubuntu-latest
-    # Джоба публикует комментарий со ссылками на превью. Набор перечислен
-    # целиком: права джобы заменяют набор workflow, а не дополняют его.
-    permissions:
-      contents: read
-      pull-requests: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          # Иначе токен оседает в .git/config, а ниже выполняется npm ci —
-          # lifecycle-скрипты зависимостей смогли бы его прочитать.
           persist-credentials: false
-
-      - name: Test deployment receiver
-        run: python3 -m unittest discover -s scripts/deploy -p 'test_*.py'
-
+      - name: Test deployment scripts
+        run: |
+          python3 -m unittest discover -s scripts/deploy -p 'test_*.py'
+          node --test scripts/deploy/test-storybook-publication.cjs
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build Storybook
-        run: npm run storybook:build
-
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
+      - run: npm ci
+      - run: npm run storybook:build
+      - name: Package static files
+        run: tar -czf "$RUNNER_TEMP/storybook.tar.gz" -C storybook-static .
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          # Оба ключа загружаются в ssh-agent (по одному на сервер)
-          ssh-private-key: |
-            ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY_TRIPLEX_DEV }}
-            ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY_TRIPLEX_DESIGN }}
-
-      - name: Get preview dir
-        id: vars
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          # Номер PR всегда целочисленный — валидируем, чтобы исключить
-          # подстановку shell-метасимволов в путь.
-          if [[ ! "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
-            echo "::error::Некорректный номер PR: $PR_NUMBER"
-            exit 1
-          fi
-          echo "preview_dir=pr-$PR_NUMBER" >> "$GITHUB_OUTPUT"
-
-      # Деплой на каждый сервер — независимый шаг с continue-on-error,
-      # чтобы недоступность одного сервера не отменяла публикацию на другом.
-      - name: Deploy Storybook to triplex-dev
-        id: deploy_dev
-        continue-on-error: true
-        env:
-          SSH_USER: ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DEV }}
-          SSH_KNOWN_HOSTS: ${{ secrets.STORYBOOK_SSH_KNOWN_HOSTS_TRIPLEX_DEV }}
-          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
-        run: |
-          bash scripts/deploy/storybook.sh "$PREVIEW_DIR"
-
-      - name: Deploy Storybook to triplex-design
-        id: deploy_design
-        continue-on-error: true
-        env:
-          SSH_USER: ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DESIGN }}
-          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
-        run: |
-          ssh -o StrictHostKeyChecking=no "$SSH_USER" "mkdir -p \"$STORYBOOK_PREVIEW_BASE_TRIPLEX_DESIGN/$PREVIEW_DIR\""
-          rsync -avz --delete storybook-static/ "$SSH_USER:$STORYBOOK_PREVIEW_BASE_TRIPLEX_DESIGN/$PREVIEW_DIR/"
-
-      # Комментарий в PR со ссылками — только на те серверы, куда деплой удался.
-      # continue-on-error: публикация комментария не должна решать судьбу job'а —
-      # это делает шаг «Report deploy results». Без него разовая ошибка GitHub API
-      # роняла job при успешных сборке и деплое и блокировала мерж PR.
-      - name: Comment PR with Storybook URLs
-        id: comment_pr
-        if: always()
-        continue-on-error: true
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-        env:
-          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
-          URL_DEV: ${{ env.STORYBOOK_URL_BASE_TRIPLEX_DEV }}
-          URL_DESIGN: ${{ env.STORYBOOK_URL_BASE_TRIPLEX_DESIGN }}
-          OUTCOME_DEV: ${{ steps.deploy_dev.outcome }}
-          OUTCOME_DESIGN: ${{ steps.deploy_design.outcome }}
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const dir = process.env.PREVIEW_DIR;
-            const lines = [];
-            if (process.env.OUTCOME_DEV === 'success') {
-              const url = `${process.env.URL_DEV}/${dir}`;
-              lines.push(`- triplex-dev: [${url}](${url})`);
-            }
-            if (process.env.OUTCOME_DESIGN === 'success') {
-              const url = `${process.env.URL_DESIGN}/${dir}`;
-              lines.push(`- triplex-design: [${url}](${url})`);
-            }
-            const body = lines.length
-              ? `🚀 Storybook Preview:\n${lines.join('\n')}`
-              : `⚠️ Не удалось опубликовать Storybook Preview ни на один сервер.`;
-            await github.rest.issues.createComment({
-              issue_number: context.payload.pull_request.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body,
-            });
-
-      # Job падает только если недоступны ОБА сервера.
-      - name: Report deploy results
-        if: always()
-        env:
-          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
-          URL_DEV: ${{ env.STORYBOOK_URL_BASE_TRIPLEX_DEV }}
-          URL_DESIGN: ${{ env.STORYBOOK_URL_BASE_TRIPLEX_DESIGN }}
-          OUTCOME_DEV: ${{ steps.deploy_dev.outcome }}
-          OUTCOME_DESIGN: ${{ steps.deploy_design.outcome }}
-          OUTCOME_COMMENT: ${{ steps.comment_pr.outcome }}
-        run: |
-          # Ссылки печатаются здесь, а не только в комментарии PR: если публикация
-          # комментария упала, это единственное место, где их можно взять.
-          [[ "$OUTCOME_DEV" == "success" ]] && echo "Превью на triplex-dev: $URL_DEV/$PREVIEW_DIR"
-          [[ "$OUTCOME_DESIGN" == "success" ]] && echo "Превью на triplex-design: $URL_DESIGN/$PREVIEW_DIR"
-
-          [[ "$OUTCOME_DEV" == "success" ]] || echo "::warning::Деплой превью на triplex-dev не удался (outcome=$OUTCOME_DEV)"
-          [[ "$OUTCOME_DESIGN" == "success" ]] || echo "::warning::Деплой превью на triplex-design не удался (outcome=$OUTCOME_DESIGN)"
-          # Сбой публикации комментария job не роняет, но и молча теряться не должен.
-          [[ "$OUTCOME_COMMENT" == "success" ]] || echo "::warning::Комментарий со ссылками на превью не опубликован (outcome=$OUTCOME_COMMENT) — ссылки напечатаны выше в этом же шаге"
-
-          if [[ "$OUTCOME_DEV" != "success" && "$OUTCOME_DESIGN" != "success" ]]; then
-            echo "::error::Оба сервера недоступны — превью не опубликовано ни на один из них"
-            exit 1
-          fi
-
-  cleanup:
-    # Симметрично preview: чистить нечего, если деплоя не было.
-    if: >-
-      github.event.action == 'closed'
-      && github.event.pull_request.head.repo.full_name == github.repository
-      && github.event.pull_request.user.login != 'dependabot[bot]'
-      && !startsWith(github.head_ref, 'prerelease-')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
-        with:
-          ssh-private-key: |
-            ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY_TRIPLEX_DEV }}
-            ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY_TRIPLEX_DESIGN }}
-
-      - name: Get preview dir
-        id: vars
-        env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          if [[ ! "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
-            echo "::error::Некорректный номер PR: $PR_NUMBER"
-            exit 1
-          fi
-          echo "preview_dir=pr-$PR_NUMBER" >> "$GITHUB_OUTPUT"
-
-      # Удаление превью на каждом сервере независимо. Недоступность сервера
-      # не должна ронять job — каталог переживёт до следующей чистки.
-      - name: Remove preview from triplex-dev
-        continue-on-error: true
-        env:
-          SSH_USER: ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DEV }}
-          SSH_KNOWN_HOSTS: ${{ secrets.STORYBOOK_SSH_KNOWN_HOSTS_TRIPLEX_DEV }}
-          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
-        run: |
-          install -d -m 700 "$HOME/.ssh"
-          printf '%s\n' "$SSH_KNOWN_HOSTS" >> "$HOME/.ssh/known_hosts"
-          chmod 600 "$HOME/.ssh/known_hosts"
-          ssh -F /dev/null -a -x -T -o BatchMode=yes -o StrictHostKeyChecking=yes \
-            -o ConnectTimeout=15 "$SSH_USER" "remove $PREVIEW_DIR"
-
-      - name: Remove preview from triplex-design
-        continue-on-error: true
-        env:
-          SSH_USER: ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DESIGN }}
-          PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
-        run: |
-          ssh -o StrictHostKeyChecking=no "$SSH_USER" "rm -rf \"$STORYBOOK_PREVIEW_BASE_TRIPLEX_DESIGN/$PREVIEW_DIR\""
+          name: storybook--pr-${{ github.event.pull_request.number }}--${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/storybook.tar.gz
+          retention-days: 2
+          if-no-files-found: error
+          compression-level: 0

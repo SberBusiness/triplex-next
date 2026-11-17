@@ -1,0 +1,131 @@
+name: Publish Storybook
+
+# Both triggers load this workflow from trusted code, never from the PR checkout.
+on:
+  workflow_run:
+    workflows:
+      - Deploy Storybook Preview
+      - Deploy Storybook for main & release branches
+      - Release, publish npm package & deploy Storybook
+      - Weekly release
+    types: [completed]
+  pull_request_target:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  authorize:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: read
+    outputs:
+      plan: ${{ steps.plan.outputs.result }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.workflow_sha }}
+          persist-credentials: false
+          sparse-checkout: scripts/deploy
+      - id: plan
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: return await require('./scripts/deploy/storybook-publication.cjs')({github, context});
+
+  publish:
+    needs: authorize
+    if: needs.authorize.outputs.plan != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        publication: ${{ fromJSON(needs.authorize.outputs.plan) }}
+    runs-on: ubuntu-latest
+    environment: ${{ matrix.publication.environment }}
+    concurrency:
+      group: storybook-publish-${{ matrix.publication.channel }}
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.workflow_sha }}
+          path: trusted
+          persist-credentials: false
+          sparse-checkout: scripts/deploy
+      - name: Download static archive
+        if: matrix.publication.action == 'deploy'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
+        with:
+          artifact-ids: ${{ matrix.publication.artifact }}
+          run-id: ${{ matrix.publication.run }}
+          github-token: ${{ github.token }}
+          path: incoming
+          merge-multiple: true
+      - name: Recheck authorization after waiting
+        id: current
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          PUBLICATION: ${{ toJSON(matrix.publication) }}
+        with:
+          script: |
+            const plan = await require('./trusted/scripts/deploy/storybook-publication.cjs')({github, context});
+            const expected = JSON.parse(process.env.PUBLICATION);
+            return plan.some(item => JSON.stringify(item) === JSON.stringify(expected));
+      - name: Load limited deployment keys
+        if: steps.current.outputs.result == 'true'
+        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY_TRIPLEX_DEV }}
+            ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY_TRIPLEX_DESIGN }}
+      - name: Publish to primary server
+        if: steps.current.outputs.result == 'true'
+        id: primary
+        env:
+          SSH_USER: ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DEV }}
+          SSH_KNOWN_HOSTS: ${{ secrets.STORYBOOK_SSH_KNOWN_HOSTS_TRIPLEX_DEV }}
+          CHANNEL: ${{ matrix.publication.channel }}
+          REVISION: ${{ matrix.publication.revision }}
+          ACTION: ${{ matrix.publication.action }}
+        run: |
+          if [[ "$ACTION" == deploy ]]; then
+            bash trusted/scripts/deploy/storybook.sh "$CHANNEL" "$REVISION" incoming/storybook.tar.gz
+          else
+            bash trusted/scripts/deploy/storybook-remove.sh "$CHANNEL"
+          fi
+      - name: Publish to mirror
+        if: steps.current.outputs.result == 'true'
+        id: mirror
+        continue-on-error: true
+        env:
+          SSH_USER: ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DESIGN }}
+          SSH_KNOWN_HOSTS: ${{ secrets.STORYBOOK_SSH_KNOWN_HOSTS_TRIPLEX_DESIGN }}
+          CHANNEL: ${{ matrix.publication.channel }}
+          REVISION: ${{ matrix.publication.revision }}
+          ACTION: ${{ matrix.publication.action }}
+        run: |
+          if [[ "$ACTION" == deploy ]]; then
+            bash trusted/scripts/deploy/storybook.sh "$CHANNEL" "$REVISION" incoming/storybook.tar.gz
+          else
+            bash trusted/scripts/deploy/storybook-remove.sh "$CHANNEL"
+          fi
+      - name: Comment preview links
+        if: steps.primary.outcome == 'success' && matrix.publication.pr != 0 && matrix.publication.action == 'deploy'
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        env:
+          PR: ${{ matrix.publication.pr }}
+          CHANNEL: ${{ matrix.publication.channel }}
+          MIRROR: ${{ steps.mirror.outcome }}
+        with:
+          script: |
+            const channel = process.env.CHANNEL;
+            const lines = [`Storybook: https://storybook.triplex-dev.ru/${channel}/`];
+            if (process.env.MIRROR === 'success') lines.push(`Зеркало: https://triplex-design.ru/storybook/${channel}/`);
+            await github.rest.issues.createComment({...context.repo, issue_number: Number(process.env.PR), body: lines.join('\n')});

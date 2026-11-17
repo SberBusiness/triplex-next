@@ -36,9 +36,9 @@ class Publication(unittest.TestCase):
             getattr(receiver, name).mkdir()
         self.files = {'index.html': b'first', 'iframe.html': b'frame', 'index.json': b'{}', 'assets/old-hash.js': b'old'}
 
-    def run_deploy(self, command, files=None, unsafe=None):
+    def run_deploy(self, command, files=None, unsafe=None, scope="production", mirror=False):
         with patch.dict(os.environ, {'SSH_ORIGINAL_COMMAND': command}), patch('sys.stdin', SimpleNamespace(buffer=bundle(files or self.files, unsafe))):
-            receiver.main()
+            receiver.main(scope, mirror)
 
     def test_switch_retains_old_chunks_and_reports_revision(self):
         self.run_deploy('deploy main ' + 'a' * 40)
@@ -50,6 +50,13 @@ class Publication(unittest.TestCase):
         self.assertEqual((receiver.SHARED / 'main/old-hash.js').read_bytes(), b'old')
         self.assertTrue(old.exists())
         self.assertEqual(json.loads((public / 'deployment.json').read_text())['revision'], 'b' * 40)
+
+    def test_mirror_retains_old_chunks_without_nginx_changes(self):
+        self.run_deploy('deploy main ' + 'a' * 40, mirror=True)
+        self.run_deploy('deploy main ' + 'b' * 40,
+                        {'index.html': b'next', 'iframe.html': b'frame', 'index.json': b'{}', 'assets/new.js': b'next'}, mirror=True)
+        self.assertEqual((receiver.PUBLIC / 'main/assets/old-hash.js').read_bytes(), b'old')
+        self.assertEqual((receiver.PUBLIC / 'main/assets/new.js').read_bytes(), b'next')
 
     def test_incomplete_upload_does_not_replace_live_site(self):
         self.run_deploy('deploy main ' + 'a' * 40)
@@ -73,10 +80,25 @@ class Publication(unittest.TestCase):
             with self.subTest(command=command), self.assertRaises(ValueError):
                 self.run_deploy(command)
 
+    def test_preview_key_cannot_publish_production(self):
+        for channel in ('main', 'release-0', 'releases/1.49.0'):
+            with self.subTest(channel=channel), self.assertRaises(ValueError):
+                self.run_deploy('deploy ' + channel + ' ' + 'a' * 40, scope='preview')
+        self.assertEqual(list(receiver.PUBLIC.iterdir()), [])
+
+    def test_production_key_cannot_modify_previews(self):
+        for command in ('deploy pr-123 ' + 'a' * 40, 'remove pr-123'):
+            with self.subTest(command=command), self.assertRaises(ValueError):
+                self.run_deploy(command)
+
+    def test_unknown_key_scope_is_rejected(self):
+        with self.assertRaises(ValueError):
+            self.run_deploy('deploy main ' + 'a' * 40, scope=None)
+
     def test_preview_cleanup_preserves_main(self):
         self.run_deploy('deploy main ' + 'a' * 40)
-        self.run_deploy('deploy pr-123 ' + 'b' * 40)
-        self.run_deploy('remove pr-123')
+        self.run_deploy('deploy pr-123 ' + 'b' * 40, scope='preview')
+        self.run_deploy('remove pr-123', scope='preview')
         self.assertTrue((receiver.PUBLIC / 'main/index.html').exists())
         self.assertFalse((receiver.PUBLIC / 'pr-123').exists())
         self.assertFalse((receiver.SHARED / 'pr-123').exists())

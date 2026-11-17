@@ -50,11 +50,6 @@ updates:
       default-days: 7
       semver-major-days: 30
     ignore:
-      # 0.24+ требует Storybook 10, проект на Storybook 9 — npm падает
-      # с ERESOLVE. Группа не поможет: обновлять надо сам Storybook.
-      # Снять вместе с миграцией на Storybook 10 (TRI-145).
-      - dependency-name: "@storybook/test-runner"
-        versions: [">=0.24.0"]
       # Типы Node держим на мажоре runtime (node-version: 22 в workflow):
       # с типами новее TypeScript пропустит API, которых в Node 22 нет, и
       # ошибка всплывёт только в рантайме. Сдвигать вместе с node-version.

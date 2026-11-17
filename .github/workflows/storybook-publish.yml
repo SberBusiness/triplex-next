@@ -47,6 +47,7 @@ jobs:
     environment: ${{ matrix.publication.environment }}
     concurrency:
       group: storybook-publish-${{ matrix.publication.channel }}
+      queue: max
       cancel-in-progress: false
     permissions:
       contents: read

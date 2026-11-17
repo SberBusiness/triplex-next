@@ -632,7 +632,9 @@ jobs:
               # Server-side strict checks close the race between fetch and merge.
               git fetch origin main --quiet
               [[ $(git rev-parse origin/main) == $(git rev-parse "$SHA^") ]] || {
-                echo 'main изменился после подготовки релиза; слияние остановлено'; exit 1;
+                echo 'main изменился после подготовки релиза; слияние остановлено.'
+                echo 'Верните содержимое main к предполёту и перезапустите prepare-react18 вместе с зависимыми jobs; потребуется новое ревью.'
+                exit 1;
               }
               MERGED=$(gh api --method PUT "repos/${GITHUB_REPOSITORY}/pulls/${PR}/merge" \
                 -f sha="$SHA" -f merge_method=merge --jq .sha)
@@ -690,8 +692,13 @@ jobs:
             fi
             echo ""
             echo "\`${VERSION}\` не опубликована (\`${V0}\` — уже). Почини причину"
-            echo "и перезапусти упавшие джобы: завершение использует тот же PR и SHA,"
-            echo "повторный бамп версии и force-push не выполняются."
+            echo "и выбери восстановление по причине остановки:"
+            echo "- Если main изменился до слияния: верни его содержимое к предполёту,"
+            echo "  перезапусти именно \`prepare-react18\` вместе с зависимыми jobs"
+            echo "  (даже если подготовка была зелёной) и заново одобри PR."
+            echo "  Один \`Re-run failed jobs\` не обновит родителя релизного коммита."
+            echo "- Если main не менялся или PR уже слит: \`Re-run failed jobs\`"
+            echo "  повторит завершение с тем же PR и SHA, без нового бампа версии."
             echo "Если \`${VERSION}\` на этой неделе решено не выпускать — удали ветку"
             echo "(PR закроется сам) и верни \`latest\` во внутреннем registry: он остался"
             echo "на React 17-сборке — docs/human/release.md § «Если релиз выпущен наполовину»."

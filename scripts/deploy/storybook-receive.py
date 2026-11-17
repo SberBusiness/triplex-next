@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Receive a Storybook tarball through a restricted SSH key, then publish atomically."""
 import fcntl
+import filecmp
 import os
 from pathlib import Path, PurePosixPath
 import re
@@ -13,6 +14,7 @@ import tempfile
 BASE = Path('/srv/triplex/storybook')
 PUBLIC = Path('/var/www/storybook/data')
 SHARED = Path('/var/www/storybook/shared')
+MAX_MEMBERS = 20000
 CHANNEL = re.compile(r'(?:main|release-[A-Za-z0-9._-]+|pr-[1-9][0-9]*|releases/v?[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?)')
 
 
@@ -24,17 +26,17 @@ def unpack(stream, destination):
             path = PurePosixPath(member.name)
             if path.is_absolute() or '..' in path.parts or not (member.isfile() or member.isdir()):
                 raise ValueError('Unsafe archive member')
-            if str(path) == '.':
-                if not member.isdir():
-                    raise ValueError('Invalid archive root')
-                continue
             if path in seen:
                 raise ValueError('Duplicate archive member')
             seen.add(path)
             total += member.size
             count += 1
-            if total > 300 * 1024 * 1024 or count > 20000:
+            if total > 300 * 1024 * 1024 or count > MAX_MEMBERS:
                 raise ValueError('Archive exceeds deployment limit')
+            if str(path) == '.':
+                if not member.isdir():
+                    raise ValueError('Invalid archive root')
+                continue
             target = destination.joinpath(*path.parts)
             if member.isdir():
                 target.mkdir(parents=True, exist_ok=True)
@@ -46,6 +48,27 @@ def unpack(stream, destination):
     for required in ('index.html', 'iframe.html', 'index.json'):
         if not (destination / required).is_file():
             raise ValueError('Incomplete Storybook build: ' + required)
+
+
+def publish_assets(source, destination):
+    """Readers keep complete files even if copying the next build fails."""
+    for item in source.iterdir():
+        target = destination / item.name
+        if item.is_dir():
+            target.mkdir(parents=True, exist_ok=True)
+            publish_assets(item, target)
+            continue
+        if target.is_file() and filecmp.cmp(item, target, shallow=False):
+            continue
+        fd, name = tempfile.mkstemp(prefix='.asset-', dir=destination)
+        os.close(fd)
+        temporary = Path(name)
+        try:
+            shutil.copyfile(item, temporary)
+            temporary.chmod(0o644)
+            os.replace(temporary, target)
+        finally:
+            temporary.unlink(missing_ok=True)
 
 
 def main(scope, retain_assets_in_build=False):
@@ -85,7 +108,7 @@ def main(scope, retain_assets_in_build=False):
             shared.mkdir(parents=True, exist_ok=True)
             # Keep content-hashed chunks used by browsers with the previous HTML.
             if (stage / 'assets').exists():
-                shutil.copytree(stage / 'assets', shared, dirs_exist_ok=True)
+                publish_assets(stage / 'assets', shared)
             # The mirror has no shared-assets Nginx location. Keep old hashed
             # chunks inside the new build too, using the same retained store.
             if retain_assets_in_build and shared.exists():

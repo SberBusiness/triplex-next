@@ -14,9 +14,13 @@ receiver = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(receiver)
 
 
-def bundle(files, unsafe=None):
+def bundle(files, unsafe=None, roots=0):
     stream = io.BytesIO()
     with tarfile.open(fileobj=stream, mode='w:gz') as archive:
+        for _ in range(roots):
+            info = tarfile.TarInfo('./')
+            info.type = tarfile.DIRTYPE
+            archive.addfile(info)
         for name, data in files.items():
             info = tarfile.TarInfo(name)
             info.size = len(data)
@@ -36,8 +40,8 @@ class Publication(unittest.TestCase):
             getattr(receiver, name).mkdir()
         self.files = {'index.html': b'first', 'iframe.html': b'frame', 'index.json': b'{}', 'assets/old-hash.js': b'old'}
 
-    def run_deploy(self, command, files=None, unsafe=None, scope="production", mirror=False):
-        with patch.dict(os.environ, {'SSH_ORIGINAL_COMMAND': command}), patch('sys.stdin', SimpleNamespace(buffer=bundle(files or self.files, unsafe))):
+    def run_deploy(self, command, files=None, unsafe=None, scope="production", mirror=False, roots=0):
+        with patch.dict(os.environ, {'SSH_ORIGINAL_COMMAND': command}), patch('sys.stdin', SimpleNamespace(buffer=bundle(files or self.files, unsafe, roots))):
             receiver.main(scope, mirror)
 
     def test_switch_retains_old_chunks_and_reports_revision(self):
@@ -70,6 +74,57 @@ class Publication(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.run_deploy('deploy main ' + 'b' * 40, {'index.html': b'broken'})
         self.assertEqual((receiver.PUBLIC / 'main').resolve(), old)
+
+    def test_single_archive_root_is_accepted(self):
+        self.run_deploy('deploy main ' + 'a' * 40, roots=1)
+        self.assertTrue((receiver.PUBLIC / 'main/index.html').is_file())
+
+    def test_duplicate_archive_roots_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, 'Duplicate archive member'):
+            self.run_deploy('deploy main ' + 'a' * 40, roots=2)
+        self.assertFalse((receiver.PUBLIC / 'main').exists())
+
+    def test_archive_root_counts_toward_member_limit(self):
+        with patch.object(receiver, 'MAX_MEMBERS', len(self.files)):
+            self.run_deploy('deploy main ' + 'a' * 40)
+            old = (receiver.PUBLIC / 'main').resolve()
+            with self.assertRaisesRegex(ValueError, 'Archive exceeds deployment limit'):
+                self.run_deploy('deploy main ' + 'b' * 40, roots=1)
+            self.assertEqual((receiver.PUBLIC / 'main').resolve(), old)
+
+    def test_failed_asset_copy_preserves_live_chunk_and_site(self):
+        self.run_deploy('deploy main ' + 'a' * 40)
+        old = (receiver.PUBLIC / 'main').resolve()
+        files = {**self.files, 'assets/old-hash.js': b'changed'}
+
+        def fail_after_partial_copy(source, target):
+            Path(target).write_bytes(b'partial')
+            raise OSError('copy failed')
+
+        with patch.object(receiver.shutil, 'copyfile', side_effect=fail_after_partial_copy):
+            with self.assertRaisesRegex(OSError, 'copy failed'):
+                self.run_deploy('deploy main ' + 'b' * 40, files)
+        shared = receiver.SHARED / 'main'
+        self.assertEqual((shared / 'old-hash.js').read_bytes(), b'old')
+        self.assertEqual((receiver.PUBLIC / 'main').resolve(), old)
+        self.assertEqual(sorted(p.name for p in shared.iterdir()), ['old-hash.js'])
+
+    def test_identical_assets_are_not_rewritten(self):
+        self.run_deploy('deploy main ' + 'a' * 40)
+        asset = receiver.SHARED / 'main/old-hash.js'
+        inode = asset.stat().st_ino
+        with patch.object(receiver.shutil, 'copyfile', side_effect=AssertionError('unexpected copy')):
+            self.run_deploy('deploy main ' + 'b' * 40)
+        self.assertEqual(asset.stat().st_ino, inode)
+
+    def test_asset_replacement_preserves_in_flight_reader(self):
+        self.run_deploy('deploy main ' + 'a' * 40)
+        asset = receiver.SHARED / 'main/old-hash.js'
+        with asset.open('rb') as reader:
+            self.run_deploy('deploy main ' + 'b' * 40, {**self.files, 'assets/old-hash.js': b'changed'})
+            self.assertEqual(reader.read(), b'old')
+        self.assertEqual(asset.read_bytes(), b'changed')
+        self.assertEqual(asset.stat().st_mode & 0o777, 0o644)
 
     def test_rejects_traversal_absolute_paths_and_links(self):
         for name, kind in [('../outside', tarfile.REGTYPE), ('/tmp/outside', tarfile.REGTYPE), ('link', tarfile.SYMTYPE), ('hardlink', tarfile.LNKTYPE)]:

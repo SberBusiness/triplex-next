@@ -164,7 +164,7 @@ export const WithIcons: StoryObj<typeof StepperExtended> = {
 };
 
 export const VisualTests: StoryObj<typeof StepperExtended> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     parameters: {
         controls: { disable: true },
         docs: {

@@ -195,7 +195,7 @@ export const WithDropdown: StoryObj<typeof Tabs> = {
 };
 
 export const VisualTests: StoryObj<typeof Tabs> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },
@@ -214,7 +214,7 @@ export const VisualTests: StoryObj<typeof Tabs> = {
 };
 
 export const VisualTestsOpen: StoryObj<typeof Tabs> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     render: VisualTestsOpenRender,
     parameters: {
         controls: { disable: true },

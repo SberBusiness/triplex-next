@@ -97,6 +97,7 @@ export const Sizes: Story = {
 };
 
 export const VisualTests: Story = {
+    tags: ["!autodocs", "!dev"],
     render: VisualTestsExample,
     parameters: {
         controls: { disable: true },

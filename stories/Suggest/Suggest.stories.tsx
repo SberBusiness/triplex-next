@@ -146,7 +146,7 @@ const visualTestsStoryParameters = {
 };
 
 export const VisualTests: StoryObj<typeof Suggest> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     render: VisualTestsRender,
     parameters: visualTestsStoryParameters,
     play: async ({ canvas, userEvent }) => {
@@ -158,7 +158,7 @@ export const VisualTests: StoryObj<typeof Suggest> = {
 };
 
 export const VisualTestsDropdownListLoading: StoryObj<typeof Suggest> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "!dev"],
     render: VisualTestsDropdownListLoadingRender,
     parameters: visualTestsStoryParameters,
     play: async ({ canvas, userEvent }) => {

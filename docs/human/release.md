@@ -309,32 +309,52 @@ npm audit --audit-level=high
 
 ```bash
 # Находки high и critical в виде «пакет идентификатор-advisory», по одной на строку.
+# Завершается с ошибкой, если отчёт npm audit не получен или не разобран.
+# Ненулевой код самого npm audit — не ошибка: так он сообщает о найденных уязвимостях.
 audit_high() {
   npm audit --json "$@" | node -e '
     let s = "";
     process.stdin.on("data", (d) => (s += d)).on("end", () => {
+      let report;
+      try {
+        report = JSON.parse(s);
+      } catch {
+        console.error("audit_high: отчёт npm audit не разобран");
+        process.exit(1);
+      }
+      if (report.error || typeof report.vulnerabilities !== "object" || report.vulnerabilities === null) {
+        console.error("audit_high: отчёт npm audit не получен:", JSON.stringify(report.error ?? {}));
+        process.exit(1);
+      }
       const found = new Set();
-      for (const v of Object.values(JSON.parse(s).vulnerabilities || {}))
+      for (const v of Object.values(report.vulnerabilities))
         for (const via of v.via)
           if (typeof via === "object" && ["high", "critical"].includes(via.severity))
-            found.add(`${via.name} ${via.url.split("/").pop()}`);
-      console.log([...found].sort().join("\n"));
-    });' | LC_ALL=C sort
+            found.add(`${via.name} ${String(via.url ?? via.source).split("/").pop()}`);
+      // Сортировка по кодам символов совпадает с LC_ALL=C — её ждёт comm ниже.
+      process.stdout.write([...found].sort().map((line) => line + "\n").join(""));
+    });'
 }
-
-audit_high > /tmp/audit-release-0.txt
 
 BASE=$(mktemp -d)
 git show origin/main:package.json > "$BASE/package.json"
 git show origin/main:package-lock.json > "$BASE/package-lock.json"
-(cd "$BASE" && audit_high --package-lock-only) > /tmp/audit-main.txt
 
-# Находки high и critical, которые есть в release-0 и которых нет в main.
-LC_ALL=C comm -13 /tmp/audit-main.txt /tmp/audit-release-0.txt
+if audit_high > /tmp/audit-release-0.txt &&
+  (cd "$BASE" && audit_high --package-lock-only) > /tmp/audit-main.txt; then
+  # Находки high и critical, которые есть в release-0 и которых нет в main.
+  LC_ALL=C comm -13 /tmp/audit-main.txt /tmp/audit-release-0.txt
+else
+  echo "Отчёт npm audit не получен — перелитие не продолжать"
+fi
 ```
 
-Критерий — последняя команда ничего не выводит: в `release-0` нет high и
-critical сверх того, что есть в `main`.
+Сначала смотри, нет ли сообщения «Отчёт npm audit не получен». Оно значит,
+что сравнение не состоялось (нет сети, нет lock-файла, сбой реестра): его
+повторяют, а не трактуют как «находок нет».
+
+Критерий — оба отчёта получены и сравнение ничего не выводит: в `release-0`
+нет high и critical сверх того, что есть в `main`.
 
 - **Вывод пуст.** Оставшиеся находки общие с `main`: они чинятся там и
   приезжают следующим перелитием. Перелитие можно продолжать.

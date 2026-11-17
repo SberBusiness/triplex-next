@@ -1,7 +1,7 @@
 ---
 component: Dropdown
 category: Dropdown
-related: [ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, Puller, LoaderSmall]
+related: [DropdownList, ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, Puller, LoaderSmall]
 tokens:
   - Dropdown.Background
   - Dropdown.Shadow
@@ -158,19 +158,11 @@ DropdownList.Background_Selected
 
 ## Связанные компоненты
 
-Отдельного AI.md пока нет ни у одного субкомпонента семейства — они описаны здесь.
-Это область задачи TRI-35 («Scope: только Dropdown; соседние экспортируемые компоненты
-из `src/components/Dropdown/` — отдельные задачи»), а не вывод по критериям
-`docs/ai/CONTEXT.md` → «Когда создавать `{ComponentName}-ai.md`». По этим критериям
-`DropdownList` и `DropdownListItem`
-заслуживают собственных AI.md и отдельных строк в `docs/ai/ROADMAP.md` — как это
-сделано для семейства `List`. Решение о том, заводить ли их, за владельцем репозитория.
-
 **Десктоп (`src/components/Dropdown/desktop/`):**
 
 - `DropdownDesktop` — десктопное меню: позиционирование, блокировка скролла страницы. `Dropdown` рендерит его напрямую или как fallback `MobileView`.
-- `DropdownList` — контейнер списка с клавиатурной навигацией, `role="listbox"`. Статическое свойство `DropdownList.Item`.
-- `DropdownListItem` — элемент списка, `role="option"`, выбор мышью и клавиатурой.
+- [DropdownList](DropdownList-ai.md) — контейнер списка с клавиатурной навигацией и `role="listbox"`.
+- [DropdownListItem](DropdownListItem-ai.md) — элемент списка с `role="option"` и выбором мышью или клавиатурой. Доступен как `DropdownList.Item`.
 
 **Мобильная версия:**
 
@@ -226,3 +218,4 @@ DropdownList.Background_Selected
 | 2026-10-23 | Исправлено: закрытие одного из открытых `DropdownDesktop` снимало блокировку скролла страницы при другом открытом меню. **Breaking:** класс блокировки на `body` переименован `.dropdownDesktopOverflowHidden` → `.dropdownDesktopScrollLock`. |
 | 2026-10-31 | Мобильная версия рендерится в `pullerProps.renderContainer`, если он задан, иначе в `document.body` (TRIPLEX-961). |
 | 2026-11-05 | **Breaking** (TRIPLEX-1039): `DropdownList` / `DropdownListItem` больше не подписываются на `keydown` документа — клавиши передаёт управляющий элемент через новый хук `useDropdownListKeyboard`; в `IDropdownListContext` добавлено обязательное поле `registerKeyDownHandler`. `DropdownList` хранит активный элемент по `id` и больше не клонирует children: `DropdownListItem` сам берёт активность и размер из списка и обрабатывает наведение, props `active` и `size` удалены. Исправления клавиатурной навигации и `aria-activedescendant`. |
+| 2026-11-17 | Добавлены ссылки на документацию `DropdownList` (TRI-187) и `DropdownListItem` (TRI-186). |

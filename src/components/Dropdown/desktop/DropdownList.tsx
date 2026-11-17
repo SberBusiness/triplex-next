@@ -21,13 +21,13 @@ import styles from "../styles/DropdownDesktopList.module.less";
 
 /** Свойства компонента DropdownList. */
 export interface IDropdownListProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Dropdown открыт. Пока true, список принимает клавиши через DropdownListContext. */
+    /** Открытость выпадающего блока. При true список регистрирует клавиатурный обработчик в DropdownListContext. */
     dropdownOpened: boolean;
-    /** Объект для создания ссылки на html-элемент "список". */
+    /** Ref корневого div списка. По умолчанию используется внутренний ref. */
     listRef?: React.RefObject<HTMLDivElement>;
-    /** Состояние загрузки. Дополняет список элементом с лоадером. */
+    /** Добавляет после опций строку с лоадером вне клавиатурной навигации. */
     loading?: boolean;
-    /** Размер списка. Пробрасывается в элементы списка. */
+    /** Размер контейнера и его опций. По умолчанию EComponentSize.MD. */
     size?: EComponentSize;
 }
 

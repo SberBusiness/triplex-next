@@ -109,6 +109,16 @@ describe("DropdownList", () => {
         expect(container.querySelector(".dropdownDesktopListLoader")).not.toBeNull();
     });
 
+    it("skips the loader item when wrapping keyboard navigation", () => {
+        renderList({ loading: true });
+
+        pressKey(EVENT_KEY_CODES.ARROW_UP);
+        expect(getTrigger()).toHaveAttribute("aria-activedescendant", "item-3");
+
+        pressKey(EVENT_KEY_CODES.ARROW_DOWN);
+        expect(getTrigger()).toHaveAttribute("aria-activedescendant", "item-1");
+    });
+
     it("marks the first item as active when the dropdown is opened", () => {
         renderList();
 

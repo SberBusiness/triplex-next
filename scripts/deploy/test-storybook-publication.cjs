@@ -10,7 +10,7 @@ function fixture() {
     const pr = {number: 799, state: 'open', base: {ref: 'main'}, head: {sha, ref: 'feature', repo: {full_name}}, user: {login: 'contributor'}};
     const run = {id: 10, repository: {full_name}, head_repository: {full_name}, conclusion: 'success',
         path: '.github/workflows/storybook-preview.yml', event: 'pull_request', head_sha: sha, head_branch: 'feature', pull_requests: [{number: 799}]};
-    const artifacts = [{id: 20, name: `storybook--pr-799--${sha}`, expired: false}];
+    const artifacts = [{id: 20, name: `storybook--pr-799--${sha}`, expired: false, created_at: '2026-11-17T10:00:00Z'}];
     const context = {repo, eventName: 'workflow_run', payload: {workflow_run: {id: 10}}};
     let ancestry = 'ahead';
     let currentSha = sha;
@@ -66,9 +66,11 @@ test('release must match a tag and belong to the release branch', async () => {
     assert.deepEqual(await publication(f), []);
 });
 
-test('duplicate channel artifacts fail instead of picking an arbitrary archive', async () => {
-    const f = fixture(); f.artifacts.push({...f.artifacts[0], id: 21});
-    await assert.rejects(publication(f), /Duplicate/);
+test('a retry selects the newest artifact for the same authorized revision', async () => {
+    const f = fixture(); f.artifacts.unshift({...f.artifacts[0], id: 19, created_at: '2026-11-17T10:01:00Z'});
+    const plan = await publication(f);
+    assert.equal(plan.length, 1);
+    assert.equal(plan[0].artifact, 19);
 });
 
 test('cleanup handles only closed same-repository previews', async () => {

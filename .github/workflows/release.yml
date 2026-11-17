@@ -429,6 +429,7 @@ jobs:
           retention-days: 2
           if-no-files-found: error
           compression-level: 0
+          overwrite: true
 
       # Каким путём прошла авторизация, по логам publish не видно: при неудачном
       # обмене OIDC npm молча уходит на NODE_AUTH_TOKEN и публикует без

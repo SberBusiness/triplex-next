@@ -51,6 +51,12 @@ class Publication(unittest.TestCase):
         self.assertTrue(old.exists())
         self.assertEqual(json.loads((public / 'deployment.json').read_text())['revision'], 'b' * 40)
 
+    def test_first_mirror_deployment_creates_state_directory(self):
+        receiver.BASE.rmdir()
+        self.run_deploy('deploy main ' + 'a' * 40, mirror=True)
+        self.assertTrue((receiver.BASE / 'deploy.lock').is_file())
+        self.assertTrue((receiver.PUBLIC / 'main/index.html').is_file())
+
     def test_mirror_retains_old_chunks_without_nginx_changes(self):
         self.run_deploy('deploy main ' + 'a' * 40, mirror=True)
         self.run_deploy('deploy main ' + 'b' * 40,

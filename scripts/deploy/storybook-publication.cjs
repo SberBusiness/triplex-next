@@ -57,8 +57,18 @@ module.exports = async function publication({github, context}) {
             const {data: definition} = await github.rest.repos.compareCommitsWithBasehead({...repo, basehead: `${run.head_sha}...${target}`});
             if (!['ahead', 'identical'].includes(definition.status)) continue;
         }
-        if (plan.some(item => item.channel === channel)) throw new Error('Duplicate publication channel');
-        plan.push({channel, revision, artifact: artifact.id, run: run.id, action: 'deploy',
+        const createdAt = Date.parse(artifact.created_at);
+        if (!Number.isFinite(createdAt)) throw new Error('Artifact creation time is missing');
+        const previous = plan.findIndex(item => item.channel === channel);
+        if (previous !== -1) {
+            if (plan[previous].revision !== revision) throw new Error('Conflicting publication revisions');
+            // Retries may expose more than one upload of the same revision.
+            // Prefer the latest creation time, with a deterministic tie-breaker.
+            const old = plan[previous];
+            if (old.createdAt > createdAt || (old.createdAt === createdAt && old.artifact >= artifact.id)) continue;
+            plan.splice(previous, 1);
+        }
+        plan.push({channel, revision, createdAt, artifact: artifact.id, run: run.id, action: 'deploy',
             environment: preview ? 'storybook-preview' : 'storybook-production', pr: pr?.number || 0});
     }
     return plan;

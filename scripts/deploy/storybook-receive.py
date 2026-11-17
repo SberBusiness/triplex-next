@@ -62,6 +62,7 @@ def main(scope, retain_assets_in_build=False):
     if (scope == 'preview') != is_preview:
         raise ValueError('Key is not authorized for this channel')
     os.umask(0o022)
+    BASE.mkdir(parents=True, exist_ok=True)
     with (BASE / 'deploy.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         public = PUBLIC / channel

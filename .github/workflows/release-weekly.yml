@@ -394,12 +394,14 @@ jobs:
     needs: [preflight, publish-react17]
     runs-on: ubuntu-latest
     outputs:
-      sha: ${{ steps.merge.outputs.sha }}
+      sha: ${{ steps.prepare.outputs.sha }}
+      branch: ${{ steps.prepare.outputs.branch }}
+      pr: ${{ steps.checks.outputs.pr }}
 
     steps:
       # Текущая вершина main, а не проверенный предполётом SHA: релизный
-      # коммит обязан лечь поверх вершины, иначе fast-forward в main
-      # невозможен. Что вершина не принесла ничего нового, проверяет
+      # коммит обязан лечь поверх вершины: перед слиянием проверяем,
+      # что база не изменилась. Что вершина не принесла ничего нового, проверяет
       # следующий шаг.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -542,52 +544,6 @@ jobs:
           # публиковать всё равно нечего.
           gh pr checks "${PR}" --repo "${GITHUB_REPOSITORY}" --required --watch --fail-fast
 
-      - name: Wait for human review and merge release PR
-        id: merge
-        timeout-minutes: 65
-        env:
-          GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
-          BRANCH: ${{ steps.prepare.outputs.branch }}
-          SHA: ${{ steps.prepare.outputs.sha }}
-          PR: ${{ steps.checks.outputs.pr }}
-        run: |
-          set -euo pipefail
-          echo "Релиз ждёт одобрения владельца кода: https://github.com/${GITHUB_REPOSITORY}/pull/${PR}"
-          echo "### Ожидается ревью [PR #${PR}](https://github.com/${GITHUB_REPOSITORY}/pull/${PR})" >> "$GITHUB_STEP_SUMMARY"
-          DEADLINE=$((SECONDS + 3600))
-          while true; do
-            STATE=$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json state,headRefOid,reviewDecision,mergeCommit)
-            [[ $(jq -r .headRefOid <<< "$STATE") == "$SHA" ]] || {
-              echo 'Вершина PR изменилась; требуется новый прогон проверок'; exit 1;
-            }
-            STATUS=$(jq -r .state <<< "$STATE")
-            if [[ "$STATUS" == MERGED ]]; then
-              MERGED=$(jq -r .mergeCommit.oid <<< "$STATE")
-              break
-            fi
-            [[ "$STATUS" == OPEN ]] || { echo 'Релизный PR закрыт без слияния'; exit 1; }
-            if [[ $(jq -r .reviewDecision <<< "$STATE") == APPROVED ]]; then
-              git fetch origin main --quiet
-              [[ $(git rev-parse origin/main) == $(git rev-parse "$SHA^") ]] || {
-                echo 'main изменился после подготовки релиза; слияние остановлено'; exit 1;
-              }
-              MERGED=$(gh api --method PUT "repos/${GITHUB_REPOSITORY}/pulls/${PR}/merge" \
-                -f sha="$SHA" -f merge_method=merge --jq .sha)
-              break
-            fi
-            if (( SECONDS >= DEADLINE )); then
-              echo 'За час ревью не получено. Одобрите PR и перезапустите упавшие jobs; новый коммит потребует повторного одобрения.'
-              exit 1
-            fi
-            sleep 30
-          done
-          [[ "$MERGED" =~ ^[a-f0-9]{40}$ ]]
-          git fetch origin "$MERGED" --quiet
-          git diff --exit-code "$SHA" "$MERGED" --
-          echo "sha=$MERGED" >> "$GITHUB_OUTPUT"
-          gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${BRANCH}" \
-            || echo 'Релиз опубликован в main; одноразовую ветку можно удалить вручную'
-
       # Ветку и PR после падения намеренно НЕ удаляем: в них лежит релизный
       # коммит и результаты проверок — то, по чему разбирают причину. Но
       # молча оставленный мусор через месяц уже никто не свяжет с релизом,
@@ -635,8 +591,117 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
 
-  publish-react18:
+  finalize-react18:
     needs: [preflight, prepare-react18]
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.merge.outputs.sha }}
+    steps:
+      # A retry after a successful merge must not repeat preparation on main.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.prepare-react18.outputs.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Wait for human review and merge release PR
+        id: merge
+        timeout-minutes: 65
+        env:
+          GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
+          BRANCH: ${{ needs.prepare-react18.outputs.branch }}
+          SHA: ${{ needs.prepare-react18.outputs.sha }}
+          PR: ${{ needs.prepare-react18.outputs.pr }}
+        run: |
+          set -euo pipefail
+          echo "Релиз ждёт одобрения владельца кода: https://github.com/${GITHUB_REPOSITORY}/pull/${PR}"
+          echo "### Ожидается ревью [PR #${PR}](https://github.com/${GITHUB_REPOSITORY}/pull/${PR})" >> "$GITHUB_STEP_SUMMARY"
+          DEADLINE=$((SECONDS + 3600))
+          while true; do
+            STATE=$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json state,headRefOid,reviewDecision,mergeCommit)
+            [[ $(jq -r .headRefOid <<< "$STATE") == "$SHA" ]] || {
+              echo 'Вершина PR изменилась; требуется новый прогон проверок'; exit 1;
+            }
+            STATUS=$(jq -r .state <<< "$STATE")
+            if [[ "$STATUS" == MERGED ]]; then
+              MERGED=$(jq -r .mergeCommit.oid <<< "$STATE")
+              break
+            fi
+            [[ "$STATUS" == OPEN ]] || { echo 'Релизный PR закрыт без слияния'; exit 1; }
+            if [[ $(jq -r .reviewDecision <<< "$STATE") == APPROVED ]]; then
+              # Server-side strict checks close the race between fetch and merge.
+              STRICT=$(gh api "repos/${GITHUB_REPOSITORY}/branches/main" --jq .protection.required_status_checks.strict)
+              [[ "$STRICT" == true ]] || { echo 'main must require an up-to-date branch before merging'; exit 1; }
+              git fetch origin main --quiet
+              [[ $(git rev-parse origin/main) == $(git rev-parse "$SHA^") ]] || {
+                echo 'main изменился после подготовки релиза; слияние остановлено'; exit 1;
+              }
+              MERGED=$(gh api --method PUT "repos/${GITHUB_REPOSITORY}/pulls/${PR}/merge" \
+                -f sha="$SHA" -f merge_method=merge --jq .sha)
+              break
+            fi
+            if (( SECONDS >= DEADLINE )); then
+              echo 'За час ревью не получено. Одобрите PR и перезапустите упавшие jobs; новый коммит потребует повторного одобрения.'
+              exit 1
+            fi
+            sleep 30
+          done
+          [[ "$MERGED" =~ ^[a-f0-9]{40}$ ]]
+          git fetch origin "$MERGED" --quiet
+          git diff --exit-code "$SHA" "$MERGED" --
+          echo "sha=$MERGED" >> "$GITHUB_OUTPUT"
+          gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${BRANCH}" \
+            || echo 'Релиз опубликован в main; одноразовую ветку можно удалить вручную'
+
+      # Ветку и PR после падения намеренно НЕ удаляем: в них лежит релизный
+      # коммит и результаты проверок — то, по чему разбирают причину. Но
+      # молча оставленный мусор через месяц уже никто не свяжет с релизом,
+      # поэтому пишем в summary, что именно осталось и что с этим делать.
+      # Джоба стартует только после публикации 0.Y.0, поэтому «ничего
+      # не опубликовано» здесь всегда про 1.Y.0 — так и пишем, иначе summary
+      # выглядит как «релиза не было», хотя половина уже вышла.
+      - name: Report leftovers on failure
+        if: failure()
+        env:
+          BRANCH: ${{ needs.prepare-react18.outputs.branch }}
+          PR: ${{ needs.prepare-react18.outputs.pr }}
+          V0: ${{ needs.preflight.outputs.v0 }}
+          VERSION: ${{ needs.preflight.outputs.version }}
+        run: |
+          set -u
+          if [ -z "${BRANCH}" ]; then
+            {
+              echo "### Релиз \`${VERSION}\` остановлен до создания релизной ветки"
+              echo ""
+              echo "Релизной ветки нет, \`${VERSION}\` не опубликована."
+              echo "\`${V0}\` уже опубликована — релиз выпущен наполовину,"
+              echo "см. docs/human/release.md § «Если релиз выпущен наполовину»."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          {
+            echo "### Релиз остановлен на проверках"
+            echo ""
+            echo "Осталось в репозитории:"
+            echo ""
+            echo "- ветка \`${BRANCH}\` с релизным коммитом"
+            if [ -n "${PR}" ]; then
+              echo "- PR #${PR} — в нём видно, какая проверка упала"
+            else
+              echo "- PR создать не успели"
+            fi
+            echo ""
+            echo "\`${VERSION}\` не опубликована (\`${V0}\` — уже). Почини причину"
+            echo "и перезапусти упавшие джобы: завершение использует тот же PR и SHA,"
+            echo "повторный бамп версии и force-push не выполняются."
+            echo "Если \`${VERSION}\` на этой неделе решено не выпускать — удали ветку"
+            echo "(PR закроется сам) и верни \`latest\` во внутреннем registry: он остался"
+            echo "на React 17-сборке — docs/human/release.md § «Если релиз выпущен наполовину»."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+
+  publish-react18:
+    needs: [preflight, finalize-react18]
     uses: ./.github/workflows/release.yml
     permissions:
       contents: write
@@ -646,7 +711,7 @@ jobs:
       target: main
       # Коммит слияния после ревью. Его дерево сверено с проверенным PR;
       # последующие изменения main в публикацию не попадут.
-      sha: ${{ needs.prepare-react18.outputs.sha }}
+      sha: ${{ needs.finalize-react18.outputs.sha }}
       make_latest: true
     secrets: inherit
 

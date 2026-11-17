@@ -101,7 +101,7 @@ jobs:
             bash trusted/scripts/deploy/storybook-remove.sh "$CHANNEL"
           fi
       - name: Publish to mirror
-        if: steps.current.outputs.result == 'true'
+        if: ${{ !cancelled() && steps.current.outputs.result == 'true' }}
         id: mirror
         continue-on-error: true
         env:

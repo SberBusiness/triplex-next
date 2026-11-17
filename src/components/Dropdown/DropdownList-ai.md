@@ -71,7 +71,8 @@ DropdownList.Background_Selected
 ## Accessibility
 
 - По умолчанию контейнер имеет `role="listbox"`, а `DropdownList.Item` — `role="option"`. Задай списку доступное имя через `aria-label` или `aria-labelledby`. Используй уникальные в документе `id` опций, чтобы связать их с активным потомком.
-- Фокус остаётся на управляющем элементе. В собственной композиции передай `context` из `useDropdownListKeyboard` в `DropdownListContext.Provider`, а `handleKeyDown` — в `onKeyDown` управляющего элемента. Используй `activeDescendant` для `aria-activedescendant` там, где роль управляющего элемента поддерживает этот атрибут. `ButtonDropdownExtended` и `SelectExtendedField` уже передают события клавиатуры списку.
+- Фокус остаётся на управляющем элементе. В собственной композиции передай `context` из `useDropdownListKeyboard` в `DropdownListContext.Provider`, а `handleKeyDown` — в `onKeyDown` управляющего элемента. `ButtonDropdownExtended` и `SelectExtendedField` уже передают события клавиатуры списку.
+- У управляющего элемента с `role="combobox"` задай доступное имя и `aria-expanded={opened}`. Пока список открыт, свяжи `aria-controls` управляющего элемента со стабильным `id` списка, а в `aria-activedescendant` передай `activeDescendant`. Готовая связка описана в [SelectField](../SelectField/SelectField-ai.md#accessibility). [WAI-ARIA 1.2](https://www.w3.org/TR/wai-aria-1.2/#aria-activedescendant)
 - `ArrowDown` и `ArrowUp` переводят активность по кругу. `Enter` и `Space` по умолчанию вызывают `onSelect` активной опции. Опция может переопределить клавиши через `keyCodesForSelection`. Для ввода текста используй только `Enter`, если пробел должен оставаться доступен для ввода.
 - Список вызывает `preventDefault()` для обработанных клавиш. Строка с лоадером исключена из клавиатурной навигации.
 
@@ -95,7 +96,7 @@ DropdownList.Background_Selected
 | Story | Example file | Что демонстрирует |
 |---|---|---|
 | `Playground` | `Playground.tsx` | Управление размером и загрузкой списка |
-| `Default` | `Default.tsx` | Подключение списка к управляющему элементу через `useDropdownListKeyboard` |
+| `Default` | `Default.tsx` | Передача клавиш от кнопки списку через `useDropdownListKeyboard` |
 | `Sizes` | `Sizes.tsx` | Размеры `SM`, `MD` и `LG` |
 | `Loading` | `Loading.tsx` | Строка загрузки после существующих опций |
 | `WithSelectedOption` | `WithSelectedOption.tsx` | Активность заранее выбранной опции при открытии |

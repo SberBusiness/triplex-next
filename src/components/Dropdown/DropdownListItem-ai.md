@@ -69,7 +69,7 @@ DropdownList.Color
 ## Accessibility
 
 - Корневой элемент по умолчанию имеет `role="option"` и `aria-selected`. Задай опции доступное имя текстом или `aria-label`, если содержимое состоит только из иконки.
-- Фокус остаётся на управляющем элементе. В собственной композиции настрой передачу клавиш через `useDropdownListKeyboard`, как в примере `Default`. Передавай `activeDescendant` в `aria-activedescendant`, если роль управляющего элемента поддерживает этот атрибут. [WAI-ARIA 1.2](https://www.w3.org/TR/wai-aria-1.2/#aria-activedescendant)
+- Фокус остаётся на управляющем элементе. Пример `Default` показывает передачу клавиш от кнопки через `useDropdownListKeyboard`. Чтобы скринридер озвучивал активную опцию, свяжи управляющий элемент со списком через `aria-controls` и `aria-activedescendant` по схеме для [DropdownList](DropdownList-ai.md#accessibility).
 - `Enter` и `Space` вызывают `onSelect` активной опции через список. `keyCodesForSelection` переопределяет этот набор. `onClick` получает событие мыши при клике по опции.
 
 ---

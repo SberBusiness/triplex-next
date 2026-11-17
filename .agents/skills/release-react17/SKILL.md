@@ -69,8 +69,11 @@ React 17-адаптации, а не случайный дрейф, поэтом
 
 ```bash
 git checkout release-0 && git pull origin release-0
-git merge origin/main
+git merge --no-commit --no-ff origin/main
 ```
+
+`--no-commit` останавливает слияние перед коммитом, даже если конфликтов нет:
+lock-файл и аудит (см. ниже) должны войти в сам коммит слияния.
 
 Мерж делается **напрямую в `release-0`, без PR** — осознанное исключение из
 общего правила, зафиксированное в [`docs/ai/commits.md`](../../../docs/ai/commits.md).
@@ -85,11 +88,61 @@ git merge origin/main
 | `package.json` — `version` | Не важно, перезапишется бампом на шаге 3 |
 | `package.json` — React-зависимости | **Всегда из `release-0`**: `react`/`react-dom` `17.0.2`, `@types/react`/`@types/react-dom` `17.0.2`, `@testing-library/react` `12.1.5`, `focus-trap-react` `10.3.0`, `react-resize-detector` `9.1.0`, `@types/react-transition-group` `4.4.9`, `peerDependencies` — `^16.8.0 \|\| ^17.0.0` |
 | `package.json` — всё остальное | Из main (новые/обновлённые зависимости, скрипты, конфиги) |
-| `package-lock.json` | Руками не разрешать. Взять любую сторону, затем перегенерировать: `npm install` |
+| `package-lock.json` | Руками не разрешать. Взять сторону main, перегенерировать `npm install`, затем проверить аудит — см. «Lock-файл и аудит» ниже |
 | `.github/workflows/release.yml`, `release-weekly.yml` | **Из main.** Копии в `release-0` не используются ни на одном пути: для события `release` GitHub берёт workflow из ветки по умолчанию, при `workflow_call` — из ветки вызывающего, а расписание живёт только в main. Брать main — значит сокращать расхождение |
 | `stories/release-notes/v0/*` | Из `release-0` (в main их нет) |
 | `stories/release-notes/v1/*` | Из main |
 | `src/**` | По принципу выше — см. известные адаптации ниже |
+
+### Lock-файл и аудит
+
+После того как `package.json` разрешён:
+
+```bash
+git checkout origin/main -- package-lock.json
+npm install
+npm audit --audit-level=high
+```
+
+Именно `origin/main --`, а не `--theirs`: `--theirs` выбирает сторону только
+у файла с конфликтом и молча оставляет результат автослияния, если git слил
+lock-файл сам.
+
+Сторона main, а не любая: в её lock-файле лежат исправления вложенных
+зависимостей, которых нет в `package.json` (результат `npm audit fix` и
+обновлений Dependabot). `npm install` при готовом lock-файле оставляет
+зафиксированные версии как есть, поэтому сторона `release-0` эти исправления
+теряет. 13.11.2026 перелитие дало в `release-0` 47 находок `npm audit`
+(10 high) при 34 без high в main.
+
+Если проверка аудита завершилась с ошибкой — `npm audit fix` и повторная
+проверка, пока число находок не перестанет меняться (одного прохода бывает
+мало). `--force` в `release-0` не используется: он поднимает мажорные версии
+и может сдвинуть React 17-зависимости.
+
+Если ошибка осталась, находки сравниваются с main по пакету и идентификатору
+advisory, а не по количеству. Команды — в
+[`docs/human/release.md`](../../../docs/human/release.md), шаг 4. Критерий —
+оба отчёта получены и сравнение ничего не выводит: в `release-0` нет high и critical сверх того,
+что есть в main. Общие с main находки чинятся в main; находка только
+в `release-0` поднимается прицельно (`npm update <пакет>`), а если она сидит
+в пакете, закреплённом ради React 17, — это решение мейнтейнера.
+
+После разрешения конфликтов и аудита слияние коммитится:
+
+```bash
+git add package.json package-lock.json
+git commit
+```
+
+`git add` обязателен: `git checkout origin/main -- package-lock.json` помечает
+файл как разрешённый, а `npm install`, `npm audit fix` и `npm update` меняют
+его уже после этого. Без `git add` в коммит уйдёт lock-файл main с React 18,
+а пересобранный останется незакоммиченным. После коммита `git status` должен
+быть чистым.
+
+Всё выше делается до этого коммита: зелёный прогон CI должен стоять
+на вершине `release-0`.
 
 ### Известные React 17-адаптации в `src/`
 
@@ -111,7 +164,8 @@ git merge origin/main
 
 ### Проверка на React 18-only API
 
-После разрешения конфликтов человек проходится по изменившимся файлам:
+После коммита слияния и до пуша человек проходится по изменившимся файлам
+(команда сравнивает `origin/release-0` с `HEAD`, до коммита диапазон пуст):
 
 ```bash
 git diff --name-only origin/release-0..HEAD -- src | \

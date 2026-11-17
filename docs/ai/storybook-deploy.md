@@ -85,7 +85,11 @@ Production-ключ не может менять preview; preview-ключ — �
 - `node --test scripts/deploy/test-storybook-publication.cjs` — разрешения
   по данным GitHub, подмена канала, устаревшие PR, чужие репозитории и теги.
 - `bash -n scripts/deploy/storybook.sh scripts/deploy/storybook-remove.sh`.
-- actionlint для workflow.
+- actionlint для workflow. Версия 1.7.12 пока не распознаёт `concurrency.queue`,
+  хотя [GitHub поддерживает `queue: max`](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-workflow-concurrency).
+  Для этой версии используй точечное исключение:
+  `actionlint -ignore 'unexpected key "queue" for "concurrency" section'`.
+  Когда линтер добавит поддержку `queue`, исключение можно убрать.
 - **Python security** запускает CodeQL security-extended и блокирует проверку
   при находках. SARIF доступен как артефакт `python-security-report`.
   Стандартный CodeQL продолжает проверять Actions и JavaScript/TypeScript.

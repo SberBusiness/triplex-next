@@ -138,7 +138,7 @@ export const Example: StoryObj<typeof Header> = {
 };
 
 export const VisualTests: StoryObj<typeof Header> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

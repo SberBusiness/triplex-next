@@ -258,7 +258,7 @@ export const Async: StoryObj<typeof SuggestField> = {
 };
 
 export const VisualTests: StoryObj<typeof SuggestField> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

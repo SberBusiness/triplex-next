@@ -212,7 +212,7 @@ const openModalPlay = async ({
 
 export const VisualTestsDefaultSize: StoryObj<typeof ModalWindow> = {
     name: "Visual tests: Default",
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: visualTestsStoryParameters,
     render: VisualTestsDefault,
     play: openModalPlay,
@@ -220,7 +220,7 @@ export const VisualTestsDefaultSize: StoryObj<typeof ModalWindow> = {
 
 export const VisualTestsSm: StoryObj<typeof ModalWindow> = {
     name: "Visual tests: Size SM",
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: visualTestsStoryParameters,
     render: VisualTestsSizeSm,
     play: openModalPlay,
@@ -228,7 +228,7 @@ export const VisualTestsSm: StoryObj<typeof ModalWindow> = {
 
 export const VisualTestsLg: StoryObj<typeof ModalWindow> = {
     name: "Visual tests: Size LG",
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: visualTestsStoryParameters,
     render: VisualTestsSizeLg,
     play: openModalPlay,
@@ -236,7 +236,7 @@ export const VisualTestsLg: StoryObj<typeof ModalWindow> = {
 
 export const VisualTestsWithLongContent: StoryObj<typeof ModalWindow> = {
     name: "Visual tests: Long Content",
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: visualTestsStoryParameters,
     render: VisualTestsLongContent,
     play: openModalPlay,
@@ -244,7 +244,7 @@ export const VisualTestsWithLongContent: StoryObj<typeof ModalWindow> = {
 
 export const VisualTestsLoadingState: StoryObj<typeof ModalWindow> = {
     name: "Visual tests: Loading",
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: visualTestsStoryParameters,
     render: VisualTestsLoading,
     play: openModalPlay,

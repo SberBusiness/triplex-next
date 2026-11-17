@@ -236,7 +236,7 @@ export const Example: StoryObj<typeof SelectField> = {
 };
 
 export const VisualTests: StoryObj<typeof SelectField> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

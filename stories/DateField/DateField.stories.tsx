@@ -173,7 +173,7 @@ export const Production: StoryObj<typeof DateField> = {
 };
 
 export const VisualTests: StoryObj<typeof DateField> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

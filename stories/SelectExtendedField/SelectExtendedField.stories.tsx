@@ -276,7 +276,7 @@ export const Example: StoryObj<typeof SelectExtendedField> = {
 };
 
 export const VisualTests: StoryObj<typeof SelectExtendedField> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

@@ -193,7 +193,7 @@ export const WithDropdown: StoryObj<typeof TabsExtended> = {
 };
 
 export const VisualTests: StoryObj<typeof TabsExtended> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

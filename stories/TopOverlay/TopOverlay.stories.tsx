@@ -110,7 +110,7 @@ export const WithConfirm: StoryObj<typeof TopOverlay> = {
 };
 
 export const VisualTests: StoryObj<typeof TopOverlay> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

@@ -192,7 +192,7 @@ export const Production: StoryObj<typeof AmountField> = {
 };
 
 export const VisualTests: StoryObj<typeof AmountField> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

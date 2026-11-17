@@ -157,7 +157,7 @@ export const VerticalMargins: StoryObj<typeof Page.Body> = {
 };
 
 export const VisualTests: StoryObj<typeof Page.Body> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

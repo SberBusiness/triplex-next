@@ -64,7 +64,7 @@ export const Example: StoryObj<typeof FormGroup> = {
 };
 
 export const VisualTests: StoryObj<typeof FormGroup> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

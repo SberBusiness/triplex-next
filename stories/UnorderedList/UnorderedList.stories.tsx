@@ -154,7 +154,7 @@ export const Sizes: StoryObj<typeof UnorderedList> = {
 };
 
 export const VisualTests: StoryObj<typeof UnorderedList> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

@@ -21,27 +21,44 @@ updates:
     # Мажоры в группы не входят намеренно: каждый приезжает отдельно и читается
     # отдельно, у них ломающие изменения. Исключение — группа vitest ниже.
     #
-    # Пакет попадает в первую подходящую группу, поэтому vitest объявлен
-    # раньше development: иначе development забрал бы его минорные обновления.
+    # Порядок групп в файле ни на что не влияет. Пакет, подходящий под несколько
+    # групп, Dependabot отдаёт самой «специфичной» (PatternSpecificityCalculator
+    # в dependabot-core): точное имя в patterns — 1000 очков, группа без
+    # patterns (production, development) — 500, маска вроде "@vitest/*" —
+    # меньше 100. Поэтому в группах ниже пакеты перечислены точными именами:
+    # маска проигрывает development, и пакет уходит из группы.
     groups:
       # vitest и @vitest/* держат друг друга на точной версии (peer
       # "vitest": "4.1.12", без ^): поставить можно только всех сразу, по одному
       # npm падает с ERESOLVE. Поэтому все обновления, включая мажоры, идут
       # одним PR. Мажор в группе — исключение из правила выше: одиночный PR
       # на мажор здесь не ставится в принципе.
+      #
+      # Добавляешь в devDependencies новый @vitest/* — допиши его сюда,
+      # в vitest-security и в exclude-patterns группы development.
+      # С 23.09 по 17.11.2026 здесь стояла маска "@vitest/*", и coverage-v8
+      # каждую неделю приезжал отдельным PR, а группа поднимала один vitest:
+      # оба PR падали с ERESOLVE.
       vitest:
-        patterns: ["vitest", "@vitest/*"]
+        patterns: ["vitest", "@vitest/coverage-v8"]
       # То же для security-обновлений: без группы Dependabot пришлёт
       # обновление одного пакета, и оно упадёт с ERESOLVE.
       vitest-security:
         applies-to: security-updates
-        patterns: ["vitest", "@vitest/*"]
+        patterns: ["vitest", "@vitest/coverage-v8"]
       production:
         dependency-type: production
         update-types: ["minor", "patch"]
+      # exclude-patterns обязателен, точных имён в группе vitest мало. Пока
+      # открыт PR группы development, Dependabot откладывает его и помечает
+      # обработанными всех её членов по dependency-type, без учёта
+      # специфичности. vitest и coverage-v8 — dev-зависимости, и группа
+      # vitest пропускалась: «already been handled by a previous group»
+      # (прогон 17.11.2026). PR development открыт почти всегда.
       development:
         dependency-type: development
         update-types: ["minor", "patch"]
+        exclude-patterns: ["vitest", "@vitest/coverage-v8"]
     # Выдержка перед обновлением: пакет, скомпрометированный через угон
     # аккаунта мейнтейнера, обычно вычищается из реестра за первые сутки-двое.
     # Неделя ожидания стоит нам недели отставания, а ловит целый класс атак
@@ -55,6 +72,13 @@ updates:
       # ошибка всплывёт только в рантайме. Сдвигать вместе с node-version.
       - dependency-name: "@types/node"
         versions: [">=23"]
+      # TypeScript 7 (компилятор на Go) не отдаёт JS API: require("typescript")
+      # возвращает только version, createProgram нет. На нём не работают
+      # vite-plugin-dts (генерация dist/index.d.ts), typescript-eslint
+      # (peer <6.1.0) и madge (peer ^5.4.4). PR #797 упал с ERESOLVE.
+      # Снять, когда все трое поддержат TS 7. Версию 6.x правило пропускает.
+      - dependency-name: "typescript"
+        versions: [">=7"]
     # Конвенция TRI-XXX на бота не распространяется, см. docs/ai/commits.md.
     commit-message:
       prefix: deps

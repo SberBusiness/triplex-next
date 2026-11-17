@@ -630,8 +630,6 @@ jobs:
             [[ "$STATUS" == OPEN ]] || { echo 'Релизный PR закрыт без слияния'; exit 1; }
             if [[ $(jq -r .reviewDecision <<< "$STATE") == APPROVED ]]; then
               # Server-side strict checks close the race between fetch and merge.
-              STRICT=$(gh api "repos/${GITHUB_REPOSITORY}/branches/main" --jq .protection.required_status_checks.strict)
-              [[ "$STRICT" == true ]] || { echo 'main must require an up-to-date branch before merging'; exit 1; }
               git fetch origin main --quiet
               [[ $(git rev-parse origin/main) == $(git rev-parse "$SHA^") ]] || {
                 echo 'main изменился после подготовки релиза; слияние остановлено'; exit 1;

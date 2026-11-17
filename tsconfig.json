@@ -1,6 +1,9 @@
 {
     "extends": "./tsconfig.build.json",
     "compilerOptions": {
+        // Обход ошибок TS2344 и TS2578 в декларациях @storybook/react 10.6.7.
+        // Сборка библиотеки проверяет декларации по tsconfig.build.json.
+        "skipLibCheck": true,
         "types": ["node", "@testing-library/jest-dom/vitest", "vitest/globals", "storybook/test"]
     },
     "include": ["src", "stories", "test-utils"]

@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { version } from "../package.json";
+import packageJson from "../package.json" with { type: "json" };
 
 /**
  * Все классы, которые не должны хешироваться.
@@ -36,7 +36,7 @@ function generateScopedName(name: string, fileName: string) {
     }
 
     const componentName = matchResult[1];
-    const hash = generateClassNameHash(componentName + name + version);
+    const hash = generateClassNameHash(componentName + name + packageJson.version);
 
     return `${name}__${hash}`;
 }

@@ -7,9 +7,7 @@ export interface IPlaygroundArgs extends Pick<IRadioXGroupProps, "indent"> {
     disabled: boolean;
 }
 
-export const Playground = ({ indent, radioSize, disabled }: IPlaygroundArgs) => {
-    const name = React.useId();
-
+export const Playground = ({ indent, radioSize, disabled, name }: IPlaygroundArgs & { name: string }) => {
     return (
         <RadioXGroup indent={indent} aria-label="Способ доставки">
             <Radio

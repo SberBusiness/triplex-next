@@ -424,9 +424,9 @@ jobs:
       - name: Deploy Storybook to server
         env:
           SSH_USER: ${{ secrets.STORYBOOK_SSH_USER }}
+          SSH_KNOWN_HOSTS: ${{ secrets.STORYBOOK_SSH_KNOWN_HOSTS_TRIPLEX_DEV }}
         run: |
-          ssh -o StrictHostKeyChecking=no "$SSH_USER" "mkdir -p $STORYBOOK_PREVIEW_BASE/releases/${RELEASE_TAG}"
-          rsync -avz --delete storybook-static/ "$SSH_USER:$STORYBOOK_PREVIEW_BASE/releases/${RELEASE_TAG}/"
+          bash scripts/deploy/storybook.sh "releases/$RELEASE_TAG"
 
       - name: Output Storybook URL
         run: echo "Storybook deployed ${STORYBOOK_URL_BASE}/releases/${RELEASE_TAG}"

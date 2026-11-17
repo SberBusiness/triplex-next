@@ -13,6 +13,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: storybook-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
 env:
   STORYBOOK_PREVIEW_BASE_TRIPLEX_DEV: "/var/www/storybook/data"
   STORYBOOK_URL_BASE_TRIPLEX_DEV: "https://storybook.triplex-dev.ru"
@@ -29,6 +33,9 @@ jobs:
           # Иначе токен оседает в .git/config, а ниже выполняется npm ci —
           # lifecycle-скрипты зависимостей смогли бы его прочитать.
           persist-credentials: false
+
+      - name: Test deployment receiver
+        run: python3 -m unittest discover -s scripts/deploy -p 'test_*.py'
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
@@ -65,10 +72,10 @@ jobs:
         continue-on-error: true
         env:
           SSH_USER: ${{ secrets.STORYBOOK_SSH_USER_TRIPLEX_DEV }}
+          SSH_KNOWN_HOSTS: ${{ secrets.STORYBOOK_SSH_KNOWN_HOSTS_TRIPLEX_DEV }}
           PREVIEW_DIR: ${{ steps.vars.outputs.preview_dir }}
         run: |
-          ssh -o StrictHostKeyChecking=no "$SSH_USER" "mkdir -p \"$STORYBOOK_PREVIEW_BASE_TRIPLEX_DEV/$PREVIEW_DIR\""
-          rsync -avz --delete storybook-static/ "$SSH_USER:$STORYBOOK_PREVIEW_BASE_TRIPLEX_DEV/$PREVIEW_DIR/"
+          bash scripts/deploy/storybook.sh "$PREVIEW_DIR"
 
       - name: Deploy Storybook to triplex-design
         id: deploy_design
@@ -81,7 +88,7 @@ jobs:
           rsync -avz --delete storybook-static/ "$SSH_USER:$STORYBOOK_PREVIEW_BASE_TRIPLEX_DESIGN/$PREVIEW_DIR/"
 
       # Репорт результатов: warning на каждый упавший сервер,
-      # job падает только если недоступны ОБА сервера.
+      # Новый основной сервер должен обновиться; второе зеркало независимо.
       - name: Report deploy results
         if: always()
         run: |
@@ -100,7 +107,7 @@ jobs:
             echo "::warning::Деплой на triplex-design не удался (outcome=$design)"
           fi
 
-          if [[ "$dev" != "success" && "$design" != "success" ]]; then
-            echo "::error::Оба сервера недоступны — деплой не выполнен ни на один из них"
+          if [[ "$dev" != "success" ]]; then
+            echo "::error::Основной сервер triplex-dev не обновлён"
             exit 1
           fi

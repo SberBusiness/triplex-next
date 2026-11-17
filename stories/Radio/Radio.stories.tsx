@@ -124,7 +124,7 @@ export const States: TStory = {
             source: { code: StatesSource, language: "tsx" },
         },
     },
-    render: StatesRender,
+    render: () => <StatesRender name="radio-states" />,
 };
 
 export const WithoutLabel: TStory = {

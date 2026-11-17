@@ -9,6 +9,7 @@ import { TextFieldBase } from "../../TextField/TextFieldBase";
 import { FormFieldInput, FormFieldClear, EFormFieldStatus } from "../../FormField";
 import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
 import { DropdownListContext, useDropdownListKeyboard } from "../../Dropdown";
+import { useDropdownOpenCallbacks } from "../../Dropdown/useDropdownOpenCallbacks";
 import { DataTestId } from "../../../consts/DataTestId";
 import { SuggestFieldDesktopDropdown } from "./SuggestFieldDesktopDropdown";
 
@@ -41,6 +42,9 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
     renderDropdownList,
     renderDropdownListItem,
     inputProps,
+    // Свойства шторки нужны только мобильному варианту, а колбэки открытия вызывает сам компонент:
+    // в DropdownDesktop они ушли бы в DOM, а кастомному renderDropdown пришлось бы их обрабатывать.
+    dropdownProps: { pullerProps, onOpen: onDropdownOpen, onClose: onDropdownClose, ...dropdownDesktopProps } = {},
     ...restProps
 }: ISuggestFieldDesktopProps<T>) => {
     const [inputValue, setInputValue] = useState(value?.label ?? "");
@@ -185,11 +189,14 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
         }
     }
 
+    // Фактическое состояние открытия выпадающего списка: без опций он не показывается.
+    const dropdownActuallyOpen = dropdownOpen && options.length !== 0;
+
+    useDropdownOpenCallbacks(dropdownActuallyOpen, onDropdownOpen, onDropdownClose);
+
     const renderSuggestField = () => {
         const Input = renderInput ?? FormFieldInput;
         const Dropdown = renderDropdown ?? SuggestFieldDesktopDropdown;
-        // Фактическое состояние открытия выпадающего списка.
-        const dropdownActuallyOpen = dropdownOpen && options.length !== 0;
 
         return (
             <TextFieldBase
@@ -225,6 +232,7 @@ export const SuggestFieldDesktop = <T extends ISuggestFieldOption = ISuggestFiel
                 />
                 <DropdownListContext.Provider value={dropdownListContext}>
                     <Dropdown
+                        {...dropdownDesktopProps}
                         value={value}
                         options={options}
                         size={size}

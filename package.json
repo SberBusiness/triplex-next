@@ -63,6 +63,7 @@
         "@storybook/addon-themes": "10.6.7",
         "@storybook/react-vite": "10.6.7",
         "@storybook/test-runner": "0.24.5",
+        "@testing-library/jest-dom": "6.9.1",
         "@testing-library/react": "16.3.3",
         "@testing-library/user-event": "14.6.8",
         "@types/big.js": "7.0.0",

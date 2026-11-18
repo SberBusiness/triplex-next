@@ -14,6 +14,52 @@ SHA = 'a' * 40
 
 
 class PublishGuardTests(unittest.TestCase):
+    def test_recovery_exception_cannot_recreate_a_missing_release(self):
+        steps = yaml.safe_load(WORKFLOW.read_text())['jobs']['build-and-publish']['steps']
+        step = next(step for step in steps if step.get('name') == 'Create GitHub Release')
+        self.assertEqual(step['env']['RECOVERY_ONLY'], "${{ steps.compatibility.outputs.recovery == 'true' }}")
+        self.assertEqual(next(step for step in steps if step.get('name') == 'Check workflow compatibility for GitHub Release')['id'], 'compatibility')
+        script = '''set -euo pipefail
+git() { [[ "$*" == 'rev-parse HEAD' ]] || return 99; printf '%s' "$TEST_SHA"; }
+gh() {
+  [[ "$*" == 'api repos/test/repo/releases/tags/1.99.0' ]] || return 99
+  printf '%s' "$TEST_RELEASE"; return "$TEST_EXIT"
+}
+''' + step['run'].split('# Пустой notes', 1)[0] + '\necho must-not-reach-creation\n'
+        for case in ('published', 'missing', 'draft', 'wrong_tag'):
+            with self.subTest(case=case):
+                info = {'tag_name': '0.99.0' if case == 'wrong_tag' else '1.99.0',
+                        'draft': case == 'draft', 'published_at': '2026-01-01T00:00:00Z'}
+                result = subprocess.run(['bash', '-c', script], capture_output=True, text=True, timeout=5,
+                                        env=dict(os.environ, GITHUB_REPOSITORY='test/repo', RELEASE_TAG='1.99.0',
+                                        RECOVERY_ONLY='true', TEST_SHA=SHA, TEST_RELEASE=json.dumps(info),
+                                        TEST_EXIT='1' if case == 'missing' else '0'))
+                self.assertEqual(result.returncode == 0, case == 'published', result.stdout + result.stderr)
+                self.assertNotIn('must-not-reach-creation', result.stdout)
+
+    def test_mcp_eligibility_uses_actual_release_prerelease_flag(self):
+        steps = yaml.safe_load(WORKFLOW.read_text())['jobs']['build-and-publish']['steps']
+        step = next(step for step in steps if step.get('name') == 'Detect MCP bundle eligibility')
+        script = '''set -euo pipefail
+gh() {
+  [[ "$*" == "api repos/test/repo/releases/tags/${RELEASE_TAG} --jq .prerelease" ]] || return 99
+  printf '%s' "$TEST_PRERELEASE"; return "$TEST_EXIT"
+}
+''' + step['run']
+        for version, prerelease, code, expected in (
+            ('1.99.0', 'false', 0, 'true'), ('1.99.0', 'true', 0, 'false'),
+            ('0.99.0', 'false', 0, 'false'), ('0.99.0', 'true', 0, 'false'),
+            ('1.99.0', 'null', 0, None), ('1.99.0', '', 1, None),
+        ):
+            with self.subTest(version=version, prerelease=prerelease), tempfile.TemporaryDirectory() as directory:
+                output = Path(directory) / 'output'
+                result = subprocess.run(['bash', '-c', script], capture_output=True, text=True, timeout=5,
+                                        env=dict(os.environ, GITHUB_REPOSITORY='test/repo', RELEASE_TAG=version,
+                                        TEST_PRERELEASE=prerelease, TEST_EXIT=str(code), GITHUB_OUTPUT=str(output)))
+                self.assertEqual(result.returncode == 0, expected is not None, result.stdout + result.stderr)
+                self.assertEqual(output.read_text() if output.exists() else '',
+                                 f'eligible={expected}\n' if expected is not None else '')
+
     def test_asset_uploads_never_create_a_release(self):
         steps = yaml.safe_load(WORKFLOW.read_text())['jobs']['build-and-publish']['steps']
         for name, filename in (('Upload build artifacts to GitHub Release', 'dist-1.99.0.zip'),
@@ -53,7 +99,8 @@ curl() {
         release = {'tag_name': '0.99.0', 'draft': False, 'published_at': '2026-01-01T00:00:00Z'}
         manifest = {'name': '@sberbusiness/triplex-next', 'version': '0.99.0', 'gitHead': SHA}
         for case in ('matching', 'draft', 'unpublished', 'wrong_tag', 'wrong_sha', 'unknown_sha', 'network'):
-            with self.subTest(case=case):
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as directory:
+                output = Path(directory) / 'output'
                 info, package = dict(release), dict(manifest)
                 if case == 'draft':
                     info['draft'] = True
@@ -67,8 +114,9 @@ curl() {
                                         env=dict(os.environ, GITHUB_REPOSITORY='test/repo', RELEASE_TAG='0.99.0',
                                         RELEASE_INFO_TEST=json.dumps(info), MANIFEST_TEST=json.dumps(package),
                                         TAG_SHA_TEST='b' * 40 if case == 'wrong_tag' else SHA,
-                                        CHECKOUT_SHA_TEST=SHA, CURL_EXIT_TEST='1' if case == 'network' else '0'))
+                                        CHECKOUT_SHA_TEST=SHA, CURL_EXIT_TEST='1' if case == 'network' else '0', GITHUB_OUTPUT=str(output)))
                 self.assertEqual(result.returncode == 0, case == 'matching', result.stdout + result.stderr)
+                self.assertEqual(output.read_text() if output.exists() else '', 'recovery=true\n' if case == 'matching' else '')
 
     def test_all_publication_paths_recheck_tags_and_share_a_version_queue(self):
         workflow = yaml.safe_load(WORKFLOW.read_text())

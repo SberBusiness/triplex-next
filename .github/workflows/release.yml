@@ -209,6 +209,7 @@ jobs:
       # GITHUB_TOKEN cannot create a release whose target has different workflow
       # files from the default branch. Stop before npm publishes an immutable version.
       - name: Check workflow compatibility for GitHub Release
+        id: compatibility
         if: github.event_name != 'release'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -222,6 +223,7 @@ jobs:
             [ "$TAG_SHA" = "$CHECKOUT_SHA" ] &&
             MANIFEST=$(curl -fsS --max-time 30 -H 'Cache-Control: no-cache' "https://registry.npmjs.org/@sberbusiness%2Ftriplex-next/${RELEASE_TAG}" 2>/dev/null) &&
             jq -e --arg tag "$RELEASE_TAG" --arg sha "$CHECKOUT_SHA" '.name == "@sberbusiness/triplex-next" and .version == $tag and .gitHead == $sha' <<< "$MANIFEST" >/dev/null; then
+            echo 'recovery=true' >> "$GITHUB_OUTPUT"
             echo 'Release, тег и npm-версия подтверждают SHA checkout: разрешено восстановление ассетов.'
             exit 0
           fi
@@ -394,11 +396,21 @@ jobs:
         if: github.event_name != 'release'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RECOVERY_ONLY: ${{ steps.compatibility.outputs.recovery == 'true' }}
           NOTES: ${{ inputs.notes }}
           MAKE_LATEST: ${{ inputs.make_latest }}
         run: |
           # Checkout has already pinned the build; never resolve a moving branch again.
           TARGET=$(git rev-parse HEAD)
+          if [ "${RECOVERY_ONLY:-false}" = true ]; then
+            if RECOVERY_RELEASE=$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}" 2>/dev/null) &&
+              jq -e --arg tag "$RELEASE_TAG" '.tag_name == $tag and .draft == false and .published_at != null' <<< "$RECOVERY_RELEASE" >/dev/null; then
+              echo 'Режим восстановления: используем существующий опубликованный Release.'
+              exit 0
+            fi
+            echo '❌ Подтверждённый Release больше не доступен; режим восстановления не создаёт Release заново.'
+            exit 1
+          fi
           # Пустой notes — собрать из MDX рядом, по канону
           # .agents/skills/release/SKILL.md § «Преобразование MDX → release notes».
           # Так вызывающему не нужно тащить многокилобайтный текст через входы.
@@ -452,11 +464,12 @@ jobs:
       - name: Detect MCP bundle eligibility
         id: mcp
         env:
-          # На пути workflow_dispatch поля release нет — релиз мы создаём сами
-          # и всегда как стабильный, поэтому prerelease по умолчанию false.
-          IS_PRERELEASE: ${{ github.event.release.prerelease || false }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [[ "${IS_PRERELEASE}" == "false" && "${RELEASE_TAG}" =~ ^1\.[0-9]+\.0$ ]]; then
+          # Read the actual Release on every trigger, including manual recovery.
+          IS_PRERELEASE=$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}" --jq .prerelease)
+          case "$IS_PRERELEASE" in true|false) ;; *) echo 'Неизвестен статус prerelease'; exit 1 ;; esac
+          if [[ "$IS_PRERELEASE" == false && "$RELEASE_TAG" =~ ^1\.[0-9]+\.0$ ]]; then
             echo "eligible=true" >> "$GITHUB_OUTPUT"
           else
             echo "eligible=false" >> "$GITHUB_OUTPUT"

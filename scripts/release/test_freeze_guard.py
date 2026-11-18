@@ -23,6 +23,7 @@ git() { [[ "$*" == 'rev-parse HEAD' ]] || return 99; printf '%s' "$TEST_CHECKOUT
 ''' + classification
         cases = (
             ('HTTP/2.0 200 OK\r\n\r\n{"sha":"' + 'a' * 40 + '"}', 0, True),
+            ('HTTP/2.0 200 OK\n\n{"sha":"' + 'a' * 40 + '"}', 0, True),
             ('HTTP/2.0 200 OK\n\n{"sha":"' + 'b' * 40 + '"}', 0, False),
             ('HTTP/2.0 404 Not Found\n\n{}', 1, True),
             ('HTTP/2.0 403 Forbidden\n\n{}', 1, False),
@@ -38,6 +39,8 @@ git() { [[ "$*" == 'rev-parse HEAD' ]] || return 99; printf '%s' "$TEST_CHECKOUT
                                         RELEASE_TAG='0.99.0', SHA='', TEST_CHECKOUT_SHA='a' * 40, REQUIRE_TAG=str(required).lower(),
                                         TEST_RESPONSE=response, TEST_EXIT=str(code)))
                 self.assertEqual(result.returncode == 0, succeeds and not (required and code == 1), result.stdout + result.stderr)
+                if 'b' * 40 in response:
+                    self.assertIn('уже есть и указывает на bbbbbbbb, а собираем aaaaaaaa', result.stdout)
 
     def test_release_status_distinguishes_not_found_from_api_failure(self):
         workflow = Path(__file__).resolve().parents[2] / '.github/workflows/release-freeze-guard.yml'

@@ -22,20 +22,24 @@ class PublishGuardTests(unittest.TestCase):
         script = '''set -euo pipefail
 git() { [[ "$*" == 'rev-parse HEAD' ]] || return 99; printf '%s' "$TEST_SHA"; }
 gh() {
+  printf '%s\n' "$*" >> "$GH_CALLS"
   [[ "$*" == 'api repos/test/repo/releases/tags/1.99.0' ]] || return 99
   printf '%s' "$TEST_RELEASE"; return "$TEST_EXIT"
 }
-''' + step['run'].split('# Пустой notes', 1)[0] + '\necho must-not-reach-creation\n'
+''' + step['run'] + '\necho must-not-reach-creation\n'
         for case in ('published', 'missing', 'draft', 'wrong_tag'):
-            with self.subTest(case=case):
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as directory:
+                calls = Path(directory) / 'gh-calls'
                 info = {'tag_name': '0.99.0' if case == 'wrong_tag' else '1.99.0',
                         'draft': case == 'draft', 'published_at': '2026-01-01T00:00:00Z'}
-                result = subprocess.run(['bash', '-c', script], capture_output=True, text=True, timeout=5,
+                result = subprocess.run(['bash', '-c', script], cwd=directory, capture_output=True, text=True, timeout=5,
                                         env=dict(os.environ, GITHUB_REPOSITORY='test/repo', RELEASE_TAG='1.99.0',
                                         RECOVERY_ONLY='true', TEST_SHA=SHA, TEST_RELEASE=json.dumps(info),
-                                        TEST_EXIT='1' if case == 'missing' else '0'))
+                                        TEST_EXIT='1' if case == 'missing' else '0', GH_CALLS=str(calls),
+                                        NOTES='Test notes', MAKE_LATEST='true'))
                 self.assertEqual(result.returncode == 0, case == 'published', result.stdout + result.stderr)
                 self.assertNotIn('must-not-reach-creation', result.stdout)
+                self.assertNotIn('release create', calls.read_text())
 
     def test_mcp_eligibility_uses_actual_release_prerelease_flag(self):
         steps = yaml.safe_load(WORKFLOW.read_text())['jobs']['build-and-publish']['steps']
@@ -146,37 +150,57 @@ curl() {
         publish = next(step for step in steps if step.get('name') == 'Publish to npm')
         self.assertEqual(publish['env']['RECOVERY_ONLY'], "${{ steps.compatibility.outputs.recovery == 'true' }}")
         commands = publish['run']
-        guard = 'BUILD_SHA=' + commands.split('BUILD_SHA=', 1)[1].split('# Порядок половин', 1)[0]
         script = '''set -euo pipefail
-git() { [[ "$*" == 'rev-parse HEAD' ]] || return 99; printf '%s' "$TEST_SHA"; }
+git() {
+  printf '%s\n' "$*" >> "$GIT_CALLS"
+  case "$*" in
+    'rev-parse HEAD') printf '%s' "$TEST_SHA" ;;
+    '-C .. fetch --no-tags --depth=1 origin HEAD') return "$FETCH_EXIT" ;;
+    '-C .. diff --quiet HEAD FETCH_HEAD -- .github/workflows') return "$DIFF_EXIT" ;;
+    *) return 99 ;;
+  esac
+}
+node() { echo 0.99.0; }
 npm() {
+  printf '%s\n' "$*" >> "$NPM_CALLS"
   if [[ "$*" == "pkg set gitHead=${TEST_SHA}" ]]; then return 0; fi
+  if [[ "$*" == 'publish --access public --tag react17' ]]; then return 0; fi
   [[ "$*" == 'view @sberbusiness/triplex-next@0.99.0 --json --prefer-online --registry=https://registry.npmjs.org' ]] || return 99
   printf '%s' "$TEST_METADATA"; return "$TEST_EXIT"
 }
-''' + guard + '\nprintf "new-version"\n'
+''' + commands
         metadata = {'name': '@sberbusiness/triplex-next', 'version': '0.99.0', 'gitHead': SHA}
-        for data, code, recovery, expected in (
-            (metadata, 0, False, 'existing'),
-            (metadata, 0, True, 'existing'),
-            ({**metadata, 'gitHead': 'b' * 40}, 0, False, 'stop'),
-            ({**metadata, 'gitHead': None}, 0, False, 'stop'),
-            ({**metadata, 'version': '0.98.0'}, 0, False, 'stop'),
-            ({'error': {'code': 'E404'}}, 1, False, 'new'),
-            ({'error': {'code': 'E404'}}, 1, True, 'stop'),
-            ({'error': {'code': 'E503'}}, 1, False, 'stop'),
-            ({}, 0, False, 'stop'),
+        missing = {'error': {'code': 'E404'}}
+        for data, code, recovery, event, fetch, diff, expected in (
+            (metadata, 0, False, 'workflow_dispatch', 0, 0, 'existing'),
+            (metadata, 0, True, 'workflow_dispatch', 0, 0, 'existing'),
+            ({**metadata, 'gitHead': 'b' * 40}, 0, False, 'workflow_dispatch', 0, 0, 'stop'),
+            ({**metadata, 'gitHead': None}, 0, False, 'workflow_dispatch', 0, 0, 'stop'),
+            ({**metadata, 'version': '0.98.0'}, 0, False, 'workflow_dispatch', 0, 0, 'stop'),
+            (missing, 1, False, 'workflow_dispatch', 0, 0, 'new'),
+            (missing, 1, True, 'workflow_dispatch', 0, 0, 'stop'),
+            (missing, 1, False, 'workflow_dispatch', 0, 1, 'stop'),
+            (missing, 1, False, 'workflow_dispatch', 1, 0, 'stop'),
+            (missing, 1, False, 'release', 1, 1, 'new'),
+            ({'error': {'code': 'E503'}}, 1, False, 'workflow_dispatch', 0, 0, 'stop'),
+            ({}, 0, False, 'workflow_dispatch', 0, 0, 'stop'),
         ):
-            with self.subTest(data=data), tempfile.TemporaryDirectory() as directory:
+            with self.subTest(data=data, recovery=recovery, event=event, fetch=fetch, diff=diff), tempfile.TemporaryDirectory() as directory:
                 output = Path(directory) / 'output'
-                result = subprocess.run(['bash', '-c', script], capture_output=True, text=True, timeout=5,
+                calls, git_calls = Path(directory) / 'npm-calls', Path(directory) / 'git-calls'
+                (Path(directory) / 'dist').mkdir()
+                result = subprocess.run(['bash', '-c', script], cwd=directory, capture_output=True, text=True, timeout=5,
                                         env=dict(os.environ, TEST_SHA=SHA, TEST_METADATA=json.dumps(data),
                                         TEST_EXIT=str(code), RELEASE_TAG='0.99.0', GITHUB_OUTPUT=str(output),
-                                        RECOVERY_ONLY=str(recovery).lower()))
+                                        RECOVERY_ONLY=str(recovery).lower(), NPM_CALLS=str(calls), GIT_CALLS=str(git_calls),
+                                        GITHUB_EVENT_NAME=event, FETCH_EXIT=str(fetch), DIFF_EXIT=str(diff)))
                 self.assertEqual(result.returncode == 0, expected != 'stop', result.stdout + result.stderr)
                 self.assertEqual(output.read_text() if output.exists() else '',
-                                 'published=false\n' if expected == 'existing' else '')
-                self.assertEqual('new-version' in result.stdout, expected == 'new')
+                                 {'existing': 'published=false\n', 'new': 'published=true\n', 'stop': ''}[expected])
+                publications = [call for call in calls.read_text().splitlines() if call.startswith('publish ')]
+                self.assertEqual(publications, ['publish --access public --tag react17'] if expected == 'new' else [])
+                if event == 'release':
+                    self.assertNotIn('fetch ', git_calls.read_text())
 
     def test_workflow_difference_stops_before_npm_and_release_uses_checkout_sha(self):
         steps = yaml.safe_load(WORKFLOW.read_text())['jobs']['build-and-publish']['steps']
@@ -188,10 +212,24 @@ npm() {
         self.assertIs(guard.get('continue-on-error', False), False)
         target_script = '''set -euo pipefail
 git() { [[ "$*" == 'rev-parse HEAD' ]] || return 99; printf '%s' "$TEST_SHA"; }
-''' + release['run'].split('# Пустой notes', 1)[0] + '\nprintf "%s" "$TARGET"\n'
-        result = subprocess.run(['bash', '-c', target_script], capture_output=True, text=True, timeout=5,
-                                check=True, env=dict(os.environ, TARGET='moving-branch', TEST_SHA=SHA))
-        self.assertEqual(result.stdout, SHA)
+gh() {
+  printf '%s\n' "$*" >> "$GH_CALLS"
+  case "$*" in
+    'release view 0.99.0') return 1 ;;
+    'release create '*) return 0 ;;
+    *) return 99 ;;
+  esac
+}
+''' + release['run']
+        with tempfile.TemporaryDirectory() as directory:
+            calls = Path(directory) / 'gh-calls'
+            subprocess.run(['bash', '-c', target_script], cwd=directory, capture_output=True, text=True, timeout=5,
+                           check=True, env=dict(os.environ, TARGET='moving-branch', TEST_SHA=SHA,
+                           NOTES='Test release notes', MAKE_LATEST='false', RECOVERY_ONLY='false',
+                           RELEASE_TAG='0.99.0', GH_CALLS=str(calls)))
+            self.assertEqual(calls.read_text().splitlines(), [
+                'release view 0.99.0',
+                f'release create 0.99.0 --target {SHA} --title 0.99.0 --latest=false --notes-file release-notes.md'])
         script = '''set -euo pipefail
 gh() { [[ "$*" == 'api repos/test/repo --jq .default_branch' ]] || return 99; echo main; }
 git() {

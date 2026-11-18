@@ -361,6 +361,17 @@ jobs:
               done
               ;;
           esac
+          # main may have changed during the build or the paired-version wait.
+          # Fetch the remote default branch again immediately before publication.
+          # A remaining race requires the same-SHA recovery documented below.
+          if [ "$GITHUB_EVENT_NAME" != release ]; then
+            git -C .. fetch --no-tags --depth=1 origin HEAD
+            if ! git -C .. diff --quiet HEAD FETCH_HEAD -- .github/workflows; then
+              echo '❌ Workflow-файлы основной ветки изменились перед npm publish; публикация остановлена.'
+              echo 'Восстановление: docs/human/release.md, «Если проверка публикации остановила выпуск».'
+              exit 1
+            fi
+          fi
           # 0.Y.0 публикуется под своим dist-tag, 1.Y.0 — под дефолтным latest.
           #
           # Раньше обе половины шли без `--tag`: npm 10 молча уводил `latest`

@@ -87,10 +87,17 @@ lock-файл и аудит (см. ниже) должны войти в сам �
 | `package.json` — React-зависимости | **Всегда из `release-0`**: `react`/`react-dom` `17.0.2`, `@types/react`/`@types/react-dom` `17.0.2`, `@testing-library/react` `12.1.5`, `focus-trap-react` `10.3.0`, `react-resize-detector` `9.1.0`, `@types/react-transition-group` `4.4.9`, `peerDependencies` — `^16.8.0 \|\| ^17.0.0` |
 | `package.json` — всё остальное | Из main (новые/обновлённые зависимости, скрипты, конфиги) |
 | `package-lock.json` | Руками не разрешать. Взять сторону main, перегенерировать `npm install`, затем проверить аудит — см. «Lock-файл и аудит» ниже |
-| `.github/workflows/release.yml`, `release-weekly.yml` | **Из main.** Копии в `release-0` не используются ни на одном пути: для события `release` GitHub берёт workflow из ветки по умолчанию, при `workflow_call` — из ветки вызывающего, а расписание живёт только в main. Брать main — значит сокращать расхождение |
+| `.github/workflows/` целиком | **Из main**, включая добавленные и удалённые файлы. Перед слиянием синхронизации каталог должен полностью совпадать с main: иначе GITHUB_TOKEN не сможет создать Release |
 | `stories/release-notes/v0/*` | Из `release-0` (в main их нет) |
 | `stories/release-notes/v1/*` | Из main |
 | `src/**` | По принципу выше — см. известные адаптации ниже |
+
+До коммита синхронизации перенеси и проверь весь каталог workflow:
+
+```bash
+git restore --source=origin/main --staged --worktree -- .github/workflows
+git diff --quiet origin/main -- .github/workflows
+```
 
 ### Lock-файл и аудит
 
@@ -193,6 +200,7 @@ gh release view <V0> 2>&1 | head -3
 gh release view <V1> 2>&1 | head -3
 git show "${PREFLIGHT_RELEASE0_SHA}:package.json" | grep -m1 '"version"'
 git merge-base --is-ancestor "$PREFLIGHT_MAIN_SHA" "$PREFLIGHT_RELEASE0_SHA"
+git diff --quiet "$PREFLIGHT_MAIN_SHA" "$PREFLIGHT_RELEASE0_SHA" -- .github/workflows
 ```
 
 Проверки — при провале остановись и сообщи разработчику:

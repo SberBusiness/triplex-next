@@ -66,6 +66,12 @@ on:
         default: ""
         type: string
 
+# Shared by manual and reusable calls; distinct from Weekly release's group.
+concurrency:
+  group: release-package-${{ github.event.release.tag_name || inputs.tag }}
+  cancel-in-progress: false
+  queue: max
+
 permissions:
   contents: write   # нужно для создания релиза и загрузки ассетов
   id-token: write   # OIDC-токен для trusted publishing в npm (см. шаг Publish to npm)
@@ -152,26 +158,6 @@ jobs:
               ahead|identical) ;;
               *) echo "❌ sha=${SHA} не лежит в ветке ${TARGET} (compare: '${STATUS:-ошибка}')."; exit 1 ;;
             esac
-
-            # Уже существующий тег `gh release create --target` не двигает:
-            # релиз повис бы на чужом коммите, а пакет ушёл бы из SHA.
-            # Совпадающий тег — штатно: повторный прогон после создания релиза.
-            # Только HTTP 404 подтверждает отсутствие тега. Ошибка API или
-            # неожиданный ответ останавливают выпуск до публикации пакета.
-            TAG_SHA=""
-            if TAG_RESPONSE=$(gh api --include "repos/${GITHUB_REPOSITORY}/commits/refs/tags/${RELEASE_TAG}" 2>/dev/null); then
-              TAG_SHA=$(printf '%s\n' "$TAG_RESPONSE" | awk 'body {print} /^\r?$/ {body=1}' |
-                jq -er '.sha | select(type == "string" and test("^[0-9a-f]{40}$"))') || {
-                echo '❌ Не удалось прочитать SHA существующего тега; публикация остановлена.'; exit 1;
-              }
-            elif [ "$(printf '%s\n' "$TAG_RESPONSE" | awk 'NR==1 && /^HTTP\// {print $2}')" != 404 ]; then
-              echo '❌ Статус тега неизвестен из-за ошибки API; повторите запрос до публикации.'; exit 1
-            fi
-            if [ -n "${TAG_SHA}" ] && [ "${TAG_SHA}" != "${SHA}" ]; then
-              echo "❌ тег ${RELEASE_TAG} уже есть и указывает на ${TAG_SHA:0:8}, а собираем ${SHA:0:8}."
-              echo "   Релиз повис бы не на опубликованном коммите. Разберись с тегом до публикации."
-              exit 1
-            fi
           fi
 
       # При `release: published` GITHUB_SHA — коммит, на который повешен тег,
@@ -189,6 +175,32 @@ jobs:
           ref: ${{ inputs.sha || inputs.target || github.sha }}
           # workflow не пушит в репозиторий; gh получает токен через env явно
           persist-credentials: false
+
+      - &validate-release-tag
+        name: Validate release tag against checkout
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          SHA=$(git rev-parse HEAD)
+          # Уже существующий тег `gh release create --target` не двигает:
+          # релиз повис бы на чужом коммите, а пакет ушёл бы из SHA.
+          # Совпадающий тег — штатно: повторный прогон после создания релиза.
+          # Только HTTP 404 подтверждает отсутствие тега. Ошибка API или
+          # неожиданный ответ останавливают дальнейшие этапы выпуска.
+          TAG_SHA=""
+          if TAG_RESPONSE=$(gh api --include "repos/${GITHUB_REPOSITORY}/commits/refs/tags/${RELEASE_TAG}" 2>/dev/null); then
+            TAG_SHA=$(printf '%s\n' "$TAG_RESPONSE" | awk 'body {print} /^\r?$/ {body=1}' |
+              jq -er '.sha | select(type == "string" and test("^[0-9a-f]{40}$"))') || {
+              echo '❌ Не удалось прочитать SHA существующего тега; дальнейшие этапы остановлены.'; exit 1;
+            }
+          elif [ "$(printf '%s\n' "$TAG_RESPONSE" | awk 'NR==1 && /^HTTP\// {print $2}')" != 404 ]; then
+            echo '❌ Статус тега неизвестен из-за ошибки API; повторите запрос перед продолжением.'; exit 1
+          fi
+          if [ -n "${TAG_SHA}" ] && [ "${TAG_SHA}" != "${SHA}" ]; then
+            echo "❌ тег ${RELEASE_TAG} уже есть и указывает на ${TAG_SHA:0:8}, а собираем ${SHA:0:8}."
+            echo "   Релиз повис бы не на опубликованном коммите. Разберись с тегом перед продолжением выпуска."
+            exit 1
+          fi
 
       # GITHUB_TOKEN cannot create a release whose target has different workflow
       # files from the default branch. Stop before npm publishes an immutable version.
@@ -356,6 +368,8 @@ jobs:
       #
       # Значения идут через env, а не через ${{ }} прямо в run: их задаёт тот,
       # кто запускает workflow, и подстановка в shell была бы точкой инъекции.
+      - *validate-release-tag
+
       - name: Create GitHub Release
         if: github.event_name != 'release'
         env:
@@ -397,6 +411,9 @@ jobs:
               "${LATEST_FLAG}" --notes-file release-notes.md
           fi
           rm -f release-notes.md
+
+      # Detect a conflicting tag created during the API call before uploading assets.
+      - *validate-release-tag
 
       # Упаковать dist.zip как release asset.
       - name: Create dist.zip

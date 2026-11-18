@@ -12,14 +12,14 @@ class FreezeGuardTests(unittest.TestCase):
         workflow = Path(__file__).resolve().parents[2] / '.github/workflows/release.yml'
         jobs = yaml.safe_load(workflow.read_text())['jobs']
         commands = next(step['run'] for step in jobs['build-and-publish']['steps']
-                        if step.get('name') == 'Validate release inputs')
-        classification = commands.split('TAG_SHA=""', 1)[1].rsplit('\nfi', 1)[0]
+                        if step.get('name') == 'Validate release tag against checkout')
+        classification = commands
         script = '''set -euo pipefail
 gh() {
   [[ "$*" == "api --include repos/test/repo/commits/refs/tags/0.99.0" ]] || return 99
   printf '%s\\n' "$TEST_RESPONSE"; return "$TEST_EXIT"
 }
-TAG_SHA=""
+git() { [[ "$*" == 'rev-parse HEAD' ]] || return 99; printf '%s' "$TEST_CHECKOUT_SHA"; }
 ''' + classification
         for response, code, succeeds in (
             ('HTTP/2.0 200 OK\r\n\r\n{"sha":"' + 'a' * 40 + '"}', 0, True),
@@ -34,7 +34,8 @@ TAG_SHA=""
             with self.subTest(response=response):
                 result = subprocess.run(['bash', '-c', script], check=False, capture_output=True,
                                         text=True, timeout=5, env=dict(os.environ, GITHUB_REPOSITORY='test/repo',
-                                        RELEASE_TAG='0.99.0', SHA='a' * 40, TEST_RESPONSE=response, TEST_EXIT=str(code)))
+                                        RELEASE_TAG='0.99.0', SHA='', TEST_CHECKOUT_SHA='a' * 40,
+                                        TEST_RESPONSE=response, TEST_EXIT=str(code)))
                 self.assertEqual(result.returncode == 0, succeeds, result.stdout + result.stderr)
 
     def test_release_status_distinguishes_not_found_from_api_failure(self):

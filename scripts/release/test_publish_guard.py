@@ -14,6 +14,23 @@ SHA = 'a' * 40
 
 
 class PublishGuardTests(unittest.TestCase):
+    def test_all_publication_paths_recheck_tags_and_share_a_version_queue(self):
+        workflow = yaml.safe_load(WORKFLOW.read_text())
+        self.assertEqual(workflow['concurrency'], {
+            'group': 'release-package-${{ github.event.release.tag_name || inputs.tag }}',
+            'cancel-in-progress': False, 'queue': 'max'})
+        steps = workflow['jobs']['build-and-publish']['steps']
+        positions = [i for i, step in enumerate(steps) if step.get('name') == 'Validate release tag against checkout']
+        self.assertEqual(len(positions), 3)
+        publish = next(i for i, step in enumerate(steps) if step.get('name') == 'Publish to npm')
+        release = next(i for i, step in enumerate(steps) if step.get('name') == 'Create GitHub Release')
+        assets = next(i for i, step in enumerate(steps) if step.get('name') == 'Create dist.zip')
+        self.assertTrue(positions[0] < publish < positions[1] < release < positions[2] < assets)
+        for position in positions:
+            self.assertNotIn('if', steps[position])
+            self.assertIs(steps[position].get('continue-on-error', False), False)
+            self.assertEqual(steps[position]['run'], steps[positions[0]]['run'])
+
     def test_existing_npm_version_must_match_the_checked_out_commit(self):
         steps = yaml.safe_load(WORKFLOW.read_text())['jobs']['build-and-publish']['steps']
         commands = next(step['run'] for step in steps if step.get('name') == 'Publish to npm')
@@ -53,6 +70,7 @@ npm() {
         release = next(step for step in steps if step.get('name') == 'Create GitHub Release')
         self.assertLess(steps.index(guard), steps.index(publish))
         self.assertEqual(guard['if'], "github.event_name != 'release'")
+        self.assertIs(guard.get('continue-on-error', False), False)
         target_script = '''set -euo pipefail
 git() { [[ "$*" == 'rev-parse HEAD' ]] || return 99; printf '%s' "$TEST_SHA"; }
 ''' + release['run'].split('# Пустой notes', 1)[0] + '\nprintf "%s" "$TARGET"\n'

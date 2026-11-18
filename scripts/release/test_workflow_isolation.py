@@ -10,6 +10,14 @@ import yaml
 WORKFLOW = Path(__file__).resolve().parents[2] / '.github/workflows/release-weekly.yml'
 
 
+def find_checkout(job):
+    return next(step for step in job['steps'] if step.get('uses', '').startswith('actions/checkout@'))
+
+
+def find_release_step(job):
+    return next(step for step in job['steps'] if step.get('run', '').strip() == 'bash scripts/release/open-pr.sh')
+
+
 def assert_isolated(job, expected_command):
     steps = job['steps']
     checkouts = [step for step in steps if step.get('uses', '').startswith('actions/checkout@')]
@@ -21,7 +29,7 @@ def assert_isolated(job, expected_command):
     assert len(release_steps) == 1
     release_step = release_steps[0]
     assert release_step.get('env', {}).get('GH_TOKEN') == '${{ secrets.DUDIM_AI_GH_TOKEN }}'
-    for scope in (job, release_step):
+    for scope in (job, checkouts[0], release_step):
         assert 'if' not in scope
         assert scope.get('continue-on-error', False) is False
     for step in steps:
@@ -44,9 +52,10 @@ class WorkflowIsolationTests(unittest.TestCase):
 
     def test_guard_rejects_missing_checkout_options_and_project_execution(self):
         job = yaml.safe_load(WORKFLOW.read_text())['jobs']['open-react17']
+        job['steps'].insert(0, {'run': 'echo harmless preparation'})
         for option in ('ref', 'persist-credentials'):
             bad = deepcopy(job)
-            del bad['steps'][0]['with'][option]
+            del find_checkout(bad)['with'][option]
             with self.subTest(option=option), self.assertRaises(AssertionError):
                 assert_isolated(bad, 'bash scripts/release/open-pr.sh')
         for step in ({'run': 'npm ci'}, {'uses': 'actions/cache@some-sha'},
@@ -66,19 +75,20 @@ class WorkflowIsolationTests(unittest.TestCase):
 
     def test_release_step_owns_token_and_cannot_be_skipped_or_ignored(self):
         job = yaml.safe_load(WORKFLOW.read_text())['jobs']['open-react17']
+        job['steps'].insert(0, {'run': 'echo harmless preparation'})
         bad = deepcopy(job)
-        bad['steps'][0]['env'] = {'GH_TOKEN': bad['steps'][1]['env'].pop('GH_TOKEN')}
+        find_checkout(bad)['env'] = {'GH_TOKEN': find_release_step(bad)['env'].pop('GH_TOKEN')}
         with self.assertRaises(AssertionError):
             assert_isolated(bad, 'bash scripts/release/open-pr.sh')
-        for level in ('job', 'step'):
+        for level in ('job', 'step', 'checkout'):
             for key, value in (('if', 'false'), ('continue-on-error', True)):
                 bad = deepcopy(job)
-                scope = bad if level == 'job' else bad['steps'][1]
+                scope = bad if level == 'job' else (find_checkout(bad) if level == 'checkout' else find_release_step(bad))
                 scope[key] = value
                 with self.subTest(level=level, key=key), self.assertRaises(AssertionError):
                     assert_isolated(bad, 'bash scripts/release/open-pr.sh')
         bad = deepcopy(job)
-        bad['steps'][1]['run'] = 'bash scripts/release/finalize-pr.sh'
+        find_release_step(bad)['run'] = 'bash scripts/release/finalize-pr.sh'
         with self.assertRaises(AssertionError):
             assert_isolated(bad, 'bash scripts/release/open-pr.sh')
         job['steps'].append({'if': 'failure()', 'run': 'echo failure'})

@@ -137,6 +137,11 @@ jobs:
             exit 0
           fi
 
+          # Check before preparing/merging a version bump, not only at publication.
+          if ! git diff --quiet origin/main origin/release-0 -- .github/workflows; then
+            fail "каталог .github/workflows в release-0 должен полностью совпадать с main; исправьте PR синхронизации"
+          fi
+
           # CI зелёный ровно на вершине release-0.
           TIP=$(git rev-parse origin/release-0)
           RUN=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/ci.yml/runs?branch=release-0&per_page=1" \

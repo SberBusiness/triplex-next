@@ -157,6 +157,7 @@ jobs:
             echo "|---|---|"
             echo "| Выпускаем | \`${V0}\`, затем \`${VERSION}\` |"
             echo "| main | \`${CURRENT}\` |"
+            echo "| main SHA | \`$(git rev-parse origin/main)\` |"
             echo "| release-0 | \`${R0}\`, CI зелёный на \`${TIP:0:8}\` |"
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -373,38 +374,8 @@ jobs:
           GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
           BRANCH: ${{ steps.bump.outputs.branch }}
           VERSION: ${{ needs.preflight.outputs.v0 }}
-        run: |
-          set -eu
-          find_pr() {
-            gh pr list --repo "${GITHUB_REPOSITORY}" --head "${BRANCH}" --base release-0 \
-              --state open --json number --jq '.[0].number // empty'
-          }
-
-          # Перезапуск прогона после падения не должен плодить PR.
-          PR=$(find_pr)
-          if [ -z "${PR}" ]; then
-            gh pr create --repo "${GITHUB_REPOSITORY}" --base release-0 --head "${BRANCH}" \
-              --title "Подготовка релиза ${VERSION}" \
-              --body "Релизный коммит еженедельного прогона. После успешных проверок требуется одобрение владельца кода. Затем workflow выполнит обычное слияние PR без обхода защиты."
-            PR=$(find_pr)
-          fi
-          [ -n "${PR}" ] || { echo "❌ PR для ветки ${BRANCH} не создан"; exit 1; }
-          echo "PR #${PR}"
-          echo "pr=${PR}" >> "$GITHUB_OUTPUT"
-
-          # Прогоны регистрируются не мгновенно. Различаем по коду выхода
-          # `gh pr checks`: 0 — все зелёные, 8 — проверки есть и ещё идут,
-          # прочее (включая 1 — «no checks reported») — ждём дальше.
-          for _ in $(seq 1 30); do
-            gh pr checks "${PR}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1 && break
-            [ $? -eq 8 ] && break
-            sleep 10
-          done
-
-          # --required: сторонние контексты (preview Storybook) на релиз
-          # не влияют. --fail-fast: упавшая проверка останавливает ожидание,
-          # публиковать всё равно нечего.
-          gh pr checks "${PR}" --repo "${GITHUB_REPOSITORY}" --required --watch --fail-fast
+          BASE_BRANCH: release-0
+        run: bash scripts/release/open-pr.sh
 
   finalize-react17:
     needs: [preflight, prepare-react17]
@@ -430,9 +401,11 @@ jobs:
         run: bash scripts/release/finalize-pr.sh
       - name: Report stopped React 17 release
         if: failure()
+        env:
+          PR: ${{ needs.prepare-react17.outputs.pr }}
         run: |
           echo '### React 17 ещё не опубликована' >> "$GITHUB_STEP_SUMMARY"
-          echo 'PR и ветка сохранены. При истечении ожидания одобрите PR и повторите failed jobs; при изменении main или release-0 см. docs/human/release.md.' >> "$GITHUB_STEP_SUMMARY"
+          echo "Проверьте состояние PR #${PR}. При истечении ожидания одобрите PR и повторите failed jobs. Если PR уже слит, продолжайте текущий прогон без нового бампа; при изменении main или release-0 см. docs/human/release.md." >> "$GITHUB_STEP_SUMMARY"
 
 
   publish-react17:
@@ -577,38 +550,8 @@ jobs:
           GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
           BRANCH: ${{ steps.prepare.outputs.branch }}
           VERSION: ${{ needs.preflight.outputs.version }}
-        run: |
-          set -eu
-          find_pr() {
-            gh pr list --repo "${GITHUB_REPOSITORY}" --head "${BRANCH}" --base main \
-              --state open --json number --jq '.[0].number // empty'
-          }
-
-          # Перезапуск прогона после падения не должен плодить PR.
-          PR=$(find_pr)
-          if [ -z "${PR}" ]; then
-            gh pr create --repo "${GITHUB_REPOSITORY}" --base main --head "${BRANCH}" \
-              --title "Подготовка релиза ${VERSION}" \
-              --body "Релизный коммит еженедельного прогона. После успешных проверок требуется одобрение владельца кода. Затем workflow выполнит обычное слияние PR без обхода защиты."
-            PR=$(find_pr)
-          fi
-          [ -n "${PR}" ] || { echo "❌ PR для ветки ${BRANCH} не создан"; exit 1; }
-          echo "PR #${PR}"
-          echo "pr=${PR}" >> "$GITHUB_OUTPUT"
-
-          # Прогоны регистрируются не мгновенно. Различаем по коду выхода
-          # `gh pr checks`: 0 — все зелёные, 8 — проверки есть и ещё идут,
-          # прочее (включая 1 — «no checks reported») — ждём дальше.
-          for _ in $(seq 1 30); do
-            gh pr checks "${PR}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1 && break
-            [ $? -eq 8 ] && break
-            sleep 10
-          done
-
-          # --required: сторонние контексты (preview Storybook) на релиз
-          # не влияют. --fail-fast: упавшая проверка останавливает ожидание,
-          # публиковать всё равно нечего.
-          gh pr checks "${PR}" --repo "${GITHUB_REPOSITORY}" --required --watch --fail-fast
+          BASE_BRANCH: main
+        run: bash scripts/release/open-pr.sh
 
       # Ветку и PR после падения намеренно НЕ удаляем: в них лежит релизный
       # коммит и результаты проверок — то, по чему разбирают причину. Но

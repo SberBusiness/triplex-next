@@ -24,15 +24,19 @@ if args[:2] == ['pr', 'view']:
     n = int(count.read_text()) if count.exists() else 0
     count.write_text(str(n + 1))
     merged = case == 'already_merged' or (root / 'merged').exists()
+    if not (case == 'wait' and n == 0):
+        (root / 'approved').touch()
     print(json.dumps({
+        'isCrossRepository': case == 'fork',
         'headRefOid': 'b' * 40 if case == 'wrong_head' else os.environ['SHA'],
         'headRefName': 'unexpected' if case == 'wrong_branch' else os.environ['BRANCH'],
-        'baseRefName': 'unexpected' if case == 'wrong_base' else os.environ['BASE_BRANCH'],
+        'baseRefName': 'unexpected' if case == 'wrong_base' or (case == 'retargeted' and n > 0) else os.environ['BASE_BRANCH'],
         'state': 'MERGED' if merged else ('CLOSED' if case == 'closed' else 'OPEN'),
         'reviewDecision': 'REVIEW_REQUIRED' if case == 'wait' and n == 0 else 'APPROVED',
         'mergeCommit': {'oid': 'c' * 40},
     }))
 elif args[:3] == ['api', '--method', 'PUT']:
+    assert (root / 'approved').exists(), 'merge before approval'
     assert 'sha=' + os.environ['SHA'] in args
     assert 'merge_method=merge' in args
     if case == 'server_rejected':
@@ -61,6 +65,10 @@ elif args[0] == 'diff':
     if '--quiet' in args:
         if case == 'main_moved' or (case == 'main_moved_during_merge' and (root / 'merged').exists()):
             sys.exit(1)
+elif args[0] == 'merge-base':
+    assert args[1:] == ['--is-ancestor', 'c' * 40, 'origin/' + os.environ['BASE_BRANCH']]
+    if case == 'not_in_base':
+        sys.exit(1)
 elif args[:3] == ['fetch', 'origin', 'c' * 40] and case == 'retry_after_merge':
     failed = root / 'fetch_failed'
     if not failed.exists():
@@ -72,7 +80,7 @@ elif args[0] not in ('fetch', 'cat-file'):
 
 
 class FinalizeReleaseTests(unittest.TestCase):
-    def run_case(self, case, base='main', succeeds=True, merges=True, retry=False, **overrides):
+    def run_case(self, case, base='main', succeeds=True, merges=True, retry=False, no_github=False, **overrides):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             commands = root / 'bin'
@@ -101,6 +109,8 @@ class FinalizeReleaseTests(unittest.TestCase):
             self.assertEqual((root / 'merged').exists(), merges)
             log = root / 'commands'
             calls = [json.loads(line) for line in log.read_text().splitlines()] if log.exists() else []
+            if no_github:
+                self.assertFalse(any(call[0] == 'gh' for call in calls))
             self.assertFalse(any('--admin' in call or call[:2] == ['git', 'push'] for call in calls))
             if succeeds or retry:
                 self.assertEqual((root / 'output').read_text(), f'sha={MERGED}\n')
@@ -118,7 +128,7 @@ class FinalizeReleaseTests(unittest.TestCase):
 
     def test_changed_or_closed_pr_never_merges(self):
         for base in ('main', 'release-0'):
-            for case in ('wrong_head', 'wrong_branch', 'wrong_base', 'closed', 'base_moved', 'server_rejected'):
+            for case in ('wrong_head', 'wrong_branch', 'wrong_base', 'fork', 'retargeted', 'closed', 'base_moved', 'server_rejected'):
                 with self.subTest(base=base, case=case):
                     self.run_case(case, base, succeeds=False, merges=False)
 
@@ -126,6 +136,7 @@ class FinalizeReleaseTests(unittest.TestCase):
         for base in ('main', 'release-0'):
             with self.subTest(base=base):
                 self.run_case('merge_changed_content', base, succeeds=False)
+                self.run_case('not_in_base', base, succeeds=False)
 
     def test_already_merged_pr_is_not_merged_again(self):
         for base in ('main', 'release-0'):
@@ -145,8 +156,8 @@ class FinalizeReleaseTests(unittest.TestCase):
         for overrides in ({'BASE_BRANCH': 'feature'}, {'SHA': 'bad'}, {'PR': '-1'},
                           {'BRANCH': 'main'}, {'BRANCH': 'prerelease-0.99.0'}):
             with self.subTest(overrides=overrides):
-                self.run_case('approved', succeeds=False, merges=False, **overrides)
-        self.run_case('approved', 'release-0', succeeds=False, merges=False, VERIFIED_MAIN='')
+                self.run_case('approved', succeeds=False, merges=False, no_github=True, **overrides)
+        self.run_case('approved', 'release-0', succeeds=False, merges=False, no_github=True, VERIFIED_MAIN='')
 
 
 if __name__ == '__main__':

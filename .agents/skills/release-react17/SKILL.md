@@ -184,6 +184,7 @@ git diff --name-only origin/release-0..HEAD -- src | \
 ```bash
 git status --porcelain
 git fetch origin main release-0
+PREFLIGHT_MAIN_SHA=$(git rev-parse origin/main)
 gh release view <V0> 2>&1 | head -3
 gh release view <V1> 2>&1 | head -3
 git show origin/release-0:package.json | grep -m1 '"version"'
@@ -374,7 +375,11 @@ git push -u origin prerelease-<V0>
 Получить SHA слияния из PR, fetch этого SHA и проверить
 `git diff --exit-code <PREPARED_SHA> <MERGED_SHA> --`. Публиковать только
 `MERGED_SHA`, чтобы новые коммиты в ветке не попали в релиз после ревью.
-Если проверка не прошла — не создавать GitHub Release.
+После слияния повторно выполнить `git fetch origin main release-0`, проверить
+`git merge-base --is-ancestor <MERGED_SHA> origin/release-0` и
+`git diff --exit-code "$PREFLIGHT_MAIN_SHA" origin/main --`. Это повторная
+сверка заморозки перед публикацией. При отказе любой проверки — не создавать
+GitHub Release; восстановление описано в `docs/human/release.md`.
 
 ## 6. Выпуск: GitHub Release
 

@@ -26,17 +26,22 @@ check_main() {
   fi
 }
 
+read_pr() {
+  STATE=$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" \
+    --json state,headRefOid,headRefName,baseRefName,isCrossRepository,reviewDecision,mergeCommit)
+  [[ $(jq -r .headRefOid <<< "$STATE") == "$SHA" &&
+     $(jq -r .headRefName <<< "$STATE") == "$BRANCH" &&
+     $(jq -r .baseRefName <<< "$STATE") == "$BASE_BRANCH" &&
+     $(jq -r .isCrossRepository <<< "$STATE") == false ]] || {
+    echo 'Вершина или ветки PR изменились; требуется новая подготовка и ревью'; exit 1;
+  }
+}
+
 echo "Релиз ждёт одобрения владельца кода: https://github.com/${GITHUB_REPOSITORY}/pull/${PR}"
 echo "### Ожидается ревью [PR #${PR}](https://github.com/${GITHUB_REPOSITORY}/pull/${PR}) → ${BASE_BRANCH}" >> "$GITHUB_STEP_SUMMARY"
 DEADLINE=$((SECONDS + 3600))
 while true; do
-  STATE=$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" \
-    --json state,headRefOid,headRefName,baseRefName,reviewDecision,mergeCommit)
-  [[ $(jq -r .headRefOid <<< "$STATE") == "$SHA" &&
-     $(jq -r .headRefName <<< "$STATE") == "$BRANCH" &&
-     $(jq -r .baseRefName <<< "$STATE") == "$BASE_BRANCH" ]] || {
-    echo 'Вершина или ветки PR изменились; требуется новая подготовка и ревью'; exit 1;
-  }
+  read_pr
   STATUS=$(jq -r .state <<< "$STATE")
   if [[ "$STATUS" == MERGED ]]; then
     MERGED=$(jq -r .mergeCommit.oid <<< "$STATE")
@@ -52,6 +57,10 @@ while true; do
       exit 1
     }
     check_main
+    # Narrow the retarget/review race; GitHub still enforces protection at merge.
+    read_pr
+    [[ $(jq -r .state <<< "$STATE") == OPEN &&
+       $(jq -r .reviewDecision <<< "$STATE") == APPROVED ]] || continue
     MERGED=$(gh api --method PUT "repos/${GITHUB_REPOSITORY}/pulls/${PR}/merge" \
       -f sha="$SHA" -f merge_method=merge --jq .sha)
     break
@@ -66,6 +75,10 @@ done
 [[ "$MERGED" =~ ^[a-f0-9]{40}$ ]] || exit 1
 git fetch origin "$MERGED" --quiet
 git diff --exit-code "$SHA" "$MERGED" --
+git fetch origin "$BASE_BRANCH" --quiet
+git merge-base --is-ancestor "$MERGED" "origin/$BASE_BRANCH" || {
+  echo 'Коммит слияния отсутствует в целевой ветке; публикация остановлена'; exit 1;
+}
 # Also checked on retries after a successful merge, before handing off to publish.
 check_main
 echo "sha=$MERGED" >> "$GITHUB_OUTPUT"

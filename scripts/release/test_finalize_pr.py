@@ -64,6 +64,8 @@ elif args[0] == 'diff':
         if case == 'main_moved' or (case == 'main_moved_during_merge' and (root / 'merged').exists()):
             sys.exit(1)
 elif args[0] == 'merge-base':
+    if args[2:] == [os.environ['SHA'], 'c' * 40]:
+        sys.exit(1 if case == 'squash_merge' else 0)
     assert args[1:] == ['--is-ancestor', 'c' * 40, 'origin/' + os.environ['BASE_BRANCH']]
     assert (root / 'base_fetched_after_merge').exists(), 'stale target branch'
     if case == 'not_in_base':
@@ -149,6 +151,11 @@ class FinalizeReleaseTests(unittest.TestCase):
         for base in ('main', 'release-0'):
             with self.subTest(base=base):
                 self.run_case('already_merged', base, merges=False)
+
+    def test_squash_merge_stops_before_publication(self):
+        for base in ('main', 'release-0'):
+            with self.subTest(base=base):
+                self.run_case('squash_merge', base, succeeds=False)
 
     def test_retry_after_merge_does_not_prepare_or_merge_again(self):
         for base in ('main', 'release-0'):

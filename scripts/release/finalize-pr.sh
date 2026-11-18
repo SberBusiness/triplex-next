@@ -74,6 +74,11 @@ done
 
 [[ "$MERGED" =~ ^[a-f0-9]{40}$ ]] || exit 1
 git fetch origin "$MERGED" --quiet
+if ! git cat-file -e "${SHA}^{commit}" 2>/dev/null || ! git merge-base --is-ancestor "$SHA" "$MERGED"; then
+  echo 'Исходный SHA не входит в историю слияния: возможно, PR слит через squash/rebase.'
+  echo 'Публикация остановлена; не повторяйте бамп. См. docs/human/release.md: «Если релизный PR слит через squash/rebase».'
+  exit 1
+fi
 git diff --exit-code "$SHA" "$MERGED" --
 git fetch origin "$BASE_BRANCH" --quiet
 git merge-base --is-ancestor "$MERGED" "origin/$BASE_BRANCH" || {

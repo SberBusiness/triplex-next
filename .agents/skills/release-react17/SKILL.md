@@ -252,10 +252,36 @@ git fetch origin main release-0 || exit 1
 [[ $(git rev-parse origin/main) == "$PREFLIGHT_MAIN_SHA" ]] || exit 1
 [[ $(git rev-parse origin/release-0) == "$PREFLIGHT_RELEASE0_SHA" ]] || exit 1
 STATE_FILE="$(git rev-parse --git-path "triplex-release-${V0}-main-sha")"
-( set -o noclobber; printf '%s\n' "$PREFLIGHT_MAIN_SHA" > "$STATE_FILE" ) || {
+( set -o noclobber; printf '%s %s\n' "$PREFLIGHT_MAIN_SHA" "$PREFLIGHT_RELEASE0_SHA" > "$STATE_FILE" ) || {
   echo 'Состояние уже начатой подготовки существует: продолжите прежнюю попытку'; exit 1;
 }
 ```
+
+**Если сеанс прервался после сохранения, но до создания ветки:** прочитай
+оба SHA из файла (это данные, не shell-скрипт). Старый файл только с одним
+SHA не перезаписывай: остановись для восстановления исходной попытки
+мейнтейнером. Имя файла сохранено для защиты от повторного предполёта:
+
+```bash
+STATE_FILE="$(git rev-parse --git-path "triplex-release-${V0:?}-main-sha")"
+read -r PREFLIGHT_MAIN_SHA PREFLIGHT_RELEASE0_SHA < "$STATE_FILE" || exit 1
+[[ "$PREFLIGHT_MAIN_SHA" =~ ^[a-f0-9]{40}$ && "$PREFLIGHT_RELEASE0_SHA" =~ ^[a-f0-9]{40}$ ]] || exit 1
+git fetch origin main release-0 || exit 1
+[[ $(git rev-parse origin/main) == "$PREFLIGHT_MAIN_SHA" ]] || exit 1
+[[ $(git rev-parse origin/release-0) == "$PREFLIGHT_RELEASE0_SHA" ]] || exit 1
+```
+
+Если вершины не изменились и локальной/удалённой `prerelease-<V0>` и её PR
+ещё нет, переходи к шагу 2. Если ветка или PR уже есть — продолжай именно
+её подготовку/ревью, не повторяй бамп. Если вершины изменились, новый
+предполёт допустим только после подтверждения отсутствия локальной ветки,
+удалённой ветки и любого PR этой попытки (включая закрытый и слитый).
+Проверь их через `git show-ref`, успешный `git ls-remote origin
+refs/heads/prerelease-<V0>` и успешный `gh pr list --state all --head
+prerelease-<V0> --base release-0`. Ошибка запроса не означает отсутствие.
+Лишь в этом случае сохрани старый файл как архив вне пути `STATE_FILE`
+и начни предусловия заново. При наличии следов подготовки или сомнениях
+остановись и передай восстановление мейнтейнеру.
 
 ## 2. Создать релизную ветку от `release-0` и прогнать гейты
 
@@ -395,8 +421,8 @@ git push -u origin prerelease-<V0>
 
 ```bash
 STATE_FILE="$(git rev-parse --git-path "triplex-release-${V0:?}-main-sha")"
-PREFLIGHT_MAIN_SHA=$(cat "$STATE_FILE") || exit 1
-[[ "$PREFLIGHT_MAIN_SHA" =~ ^[a-f0-9]{40}$ ]] || exit 1
+read -r PREFLIGHT_MAIN_SHA PREFLIGHT_RELEASE0_SHA < "$STATE_FILE" || exit 1
+[[ "$PREFLIGHT_MAIN_SHA" =~ ^[a-f0-9]{40}$ && "$PREFLIGHT_RELEASE0_SHA" =~ ^[a-f0-9]{40}$ ]] || exit 1
 git cat-file -e "${PREFLIGHT_MAIN_SHA}^{commit}" || exit 1
 ```
 

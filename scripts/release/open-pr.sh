@@ -87,6 +87,20 @@ for _ in $(seq 1 30); do
       <<< "$CHECKS" >/dev/null || {
       echo 'Не все обязательные проверки завершились успешно'; exit 1;
     }
+    # Read the head and its rollup together: checks on a newer PR head cannot
+    # certify the commit prepared by this release attempt.
+    SNAPSHOT=$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json headRefOid,statusCheckRollup)
+    jq -e --arg sha "$SHA" --argjson expected "$REQUIRED" '
+      .headRefOid == $sha and
+      (.statusCheckRollup | map({name: (.name // .context),
+        passed: (if .__typename == "CheckRun" then
+          .status == "COMPLETED" and .conclusion == "SUCCESS"
+          else .state == "SUCCESS" end)}) |
+        (($expected - [.[].name]) | length == 0) and
+        all(.[]; . as $check | if $expected | index($check.name) then $check.passed else true end))
+    ' <<< "$SNAPSHOT" >/dev/null || {
+      echo 'Итоговые проверки не подтверждают подготовленный SHA'; exit 1;
+    }
     exit 0
   fi
   sleep 10

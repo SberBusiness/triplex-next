@@ -26,6 +26,17 @@ if args[:2] == ['pr', 'list']:
     print(json.dumps(entries))
 elif args[:2] == ['pr', 'create']:
     (root / 'created').touch()
+elif args[:2] == ['pr', 'view']:
+    assert args[args.index('--json') + 1] == 'headRefOid,statusCheckRollup'
+    names = ['AI.md tokens', 'Build library', 'E2E tests', 'Unit tests',
+             'Visual regression tests', 'Deployment safety', 'Python security']
+    checks = [{'__typename': 'CheckRun', 'name': name, 'status': 'COMPLETED', 'conclusion': 'SUCCESS'} for name in names]
+    if case == 'snapshot_pending':
+        checks[-1]['status'] = 'IN_PROGRESS'
+    if case == 'snapshot_missing':
+        checks.pop()
+    print(json.dumps({'headRefOid': 'b' * 40 if case == 'head_moved' else os.environ['SHA'],
+                      'statusCheckRollup': checks}))
 elif args[:2] == ['pr', 'checks']:
     assert args[2] == '42', 'must not reuse the fork PR'
     assert '--required' in args, 'unrelated checks must not end registration wait'
@@ -74,7 +85,8 @@ class OpenReleasePrTests(unittest.TestCase):
         for base, version in (('main', '1.99.0'), ('release-0', '0.99.0')):
             for case in ('reuse', 'create', 'delayed', 'partial', 'never_all', 'failed', 'missing',
                          'watch_failure', 'forbidden', 'transient', 'invalid_json', 'merged', 'closed',
-                         'wrong_sha', 'cancel_during_watch', 'partial_after_watch', 'post_watch_error', 'manual'):
+                         'wrong_sha', 'cancel_during_watch', 'partial_after_watch', 'post_watch_error', 'manual',
+                         'head_moved', 'snapshot_pending', 'snapshot_missing'):
                 with self.subTest(base=base, case=case), tempfile.TemporaryDirectory() as directory:
                     root = Path(directory)
                     for name, source in (('gh', GH), ('sleep', '#!/bin/sh\nexit 0\n')):
@@ -97,7 +109,8 @@ class OpenReleasePrTests(unittest.TestCase):
                         self.assertEqual((root / 'output').read_text(), 'pr=42\n')
                     self.assertEqual((root / 'created').exists(), case == 'create')
                     self.assertEqual((root / 'watched').exists(), case in ('reuse', 'create', 'delayed', 'partial', 'transient', 'watch_failure',
-                                              'cancel_during_watch', 'partial_after_watch', 'post_watch_error', 'manual'))
+                                              'cancel_during_watch', 'partial_after_watch', 'post_watch_error', 'manual',
+                                              'head_moved', 'snapshot_pending', 'snapshot_missing'))
                     if case in ('delayed', 'partial'):
                         self.assertEqual((root / 'polls').read_text(), '3')
                     if case == 'never_all':

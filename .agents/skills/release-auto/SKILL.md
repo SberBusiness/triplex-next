@@ -101,8 +101,25 @@ gh run view <RUN_ID> --json jobs \
   --jq '[.jobs[] | select((.name == "open-react17" or .name == "finalize-react17") and .conclusion != "skipped")] | length'
 ```
 
-Проверь, что для ветки **именно этой попытки** существует PR своего
-репозитория: имя ветки и номер PR есть в логах/summary `open-react17`.
+Проверь, что для ветки **именно этой подготовки** существует PR своего
+репозитория. Номер PR есть в логах/summary `open-react17`. Если её логи ещё
+недоступны, прочитай логи завершённой `prepare-react17`: она печатает
+`Prepared release branch:` и `Prepared release SHA:`. При частичном повторе
+ищи последнюю успешную подготовку в попытках этого run, вплоть до текущей;
+не вычисляй ветку по номеру текущей попытки — подготовка могла не повторяться.
+Найти job и прочитать её логи можно через `gh run view <RUN_ID> --attempt <N>
+--json jobs` и `gh run view <RUN_ID> --job <PREPARE_JOB_ID> --log`.
+По полученной ветке найди PR:
+
+```bash
+gh pr list --repo SberBusiness/triplex-next --state all \
+  --head <PREPARED_BRANCH> --base release-0 \
+  --json number,url,state,headRefOid,isCrossRepository
+```
+
+Принимай только `isCrossRepository=false` и `headRefOid`, равный полному
+`Prepared release SHA`. Если подготовка или SHA не подтверждены, сообщи
+неопределённость; не подставляй другой PR по совпавшему номеру версии.
 Открытый PR покажи сразу вместе с CI/ревью. Если PR уже слит — не называй
 его ожидающим ревью, проверь публикацию и восстановление текущего прогона.
 Если PR создать не удалось, не выдавай такую попытку за выпуск: сообщи

@@ -17,7 +17,14 @@ def assert_isolated(job):
     options = checkouts[0].get('with', {})
     assert options.get('ref') == '${{ github.workflow_sha }}'
     assert options.get('persist-credentials') is False
-    assert any(step.get('env', {}).get('GH_TOKEN') == '${{ secrets.DUDIM_AI_GH_TOKEN }}' for step in steps)
+    commands = ('bash scripts/release/open-pr.sh', 'bash scripts/release/finalize-pr.sh')
+    release_steps = [step for step in steps if step.get('run', '').strip() in commands]
+    assert len(release_steps) == 1
+    release_step = release_steps[0]
+    assert release_step.get('env', {}).get('GH_TOKEN') == '${{ secrets.DUDIM_AI_GH_TOKEN }}'
+    for scope in (job, release_step):
+        assert 'if' not in scope
+        assert scope.get('continue-on-error', False) is False
     for step in steps:
         assert not re.search(r'download-artifact|actions/cache', step.get('uses', ''))
         assert not re.search(r'\bnpm\b', step.get('run', ''))
@@ -57,6 +64,22 @@ class WorkflowIsolationTests(unittest.TestCase):
                                  '          # ref: ${{ github.workflow_sha }}')
         with self.assertRaises(AssertionError):
             assert_isolated(yaml.safe_load(commented)['jobs']['open-react17'])
+
+    def test_release_step_owns_token_and_cannot_be_skipped_or_ignored(self):
+        job = yaml.safe_load(WORKFLOW.read_text())['jobs']['open-react17']
+        bad = deepcopy(job)
+        bad['steps'][0]['env'] = {'GH_TOKEN': bad['steps'][1]['env'].pop('GH_TOKEN')}
+        with self.assertRaises(AssertionError):
+            assert_isolated(bad)
+        for level in ('job', 'step'):
+            for key, value in (('if', 'false'), ('continue-on-error', True)):
+                bad = deepcopy(job)
+                scope = bad if level == 'job' else bad['steps'][1]
+                scope[key] = value
+                with self.subTest(level=level, key=key), self.assertRaises(AssertionError):
+                    assert_isolated(bad)
+        job['steps'].append({'if': 'failure()', 'run': 'echo failure'})
+        assert_isolated(job)
 
 
 if __name__ == '__main__':

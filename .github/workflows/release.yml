@@ -156,10 +156,17 @@ jobs:
             # Уже существующий тег `gh release create --target` не двигает:
             # релиз повис бы на чужом коммите, а пакет ушёл бы из SHA.
             # Совпадающий тег — штатно: повторный прогон после создания релиза.
-            # На 404 gh печатает тело ошибки в stdout — в расчёт идёт только
-            # ответ, похожий на SHA; иначе тега нет.
-            TAG_SHA=$(gh api "repos/${GITHUB_REPOSITORY}/commits/refs/tags/${RELEASE_TAG}" --jq .sha 2>/dev/null) || TAG_SHA=""
-            printf '%s' "${TAG_SHA}" | grep -qE '^[0-9a-f]{40}$' || TAG_SHA=""
+            # Только HTTP 404 подтверждает отсутствие тега. Ошибка API или
+            # неожиданный ответ останавливают выпуск до публикации пакета.
+            TAG_SHA=""
+            if TAG_RESPONSE=$(gh api --include "repos/${GITHUB_REPOSITORY}/commits/refs/tags/${RELEASE_TAG}" 2>/dev/null); then
+              TAG_SHA=$(printf '%s\n' "$TAG_RESPONSE" | awk 'body {print} /^\r?$/ {body=1}' |
+                jq -er '.sha | select(type == "string" and test("^[0-9a-f]{40}$"))') || {
+                echo '❌ Не удалось прочитать SHA существующего тега; публикация остановлена.'; exit 1;
+              }
+            elif [ "$(printf '%s\n' "$TAG_RESPONSE" | awk 'NR==1 && /^HTTP\// {print $2}')" != 404 ]; then
+              echo '❌ Статус тега неизвестен из-за ошибки API; повторите запрос до публикации.'; exit 1
+            fi
             if [ -n "${TAG_SHA}" ] && [ "${TAG_SHA}" != "${SHA}" ]; then
               echo "❌ тег ${RELEASE_TAG} уже есть и указывает на ${TAG_SHA:0:8}, а собираем ${SHA:0:8}."
               echo "   Релиз повис бы не на опубликованном коммите. Разберись с тегом до публикации."

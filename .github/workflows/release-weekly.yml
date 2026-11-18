@@ -348,6 +348,8 @@ jobs:
             echo "branch=${BRANCH}"
             echo "sha=$(git rev-parse HEAD)"
           } >> "$GITHUB_OUTPUT"
+          echo "Prepared release branch: ${BRANCH}"
+          echo "Prepared release SHA: $(git rev-parse HEAD)"
 
   open-react17:
     needs: [preflight, prepare-react17]
@@ -532,6 +534,8 @@ jobs:
             echo "branch=${BRANCH}"
             echo "sha=$(git rev-parse HEAD)"
           } >> "$GITHUB_OUTPUT"
+          echo "Prepared release branch: ${BRANCH}"
+          echo "Prepared release SHA: $(git rev-parse HEAD)"
 
       - name: Report preparation failure
         if: failure()
@@ -569,6 +573,24 @@ jobs:
           VERSION: ${{ needs.preflight.outputs.version }}
           BASE_BRANCH: main
         run: bash scripts/release/open-pr.sh
+      - name: Report React 18 PR check failure
+        if: failure()
+        env:
+          PR: ${{ steps.checks.outputs.pr }}
+          V0: ${{ needs.preflight.outputs.v0 }}
+          VERSION: ${{ needs.preflight.outputs.version }}
+        run: |
+          {
+            echo "### Открытие или проверки PR для ${VERSION} остановлены"
+            echo "${V0} уже опубликована; ${VERSION} ещё не опубликована этим прогоном."
+            if [ -n "$PR" ]; then
+              echo "Проверьте [PR #${PR}](https://github.com/${GITHUB_REPOSITORY}/pull/${PR})."
+            else
+              echo 'Номер PR не получен. Проверьте существующий PR подготовленной ветки.'
+            fi
+            echo 'После устранения причины повторите failed jobs исходного прогона: открытие/проверки, без нового бампа.'
+            echo 'При изменении SHA, базы или закрытом PR сначала выберите восстановление по docs/human/release.md.'
+          } >> "$GITHUB_STEP_SUMMARY"
 
   finalize-react18:
     needs: [preflight, prepare-react18, open-react18]

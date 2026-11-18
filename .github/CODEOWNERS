@@ -1,2 +1,7 @@
 # Каждый PR требует ревью хотя бы от одного из этих участников:
 *  @dudim @aromny-w @kvther1ne
+
+# Инфраструктуру и правила ревью проверяет владелец сервера.
+/scripts/deploy/ @dudim
+/.github/workflows/ @dudim
+/.github/CODEOWNERS @dudim

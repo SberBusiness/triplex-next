@@ -416,20 +416,20 @@ jobs:
       - name: Build Storybook
         run: npm run storybook:build
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@e83874834305fe9a4a2997156cb26c5de65a8555 # v0.10.0
-        with:
-          ssh-private-key: ${{ secrets.STORYBOOK_SSH_PRIVATE_KEY }}
-
-      - name: Deploy Storybook to server
-        env:
-          SSH_USER: ${{ secrets.STORYBOOK_SSH_USER }}
+      # The trusted publisher on main receives only static files, never release code.
+      - name: Package Storybook
+        id: storybook
         run: |
-          ssh -o StrictHostKeyChecking=no "$SSH_USER" "mkdir -p $STORYBOOK_PREVIEW_BASE/releases/${RELEASE_TAG}"
-          rsync -avz --delete storybook-static/ "$SSH_USER:$STORYBOOK_PREVIEW_BASE/releases/${RELEASE_TAG}/"
-
-      - name: Output Storybook URL
-        run: echo "Storybook deployed ${STORYBOOK_URL_BASE}/releases/${RELEASE_TAG}"
+          tar -czf "$RUNNER_TEMP/storybook.tar.gz" -C storybook-static .
+          echo "revision=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: storybook--releases__${{ env.RELEASE_TAG }}--${{ steps.storybook.outputs.revision }}
+          path: ${{ runner.temp }}/storybook.tar.gz
+          retention-days: 2
+          if-no-files-found: error
+          compression-level: 0
+          overwrite: true
 
       # Каким путём прошла авторизация, по логам publish не видно: при неудачном
       # обмене OIDC npm молча уходит на NODE_AUTH_TOKEN и публикует без

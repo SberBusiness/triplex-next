@@ -1,7 +1,7 @@
 ---
 component: CollapsibleTreeExtended
 category: CollapsibleTree
-related: [CollapsibleTree, TreeView, TreeViewNode]
+related: [CollapsibleTreeExtendedNode, CollapsibleTree, TreeView, TreeViewNode]
 tokens: []
 stories: stories/CollapsibleTreeExtended/CollapsibleTreeExtended.stories.tsx
 version: "1.0"
@@ -45,7 +45,8 @@ controlled/uncontrolled-состояние) через `CollapsibleTreeExtended.
 | `...HTMLUListElementAttributes` | — | — | Все стандартные атрибуты `<ul>` (наследуются от `TreeView`) |
 
 Доступ к ноде: `CollapsibleTreeExtended.Node` (статическое свойство, ссылка на
-`CollapsibleTreeExtendedNode`).
+`CollapsibleTreeExtendedNode`). Полный контракт —
+[CollapsibleTreeExtendedNode-ai.md](./CollapsibleTreeExtendedNode-ai.md).
 
 ### `CollapsibleTreeExtended.Node` (`CollapsibleTreeExtendedNode`)
 
@@ -73,11 +74,11 @@ controlled/uncontrolled-состояние) через `CollapsibleTreeExtended.
 | Поле | Описание |
 |---|---|
 | `opened` | Текущее состояние раскрытия |
-| `toggle(opened)` | Функция смены `opened` (no-op при совпадении значений) |
+| `toggle(opened)` | Функция смены `opened`. Controlled — передаёт каждый запрос во внешний `toggle`; uncontrolled — значение, совпадающее с текущим, пропускается |
 | `animating` | Идёт ли анимация раскрытия (из `AccordionBase`) |
 | `activeNode` | Текущая активная нода дерева (из `TreeView`) |
 | `hasChildNodes` | Есть ли у текущей ноды дочерние |
-| `isLastNode` | Последняя ли нода на своём уровне |
+| `isLastNode` | Нода последняя на своём уровне и все её предки последние на своих уровнях |
 
 `renderBody` получает `ICollapsibleTreeExtendedNodeBodyProvideProps` — тот же
 набор без `isLastNode`.
@@ -112,7 +113,8 @@ controlled/uncontrolled-состояние) через `CollapsibleTreeExtended.
 
 - **`CollapsibleTreeExtended.Node` — class-компонент.** Намеренное решение —
   не переписывать на FC + hooks без согласования. `forwardRef` к нему не
-  применяется (классы используют обычный `ref`).
+  применяется: обычный `ref` указывает на экземпляр `CollapsibleTreeExtendedNode`,
+  не на DOM-элемент.
 - **`ref` указывает на корневой `<ul role="tree">`.** Компонент — тонкая обёртка
   `props → <TreeView>` без своего рендера, поэтому `ref` просто уходит насквозь
   в `TreeView`, который и отдаёт корневой `<ul>`.
@@ -140,23 +142,25 @@ controlled/uncontrolled-состояние) через `CollapsibleTreeExtended.
 - Семантика дерева задаётся `TreeView` — корневой `<ul>`, узлы `<li>`, ветки
   оборачиваются в `<TreeView.Group>` (доп. `<ul role="group">`) при наличии
   детей.
-- Клавиатурная навигация по дереву (стрелки, Home/End, раскрытие/сворачивание)
-  обрабатывается на уровне `TreeView` — `CollapsibleTreeExtended` ничего не
-  добавляет сверху.
-- `aria-expanded`, `aria-label` на toggle-кнопке и любые другие aria-атрибуты
-  узла **передаёт потребитель** в разметке `renderHeader`. Компонент не
-  хардкодит текст и aria-атрибуты — библиотека мультиязычная и `renderHeader`
-  по контракту произвольный.
+- `TreeView` обрабатывает ArrowUp / ArrowDown при наличии активной ноды:
+  меняет `activeNode`, но не переносит DOM-фокус. Home / End и раскрытие по
+  ArrowLeft / ArrowRight не реализованы. `CollapsibleTreeExtended` не добавляет
+  клавиатурных обработчиков.
+- `TreeView.Node` задаёт `role="treeitem"` и `aria-expanded` на `<li>`.
+  Доступное имя и атрибуты toggle-кнопки **передаёт потребитель** в разметке
+  `renderHeader`; библиотека не хардкодит локализованные строки.
 - Свёрнутое `renderBody` получает `visibility: hidden` — фокус Tab не уходит
   в скрытое содержимое, но reflow сохраняется (важно для анимации).
-- Активная нода (`activeNode` в provide-props) — это нода в фокусе клавиатуры
-  `TreeView`, не selected-состояние. Визуальную подсветку реализует
+- Активная нода (`activeNode` в provide-props) — текущая нода навигации
+  `TreeView`, не selected-состояние и не гарантия DOM-фокуса. Визуальную подсветку реализует
   потребитель через `renderHeader`.
 
 ---
 
 ## Связанные компоненты
 
+- [`CollapsibleTreeExtendedNode`](./CollapsibleTreeExtendedNode-ai.md) — публичная
+  часть `.Node`: render-props, controlled/uncontrolled-режимы и class-ref.
 - `CollapsibleTree` (`src/components/CollapsibleTree`) — готовая обёртка
   верхнего уровня с типовым UI узла (шеврон, hover, focus-visible). Если
   нестандартный UI узла не нужен — используй её.
@@ -195,3 +199,4 @@ controlled/uncontrolled-состояние) через `CollapsibleTreeExtended.
 | 2026-08-26 | В `related` добавлен `TreeViewNode` — у узла появился собственный AI.md, и он точный адресат наследования `ICollapsibleTreeExtendedNodeProps` |
 | 2026-09-17 | TRI-22: `CollapsibleTreeExtended` обёрнут `forwardRef` — `ref` отдаёт корневой `<ul>`; тип переименован в `ICollapsibleTreeExtendedFC`, старое имя оставлено deprecated-алиасом |
 | 2026-10-16 | При сверке ROADMAP с публичными экспортами внутренний `AccordionBase` исключён из `related`; описание зависимости сохранено в «Связанные компоненты». |
+| 2026-11-09 | TRI-180: `toggle` из render-props в controlled-режиме передаёт во внешний `toggle` каждый запрос, включая совпадающий с текущим `opened`; в uncontrolled-режиме последовательные вызовы применяются по актуальному состоянию ноды |

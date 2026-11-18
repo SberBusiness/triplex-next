@@ -2,7 +2,7 @@ import { toMatchImageSnapshot } from "jest-image-snapshot";
 import type { TestRunnerConfig } from "@storybook/test-runner";
 import type { Page } from "playwright";
 import { getStoryContext } from "@storybook/test-runner";
-import { VISUAL_TEST_VIEWPORTS } from "./visualTestViewports";
+import { VISUAL_TEST_VIEWPORTS } from "./visualTestViewports.ts";
 
 /**
  * Перемонтирует стори через внутренний канал Storybook и ждёт стабилизации DOM.

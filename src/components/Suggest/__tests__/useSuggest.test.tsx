@@ -15,10 +15,10 @@ type TUseSuggestProps = Parameters<typeof useSuggest>[0];
  * где renderHook ещё не экспортируется.
  */
 const renderUseSuggest = (props: Partial<TUseSuggestProps> = {}) => {
-    const result = {} as { current: ReturnType<typeof useSuggest> };
+    const result = {} as { current: ReturnType<typeof useSuggest>["suggest"] };
 
     const SuggestReader: React.FC<{ hookProps: TUseSuggestProps }> = ({ hookProps }) => {
-        result.current = useSuggest(hookProps);
+        result.current = useSuggest(hookProps).suggest;
 
         return null;
     };
@@ -131,16 +131,12 @@ describe("useSuggest", () => {
         expect(result.current.dropdownOpen).toBe(false);
     });
 
-    test("closeDropdown puts the passed value into input and resets activeDescendant", () => {
+    test("closeDropdown puts the passed value into input", () => {
         const { result } = renderUseSuggest({ value: OPTION_A });
-
-        act(() => result.current.setActiveDescendant("a"));
-        expect(result.current.activeDescendant).toBe("a");
 
         act(() => result.current.closeDropdown("явное значение"));
 
         expect(result.current.inputValue).toBe("явное значение");
-        expect(result.current.activeDescendant).toBeUndefined();
     });
 
     test("closeDropdown uses the latest value after it changed", () => {

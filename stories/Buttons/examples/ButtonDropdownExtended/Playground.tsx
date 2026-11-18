@@ -24,12 +24,13 @@ export const Playground = ({ closeOnTab }: TPlaygroundProps) => {
     const buttonRef = useRef<HTMLButtonElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const renderButton = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => (
+    const renderButton = ({ opened, setOpened, activeDescendant }: IButtonDropdownExtendedButtonProvideProps) => (
         <Button
             theme={EButtonTheme.GENERAL}
             size={EComponentSize.MD}
             aria-haspopup="menu"
             aria-expanded={opened}
+            aria-activedescendant={activeDescendant}
             onClick={() => setOpened(!opened)}
             ref={buttonRef}
         >

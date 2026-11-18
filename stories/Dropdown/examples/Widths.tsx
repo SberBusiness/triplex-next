@@ -3,10 +3,12 @@ import {
     Button,
     Dropdown,
     DropdownList,
+    DropdownListContext,
     EButtonTheme,
     EComponentSize,
     EDropdownDirection,
     EDropdownWidth,
+    useDropdownListKeyboard,
 } from "@sberbusiness/triplex-next";
 
 const OPTIONS = [
@@ -24,6 +26,7 @@ interface IWidthItemProps {
 const WidthItem = ({ width }: IWidthItemProps) => {
     const targetRef = useRef<HTMLButtonElement>(null);
     const [opened, setOpened] = useState(false);
+    const { context, activeDescendant, handleKeyDown } = useDropdownListKeyboard();
 
     return (
         <div style={{ width: "280px" }}>
@@ -35,6 +38,8 @@ const WidthItem = ({ width }: IWidthItemProps) => {
                 aria-haspopup="listbox"
                 aria-expanded={opened}
                 onClick={() => setOpened(!opened)}
+                onKeyDown={handleKeyDown}
+                aria-activedescendant={activeDescendant}
                 ref={targetRef}
             >
                 Button text
@@ -47,17 +52,19 @@ const WidthItem = ({ width }: IWidthItemProps) => {
                 width={width}
                 direction={EDropdownDirection.BOTTOM}
             >
-                <DropdownList dropdownOpened={opened} size={EComponentSize.MD}>
-                    {OPTIONS.map((option) => (
-                        <DropdownList.Item
-                            key={option.id}
-                            id={`${width}-${option.id}`}
-                            onSelect={() => setOpened(false)}
-                        >
-                            {option.label}
-                        </DropdownList.Item>
-                    ))}
-                </DropdownList>
+                <DropdownListContext.Provider value={context}>
+                    <DropdownList dropdownOpened={opened} size={EComponentSize.MD}>
+                        {OPTIONS.map((option) => (
+                            <DropdownList.Item
+                                key={option.id}
+                                id={`${width}-${option.id}`}
+                                onSelect={() => setOpened(false)}
+                            >
+                                {option.label}
+                            </DropdownList.Item>
+                        ))}
+                    </DropdownList>
+                </DropdownListContext.Provider>
             </Dropdown>
         </div>
     );

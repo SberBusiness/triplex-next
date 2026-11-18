@@ -13,7 +13,6 @@ import {
     SelectExtendedFieldDropdownDefault,
 } from "@sberbusiness/triplex-next/components/SelectExtendedField/components/SelectExtendedFieldDropdownDefault";
 import { EDropdownWidth } from "@sberbusiness/triplex-next/components/Dropdown";
-import { DropdownListContext } from "@sberbusiness/triplex-next/components/Dropdown/DropdownListContext";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 
 /** Свойства опции списка. */
@@ -47,8 +46,8 @@ export interface ISelectFieldProps
 /**
  * Базовый компонент SelectField.
  * Готовый Select со списком опций: поле выбора и выпадающий блок собраны заранее, состоянием
- * открытости владеет SelectExtendedField. Сам компонент отвечает только за связку поля со списком
- * (aria-controls, aria-activedescendant) и за прокидывание опций в выпадающий блок.
+ * открытости и клавиатурной связкой поля со списком (aria-activedescendant) владеет SelectExtendedField.
+ * Сам компонент отвечает только за aria-controls и за прокидывание опций в выпадающий блок.
  */
 export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((props, ref) => {
     const {
@@ -71,9 +70,6 @@ export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((
         ...rest
     } = props;
 
-    // Идентификатор активной (подсвеченной с клавиатуры) опции. Его выставляет DropdownList
-    // через DropdownListContext, а поле выбора отдаёт в aria-activedescendant.
-    const [activeDescendant, setActiveDescendant] = useState<string>();
     // Идентификатор списка опций. Должен быть стабилен на всё время жизни компонента:
     // на него ссылается aria-controls поля выбора.
     const [listId] = useState(() => uniqueId());
@@ -86,7 +82,6 @@ export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((
             status={status}
             role="combobox"
             aria-controls={listId}
-            aria-activedescendant={activeDescendant}
             aria-labelledby={ariaLabelledby}
             ref={ref}
             size={size}
@@ -100,21 +95,19 @@ export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((
     );
 
     const renderDropdown = (dropdownProvideProps: ISelectExtendedFieldDropdownProvideProps) => (
-        <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
-            <SelectExtendedFieldDropdownDefault
-                {...dropdownProvideProps}
-                size={size}
-                width={EDropdownWidth.TARGET}
-                dropdownProps={dropdownProps}
-                dropdownListItemClassName={dropdownListItemClassName}
-                loading={loading}
-                listId={listId}
-                mobileTitle={mobileTitle}
-                onChange={onChange}
-                options={options}
-                value={value}
-            />
-        </DropdownListContext.Provider>
+        <SelectExtendedFieldDropdownDefault
+            {...dropdownProvideProps}
+            size={size}
+            width={EDropdownWidth.TARGET}
+            dropdownProps={dropdownProps}
+            dropdownListItemClassName={dropdownListItemClassName}
+            loading={loading}
+            listId={listId}
+            mobileTitle={mobileTitle}
+            onChange={onChange}
+            options={options}
+            value={value}
+        />
     );
 
     return (

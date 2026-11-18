@@ -1,8 +1,9 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { ITabsLineItemProps } from "../components/TabsLineItem";
 import { TabsLineDropdown } from "../components/TabsLineDropdown";
 
@@ -105,6 +106,23 @@ describe("TabsLineDropdown", () => {
             await user.keyboard(key);
 
             expect(queryList()).toBeInTheDocument();
+        });
+
+        it("Should navigate the opened list and select a tab with keys pressed on the target", () => {
+            const onClickTab = vi.fn();
+
+            renderDropdown({ onClickTab });
+            fireEvent.keyDown(getTarget(), { code: "ArrowDown", keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+            fireEvent.keyDown(getTarget(), { code: "ArrowDown", keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+
+            const options = screen.getAllByRole("option");
+            expect(getTarget()).toHaveAttribute("aria-activedescendant", options[1].id);
+
+            const prevented = !fireEvent.keyDown(getTarget(), { code: "Enter", keyCode: EVENT_KEY_CODES.ENTER });
+
+            expect(prevented).toBe(true);
+            expect(onClickTab).toHaveBeenCalledWith(tabs[1]);
+            expect(queryList()).not.toBeInTheDocument();
         });
 
         it("Should close the list on Escape", async () => {

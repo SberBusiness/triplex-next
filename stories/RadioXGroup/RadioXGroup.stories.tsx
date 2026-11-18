@@ -85,7 +85,7 @@ export const Playground: StoryObj<IPlaygroundArgs> = {
         docs: { canvas: { sourceState: "none" }, codePanel: false },
         testRunner: { skip: true },
     },
-    render: PlaygroundRender,
+    render: (args) => <PlaygroundRender {...args} name="radio-x-group-playground" />,
 };
 
 export const Default: Story = {
@@ -93,7 +93,7 @@ export const Default: Story = {
         controls: { disable: true },
         docs: { source: { code: DefaultSource, language: "tsx" } },
     },
-    render: DefaultRender,
+    render: () => <DefaultRender name="radio-x-group-default" />,
 };
 
 export const Indents: Story = {
@@ -101,7 +101,7 @@ export const Indents: Story = {
         controls: { disable: true },
         docs: { source: { code: IndentsSource, language: "tsx" } },
     },
-    render: IndentsRender,
+    render: () => <IndentsRender name="radio-x-group-indents" />,
 };
 
 export const Sizes: Story = {
@@ -112,7 +112,7 @@ export const Sizes: Story = {
             source: { code: SizesSource, language: "tsx" },
         },
     },
-    render: SizesRender,
+    render: () => <SizesRender name="radio-x-group-sizes" />,
 };
 
 export const States: Story = {
@@ -125,7 +125,7 @@ export const States: Story = {
             source: { code: StatesSource, language: "tsx" },
         },
     },
-    render: StatesRender,
+    render: () => <StatesRender name="radio-x-group-states" />,
 };
 
 export const VisualTests: Story = {
@@ -135,7 +135,7 @@ export const VisualTests: Story = {
         docs: { canvas: { sourceState: "none" }, codePanel: false },
         testRunner: { hoverSelector: 'input[value="hovered"]' },
     },
-    render: VisualTestsRender,
+    render: () => <VisualTestsRender name="radio-x-group-visual-tests" />,
     play: async ({ canvas, userEvent }) => {
         canvas.getByRole("radiogroup", { name: "Клавиатурный фокус" }).focus();
         await userEvent.tab();

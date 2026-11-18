@@ -93,7 +93,7 @@ React 17 совместимость, modern story pattern, формат комм
 
 ## Стек
 
-React 18 + TypeScript strict + LESS Modules + Vite + Storybook 9
+React 18 + TypeScript strict + LESS Modules + Vite + Storybook 10
 
 ## Ключевые ограничения
 

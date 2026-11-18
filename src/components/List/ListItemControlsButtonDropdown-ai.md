@@ -72,13 +72,15 @@ dropdown.
 ## Accessibility
 
 - **Клавиатура:**
-  - `Space`, `ArrowUp`, `ArrowDown` — `preventDefault` (не скроллит страницу).
+  - `Space`, `ArrowUp`, `ArrowDown` — `preventDefault` (не скроллит страницу). Клавиши сравниваются по `event.code` (обработчик `createButtonDropdownKeyDownHandler` из `Button/utils.ts` общий с `ButtonDropdown`): `event.key` пробела — `" "`.
+  - `Space` на закрытой кнопке открывает dropdown — явно, так как нативная click-активация отменена `preventDefault`.
   - `ArrowUp` / `ArrowDown` в закрытом состоянии — открывают dropdown.
   - `Escape` / `Tab` — закрывают dropdown (через `ButtonDropdownExtended`).
+  - В открытом dropdown `ArrowUp` / `ArrowDown` перемещают активный пункт, `Enter` / `Space` выбирают его — клавиши кнопки передаёт списку `ButtonDropdownExtended`.
 - **`aria-haspopup="menu"`** — указывает на наличие меню.
 - **`aria-expanded`** — синхронизирован с `opened` (true/false).
 - **`aria-controls`** — связывает кнопку с id dropdown.
-- **`aria-activedescendant`** — управляется через `DropdownListContext`, указывает на текущий выделенный элемент.
+- **`aria-activedescendant`** — приходит из `activeDescendant` в `renderButton` `ButtonDropdownExtended`, указывает на текущий выделенный элемент.
 
 ---
 
@@ -88,7 +90,7 @@ dropdown.
 - `ButtonDropdownExtended` — обвязка для кастомных кнопок + dropdown.
 - `Dropdown`, `DropdownList` (desktop) — выпадающий список на десктопе.
 - `Puller` (`PullerBody`, `PullerList`, `PullerListItem`, `PullerHeader`, `PullerClose`) — bottom-sheet на мобильном.
-- `DropdownListContext` — управление `activeDescendant`.
+- `DropdownListContext` / `useDropdownListKeyboard` — связка кнопки со списком; подключает `ButtonDropdownExtended`.
 
 ---
 
@@ -109,3 +111,4 @@ dropdown.
 |---|---|
 | 2026-04-29 | Создан документ |
 | 2026-10-21 | Переход на `Puller` (TRIPLEX-961): мобильная версия собрана из частей `Puller` (бывший `DropdownMobile*`). |
+| 2026-11-05 | TRIPLEX-1039: клавиши в открытом dropdown список получает от кнопки через `ButtonDropdownExtended`. Клавиши кнопки сравниваются по `event.code`: раньше `preventDefault` на `Space` не срабатывал. |

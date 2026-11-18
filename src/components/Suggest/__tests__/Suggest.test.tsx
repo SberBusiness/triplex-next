@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, test, vi } from "vitest";
+import { DropdownList } from "../../Dropdown/desktop/DropdownList";
 import { Suggest } from "../Suggest";
 import { useSuggestContext } from "../SuggestContext";
 import { ISuggestOption, ISuggestProps } from "../types";
@@ -54,6 +55,29 @@ const Dropdown = () => {
             ))}
         </div>,
         document.body,
+    );
+};
+
+/**
+ * Настоящий DropdownList с опциями и activeDescendant из контекста.
+ * keepMounted — список остаётся в DOM и при закрытом выпадающем списке.
+ */
+const ListDropdown = ({ keepMounted }: { keepMounted: boolean }) => {
+    const { dropdownOpen, activeDescendant, options } = useSuggestContext();
+
+    return (
+        <>
+            <span data-testid="active-descendant">{activeDescendant}</span>
+            {(dropdownOpen || keepMounted) && (
+                <DropdownList dropdownOpened={dropdownOpen}>
+                    {options.map((option) => (
+                        <DropdownList.Item key={option.id} id={option.id}>
+                            {option.label}
+                        </DropdownList.Item>
+                    ))}
+                </DropdownList>
+            )}
+        </>
     );
 };
 
@@ -234,6 +258,22 @@ describe("Suggest", () => {
         expect(screen.queryByTestId("dropdown")).not.toBeInTheDocument();
         expect(onKeyDown).toHaveBeenCalledTimes(1);
         expect(onOuterKeyDown).not.toHaveBeenCalled();
+    });
+
+    test.each([
+        ["unmounted", false],
+        ["kept mounted", true],
+    ])("resets activeDescendant when the dropdown closes and the list is %s", async (_name, keepMounted) => {
+        const user = userEvent.setup();
+
+        renderSuggest({}, <ListDropdown keepMounted={keepMounted} />);
+
+        await user.click(screen.getByRole("button", { name: "open" }));
+        expect(screen.getByTestId("active-descendant")).toHaveTextContent(OPTIONS[0].id);
+
+        await user.keyboard("{Escape}");
+
+        expect(screen.getByTestId("active-descendant")).toBeEmptyDOMElement();
     });
 
     test("lets Escape bubble when the dropdown is closed", async () => {

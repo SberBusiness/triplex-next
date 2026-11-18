@@ -6,7 +6,7 @@ import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize"
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
 import { TestProps } from "../../../types/CoreTypes";
 import { isKey } from "../../../utils/keyboard";
-import { Dropdown, DropdownList, DropdownListContext, EDropdownWidth } from "../../Dropdown";
+import { Dropdown, DropdownList, DropdownListContext, EDropdownWidth, useDropdownListKeyboard } from "../../Dropdown";
 import { Text, EFontType } from "../../Typography";
 import { tabsLineSizeToTextSizeMap } from "../utils";
 import { ITabsLineItemProps } from "./TabsLineItem";
@@ -46,7 +46,11 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
         ...htmlDivAttributes
     } = props;
 
-    const [activeDescendant, setActiveDescendant] = useState<string | undefined>(undefined);
+    const {
+        context: dropdownListContext,
+        activeDescendant,
+        handleKeyDown: handleDropdownListKeyDown,
+    } = useDropdownListKeyboard();
     const [opened, setOpened] = useState(false);
     const [focused, setFocused] = useState(false);
     const [hovered, setHovered] = useState(false);
@@ -102,11 +106,13 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
                 event.preventDefault();
                 setOpened(true);
             }
-        } else {
+        } else if (isKey(event.code, "TAB") || isKey(event.code, "ESCAPE")) {
             // При нажатии Tab или Esc закрывается выпадающий список.
-            if (isKey(event.code, "TAB") || isKey(event.code, "ESCAPE")) {
-                setOpened(false);
-            }
+            setOpened(false);
+        } else {
+            // Обработанная списком клавиша получает preventDefault, поэтому Enter / Space не переключают список
+            // нативной активацией кнопки.
+            handleDropdownListKeyDown(event);
         }
 
         targetHtmlAttributes?.onKeyDown?.(event);
@@ -204,7 +210,7 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
             targetRef={targetRef}
             ref={dropdownRef}
         >
-            <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
+            <DropdownListContext.Provider value={dropdownListContext}>
                 <DropdownList dropdownOpened={opened} id={instanceId.current} size={size}>
                     {tabs.map((tab, index) => {
                         const { id, label: tabLabel, showNotificationIcon, ...htmlButtonAttributes } = tab;

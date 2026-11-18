@@ -5,11 +5,15 @@ import {
     DropdownListItem,
     EComponentSize,
     EDropdownWidth,
+    EVENT_KEY_CODES,
     Suggest,
     TextField,
     useSuggestContext,
     type ISuggestOption,
 } from "@sberbusiness/triplex-next";
+
+/** Пробел в поле ввода остаётся вводом: опция выбирается с клавиатуры только по Enter. */
+const KEY_CODES_FOR_SELECTION = [EVENT_KEY_CODES.ENTER];
 
 const FRUITS: ISuggestOption[] = [
     { id: "1", label: "Apple" },
@@ -27,7 +31,8 @@ interface ISuggestPartProps {
 
 /** Управляющий элемент. Suggest сам размер не отображает — прокидывайте его в поле ввода и список. */
 const SuggestTarget = ({ size }: ISuggestPartProps) => {
-    const { inputValue, dropdownOpen, dropdownListId, setDropdownOpen, onFilter } = useSuggestContext();
+    const { inputValue, dropdownOpen, dropdownListId, activeDescendant, setDropdownOpen, onFilter } =
+        useSuggestContext();
 
     return (
         <TextField
@@ -39,6 +44,7 @@ const SuggestTarget = ({ size }: ISuggestPartProps) => {
                 role: "combobox",
                 "aria-expanded": dropdownOpen,
                 "aria-controls": dropdownListId,
+                "aria-activedescendant": activeDescendant,
                 onChange: (event) => {
                     onFilter(event.target.value);
                     setDropdownOpen(true);
@@ -85,6 +91,7 @@ const SuggestDropdown = ({ size }: ISuggestPartProps) => {
                         <DropdownListItem
                             key={option.id}
                             id={option.id}
+                            keyCodesForSelection={KEY_CODES_FOR_SELECTION}
                             selected={option.id === value?.id}
                             onSelect={() => onSelect(option)}
                         >

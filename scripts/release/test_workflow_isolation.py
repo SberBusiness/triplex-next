@@ -28,6 +28,7 @@ def assert_isolated(job, expected_command):
     release_steps = [step for step in steps if step.get('run', '').strip() == expected_command]
     assert len(release_steps) == 1
     release_step = release_steps[0]
+    assert steps.index(checkouts[0]) < steps.index(release_step)
     assert release_step.get('env', {}).get('GH_TOKEN') == '${{ secrets.DUDIM_AI_GH_TOKEN }}'
     for scope in (job, checkouts[0], release_step):
         assert 'if' not in scope
@@ -89,6 +90,12 @@ class WorkflowIsolationTests(unittest.TestCase):
                     assert_isolated(bad, 'bash scripts/release/open-pr.sh')
         bad = deepcopy(job)
         find_release_step(bad)['run'] = 'bash scripts/release/finalize-pr.sh'
+        with self.assertRaises(AssertionError):
+            assert_isolated(bad, 'bash scripts/release/open-pr.sh')
+        bad = deepcopy(job)
+        checkout, release_step = find_checkout(bad), find_release_step(bad)
+        ci, ri = bad['steps'].index(checkout), bad['steps'].index(release_step)
+        bad['steps'][ci], bad['steps'][ri] = release_step, checkout
         with self.assertRaises(AssertionError):
             assert_isolated(bad, 'bash scripts/release/open-pr.sh')
         job['steps'].append({'if': 'failure()', 'run': 'echo failure'})

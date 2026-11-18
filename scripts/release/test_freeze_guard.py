@@ -21,7 +21,7 @@ gh() {
 }
 git() { [[ "$*" == 'rev-parse HEAD' ]] || return 99; printf '%s' "$TEST_CHECKOUT_SHA"; }
 ''' + classification
-        for response, code, succeeds in (
+        cases = (
             ('HTTP/2.0 200 OK\r\n\r\n{"sha":"' + 'a' * 40 + '"}', 0, True),
             ('HTTP/2.0 200 OK\n\n{"sha":"' + 'b' * 40 + '"}', 0, False),
             ('HTTP/2.0 404 Not Found\n\n{}', 1, True),
@@ -30,13 +30,14 @@ git() { [[ "$*" == 'rev-parse HEAD' ]] || return 99; printf '%s' "$TEST_CHECKOUT
             ('', 1, False),
             ('HTTP/2.0 200 OK\n\n{}', 0, False),
             ('HTTP/2.0 200 OK\n\nnot-json', 0, False),
-        ):
-            with self.subTest(response=response):
+        )
+        for response, code, succeeds, required in ((*case, required) for case in cases for required in (False, True)):
+            with self.subTest(response=response, required=required):
                 result = subprocess.run(['bash', '-c', script], check=False, capture_output=True,
                                         text=True, timeout=5, env=dict(os.environ, GITHUB_REPOSITORY='test/repo',
-                                        RELEASE_TAG='0.99.0', SHA='', TEST_CHECKOUT_SHA='a' * 40,
+                                        RELEASE_TAG='0.99.0', SHA='', TEST_CHECKOUT_SHA='a' * 40, REQUIRE_TAG=str(required).lower(),
                                         TEST_RESPONSE=response, TEST_EXIT=str(code)))
-                self.assertEqual(result.returncode == 0, succeeds, result.stdout + result.stderr)
+                self.assertEqual(result.returncode == 0, succeeds and not (required and code == 1), result.stdout + result.stderr)
 
     def test_release_status_distinguishes_not_found_from_api_failure(self):
         workflow = Path(__file__).resolve().parents[2] / '.github/workflows/release-freeze-guard.yml'

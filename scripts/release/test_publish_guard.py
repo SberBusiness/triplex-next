@@ -14,6 +14,62 @@ SHA = 'a' * 40
 
 
 class PublishGuardTests(unittest.TestCase):
+    def test_asset_uploads_never_create_a_release(self):
+        steps = yaml.safe_load(WORKFLOW.read_text())['jobs']['build-and-publish']['steps']
+        for name, filename in (('Upload build artifacts to GitHub Release', 'dist-1.99.0.zip'),
+                               ('Upload MCP bundle to GitHub Release', 'mcp-data-1.99.0.json')):
+            with self.subTest(name=name):
+                step = next(step for step in steps if step.get('name') == name)
+                script = 'set -euo pipefail\ngh() { printf "%s\\n" "$*"; }\n' + step['run']
+                result = subprocess.run(['bash', '-c', script], check=True, capture_output=True, text=True,
+                                        timeout=5, env=dict(os.environ, RELEASE_TAG='1.99.0'))
+                self.assertEqual(result.stdout, f'release upload 1.99.0 {filename} --clobber\n')
+
+    def test_existing_publication_can_recover_after_workflow_changes(self):
+        steps = yaml.safe_load(WORKFLOW.read_text())['jobs']['build-and-publish']['steps']
+        guard = next(step for step in steps if step.get('name') == 'Check workflow compatibility for GitHub Release')
+        script = '''set -euo pipefail
+gh() {
+  case "$*" in
+    'api repos/test/repo/releases/tags/0.99.0') printf '%s' "$RELEASE_INFO_TEST" ;;
+    'api repos/test/repo/commits/refs/tags/0.99.0 --jq .sha') printf '%s' "$TAG_SHA_TEST" ;;
+    'api repos/test/repo --jq .default_branch') echo main ;;
+    *) return 99 ;;
+  esac
+}
+git() {
+  case "$*" in
+    'rev-parse HEAD') printf '%s' "$CHECKOUT_SHA_TEST" ;;
+    'fetch --no-tags --depth=1 origin refs/heads/main') return 0 ;;
+    'diff --quiet HEAD FETCH_HEAD -- .github/workflows') return 1 ;;
+    *) return 99 ;;
+  esac
+}
+curl() {
+  [[ "$*" == '-fsS --max-time 30 -H Cache-Control: no-cache https://registry.npmjs.org/@sberbusiness%2Ftriplex-next/0.99.0' ]] || return 99
+  printf '%s' "$MANIFEST_TEST"; return "$CURL_EXIT_TEST"
+}
+''' + guard['run']
+        release = {'tag_name': '0.99.0', 'draft': False, 'published_at': '2026-01-01T00:00:00Z'}
+        manifest = {'name': '@sberbusiness/triplex-next', 'version': '0.99.0', 'gitHead': SHA}
+        for case in ('matching', 'draft', 'unpublished', 'wrong_tag', 'wrong_sha', 'unknown_sha', 'network'):
+            with self.subTest(case=case):
+                info, package = dict(release), dict(manifest)
+                if case == 'draft':
+                    info['draft'] = True
+                if case == 'unpublished':
+                    info['published_at'] = None
+                if case == 'wrong_sha':
+                    package['gitHead'] = 'b' * 40
+                if case == 'unknown_sha':
+                    del package['gitHead']
+                result = subprocess.run(['bash', '-c', script], capture_output=True, text=True, timeout=5,
+                                        env=dict(os.environ, GITHUB_REPOSITORY='test/repo', RELEASE_TAG='0.99.0',
+                                        RELEASE_INFO_TEST=json.dumps(info), MANIFEST_TEST=json.dumps(package),
+                                        TAG_SHA_TEST='b' * 40 if case == 'wrong_tag' else SHA,
+                                        CHECKOUT_SHA_TEST=SHA, CURL_EXIT_TEST='1' if case == 'network' else '0'))
+                self.assertEqual(result.returncode == 0, case == 'matching', result.stdout + result.stderr)
+
     def test_all_publication_paths_recheck_tags_and_share_a_version_queue(self):
         workflow = yaml.safe_load(WORKFLOW.read_text())
         self.assertEqual(workflow['concurrency'], {
@@ -22,6 +78,8 @@ class PublishGuardTests(unittest.TestCase):
         steps = workflow['jobs']['build-and-publish']['steps']
         positions = [i for i, step in enumerate(steps) if step.get('name') == 'Validate release tag against checkout']
         self.assertEqual(len(positions), 3)
+        self.assertEqual([steps[i]['env']['REQUIRE_TAG'] for i in positions],
+                         ["${{ github.event_name == 'release' }}"] * 2 + ['true'])
         publish = next(i for i, step in enumerate(steps) if step.get('name') == 'Publish to npm')
         release = next(i for i, step in enumerate(steps) if step.get('name') == 'Create GitHub Release')
         assets = next(i for i, step in enumerate(steps) if step.get('name') == 'Create dist.zip')
@@ -80,6 +138,7 @@ git() { [[ "$*" == 'rev-parse HEAD' ]] || return 99; printf '%s' "$TEST_SHA"; }
         script = '''set -euo pipefail
 gh() { [[ "$*" == 'api repos/test/repo --jq .default_branch' ]] || return 99; echo main; }
 git() {
+  if [[ "$*" == 'rev-parse HEAD' ]]; then printf '%s' "$TEST_SHA"; return 0; fi
   if [[ "$*" == 'fetch --no-tags --depth=1 origin refs/heads/main' ]]; then return "$FETCH_EXIT"; fi
   [[ "$*" == 'diff --quiet HEAD FETCH_HEAD -- .github/workflows' ]] || return 99
   return "$DIFF_EXIT"
@@ -88,7 +147,7 @@ git() {
         for fetch, diff in ((0, 0), (1, 0), (0, 1)):
             with self.subTest(fetch=fetch, diff=diff):
                 result = subprocess.run(['bash', '-c', script], capture_output=True, text=True, timeout=5,
-                                        env=dict(os.environ, GITHUB_REPOSITORY='test/repo',
+                                        env=dict(os.environ, GITHUB_REPOSITORY='test/repo', TEST_SHA=SHA, RELEASE_TAG='0.99.0',
                                         FETCH_EXIT=str(fetch), DIFF_EXIT=str(diff)))
                 self.assertEqual(result.returncode == 0, fetch == diff == 0, result.stdout + result.stderr)
 

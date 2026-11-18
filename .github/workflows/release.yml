@@ -176,11 +176,11 @@ jobs:
           # workflow не пушит в репозиторий; gh получает токен через env явно
           persist-credentials: false
 
-      - &validate-release-tag
-        name: Validate release tag against checkout
+      - name: Validate release tag against checkout
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
+          REQUIRE_TAG: ${{ github.event_name == 'release' }}
+        run: &validate-release-tag |
           SHA=$(git rev-parse HEAD)
           # Уже существующий тег `gh release create --target` не двигает:
           # релиз повис бы на чужом коммите, а пакет ушёл бы из SHA.
@@ -196,6 +196,10 @@ jobs:
           elif [ "$(printf '%s\n' "$TAG_RESPONSE" | awk 'NR==1 && /^HTTP\// {print $2}')" != 404 ]; then
             echo '❌ Статус тега неизвестен из-за ошибки API; повторите запрос перед продолжением.'; exit 1
           fi
+          if [ -z "$TAG_SHA" ] && [ "$REQUIRE_TAG" = true ]; then
+            echo '❌ Тег опубликованного Release отсутствует; дальнейшие этапы остановлены.'
+            exit 1
+          fi
           if [ -n "${TAG_SHA}" ] && [ "${TAG_SHA}" != "${SHA}" ]; then
             echo "❌ тег ${RELEASE_TAG} уже есть и указывает на ${TAG_SHA:0:8}, а собираем ${SHA:0:8}."
             echo "   Релиз повис бы не на опубликованном коммите. Разберись с тегом перед продолжением выпуска."
@@ -209,6 +213,18 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          CHECKOUT_SHA=$(git rev-parse HEAD)
+          # A completed publication only needs asset recovery, not a new Release.
+          # Unknown API/registry state never enables this exception.
+          if RELEASE_INFO=$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}" 2>/dev/null) &&
+            jq -e --arg tag "$RELEASE_TAG" '.tag_name == $tag and .draft == false and .published_at != null' <<< "$RELEASE_INFO" >/dev/null &&
+            TAG_SHA=$(gh api "repos/${GITHUB_REPOSITORY}/commits/refs/tags/${RELEASE_TAG}" --jq .sha 2>/dev/null) &&
+            [ "$TAG_SHA" = "$CHECKOUT_SHA" ] &&
+            MANIFEST=$(curl -fsS --max-time 30 -H 'Cache-Control: no-cache' "https://registry.npmjs.org/@sberbusiness%2Ftriplex-next/${RELEASE_TAG}" 2>/dev/null) &&
+            jq -e --arg tag "$RELEASE_TAG" --arg sha "$CHECKOUT_SHA" '.name == "@sberbusiness/triplex-next" and .version == $tag and .gitHead == $sha' <<< "$MANIFEST" >/dev/null; then
+            echo 'Release, тег и npm-версия подтверждают SHA checkout: разрешено восстановление ассетов.'
+            exit 0
+          fi
           DEFAULT_BRANCH=$(gh api "repos/${GITHUB_REPOSITORY}" --jq .default_branch)
           git fetch --no-tags --depth=1 origin "refs/heads/${DEFAULT_BRANCH}"
           if ! git diff --quiet HEAD FETCH_HEAD -- .github/workflows; then
@@ -368,7 +384,11 @@ jobs:
       #
       # Значения идут через env, а не через ${{ }} прямо в run: их задаёт тот,
       # кто запускает workflow, и подстановка в shell была бы точкой инъекции.
-      - *validate-release-tag
+      - name: Validate release tag against checkout
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REQUIRE_TAG: ${{ github.event_name == 'release' }}
+        run: *validate-release-tag
 
       - name: Create GitHub Release
         if: github.event_name != 'release'
@@ -413,7 +433,11 @@ jobs:
           rm -f release-notes.md
 
       # Detect a conflicting tag created during the API call before uploading assets.
-      - *validate-release-tag
+      - name: Validate release tag against checkout
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REQUIRE_TAG: 'true'
+        run: *validate-release-tag
 
       # Упаковать dist.zip как release asset.
       - name: Create dist.zip
@@ -443,30 +467,18 @@ jobs:
         if: steps.mcp.outputs.eligible == 'true'
         run: npm run generateMcpData -- --out "mcp-data-${RELEASE_TAG}.json"
 
-      # tag_name обязателен: без него action выводит тег из GITHUB_REF, а на пути
-      # workflow_dispatch там `refs/heads/main`, а не `refs/tags/...` — action падает
-      # с «GitHub Releases requires a tag». На пути `release: published` значение
-      # совпадает с тем, что action вывел бы сам.
-      #
-      # fail_on_unmatched_files: по умолчанию action молча пропускает ненайденные
-      # файлы — релиз опубликовался бы без архива, и это заметили бы уже потребители.
+      # gh release upload requires an existing Release; it never creates one
+      # or chooses a default-branch target when the Release/tag disappeared.
       - name: Upload build artifacts to GitHub Release
-        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
-        with:
-          tag_name: ${{ env.RELEASE_TAG }}
-          files: dist-${{ env.RELEASE_TAG }}.zip
-          fail_on_unmatched_files: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "$RELEASE_TAG" "dist-${RELEASE_TAG}.zip" --clobber
 
-      # Отдельным шагом: для 0.* бандла нет, и указывать его в files выше значило бы
-      # ссылаться на несуществующий файл. Шаг идёт под тем же условием, что и
-      # генерация, поэтому отсутствие файла здесь — тоже повод упасть.
       - name: Upload MCP bundle to GitHub Release
         if: steps.mcp.outputs.eligible == 'true'
-        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
-        with:
-          tag_name: ${{ env.RELEASE_TAG }}
-          files: mcp-data-${{ env.RELEASE_TAG }}.json
-          fail_on_unmatched_files: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload "$RELEASE_TAG" "mcp-data-${RELEASE_TAG}.json" --clobber
 
       # ---- Сборка и деплой Storybook ----
       - name: Build Storybook

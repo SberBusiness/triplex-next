@@ -107,8 +107,10 @@ gh run view <RUN_ID> --json jobs \
 `Prepared release branch:` и `Prepared release SHA:`. При частичном повторе
 ищи последнюю успешную подготовку в попытках этого run, вплоть до текущей;
 не вычисляй ветку по номеру текущей попытки — подготовка могла не повторяться.
-Найти job и прочитать её логи можно через `gh run view <RUN_ID> --attempt <N>
---json jobs` и `gh run view <RUN_ID> --job <PREPARE_JOB_ID> --log`.
+Найти job можно через `gh run view <RUN_ID> --attempt <N> --json jobs`.
+Логи **завершённой** job при ещё активном прогоне скачай через REST:
+`gh api repos/SberBusiness/triplex-next/actions/jobs/<PREPARE_JOB_ID>/logs`.
+Не используй здесь `gh run view --log`: CLI может ждать окончания всего run.
 По полученной ветке найди PR:
 
 ```bash

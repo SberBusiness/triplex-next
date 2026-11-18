@@ -10,15 +10,14 @@ import yaml
 WORKFLOW = Path(__file__).resolve().parents[2] / '.github/workflows/release-weekly.yml'
 
 
-def assert_isolated(job):
+def assert_isolated(job, expected_command):
     steps = job['steps']
     checkouts = [step for step in steps if step.get('uses', '').startswith('actions/checkout@')]
     assert len(checkouts) == 1
     options = checkouts[0].get('with', {})
     assert options.get('ref') == '${{ github.workflow_sha }}'
     assert options.get('persist-credentials') is False
-    commands = ('bash scripts/release/open-pr.sh', 'bash scripts/release/finalize-pr.sh')
-    release_steps = [step for step in steps if step.get('run', '').strip() in commands]
+    release_steps = [step for step in steps if step.get('run', '').strip() == expected_command]
     assert len(release_steps) == 1
     release_step = release_steps[0]
     assert release_step.get('env', {}).get('GH_TOKEN') == '${{ secrets.DUDIM_AI_GH_TOKEN }}'
@@ -36,7 +35,7 @@ class WorkflowIsolationTests(unittest.TestCase):
         for react in ('17', '18'):
             for operation in ('open', 'finalize'):
                 with self.subTest(react=react, operation=operation):
-                    assert_isolated(jobs[f'{operation}-react{react}'])
+                    assert_isolated(jobs[f'{operation}-react{react}'], f'bash scripts/release/{operation}-pr.sh')
             commands = '\n'.join(step.get('run', '') for step in jobs[f'prepare-react{react}']['steps'])
             self.assertNotRegex(commands, r'npm ci|npm install|npm run')
             self.assertIn('--no-git-tag-version --ignore-scripts', commands)
@@ -49,37 +48,41 @@ class WorkflowIsolationTests(unittest.TestCase):
             bad = deepcopy(job)
             del bad['steps'][0]['with'][option]
             with self.subTest(option=option), self.assertRaises(AssertionError):
-                assert_isolated(bad)
+                assert_isolated(bad, 'bash scripts/release/open-pr.sh')
         for step in ({'run': 'npm ci'}, {'uses': 'actions/cache@some-sha'},
                      {'uses': 'actions/download-artifact@some-sha'}):
             bad = deepcopy(job)
             bad['steps'].append(step)
             with self.subTest(step=step), self.assertRaises(AssertionError):
-                assert_isolated(bad)
+                assert_isolated(bad, 'bash scripts/release/open-pr.sh')
 
     def test_yaml_comments_do_not_change_the_security_contract(self):
         text = WORKFLOW.read_text()
-        assert_isolated(yaml.safe_load('# No npm commands here\n' + text)['jobs']['open-react17'])
+        assert_isolated(yaml.safe_load('# No npm commands here\n' + text)['jobs']['open-react17'], 'bash scripts/release/open-pr.sh')
         commented = text.replace('          ref: ${{ github.workflow_sha }}',
                                  '          # ref: ${{ github.workflow_sha }}')
         with self.assertRaises(AssertionError):
-            assert_isolated(yaml.safe_load(commented)['jobs']['open-react17'])
+            assert_isolated(yaml.safe_load(commented)['jobs']['open-react17'], 'bash scripts/release/open-pr.sh')
 
     def test_release_step_owns_token_and_cannot_be_skipped_or_ignored(self):
         job = yaml.safe_load(WORKFLOW.read_text())['jobs']['open-react17']
         bad = deepcopy(job)
         bad['steps'][0]['env'] = {'GH_TOKEN': bad['steps'][1]['env'].pop('GH_TOKEN')}
         with self.assertRaises(AssertionError):
-            assert_isolated(bad)
+            assert_isolated(bad, 'bash scripts/release/open-pr.sh')
         for level in ('job', 'step'):
             for key, value in (('if', 'false'), ('continue-on-error', True)):
                 bad = deepcopy(job)
                 scope = bad if level == 'job' else bad['steps'][1]
                 scope[key] = value
                 with self.subTest(level=level, key=key), self.assertRaises(AssertionError):
-                    assert_isolated(bad)
+                    assert_isolated(bad, 'bash scripts/release/open-pr.sh')
+        bad = deepcopy(job)
+        bad['steps'][1]['run'] = 'bash scripts/release/finalize-pr.sh'
+        with self.assertRaises(AssertionError):
+            assert_isolated(bad, 'bash scripts/release/open-pr.sh')
         job['steps'].append({'if': 'failure()', 'run': 'echo failure'})
-        assert_isolated(job)
+        assert_isolated(job, 'bash scripts/release/open-pr.sh')
 
 
 if __name__ == '__main__':

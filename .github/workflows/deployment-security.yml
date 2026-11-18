@@ -16,9 +16,19 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - name: Install release test dependencies
+        run: |
+          python3 -m venv "$RUNNER_TEMP/release-tests"
+          "$RUNNER_TEMP/release-tests/bin/python" -m pip install --disable-pip-version-check -r scripts/release/requirements-test.txt
       - run: python3 -m unittest discover -s scripts/deploy -p 'test_*.py'
+      - run: |
+          "$RUNNER_TEMP/release-tests/bin/python" -m unittest discover -s scripts/release -p 'test_*.py'
+      - name: Check every release and deployment shell script
+        run: |
+          for script in scripts/release/*.sh scripts/deploy/*.sh; do
+            bash -n "$script" || exit 1
+          done
       - run: node --test scripts/deploy/test-storybook-publication.cjs
-      - run: bash -n scripts/deploy/storybook.sh scripts/deploy/storybook-remove.sh
 
   python-security:
     name: Python security

@@ -284,6 +284,7 @@ jobs:
         id: publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          RECOVERY_ONLY: ${{ steps.compatibility.outputs.recovery == 'true' }}
         run: |
           cd dist
           PKG_VERSION=$(node -p "require('./package.json').version")
@@ -317,6 +318,10 @@ jobs:
             exit 0
           elif ! jq -e '.error.code == "E404"' <<< "$PUBLISHED_METADATA" >/dev/null; then
             echo '❌ Не удалось подтвердить наличие npm-версии; публикация остановлена до восстановления доступа к реестру.'
+            exit 1
+          fi
+          if [ "${RECOVERY_ONLY:-false}" = true ]; then
+            echo '❌ Режим восстановления: npm не подтверждает версию; npm publish не запускаем.'
             exit 1
           fi
           # Порядок половин — не только договорённость скилов: во внутреннем
@@ -466,10 +471,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Read the actual Release on every trigger, including manual recovery.
+          # Versions outside 1.Y.0 never need MCP metadata or an API request.
+          if [[ ! "$RELEASE_TAG" =~ ^1\.[0-9]+\.0$ ]]; then
+            echo 'eligible=false' >> "$GITHUB_OUTPUT"
+            echo "MCP bundle не генерируется: tag=${RELEASE_TAG}."
+            exit 0
+          fi
+          # Read the actual Release for React 18, including manual recovery.
           IS_PRERELEASE=$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${RELEASE_TAG}" --jq .prerelease)
           case "$IS_PRERELEASE" in true|false) ;; *) echo 'Неизвестен статус prerelease'; exit 1 ;; esac
-          if [[ "$IS_PRERELEASE" == false && "$RELEASE_TAG" =~ ^1\.[0-9]+\.0$ ]]; then
+          if [[ "$IS_PRERELEASE" == false ]]; then
             echo "eligible=true" >> "$GITHUB_OUTPUT"
           else
             echo "eligible=false" >> "$GITHUB_OUTPUT"

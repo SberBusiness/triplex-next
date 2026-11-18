@@ -40,8 +40,9 @@ gh() {
     def test_mcp_eligibility_uses_actual_release_prerelease_flag(self):
         steps = yaml.safe_load(WORKFLOW.read_text())['jobs']['build-and-publish']['steps']
         step = next(step for step in steps if step.get('name') == 'Detect MCP bundle eligibility')
-        script = '''set -euo pipefail
+        script = r'''set -euo pipefail
 gh() {
+  [[ "$RELEASE_TAG" =~ ^1\.[0-9]+\.0$ ]] || { echo unexpected-api-call >&2; return 99; }
   [[ "$*" == "api repos/test/repo/releases/tags/${RELEASE_TAG} --jq .prerelease" ]] || return 99
   printf '%s' "$TEST_PRERELEASE"; return "$TEST_EXIT"
 }
@@ -49,6 +50,8 @@ gh() {
         for version, prerelease, code, expected in (
             ('1.99.0', 'false', 0, 'true'), ('1.99.0', 'true', 0, 'false'),
             ('0.99.0', 'false', 0, 'false'), ('0.99.0', 'true', 0, 'false'),
+            ('0.99.0', '', 1, 'false'), ('1.99.1', '', 1, 'false'),
+            ('1.99.0-beta', '', 1, 'false'),
             ('1.99.0', 'null', 0, None), ('1.99.0', '', 1, None),
         ):
             with self.subTest(version=version, prerelease=prerelease), tempfile.TemporaryDirectory() as directory:
@@ -57,6 +60,7 @@ gh() {
                                         env=dict(os.environ, GITHUB_REPOSITORY='test/repo', RELEASE_TAG=version,
                                         TEST_PRERELEASE=prerelease, TEST_EXIT=str(code), GITHUB_OUTPUT=str(output)))
                 self.assertEqual(result.returncode == 0, expected is not None, result.stdout + result.stderr)
+                self.assertNotIn('unexpected-api-call', result.stderr)
                 self.assertEqual(output.read_text() if output.exists() else '',
                                  f'eligible={expected}\n' if expected is not None else '')
 
@@ -139,7 +143,9 @@ curl() {
 
     def test_existing_npm_version_must_match_the_checked_out_commit(self):
         steps = yaml.safe_load(WORKFLOW.read_text())['jobs']['build-and-publish']['steps']
-        commands = next(step['run'] for step in steps if step.get('name') == 'Publish to npm')
+        publish = next(step for step in steps if step.get('name') == 'Publish to npm')
+        self.assertEqual(publish['env']['RECOVERY_ONLY'], "${{ steps.compatibility.outputs.recovery == 'true' }}")
+        commands = publish['run']
         guard = 'BUILD_SHA=' + commands.split('BUILD_SHA=', 1)[1].split('# Порядок половин', 1)[0]
         script = '''set -euo pipefail
 git() { [[ "$*" == 'rev-parse HEAD' ]] || return 99; printf '%s' "$TEST_SHA"; }
@@ -150,20 +156,23 @@ npm() {
 }
 ''' + guard + '\nprintf "new-version"\n'
         metadata = {'name': '@sberbusiness/triplex-next', 'version': '0.99.0', 'gitHead': SHA}
-        for data, code, expected in (
-            (metadata, 0, 'existing'),
-            ({**metadata, 'gitHead': 'b' * 40}, 0, 'stop'),
-            ({**metadata, 'gitHead': None}, 0, 'stop'),
-            ({**metadata, 'version': '0.98.0'}, 0, 'stop'),
-            ({'error': {'code': 'E404'}}, 1, 'new'),
-            ({'error': {'code': 'E503'}}, 1, 'stop'),
-            ({}, 0, 'stop'),
+        for data, code, recovery, expected in (
+            (metadata, 0, False, 'existing'),
+            (metadata, 0, True, 'existing'),
+            ({**metadata, 'gitHead': 'b' * 40}, 0, False, 'stop'),
+            ({**metadata, 'gitHead': None}, 0, False, 'stop'),
+            ({**metadata, 'version': '0.98.0'}, 0, False, 'stop'),
+            ({'error': {'code': 'E404'}}, 1, False, 'new'),
+            ({'error': {'code': 'E404'}}, 1, True, 'stop'),
+            ({'error': {'code': 'E503'}}, 1, False, 'stop'),
+            ({}, 0, False, 'stop'),
         ):
             with self.subTest(data=data), tempfile.TemporaryDirectory() as directory:
                 output = Path(directory) / 'output'
                 result = subprocess.run(['bash', '-c', script], capture_output=True, text=True, timeout=5,
                                         env=dict(os.environ, TEST_SHA=SHA, TEST_METADATA=json.dumps(data),
-                                        TEST_EXIT=str(code), RELEASE_TAG='0.99.0', GITHUB_OUTPUT=str(output)))
+                                        TEST_EXIT=str(code), RELEASE_TAG='0.99.0', GITHUB_OUTPUT=str(output),
+                                        RECOVERY_ONLY=str(recovery).lower()))
                 self.assertEqual(result.returncode == 0, expected != 'stop', result.stdout + result.stderr)
                 self.assertEqual(output.read_text() if output.exists() else '',
                                  'published=false\n' if expected == 'existing' else '')

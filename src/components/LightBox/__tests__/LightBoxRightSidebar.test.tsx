@@ -10,7 +10,7 @@ describe("LightBoxRightSidebar", () => {
     beforeEach(() => {
         vi.stubGlobal(
             "ResizeObserver",
-            vi.fn().mockImplementation((callback: (entries: ResizeObserverEntry[]) => void) => {
+            vi.fn().mockImplementation(function (callback: (entries: ResizeObserverEntry[]) => void) {
                 triggerResize = (width: number) => {
                     act(() => {
                         callback([{ contentRect: { width } as DOMRectReadOnly } as ResizeObserverEntry]);

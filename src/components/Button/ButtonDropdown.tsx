@@ -16,14 +16,8 @@ import {
 } from "./ButtonDropdownExtended";
 import { Button } from "./Button";
 import { EButtonDotsTheme, EButtonTheme } from "./enums";
-import { isKey } from "../../utils/keyboard";
-import {
-    DropdownList,
-    DropdownListContext,
-    IDropdownListItemProps,
-    EDropdownWidth,
-    EDropdownAlignment,
-} from "../Dropdown";
+import { createButtonDropdownKeyDownHandler } from "./utils";
+import { DropdownList, IDropdownListItemProps, EDropdownWidth, EDropdownAlignment } from "../Dropdown";
 import { PullerHeader, PullerClose, PullerBody, PullerList, PullerListItem } from "../Puller";
 import { Text, ETextSize } from "../Typography";
 import { EComponentSize } from "../../enums/EComponentSize";
@@ -33,7 +27,7 @@ import styles from "./styles/ButtonDropdown.module.less";
 /** Свойства опции в выпадающем списке действий. */
 export interface IButtonDropdownOption extends Omit<
     IDropdownListItemProps,
-    "active" | "onSelect" | "selected" | "keyCodesForSelection" | "className" | "key"
+    "onSelect" | "selected" | "keyCodesForSelection" | "className" | "key"
 > {
     /** Уникальное имя опции. */
     id: string;
@@ -144,7 +138,6 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
         const buttonRef = useRef<HTMLButtonElement | null>(null);
         const dropdownRef = useRef<HTMLDivElement>(null);
         const classNames = clsx(styles.buttonDropdown, { [styles.block]: !!block }, className);
-        const [activeDescendant, setActiveDescendant] = useState<string>();
         const [instanceId] = useState(() => uniqueId());
 
         const isDots = isDotsTheme(theme);
@@ -159,31 +152,9 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
             }
         };
 
-        const handleClick =
-            ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) =>
-            () =>
-                setOpened(!opened);
-
-        const handleKeyDown =
-            ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) =>
-            (event: React.KeyboardEvent<HTMLButtonElement>) => {
-                // Сравнивается event.code (как в ButtonDropdownExtended): event.key пробела — " ", он не входит в EVENT_KEYS.SPACE.
-                const key: string | number = event.code || event.keyCode;
-
-                if (isKey(key, "SPACE") || isKey(key, "ARROW_UP") || isKey(key, "ARROW_DOWN")) {
-                    event.preventDefault();
-                }
-                if (isKey(key, "SPACE")) {
-                    // preventDefault отменяет нативную click-активацию кнопки по пробелу — переключение выполняется явно.
-                    setOpened(!opened);
-                } else if (!opened && (isKey(key, "ARROW_UP") || isKey(key, "ARROW_DOWN"))) {
-                    setOpened(true);
-                }
-            };
-
         const renderCaret = () => SIZE_TO_CARET_ICON_MAP[size](THEME_TO_CARET_PALETTE_INDEX_MAP[buttonTheme]);
 
-        const renderButton = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => {
+        const renderButton = ({ opened, setOpened, activeDescendant }: IButtonDropdownExtendedButtonProvideProps) => {
             const classNames = clsx(styles.buttonDropdownTarget, {
                 [styles.dots]: isDots,
                 [styles.block]: !!block,
@@ -195,8 +166,8 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                     className={classNames}
                     theme={buttonTheme}
                     size={size}
-                    onKeyDown={handleKeyDown({ opened, setOpened })}
-                    onClick={handleClick({ opened, setOpened })}
+                    onKeyDown={createButtonDropdownKeyDownHandler({ opened, setOpened })}
+                    onClick={() => setOpened(!opened)}
                     disabled={disabled}
                     aria-haspopup="menu"
                     aria-expanded={opened}
@@ -221,64 +192,62 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
             const classNames = clsx(className, dropdownClassName);
 
             return (
-                <DropdownListContext.Provider value={{ activeDescendant, setActiveDescendant }}>
-                    <ButtonDropdownExtended.Dropdown
-                        {...restDropdownAttributes}
-                        className={classNames}
-                        size={size}
-                        width={EDropdownWidth.MIN_TARGET}
-                        alignment={EDropdownAlignment.RIGHT}
-                        opened={opened}
-                        setOpened={setOpened}
-                        targetRef={buttonRef}
-                        ref={dropdownRef}
-                        pullerProps={{
-                            children: (
-                                <>
-                                    <PullerHeader controlButtons={<PullerClose onClick={() => setOpened(false)} />}>
-                                        <Text tag="div" size={ETextSize.B3}>
-                                            {children}
-                                        </Text>
-                                    </PullerHeader>
-                                    <PullerBody>
-                                        <PullerList>
-                                            {options.map(({ label, ...restOption }) => (
-                                                <PullerListItem
-                                                    {...restOption}
-                                                    key={restOption.id}
-                                                    selected={restOption.id === selected?.id}
-                                                    onSelect={() => {
-                                                        restOption.onSelect?.();
-                                                        setOpened(false);
-                                                    }}
-                                                >
-                                                    {label}
-                                                </PullerListItem>
-                                            ))}
-                                        </PullerList>
-                                    </PullerBody>
-                                </>
-                            ),
-                        }}
-                    >
-                        <DropdownList dropdownOpened={opened} id={instanceId} size={size}>
-                            {options.map(({ label, ...restOption }) => (
-                                <DropdownList.Item
-                                    {...restOption}
-                                    className={styles.buttonDropdownMenuItem}
-                                    key={restOption.id}
-                                    selected={restOption.id === selected?.id}
-                                    onSelect={() => {
-                                        restOption.onSelect?.();
-                                        setOpened(false);
-                                    }}
-                                >
-                                    {label}
-                                </DropdownList.Item>
-                            ))}
-                        </DropdownList>
-                    </ButtonDropdownExtended.Dropdown>
-                </DropdownListContext.Provider>
+                <ButtonDropdownExtended.Dropdown
+                    {...restDropdownAttributes}
+                    className={classNames}
+                    size={size}
+                    width={EDropdownWidth.MIN_TARGET}
+                    alignment={EDropdownAlignment.RIGHT}
+                    opened={opened}
+                    setOpened={setOpened}
+                    targetRef={buttonRef}
+                    ref={dropdownRef}
+                    pullerProps={{
+                        children: (
+                            <>
+                                <PullerHeader controlButtons={<PullerClose onClick={() => setOpened(false)} />}>
+                                    <Text tag="div" size={ETextSize.B3}>
+                                        {children}
+                                    </Text>
+                                </PullerHeader>
+                                <PullerBody>
+                                    <PullerList>
+                                        {options.map(({ label, ...restOption }) => (
+                                            <PullerListItem
+                                                {...restOption}
+                                                key={restOption.id}
+                                                selected={restOption.id === selected?.id}
+                                                onSelect={() => {
+                                                    restOption.onSelect?.();
+                                                    setOpened(false);
+                                                }}
+                                            >
+                                                {label}
+                                            </PullerListItem>
+                                        ))}
+                                    </PullerList>
+                                </PullerBody>
+                            </>
+                        ),
+                    }}
+                >
+                    <DropdownList dropdownOpened={opened} id={instanceId} size={size}>
+                        {options.map(({ label, ...restOption }) => (
+                            <DropdownList.Item
+                                {...restOption}
+                                className={styles.buttonDropdownMenuItem}
+                                key={restOption.id}
+                                selected={restOption.id === selected?.id}
+                                onSelect={() => {
+                                    restOption.onSelect?.();
+                                    setOpened(false);
+                                }}
+                            >
+                                {label}
+                            </DropdownList.Item>
+                        ))}
+                    </DropdownList>
+                </ButtonDropdownExtended.Dropdown>
             );
         };
 

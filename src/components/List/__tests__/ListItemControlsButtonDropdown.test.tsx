@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { ListItemControlsButtonDropdown } from "../components/ListItemControlsButtonDropdown";
+import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 
 const options = [
     { id: "opt-1", label: "Option 1" },
@@ -32,14 +33,14 @@ describe("ListItemControlsButtonDropdown", () => {
     it("opens the dropdown on ArrowDown when closed", () => {
         render(<ListItemControlsButtonDropdown options={options}>Actions</ListItemControlsButtonDropdown>);
         const button = screen.getByRole("button");
-        fireEvent.keyDown(button, { key: "ArrowDown" });
+        fireEvent.keyDown(button, { code: "ArrowDown" });
         expect(button).toHaveAttribute("aria-expanded", "true");
     });
 
     it("opens the dropdown on ArrowUp when closed", () => {
         render(<ListItemControlsButtonDropdown options={options}>Actions</ListItemControlsButtonDropdown>);
         const button = screen.getByRole("button");
-        fireEvent.keyDown(button, { key: "ArrowUp" });
+        fireEvent.keyDown(button, { code: "ArrowUp" });
         expect(button).toHaveAttribute("aria-expanded", "true");
     });
 
@@ -49,9 +50,9 @@ describe("ListItemControlsButtonDropdown", () => {
         fireEvent.click(button);
         expect(button).toHaveAttribute("aria-expanded", "true");
 
-        fireEvent.keyDown(button, { key: "ArrowDown" });
+        fireEvent.keyDown(button, { code: "ArrowDown" });
         expect(button).toHaveAttribute("aria-expanded", "true");
-        fireEvent.keyDown(button, { key: "ArrowUp" });
+        fireEvent.keyDown(button, { code: "ArrowUp" });
         expect(button).toHaveAttribute("aria-expanded", "true");
     });
 
@@ -59,12 +60,36 @@ describe("ListItemControlsButtonDropdown", () => {
         render(<ListItemControlsButtonDropdown options={options}>Actions</ListItemControlsButtonDropdown>);
         const button = screen.getByRole("button");
 
-        const arrowDown = fireEvent.keyDown(button, { key: "ArrowDown" });
+        const arrowDown = fireEvent.keyDown(button, { code: "ArrowDown" });
         // fireEvent returns false when an event handler called preventDefault
         expect(arrowDown).toBe(false);
 
-        const arrowUp = fireEvent.keyDown(button, { key: "ArrowUp" });
+        const arrowUp = fireEvent.keyDown(button, { code: "ArrowUp" });
         expect(arrowUp).toBe(false);
+    });
+
+    it("opens dropdown on Space and prevents default click activation", () => {
+        render(<ListItemControlsButtonDropdown options={options}>Actions</ListItemControlsButtonDropdown>);
+        const button = screen.getByRole("button");
+
+        const prevented = !fireEvent.keyDown(button, { code: "Space" });
+        expect(prevented).toBe(true);
+        expect(button).toHaveAttribute("aria-expanded", "true");
+    });
+
+    it("selects the active option on Space when open and closes", () => {
+        const onSelect = vi.fn();
+        const opts = [{ id: "opt-1", label: "Option 1", onSelect }];
+        render(<ListItemControlsButtonDropdown options={opts}>Actions</ListItemControlsButtonDropdown>);
+        const button = screen.getByRole("button", { name: /Actions/ });
+
+        fireEvent.keyDown(button, { code: "Space", keyCode: EVENT_KEY_CODES.SPACE });
+        expect(button).toHaveAttribute("aria-expanded", "true");
+        expect(onSelect).not.toHaveBeenCalled();
+
+        fireEvent.keyDown(button, { code: "Space", keyCode: EVENT_KEY_CODES.SPACE });
+        expect(onSelect).toHaveBeenCalledTimes(1);
+        expect(button).toHaveAttribute("aria-expanded", "false");
     });
 
     it("is disabled when disabled prop is set", () => {

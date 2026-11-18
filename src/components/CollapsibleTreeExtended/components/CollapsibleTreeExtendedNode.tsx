@@ -1,4 +1,5 @@
 import React from "react";
+import clsx from "clsx";
 import { ITreeViewNodeProps, ITreeViewNodeProvideProps } from "../../TreeView/components/TreeViewNode";
 import {
     IAccordionBaseProps,
@@ -7,7 +8,6 @@ import {
 } from "../../AccordionBase/types";
 import { TreeView } from "../../TreeView/TreeView";
 import { AccordionBase } from "../../AccordionBase/protected/AccordionBase";
-import clsx from "clsx";
 import styles from "../styles/CollapsibleTreeExtended.module.less";
 
 /** Свойства, передаваемые CollapsibleTreeExtendedNode в рендер-функцию renderBody. */
@@ -35,6 +35,7 @@ export interface ICollapsibleTreeExtendedNodeHeaderProvideProps
 /** Свойства CollapsibleTreeExtendedNode. */
 export interface ICollapsibleTreeExtendedNodeProps
     extends Omit<ITreeViewNodeProps, "children">, Pick<IAccordionBaseProps, "onToggle" | "toggle"> {
+    /** Содержимое задаётся через renderBody; children не поддерживается. */
     children?: never;
     /** Рендер-функция раскрываемого содержимого ноды (обычно дочерние ноды). */
     renderBody: (props: ICollapsibleTreeExtendedNodeBodyProvideProps) => React.ReactNode;
@@ -45,7 +46,7 @@ export interface ICollapsibleTreeExtendedNodeProps
 /**
  * Нода дерева CollapsibleTreeExtended.
  * Является оберткой TreeView.Node.
- * Сворачиваться/разворачиваться может только если есть дочерние ноды. Они передаются в renderBody.
+ * Раскрываемое содержимое задаётся через renderBody; зарегистрированные дочерние ноды оборачиваются в TreeView.Group.
  *
  * Поддерживает controlled и uncontrolled режим:
  * - если `opened` передан (`!== undefined`) — нода контролируемая, состояние раскрытия читается из props,
@@ -58,20 +59,27 @@ export class CollapsibleTreeExtendedNode extends React.Component<ICollapsibleTre
     public static displayName = "CollapsibleTreeExtendedNode";
 
     public render(): JSX.Element {
-        const { opened: openedProps, onToggle, renderBody, renderHeader, toggle, ...treeNodeProps } = this.props;
-        const controlled = openedProps !== undefined;
+        const { opened: openedProp, onToggle, renderBody, renderHeader, toggle, ...treeNodeProps } = this.props;
 
         return (
-            <TreeView.Node opened={openedProps} {...treeNodeProps}>
-                {(treeViewNodeProps) => {
-                    const opened = controlled ? openedProps : treeViewNodeProps.openedNode;
+            <TreeView.Node opened={openedProp} {...treeNodeProps}>
+                {({ activeNode, hasChildNodes, isLastNode, openedNode, setOpenedNode }) => {
+                    // Controlled-состояние из props, иначе — состояние текущей ноды TreeView.
+                    const opened = openedProp !== undefined ? openedProp : openedNode;
+                    // Общие provide-props для renderBody и renderHeader.
+                    const nodeProps = { activeNode, hasChildNodes, opened, toggle: this.createToggle(setOpenedNode) };
+
                     return (
                         <AccordionBase
                             expandAnimationClassName={clsx(styles.collapsibleTreeExtendedNodeContent, {
                                 collapsed: !opened,
                             })}
-                            renderBody={this.renderBody(treeViewNodeProps)}
-                            renderHeader={this.renderHeader(treeViewNodeProps)}
+                            renderBody={({ animating }) => {
+                                const body = renderBody({ ...nodeProps, animating });
+                                // Внутренние ноды оборачиваются дополнительным тегом.
+                                return hasChildNodes ? <TreeView.Group>{body}</TreeView.Group> : body;
+                            }}
+                            renderHeader={({ animating }) => renderHeader({ ...nodeProps, animating, isLastNode })}
                             isOpen={opened}
                             onToggle={onToggle}
                         />
@@ -82,71 +90,21 @@ export class CollapsibleTreeExtendedNode extends React.Component<ICollapsibleTre
     }
 
     /**
-     * Изменяет состояние ноды — раскрыта/свернута.
+     * Создаёт функцию смены состояния ноды — раскрыта/свернута.
      * В controlled-режиме делегирует в `props.toggle`, в uncontrolled — переключает внутреннее состояние TreeView.
-     * Эта функция передается дочерним компонентам и вызывается из них.
      */
-    private toggle =
-        ({ openedNode, setOpenedNode }: ITreeViewNodeProvideProps) =>
-        (nextOpened: boolean) => {
-            const { opened: openedProps, toggle } = this.props;
-            const controlled = openedProps !== undefined;
-            const opened = controlled ? openedProps : openedNode;
+    private createToggle(
+        setOpenedNode: ITreeViewNodeProvideProps["setOpenedNode"],
+    ): ICollapsibleTreeExtendedNodeHeaderProvideProps["toggle"] {
+        return (nextOpened) => {
+            const { opened, toggle } = this.props;
 
-            if (opened === nextOpened) {
-                return;
-            }
-
-            if (controlled) {
-                toggle?.(nextOpened);
-            } else {
+            if (opened === undefined) {
                 setOpenedNode(nextOpened);
+            } else {
+                // props.opened до перерендера устаревший — не сравниваем.
+                toggle?.(nextOpened);
             }
         };
-
-    /** Рендер-функция для передачи дочерних нод. */
-    private renderBody =
-        (treeViewNodeProvideProps: ITreeViewNodeProvideProps) =>
-        (accordionBodyProvideProps: IAccordionBodyProvideProps) => {
-            const { activeNode, openedNode, hasChildNodes } = treeViewNodeProvideProps;
-            const { animating } = accordionBodyProvideProps;
-            const { opened: openedProps, renderBody } = this.props;
-            const controlled = openedProps !== undefined;
-            const opened = controlled ? openedProps : openedNode;
-
-            const bodyProps: ICollapsibleTreeExtendedNodeBodyProvideProps = {
-                activeNode,
-                animating,
-                hasChildNodes,
-                opened,
-                toggle: this.toggle(treeViewNodeProvideProps),
-            };
-
-            // Внутренние ноды оборачиваются дополнительным тегом.
-            if (hasChildNodes) {
-                return <TreeView.Group>{renderBody(bodyProps)}</TreeView.Group>;
-            }
-
-            return renderBody(bodyProps);
-        };
-
-    /** Рендер-функция не сворачиваемой части ноды. */
-    private renderHeader =
-        (treeViewNodeProvideProps: ITreeViewNodeProvideProps) =>
-        (accordionHeaderProvideProps: IAccordionHeaderProvideProps) => {
-            const { activeNode, openedNode, hasChildNodes, isLastNode } = treeViewNodeProvideProps;
-            const { animating } = accordionHeaderProvideProps;
-            const { opened: openedProps, renderHeader } = this.props;
-            const controlled = openedProps !== undefined;
-            const opened = controlled ? openedProps : openedNode;
-
-            return renderHeader({
-                activeNode,
-                animating,
-                hasChildNodes,
-                isLastNode,
-                opened,
-                toggle: this.toggle(treeViewNodeProvideProps),
-            });
-        };
+    }
 }

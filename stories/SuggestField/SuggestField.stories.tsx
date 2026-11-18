@@ -106,6 +106,10 @@ const PLAYGROUND_ARG_TYPES: ArgTypesType<PlaygroundArgs> = {
         control: "object",
         table: { category: "Props" },
     },
+    dropdownProps: {
+        control: "object",
+        table: { category: "Props" },
+    },
     // Settings
     withPrefix: {
         description: "С префиксом.",

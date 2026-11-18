@@ -1,9 +1,9 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 import { ListActionItem } from "../components/ListActionItem";
 import { List } from "../List";
-import { userEvent } from "storybook/internal/test";
 
 describe("ListActionItem", () => {
     it("renders children", () => {

@@ -41,7 +41,7 @@ export const ChipSort = React.forwardRef<HTMLDivElement, IChipSortProps>(
         // сортировка по умолчанию — это не изменение фильтра, подсвечивать нечего.
         const selected = value != null && !isEqual(defaultValue, value);
 
-        const renderTarget = ({ opened, setOpened }: ISelectExtendedFieldTargetProvideProps) => {
+        const renderTarget = ({ opened, setOpened, activeDescendant }: ISelectExtendedFieldTargetProvideProps) => {
             const handleKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
                 // Закрытием списка занимается SelectExtendedField, здесь только открытие.
                 if (!opened && (isKey(event.code, "ENTER") || isKey(event.code, "SPACE"))) {
@@ -61,6 +61,7 @@ export const ChipSort = React.forwardRef<HTMLDivElement, IChipSortProps>(
                     role="combobox"
                     aria-expanded={opened}
                     aria-controls={instanceId.current}
+                    aria-activedescendant={activeDescendant}
                     ref={ref}
                 >
                     <IconWrapper active={opened} disabled={disabled} displayContents>

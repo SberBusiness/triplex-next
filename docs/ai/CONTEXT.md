@@ -24,7 +24,7 @@ React-библиотека компонентов дизайн-системы.
 | Стили | LESS CSS Modules (`.module.less`) |
 | Дизайн-токены | CSS-переменные, генерируются в `src/generated/` |
 | Сборка | Vite, ES-модули only |
-| Документация | Storybook 9 |
+| Документация | Storybook 10 |
 | Unit-тесты | Vitest + Testing Library |
 | Visual regression | Storybook test-runner + jest-image-snapshot |
 | E2E | Playwright |

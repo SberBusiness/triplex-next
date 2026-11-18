@@ -134,6 +134,25 @@ describe("TreeViewNode", () => {
 
             expect(screen.getByRole("treeitem")).toHaveAttribute("aria-expanded", "true");
         });
+
+        it("setOpenedNode с текущим значением не перерисовывает дерево", () => {
+            const renderContent = vi.fn(({ setOpenedNode }: ITreeViewNodeProvideProps) => (
+                <button type="button" onClick={() => setOpenedNode(false)}>
+                    collapse
+                </button>
+            ));
+            render(
+                <TreeView aria-label="Tree">
+                    <TreeView.Node id="a">{renderContent}</TreeView.Node>
+                </TreeView>,
+            );
+            const renderCount = renderContent.mock.calls.length;
+
+            fireEvent.click(screen.getByRole("button", { name: "collapse" }));
+
+            expect(renderContent).toHaveBeenCalledTimes(renderCount);
+            expect(screen.getByRole("treeitem")).toHaveAttribute("aria-expanded", "false");
+        });
     });
 
     describe("Provide-props", () => {

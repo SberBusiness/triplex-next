@@ -40,6 +40,11 @@ body {
     word-break: break-word;
 }
 
+.icon-display-name.deprecated {
+    text-decoration: line-through;
+    cursor: help;
+}
+
 .theme-light > body {
     color: rgb(24, 24, 25);
     background-color: rgb(255, 255, 255);
@@ -66,6 +71,10 @@ body {
 .theme-light .icon-item.inverted {
     color: #E8E8E8;
     background-color: #000000;
+}
+
+.icon-item.deprecated {
+    background-color: #FFB1C1 !important;
 }
 
 @font-face {

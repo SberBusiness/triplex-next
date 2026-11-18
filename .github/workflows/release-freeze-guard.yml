@@ -138,6 +138,12 @@ jobs:
             --jq '[.workflow_runs[] | select(.status == "in_progress" or .status == "queued")][0].html_url // empty' 2>/dev/null) || RUN_URL=""
           # Тело ошибки API — не «прогон идёт»: только настоящая ссылка на прогон.
           printf '%s' "${RUN_URL}" | grep -qE '^https://github\.com/.+/actions/runs/[0-9]+$' || RUN_URL=""
+          V0_STATUS=unknown
+          if V0_RESPONSE=$(gh api --include "repos/${GITHUB_REPOSITORY}/releases/tags/${V0}" 2>/dev/null); then
+            V0_STATUS=present
+          elif [ "$(printf '%s\n' "$V0_RESPONSE" | awk 'NR==1 && /^HTTP\// {print $2}')" = 404 ]; then
+            V0_STATUS=absent
+          fi
           if [ -n "${RUN_URL}" ]; then
             HINT="прямо сейчас идёт прогон Weekly release, версии могут разъехаться"
             ACTION=$(cat <<EOF
@@ -150,7 +156,7 @@ jobs:
           3. Выбрать восстановление по фактическому этапу в \`docs/human/release.md\`: «Если остановился React 17 PR до публикации» или «Если релиз выпущен наполовину». Не повторять бамп, если релизный PR уже слит.
           EOF
             )
-          elif gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${V0}" >/dev/null 2>&1; then
+          elif [ "$V0_STATUS" = present ]; then
             HINT="релиз остановился на половине, см. «Если релиз выпущен наполовину»"
             ACTION=$(cat <<EOF
           Релиз остановился на половине: \`${V0}\` выпущена, \`${VERSION}\` — нет. Перелитие и новый запуск **не помогут**: предполёт откажет, \`${V0}\` уже существует.
@@ -158,6 +164,9 @@ jobs:
           Если прогон остановился на сверке содержимого \`main\` — откатить этот мерж в \`main\` (revert) и нажать **Re-run failed jobs** упавшего прогона: \`${VERSION}\` соберётся точной парой \`${V0}\`. Иначе — \`docs/human/release.md\` § «Если релиз выпущен наполовину».
           EOF
             )
+          elif [ "$V0_STATUS" = unknown ]; then
+            HINT="статус GitHub Release не удалось прочитать"
+            ACTION="Статус ${V0} неизвестен из-за ошибки API. Проверьте GitHub Release, npm и текущий прогон перед выбором восстановления; не начинайте новый бамп по этому сообщению."
           elif [ "$(git show origin/release-0:package.json | jq -r .version)" = "${V0}" ]; then
             HINT="бамп React 17 уже слит; продолжить исходный выпуск"
             ACTION=$(cat <<EOF

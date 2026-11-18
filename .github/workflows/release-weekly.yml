@@ -342,8 +342,8 @@ jobs:
           # он заводит задачу по итогам прогона.
           git commit -m "Подготовка релиза ${V0}"
           # PAT используется только для push в одноразовую ветку, не в release-0.
-          BRANCH="prerelease-${V0}"
-          git push --force "https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${BRANCH}"
+          BRANCH="prerelease-${V0}-run-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          git push "https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${BRANCH}"
           {
             echo "branch=${BRANCH}"
             echo "sha=$(git rev-parse HEAD)"
@@ -366,6 +366,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
           BRANCH: ${{ needs.prepare-react17.outputs.branch }}
+          SHA: ${{ needs.prepare-react17.outputs.sha }}
           VERSION: ${{ needs.preflight.outputs.v0 }}
           BASE_BRANCH: release-0
         run: bash scripts/release/open-pr.sh
@@ -524,9 +525,9 @@ jobs:
           git commit -m "Подготовка релиза ${VERSION}"
 
           # Одноразовая ветка проходит проверки и ревью через PR в main.
-          # Force обновляет только её при повторной подготовке; одобрение сбросится.
-          BRANCH="prerelease-${VERSION}"
-          git push --force "https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${BRANCH}"
+          # Каждая попытка получает свою ветку; чужие и прежние ветки не перезаписываем.
+          BRANCH="prerelease-${VERSION}-run-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          git push "https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${BRANCH}"
           {
             echo "branch=${BRANCH}"
             echo "sha=$(git rev-parse HEAD)"
@@ -564,6 +565,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
           BRANCH: ${{ needs.prepare-react18.outputs.branch }}
+          SHA: ${{ needs.prepare-react18.outputs.sha }}
           VERSION: ${{ needs.preflight.outputs.version }}
           BASE_BRANCH: main
         run: bash scripts/release/open-pr.sh
@@ -638,9 +640,9 @@ jobs:
             echo "  Один \`Re-run failed jobs\` не обновит родителя релизного коммита."
             echo "- Если main не менялся или PR уже слит: \`Re-run failed jobs\`"
             echo "  повторит завершение с тем же PR и SHA, без нового бампа версии."
-            echo "Если \`${VERSION}\` на этой неделе решено не выпускать — удали ветку"
-            echo "(PR закроется сам) и верни \`latest\` во внутреннем registry: он остался"
-            echo "на React 17-сборке — docs/human/release.md § «Если релиз выпущен наполовину»."
+            echo 'Перед отменой выпуска проверьте состояние PR: открытый можно закрыть без слияния.'
+            echo 'Если PR уже MERGED, удаление ветки не отменяет бамп: продолжайте failed jobs того же прогона.'
+            echo 'Отмена после слияния требует отдельного восстановления версии через PR; см. docs/human/release.md.'
           } >> "$GITHUB_STEP_SUMMARY"
 
   publish-react18:

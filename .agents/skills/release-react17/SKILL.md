@@ -181,20 +181,18 @@ git diff --name-only origin/release-0..HEAD -- src | \
 
 ## 1. Предусловия
 
+Проверки и сохранение SHA выполняй в одном сеансе оболочки. Если сеанс
+прервался до сохранения, начни предполёт заново: подготовка ещё не началась.
+
 ```bash
 git status --porcelain
 git fetch origin main release-0
-# V0 — фактическая версия этого выпуска (например, 0.56.0).
-STATE_FILE="$(git rev-parse --git-path "triplex-release-${V0:?}-main-sha")"
 PREFLIGHT_MAIN_SHA=$(git rev-parse origin/main) || exit 1
-# Не перезаписывать SHA старой попытки тем же номером версии.
-( set -o noclobber; printf '%s\n' "$PREFLIGHT_MAIN_SHA" > "$STATE_FILE" ) || {
-  echo 'Состояние предполёта уже существует: продолжите прежнюю попытку, не создавайте новую'; exit 1;
-}
+PREFLIGHT_RELEASE0_SHA=$(git rev-parse origin/release-0) || exit 1
 gh release view <V0> 2>&1 | head -3
 gh release view <V1> 2>&1 | head -3
-git show origin/release-0:package.json | grep -m1 '"version"'
-git merge-base --is-ancestor origin/main origin/release-0
+git show "${PREFLIGHT_RELEASE0_SHA}:package.json" | grep -m1 '"version"'
+git merge-base --is-ancestor "$PREFLIGHT_MAIN_SHA" "$PREFLIGHT_RELEASE0_SHA"
 ```
 
 Проверки — при провале остановись и сообщи разработчику:
@@ -214,10 +212,10 @@ git merge-base --is-ancestor origin/main origin/release-0
 `release-0`:
 
 ```bash
-git merge-base --is-ancestor origin/main origin/release-0
+git merge-base --is-ancestor "$PREFLIGHT_MAIN_SHA" "$PREFLIGHT_RELEASE0_SHA"
 ```
 
-Сверять можно прямо с вершиной `origin/main`: эта половина идёт первой, до
+Сверяем зафиксированный `PREFLIGHT_MAIN_SHA`: эта половина идёт первой, до
 того как React 18-часть добавит в `main` коммит с бампом. Проверка
 индифферентна к собственным коммитам `release-0` поверх мержа — их может быть
 сколько угодно, включая правки после разрешения конфликтов; падает она только
@@ -226,7 +224,7 @@ git merge-base --is-ancestor origin/main origin/release-0
 При провале покажи, чего именно не хватает, — без этого сообщение бесполезно:
 
 ```bash
-git log origin/main --not origin/release-0 --oneline
+git log "$PREFLIGHT_MAIN_SHA" --not "$PREFLIGHT_RELEASE0_SHA" --oneline
 ```
 
 Разрешать ситуацию самостоятельно (доливать main) **нельзя**: мерж — ручной
@@ -237,12 +235,27 @@ git log origin/main --not origin/release-0 --oneline
 ```bash
 gh run list --workflow=ci.yml --branch release-0 --limit 1 \
   --json headSha,status,conclusion,url
-git rev-parse origin/release-0
+printf '%s\n' "$PREFLIGHT_RELEASE0_SHA"
 ```
 
-`headSha` прогона должен совпадать с вершиной `origin/release-0`,
+`headSha` прогона должен совпадать с зафиксированным `PREFLIGHT_RELEASE0_SHA`,
 `status` = `completed`, `conclusion` = `success`. Прогон на другом коммите
 не считается — значит проверялось не то состояние ветки.
+
+Только после успешного прохождения всех предусловий сохрани SHA. Ветки
+не должны успеть сдвинуться за время проверки; иначе повтори предполёт,
+пока файл состояния ещё не создан:
+
+```bash
+: "${PREFLIGHT_MAIN_SHA:?}" "${PREFLIGHT_RELEASE0_SHA:?}" "${V0:?}"
+git fetch origin main release-0 || exit 1
+[[ $(git rev-parse origin/main) == "$PREFLIGHT_MAIN_SHA" ]] || exit 1
+[[ $(git rev-parse origin/release-0) == "$PREFLIGHT_RELEASE0_SHA" ]] || exit 1
+STATE_FILE="$(git rev-parse --git-path "triplex-release-${V0}-main-sha")"
+( set -o noclobber; printf '%s\n' "$PREFLIGHT_MAIN_SHA" > "$STATE_FILE" ) || {
+  echo 'Состояние уже начатой подготовки существует: продолжите прежнюю попытку'; exit 1;
+}
+```
 
 ## 2. Создать релизную ветку от `release-0` и прогнать гейты
 
@@ -250,7 +263,7 @@ git rev-parse origin/release-0
 Исходное состояние — проверенная вершина `origin/release-0`.
 
 ```bash
-git switch -c prerelease-<V0> origin/release-0
+git switch -c prerelease-<V0> "$PREFLIGHT_RELEASE0_SHA"
 ```
 
 Рабочее дерево должно остаться чистым, а `git rev-parse HEAD` — совпасть
@@ -399,7 +412,7 @@ git cat-file -e "${PREFLIGHT_MAIN_SHA}^{commit}" || exit 1
 прочитать сохранённый SHA указанным выше блоком. При отказе любой проверки — не создавать
 GitHub Release; восстановление описано в `docs/human/release.md`.
 
-## 6. Выпуск: GitHub Release
+## 6. Выпуск с проверенного SHA через Release workflow
 
 **Точка невозврата.** Текст notes собирается из `v0/<V0>.mdx` по канону из
 [`release`](../release/SKILL.md), раздел «Преобразование MDX → release notes»
@@ -413,15 +426,20 @@ GitHub Release; восстановление описано в `docs/human/relea
 
 ```bash
 node scripts/releaseNotesMd.js stories/release-notes/v0/<V0>.mdx > /tmp/notes-<V0>.md
-gh release create <V0> --target <MERGED_SHA> --title "<V0>" --latest=false \
-  --notes-file /tmp/notes-<V0>.md
+gh workflow run release.yml --ref main \
+  -f tag=<V0> -f target=release-0 -f sha=<MERGED_SHA> -f make_latest=false
 ```
 
 Скрипт [`scripts/releaseNotesMd.js`](../../../scripts/releaseNotesMd.js) —
 исполняемая форма канона «Преобразование MDX → release notes» из
 [`release`](../release/SKILL.md); ручная сборка текста эквивалентна.
 
-`--latest=false` обязателен: пометка Latest на GitHub должна достаться `1.x`.
+`make_latest=false` обязателен: пометка Latest на GitHub должна достаться `1.x`.
+Release workflow берёт notes из MDX **переданного SHA**, после сборки и
+публикации создаёт GitHub Release. В summary ручного выпуска зафиксируй run URL.
+Не заменяй этот вызов на `gh release create --target <MERGED_SHA>`: гейт
+события `release: published` требует `target_commitish=release-0`. И не
+подменяй SHA подвижной вершиной ветки; отдельный вход `sha` закрепляет сборку.
 
 
 ## 7. Дождаться публикации и проверить npm

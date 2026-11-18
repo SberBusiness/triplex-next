@@ -93,7 +93,7 @@ class FinalizeReleaseTests(unittest.TestCase):
                 path.chmod(0o700)
             env = dict(os.environ, PATH=str(commands) + os.pathsep + os.environ['PATH'],
                        TEST_CASE=case, TEST_ROOT=directory, BASE_BRANCH=base,
-                       SHA=SHA, PR='42', BRANCH=f'prerelease-{0 if base == "release-0" else 1}.99.0',
+                       SHA=SHA, PR='42', BRANCH=f'prerelease-{0 if base == "release-0" else 1}.99.0-run-123-1',
                        VERIFIED_MAIN='e' * 40, GITHUB_REPOSITORY='test/repo',
                        GITHUB_OUTPUT=str(root / 'output'), GITHUB_STEP_SUMMARY=str(root / 'summary'))
             env.update(overrides)
@@ -128,6 +128,10 @@ class FinalizeReleaseTests(unittest.TestCase):
             for case in ('approved', 'wait'):
                 with self.subTest(base=base, case=case):
                     self.run_case(case, base)
+
+    def test_manual_branch_is_still_supported(self):
+        self.run_case('approved', BRANCH='prerelease-1.99.0')
+        self.run_case('approved', 'release-0', BRANCH='prerelease-0.99.0')
 
     def test_changed_or_closed_pr_never_merges(self):
         for base in ('main', 'release-0'):

@@ -16,6 +16,9 @@ on:
         description: "Ветка, на которую вешается тег"
         required: true
         default: main
+      sha:
+        description: "Проверенный merge SHA для сборки и тега; обязан лежать в target"
+        required: false
       make_latest:
         description: "Пометить релиз как Latest — обязательно для 1.Y.0, запрещено для 0.Y.0"
         type: boolean
@@ -87,8 +90,9 @@ jobs:
       # 0.Y.0 только из release-0. Проверка стоит до checkout намеренно.
       #
       # Гейт общий для обоих триггеров: на пути `release: published` ветку даёт
-      # `target_commitish`. Оба скила создают релиз на ещё не существующем теге
-      # и с явным `--target`, поэтому там всегда лежит имя ветки. Если же релиз
+      # `target_commitish`. При создании релиза вручную нужен явный `--target`
+      # с именем ветки. React 17 skill вызывает workflow_dispatch с точным SHA.
+      # Если же релиз
       # повесить на уже существующий тег, GitHub подставит ветку по умолчанию —
       # для 0.Y.0 это осознанный стоп: такой релиз надо пересоздать
       # с `--target release-0`.

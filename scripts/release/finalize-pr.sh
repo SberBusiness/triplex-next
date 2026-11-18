@@ -7,10 +7,10 @@ set -euo pipefail
 [[ "$SHA" =~ ^[a-f0-9]{40}$ && "$PR" =~ ^[1-9][0-9]*$ ]] || exit 1
 case "$BASE_BRANCH" in
   release-0)
-    [[ "$BRANCH" =~ ^prerelease-0\.[0-9]+\.0$ ]] || exit 1
+    [[ "$BRANCH" =~ ^prerelease-0\.[0-9]+\.0(-run-[1-9][0-9]*-[1-9][0-9]*)?$ ]] || exit 1
     [[ "${VERIFIED_MAIN:-}" =~ ^[a-f0-9]{40}$ ]] || exit 1
     ;;
-  main) [[ "$BRANCH" =~ ^prerelease-1\.[0-9]+\.0$ ]] || exit 1 ;;
+  main) [[ "$BRANCH" =~ ^prerelease-1\.[0-9]+\.0(-run-[1-9][0-9]*-[1-9][0-9]*)?$ ]] || exit 1 ;;
   *) echo 'Неподдерживаемая релизная ветка'; exit 1 ;;
 esac
 

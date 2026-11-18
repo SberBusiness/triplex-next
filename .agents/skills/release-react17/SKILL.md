@@ -1,6 +1,6 @@
 ---
 name: release-react17
-description: React 17-релиз triplex-next (0.Y.0) — первая половина выпуска: предусловия на уже перелитую человеком ветку release-0, локальные гейты (сборка, unit-тесты), перенос release notes v1 → v0, бамп версии, прямой push в release-0 и GitHub Release без пометки latest. Под-skill для release; выпускается ДО React 18-половины. Ручной путь — еженедельный релиз делает release-weekly.yml по расписанию GitHub.
+description: React 17-релиз triplex-next (0.Y.0) — первая половина выпуска: предусловия на уже перелитую человеком ветку release-0, локальные гейты (сборка, unit-тесты), перенос release notes v1 → v0, бамп версии, PR в release-0 с обязательными проверками и ревью и GitHub Release без пометки latest. Под-skill для release; выпускается ДО React 18-половины. Ручной путь — еженедельный релиз делает release-weekly.yml по расписанию GitHub.
 ---
 
 # release-react17
@@ -45,15 +45,11 @@ description: React 17-релиз triplex-next (0.Y.0) — первая поло�
 
 ## Ключевое отличие от [React 18-части](../release-react18/SKILL.md)
 
-**CI на `release-0` запускается на push** ([`ci.yml`](../../../.github/workflows/ci.yml),
-триггер `push: branches: [release-0]`) — в том числе на релизный коммит
-этого skill'а. Но **дождаться** его нельзя: GitHub Release создаётся сразу
-после push, и прогон, стартующий одновременно, ничего не защищает.
-
-Значит гейтов два: зелёный прогон на вершине `release-0` *после ручного
-перелития* (предусловие шага 1) и локальные гейты шага 2. Пропускать вторые
-нельзя — релизный коммит меняет версию и notes уже после того, как первый
-прогон отработал.
+`release-0` защищена так же, как `main`: обязательный PR, актуальная база,
+зелёные проверки и одобрение владельца кода без исключений для бота/админа.
+После локальных гейтов создаётся `prerelease-<V0>` → `release-0`; публикация
+разрешена только после проверок, ревью и слияния PR. Главное отличие —
+React 17-зависимости и notes v0; эта половина публикуется первой.
 
 ---
 
@@ -68,15 +64,17 @@ React 17-адаптации, а не случайный дрейф, поэтом
 конфликты.
 
 ```bash
-git checkout release-0 && git pull origin release-0
+git fetch origin main release-0
+git switch -c sync-release-0-<дата> origin/release-0
 git merge --no-commit --no-ff origin/main
 ```
 
 `--no-commit` останавливает слияние перед коммитом, даже если конфликтов нет:
 lock-файл и аудит (см. ниже) должны войти в сам коммит слияния.
 
-Мерж делается **напрямую в `release-0`, без PR** — осознанное исключение из
-общего правила, зафиксированное в [`docs/ai/commits.md`](../../../docs/ai/commits.md).
+Изменения отправляются PR из временной ветки в `release-0`. Нужны CI,
+ревью владельца кода и **Create a merge commit**, без squash/rebase:
+предполёт проверяет сохранённое родство с `main`. Прямой push запрещён.
 
 **Общий принцип разрешения конфликтов:** из main берётся *логика и
 поведение*, из `release-0` сохраняется *React 17-совместимость* — версии
@@ -176,8 +174,8 @@ git diff --name-only origin/release-0..HEAD -- src | \
 адаптировать (см. [`docs/ai/codestyle.md`](../../../docs/ai/codestyle.md) и
 правило про совместимость с React 17).
 
-Дальше — push `release-0` и зелёный CI. С этого момента ветка готова
-к релизу.
+Дальше — PR синхронизации, проверки, ревью и merge commit в `release-0`.
+Дождаться зелёного CI на её новой вершине; после этого ветка готова к релизу.
 
 ---
 
@@ -239,15 +237,13 @@ git rev-parse origin/release-0
 `status` = `completed`, `conclusion` = `success`. Прогон на другом коммите
 не считается — значит проверялось не то состояние ветки.
 
-## 2. Перейти в `release-0` и прогнать гейты
+## 2. Создать релизную ветку от `release-0` и прогнать гейты
 
-Первым делом — переключиться на ветку. Все дальнейшие шаги (гейты, бамп,
-коммит, push) идут в `release-0`, а текущей веткой может быть любая:
-предполёт читал всё через `origin/`, чекаут не трогая.
+Все дальнейшие шаги выполняются в отдельной ветке `prerelease-<V0>`.
+Исходное состояние — проверенная вершина `origin/release-0`.
 
 ```bash
-git checkout release-0
-git pull origin release-0
+git switch -c prerelease-<V0> origin/release-0
 ```
 
 Рабочее дерево должно остаться чистым, а `git rev-parse HEAD` — совпасть
@@ -342,7 +338,7 @@ git diff --stat
 git diff -- package.json "stories/release-notes/v0/<V0>.mdx"
 ```
 
-Ожидается ровно четыре файла: `package.json`, `package-lock.json` и два
+Ожидается четыре файла (три, если notes текущей версии уже заполнены): `package.json`, `package-lock.json` и два
 `v0/*.mdx`. Что-то ещё — стоп: в дерево попало постороннее.
 
 Считай по `git status --short`: `<NEXT0>.mdx` ты только что создал, он
@@ -358,7 +354,7 @@ untracked, и в `git diff --stat` его не будет.
 git add package.json package-lock.json \
   "stories/release-notes/v0/<V0>.mdx" "stories/release-notes/v0/<NEXT0>.mdx"
 git commit -m "<TRI-XXX> Подготовка релиза <V0>"     # от бота, если задан TRIPLEX_BOT_GH_TOKEN
-git push origin release-0
+git push -u origin prerelease-<V0>
 ```
 
 Пути к notes указывай точно — `git add stories/release-notes/v0/` затянул бы
@@ -366,7 +362,21 @@ git push origin release-0
 
 Авторство бота — по паттерну из [`docs/ai/commits.md`](../../../docs/ai/commits.md).
 
-## 5. Выпуск: GitHub Release
+## 5. PR, проверки и человеческое ревью
+
+Создать PR от бота по `docs/ai/commits.md`: `prerelease-<V0>` → `release-0`.
+Дождаться зелёных обязательных проверок и одобрения владельца кода; новые
+коммиты требуют повторного одобрения. Не использовать `--admin`, прямой push
+или снятие защиты. Пока одобрения нет — остановиться с ссылкой на PR.
+
+Перед слиянием проверить неизменность базы `release-0` и содержимого `main`
+относительно предполёта. Слить обычным merge с закреплённым head SHA.
+Получить SHA слияния из PR, fetch этого SHA и проверить
+`git diff --exit-code <PREPARED_SHA> <MERGED_SHA> --`. Публиковать только
+`MERGED_SHA`, чтобы новые коммиты в ветке не попали в релиз после ревью.
+Если проверка не прошла — не создавать GitHub Release.
+
+## 6. Выпуск: GitHub Release
 
 **Точка невозврата.** Текст notes собирается из `v0/<V0>.mdx` по канону из
 [`release`](../release/SKILL.md), раздел «Преобразование MDX → release notes»
@@ -380,7 +390,7 @@ git push origin release-0
 
 ```bash
 node scripts/releaseNotesMd.js stories/release-notes/v0/<V0>.mdx > /tmp/notes-<V0>.md
-gh release create <V0> --target release-0 --title "<V0>" --latest=false \
+gh release create <V0> --target <MERGED_SHA> --title "<V0>" --latest=false \
   --notes-file /tmp/notes-<V0>.md
 ```
 
@@ -391,7 +401,7 @@ gh release create <V0> --target release-0 --title "<V0>" --latest=false \
 `--latest=false` обязателен: пометка Latest на GitHub должна достаться `1.x`.
 
 
-## 6. Дождаться публикации и проверить npm
+## 7. Дождаться публикации и проверить npm
 
 ```bash
 gh run list --workflow=release.yml --limit 1
@@ -465,7 +475,7 @@ npm dist-tag add @sberbusiness/triplex-next@<предыдущая 1.x> latest \
 
 - Не мержить `main` в `release-0` — это ручной шаг мейнтейнера. Не «дотягивать»
   ветку самостоятельно при провале `is-ancestor`.
-- Не пушить в `release-0` при упавшем гейте.
+- Не пушить напрямую в `release-0`; не сливать PR при упавшем гейте или без ревью.
 - Не менять смысл release notes при переносе v1 → v0 и не перезаписывать
   заполненный человеком `v0/<V0>.mdx`.
 - Не помечать `0.x` как Latest на GitHub.

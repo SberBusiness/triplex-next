@@ -17,6 +17,8 @@ jobs:
         with:
           persist-credentials: false
       - run: python3 -m unittest discover -s scripts/deploy -p 'test_*.py'
+      - run: python3 -m unittest discover -s scripts/release -p 'test_*.py'
+      - run: bash -n scripts/release/finalize-pr.sh
       - run: node --test scripts/deploy/test-storybook-publication.cjs
       - run: bash -n scripts/deploy/storybook.sh scripts/deploy/storybook-remove.sh
 

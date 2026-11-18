@@ -72,3 +72,6 @@ __screenshots__/__diff__/
 
 # Python deployment receiver tests
 scripts/deploy/__pycache__/
+
+# Release workflow tests
+scripts/release/__pycache__/

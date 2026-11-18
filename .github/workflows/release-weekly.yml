@@ -11,11 +11,12 @@ name: Weekly release
 # Что делает человек до запуска (docs/human/release.md):
 #   1. домержить задачи спринта в main, дальше main заморожен;
 #   2. пункты в stories/release-notes/v1/<VERSION>.mdx (пишутся по ходу спринта);
-#   3. перелить main в release-0, разрешить конфликты React 17, запушить,
+#   3. слить PR синхронизации main → release-0 с сохранением React 17,
 #      дождаться зелёного ci.yml;
 #   4. к 13:45 проверить, что прогон стартовал — расписание опаздывает,
 #      и если его нет, запустить workflow_dispatch руками.
-# Всё остальное ниже.
+#   5. одобрить релизные PR: сначала React 17, затем React 18.
+# Слияние после одобрения и публикацию выполняет workflow.
 
 on:
   # Минута намеренно некруглая. Расписание Actions — best-effort, и на начале
@@ -183,12 +184,14 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       sha: ${{ steps.bump.outputs.sha }}
+      branch: ${{ steps.bump.outputs.branch }}
+      pr: ${{ steps.checks.outputs.pr }}
 
     steps:
       # persist-credentials: false — принципиально. Иначе actions/checkout
       # положил бы PAT в .git/config, а ниже выполняются `npm ci` (lifecycle-
       # скрипты полутора тысяч зависимостей), тесты и сборка. Любой из этих
-      # скриптов смог бы прочитать токен с правом прямого push в main.
+      # скриптов смог бы прочитать токен с правами записи в репозиторий.
       # Токен подставляется точечно, только в момент push.
       #
       # Собираем ровно ту вершину release-0, на которой предполёт видел
@@ -200,10 +203,8 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      # Если release-0 сдвинулся, push релизного коммита ниже всё равно
-      # был бы отклонён как non-fast-forward — но уже после тестов и сборки.
-      # Останавливаемся сразу и объясняем почему: публикации ещё не было,
-      # лечится новым прогоном, предполёт которого проверит CI заново.
+      # Не готовим релиз из устаревшего состояния. Перед слиянием PR
+      # finalize-react17 повторит проверку базы, а GitHub потребует strict CI.
       - name: Check release-0 is unchanged since preflight
         env:
           VERIFIED: ${{ needs.preflight.outputs.release0_sha }}
@@ -355,16 +356,87 @@ jobs:
           # в docs/ai/commits.md; связь с трекером даёт skill release-auto,
           # он заводит задачу по итогам прогона.
           git commit -m "Подготовка релиза ${V0}"
-          # Токен только здесь и только в URL push: в .git/config он не оседает.
-          # GITHUB_TOKEN не годится — он не входит в списки branch protection
-          # на main, и его пуши не запускают другие workflow.
-          git push "https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:release-0
-          # Публикуем ровно этот коммит, а не вершину release-0 на момент
-          # старта publish-react17 (TRI-155).
-          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          # PAT используется только для push в одноразовую ветку, не в release-0.
+          BRANCH="prerelease-${V0}"
+          git push --force "https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${BRANCH}"
+          {
+            echo "branch=${BRANCH}"
+            echo "sha=$(git rev-parse HEAD)"
+          } >> "$GITHUB_OUTPUT"
+
+      # Релизный PR проходит обязательные проверки и человеческое ревью.
+      # Бот не имеет исключения из правил release-0.
+      - name: Open PR and wait for required checks
+        id: checks
+        timeout-minutes: 60
+        env:
+          GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
+          BRANCH: ${{ steps.bump.outputs.branch }}
+          VERSION: ${{ needs.preflight.outputs.v0 }}
+        run: |
+          set -eu
+          find_pr() {
+            gh pr list --repo "${GITHUB_REPOSITORY}" --head "${BRANCH}" --base release-0 \
+              --state open --json number --jq '.[0].number // empty'
+          }
+
+          # Перезапуск прогона после падения не должен плодить PR.
+          PR=$(find_pr)
+          if [ -z "${PR}" ]; then
+            gh pr create --repo "${GITHUB_REPOSITORY}" --base release-0 --head "${BRANCH}" \
+              --title "Подготовка релиза ${VERSION}" \
+              --body "Релизный коммит еженедельного прогона. После успешных проверок требуется одобрение владельца кода. Затем workflow выполнит обычное слияние PR без обхода защиты."
+            PR=$(find_pr)
+          fi
+          [ -n "${PR}" ] || { echo "❌ PR для ветки ${BRANCH} не создан"; exit 1; }
+          echo "PR #${PR}"
+          echo "pr=${PR}" >> "$GITHUB_OUTPUT"
+
+          # Прогоны регистрируются не мгновенно. Различаем по коду выхода
+          # `gh pr checks`: 0 — все зелёные, 8 — проверки есть и ещё идут,
+          # прочее (включая 1 — «no checks reported») — ждём дальше.
+          for _ in $(seq 1 30); do
+            gh pr checks "${PR}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1 && break
+            [ $? -eq 8 ] && break
+            sleep 10
+          done
+
+          # --required: сторонние контексты (preview Storybook) на релиз
+          # не влияют. --fail-fast: упавшая проверка останавливает ожидание,
+          # публиковать всё равно нечего.
+          gh pr checks "${PR}" --repo "${GITHUB_REPOSITORY}" --required --watch --fail-fast
+
+  finalize-react17:
+    needs: [preflight, prepare-react17]
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.merge.outputs.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.prepare-react17.outputs.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Wait for human review and merge release PR
+        id: merge
+        timeout-minutes: 65
+        env:
+          GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
+          BASE_BRANCH: release-0
+          BRANCH: ${{ needs.prepare-react17.outputs.branch }}
+          SHA: ${{ needs.prepare-react17.outputs.sha }}
+          PR: ${{ needs.prepare-react17.outputs.pr }}
+          VERIFIED_MAIN: ${{ needs.preflight.outputs.main_sha }}
+        run: bash scripts/release/finalize-pr.sh
+      - name: Report stopped React 17 release
+        if: failure()
+        run: |
+          echo '### React 17 ещё не опубликована' >> "$GITHUB_STEP_SUMMARY"
+          echo 'PR и ветка сохранены. При истечении ожидания одобрите PR и повторите failed jobs; при изменении main или release-0 см. docs/human/release.md.' >> "$GITHUB_STEP_SUMMARY"
+
 
   publish-react17:
-    needs: [preflight, prepare-react17]
+    needs: [preflight, finalize-react17]
     uses: ./.github/workflows/release.yml
     # Права переиспользуемому workflow выдаёт вызывающая джоба: объявления
     # внутри release.yml могут их только сузить. Без id-token здесь обмен
@@ -382,7 +454,7 @@ jobs:
       tag: ${{ needs.preflight.outputs.v0 }}
       target: release-0
       # Ровно релизный коммит, а не вершина ветки на момент старта (TRI-155).
-      sha: ${{ needs.prepare-react17.outputs.sha }}
+      sha: ${{ needs.finalize-react17.outputs.sha }}
       make_latest: false
     secrets: inherit
 
@@ -416,7 +488,7 @@ jobs:
       #
       # Сверяем содержимое, а не SHA. Равенство SHA сделало бы остановку
       # тупиковой: сдвинувшийся main не вернуть, а релизный коммит от старой
-      # вершины не заведёшь fast-forward'ом. По содержимому же выход есть —
+      # вершины не пройдёт проверку неизменности базы. Выход —
       # откатить влитое (revert вернёт дерево к проверенному) и перезапустить
       # упавшие джобы.
       - name: Check main content is unchanged since preflight
@@ -487,14 +559,8 @@ jobs:
           fi
           git commit -m "Подготовка релиза ${VERSION}"
 
-          # Прямым push'ом в main релизный коммит больше не едет: на main
-          # включены обязательные проверки, а ci.yml и visual-test.yml
-          # запускаются только на pull_request — на прямом push'е нужные
-          # контексты не появились бы никогда, и он отклонялся бы вечно.
-          # Поэтому коммит сначала уходит в релизную ветку, проверки идут
-          # на её PR и привязываются к тому же SHA, а в main он попадает
-          # fast-forward'ом — уже зелёным (шаг «Fast-forward main»).
-          # Ветка одноразовая: force нужен для перезапуска упавшего прогона.
+          # Одноразовая ветка проходит проверки и ревью через PR в main.
+          # Force обновляет только её при повторной подготовке; одобрение сбросится.
           BRANCH="prerelease-${VERSION}"
           git push --force "https://x-access-token:${DUDIM_AI_GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/${BRANCH}"
           {
@@ -612,46 +678,8 @@ jobs:
           BRANCH: ${{ needs.prepare-react18.outputs.branch }}
           SHA: ${{ needs.prepare-react18.outputs.sha }}
           PR: ${{ needs.prepare-react18.outputs.pr }}
-        run: |
-          set -euo pipefail
-          echo "Релиз ждёт одобрения владельца кода: https://github.com/${GITHUB_REPOSITORY}/pull/${PR}"
-          echo "### Ожидается ревью [PR #${PR}](https://github.com/${GITHUB_REPOSITORY}/pull/${PR})" >> "$GITHUB_STEP_SUMMARY"
-          DEADLINE=$((SECONDS + 3600))
-          while true; do
-            STATE=$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" --json state,headRefOid,reviewDecision,mergeCommit)
-            [[ $(jq -r .headRefOid <<< "$STATE") == "$SHA" ]] || {
-              echo 'Вершина PR изменилась; требуется новый прогон проверок'; exit 1;
-            }
-            STATUS=$(jq -r .state <<< "$STATE")
-            if [[ "$STATUS" == MERGED ]]; then
-              MERGED=$(jq -r .mergeCommit.oid <<< "$STATE")
-              break
-            fi
-            [[ "$STATUS" == OPEN ]] || { echo 'Релизный PR закрыт без слияния'; exit 1; }
-            if [[ $(jq -r .reviewDecision <<< "$STATE") == APPROVED ]]; then
-              # Server-side strict checks close the race between fetch and merge.
-              git fetch origin main --quiet
-              [[ $(git rev-parse origin/main) == $(git rev-parse "$SHA^") ]] || {
-                echo 'main изменился после подготовки релиза; слияние остановлено.'
-                echo 'Верните содержимое main к предполёту и перезапустите prepare-react18 вместе с зависимыми jobs; потребуется новое ревью.'
-                exit 1;
-              }
-              MERGED=$(gh api --method PUT "repos/${GITHUB_REPOSITORY}/pulls/${PR}/merge" \
-                -f sha="$SHA" -f merge_method=merge --jq .sha)
-              break
-            fi
-            if (( SECONDS >= DEADLINE )); then
-              echo 'За час ревью не получено. Одобрите PR и перезапустите упавшие jobs; новый коммит потребует повторного одобрения.'
-              exit 1
-            fi
-            sleep 30
-          done
-          [[ "$MERGED" =~ ^[a-f0-9]{40}$ ]]
-          git fetch origin "$MERGED" --quiet
-          git diff --exit-code "$SHA" "$MERGED" --
-          echo "sha=$MERGED" >> "$GITHUB_OUTPUT"
-          gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${BRANCH}" \
-            || echo 'Релиз опубликован в main; одноразовую ветку можно удалить вручную'
+          BASE_BRANCH: main
+        run: bash scripts/release/finalize-pr.sh
 
       # Ветку и PR после падения намеренно НЕ удаляем: в них лежит релизный
       # коммит и результаты проверок — то, по чему разбирают причину. Но

@@ -1,0 +1,67 @@
+name: Deployment security
+
+on:
+  pull_request:
+  push:
+    branches: [main, release-0]
+
+permissions:
+  contents: read
+
+jobs:
+  deployment-safety:
+    name: Deployment safety
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: python3 -m unittest discover -s scripts/deploy -p 'test_*.py'
+      - run: node --test scripts/deploy/test-storybook-publication.cjs
+      - run: bash -n scripts/deploy/storybook.sh scripts/deploy/storybook-remove.sh
+
+  python-security:
+    name: Python security
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: github/codeql-action/init@5895b2c9be147bc7f1c75ce72c5cb577febb1907 # v4
+        with:
+          languages: python
+          build-mode: none
+          queries: security-extended
+      - uses: github/codeql-action/analyze@5895b2c9be147bc7f1c75ce72c5cb577febb1907 # v4
+        with:
+          # Default setup continues scanning Actions/JS. GitHub cannot add Python
+          # to default setup until Python exists on main, so this PR has its own gate.
+          upload: never
+          upload-database: false
+          output: codeql-results
+      - name: Fail on Python security findings
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          reports = list(Path('codeql-results').glob('*.sarif'))
+          if not reports:
+              raise SystemExit('CodeQL produced no report')
+          findings = [result for report in reports
+                      for run in json.loads(report.read_text())['runs']
+                      for result in run.get('results', [])]
+          for finding in findings:
+              print(finding.get('ruleId'), finding.get('message', {}).get('text'))
+          if findings:
+              raise SystemExit(f'CodeQL found {len(findings)} issue(s); review required')
+          PY
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: python-security-report
+          path: codeql-results/*.sarif
+          if-no-files-found: error
+          retention-days: 14

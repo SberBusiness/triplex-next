@@ -184,7 +184,13 @@ git diff --name-only origin/release-0..HEAD -- src | \
 ```bash
 git status --porcelain
 git fetch origin main release-0
-PREFLIGHT_MAIN_SHA=$(git rev-parse origin/main)
+# V0 — фактическая версия этого выпуска (например, 0.56.0).
+STATE_FILE="$(git rev-parse --git-path "triplex-release-${V0:?}-main-sha")"
+PREFLIGHT_MAIN_SHA=$(git rev-parse origin/main) || exit 1
+# Не перезаписывать SHA старой попытки тем же номером версии.
+( set -o noclobber; printf '%s\n' "$PREFLIGHT_MAIN_SHA" > "$STATE_FILE" ) || {
+  echo 'Состояние предполёта уже существует: продолжите прежнюю попытку, не создавайте новую'; exit 1;
+}
 gh release view <V0> 2>&1 | head -3
 gh release view <V1> 2>&1 | head -3
 git show origin/release-0:package.json | grep -m1 '"version"'
@@ -370,6 +376,17 @@ git push -u origin prerelease-<V0>
 коммиты требуют повторного одобрения. Не использовать `--admin`, прямой push
 или снятие защиты. Пока одобрения нет — остановиться с ссылкой на PR.
 
+Перед продолжением после ревью восстановить исходный SHA из файла в git-каталоге.
+Файл не входит в коммит и переживает смену оболочки. Если потерян файл или
+рабочая копия, **остановиться**: нельзя подставлять свежий `origin/main`.
+
+```bash
+STATE_FILE="$(git rev-parse --git-path "triplex-release-${V0:?}-main-sha")"
+PREFLIGHT_MAIN_SHA=$(cat "$STATE_FILE") || exit 1
+[[ "$PREFLIGHT_MAIN_SHA" =~ ^[a-f0-9]{40}$ ]] || exit 1
+git cat-file -e "${PREFLIGHT_MAIN_SHA}^{commit}" || exit 1
+```
+
 Перед слиянием проверить неизменность базы `release-0` и содержимого `main`
 относительно предполёта. Слить обычным merge с закреплённым head SHA.
 Получить SHA слияния из PR, fetch этого SHA и проверить
@@ -378,7 +395,8 @@ git push -u origin prerelease-<V0>
 После слияния повторно выполнить `git fetch origin main release-0`, проверить
 `git merge-base --is-ancestor <MERGED_SHA> origin/release-0` и
 `git diff --exit-code "$PREFLIGHT_MAIN_SHA" origin/main --`. Это повторная
-сверка заморозки перед публикацией. При отказе любой проверки — не создавать
+сверка заморозки перед публикацией; при новом сеансе сначала повторно
+прочитать сохранённый SHA указанным выше блоком. При отказе любой проверки — не создавать
 GitHub Release; восстановление описано в `docs/human/release.md`.
 
 ## 6. Выпуск: GitHub Release

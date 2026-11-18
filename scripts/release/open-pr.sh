@@ -25,17 +25,47 @@ fi
 [[ "$PR" =~ ^[1-9][0-9]*$ ]] || { echo 'Релизный PR не найден'; exit 1; }
 echo "pr=$PR" >> "$GITHUB_OUTPUT"
 echo "PR #$PR"
+if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then
+  echo "### Проверки [PR #${PR}](https://github.com/${GITHUB_REPOSITORY}/pull/${PR})" >> "$GITHUB_STEP_SUMMARY"
+fi
 
-# A preview or third-party check may appear before the required workflows.
+# Keep in sync with protection on main/release-0. GitHub remains the final gate
+# if an administrator adds another required check before this list is updated.
+REQUIRED='["AI.md tokens", "Build library", "E2E tests", "Unit tests", "Visual regression tests", "Deployment safety", "Python security"]'
+ERROR_FILE=$(mktemp)
+trap 'rm -f "$ERROR_FILE"' EXIT
+ERRORS=0
+MISSING=$(jq -r 'join(", ")' <<< "$REQUIRED")
+# A preview or one early required check cannot stand in for the full CI suite.
 for _ in $(seq 1 30); do
-  CHECKS=$(gh pr checks "$PR" --repo "$GITHUB_REPOSITORY" --required --json name,bucket) || CHECKS=${CHECKS:-'[]'}
-  if jq -e 'type == "array" and length > 0' <<< "$CHECKS" >/dev/null; then
-    if jq -e 'any(.[]; .bucket == "fail" or .bucket == "cancel")' <<< "$CHECKS" >/dev/null; then
-      echo 'Обязательная проверка завершилась неудачно'; exit 1
+  if CHECKS=$(gh pr checks "$PR" --repo "$GITHUB_REPOSITORY" --required --json name,bucket 2>"$ERROR_FILE"); then
+    :
+  elif grep -Eq "^no (required )?checks reported on the '.+' branch$" "$ERROR_FILE"; then
+    # gh v2.100 returns this diagnostic before emitting any JSON.
+    CHECKS='[]'
+  else
+    ERRORS=$((ERRORS + 1))
+    if (( ERRORS >= 3 )); then
+      echo 'Не удалось получить статусы проверок PR после трёх ошибок запроса'
+      cat "$ERROR_FILE" >&2
+      exit 1
     fi
-    exec gh pr checks "$PR" --repo "$GITHUB_REPOSITORY" --required --watch --fail-fast
+    sleep 10
+    continue
+  fi
+  jq -e 'type == "array" and all(.[]; (.name | type == "string") and (.bucket | type == "string"))' <<< "$CHECKS" >/dev/null || {
+    echo 'Некорректный ответ при чтении статусов проверок'; exit 1;
+  }
+  ERRORS=0
+  if jq -e 'any(.[]; .bucket == "fail" or .bucket == "cancel")' <<< "$CHECKS" >/dev/null; then
+    echo 'Обязательная проверка завершилась неудачно'; exit 1
+  fi
+  MISSING=$(jq -r --argjson expected "$REQUIRED" '$expected - [.[].name] | join(", ")' <<< "$CHECKS")
+  if [[ -z "$MISSING" ]]; then
+    gh pr checks "$PR" --repo "$GITHUB_REPOSITORY" --required --watch --fail-fast
+    exit 0
   fi
   sleep 10
 done
-echo 'Обязательные проверки не зарегистрированы за пять минут'
+echo "За пять минут не зарегистрированы обязательные проверки: $MISSING"
 exit 1

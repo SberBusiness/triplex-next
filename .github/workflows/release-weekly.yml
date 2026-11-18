@@ -186,18 +186,11 @@ jobs:
     outputs:
       sha: ${{ steps.bump.outputs.sha }}
       branch: ${{ steps.bump.outputs.branch }}
-      pr: ${{ steps.checks.outputs.pr }}
 
     steps:
-      # persist-credentials: false — принципиально. Иначе actions/checkout
-      # положил бы PAT в .git/config, а ниже выполняются `npm ci` (lifecycle-
-      # скрипты полутора тысяч зависимостей), тесты и сборка. Любой из этих
-      # скриптов смог бы прочитать токен с правами записи в репозиторий.
-      # Токен подставляется точечно, только в момент push.
-      #
-      # Собираем ровно ту вершину release-0, на которой предполёт видел
-      # зелёный CI, а не текущую: push в release-0 после предполёта попал бы
-      # в 0.Y.0 непроверенным (TRI-155).
+      # Подготовка не исполняет зависимости, сборку или project lifecycle scripts.
+      # Полные build/unit/visual/security проверки пройдут на релизном PR.
+      # Здесь берём ровно проверенную предполётом вершину release-0.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ needs.preflight.outputs.release0_sha }}
@@ -265,15 +258,6 @@ jobs:
         with:
           node-version: 22
 
-      - run: npm ci
-
-      # Гейты. CI на вершине release-0 проверял состояние ДО релизного коммита,
-      # а он меняет версию и notes — поэтому прогон здесь обязателен.
-      # `npm run build` в prebuild гоняет tsc по tsconfig.build.json; полный
-      # tsc гейтом быть не может — он даёт давние ошибки в stories/.
-      - run: npm run test-unit
-      - run: npm run build
-
       - name: Transfer release notes v1 → v0
         id: notes
         env:
@@ -321,7 +305,7 @@ jobs:
           DUDIM_AI_GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
         run: |
           set -eu
-          npm version "${V0}" --no-git-tag-version
+          npm version "${V0}" --no-git-tag-version --ignore-scripts
           git config user.name "dudim-ai"
           git config user.email "dudim-ai@users.noreply.github.com"
           git add package.json package-lock.json \
@@ -365,27 +349,36 @@ jobs:
             echo "sha=$(git rev-parse HEAD)"
           } >> "$GITHUB_OUTPUT"
 
-      # Релизный PR проходит обязательные проверки и человеческое ревью.
-      # Бот не имеет исключения из правил release-0.
-      - name: Open PR and wait for required checks
+  open-react17:
+    needs: [preflight, prepare-react17]
+    runs-on: ubuntu-latest
+    outputs:
+      pr: ${{ steps.checks.outputs.pr }}
+    steps:
+      # A fresh runner and the exact workflow commit, with no dependency execution.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.workflow_sha }}
+          persist-credentials: false
+      - name: Open PR and wait for all required checks
         id: checks
         timeout-minutes: 60
         env:
           GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
-          BRANCH: ${{ steps.bump.outputs.branch }}
+          BRANCH: ${{ needs.prepare-react17.outputs.branch }}
           VERSION: ${{ needs.preflight.outputs.v0 }}
           BASE_BRANCH: release-0
         run: bash scripts/release/open-pr.sh
 
   finalize-react17:
-    needs: [preflight, prepare-react17]
+    needs: [preflight, prepare-react17, open-react17]
     runs-on: ubuntu-latest
     outputs:
       sha: ${{ steps.merge.outputs.sha }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ needs.prepare-react17.outputs.sha }}
+          ref: ${{ github.workflow_sha }}
           fetch-depth: 0
           persist-credentials: false
       - name: Wait for human review and merge release PR
@@ -396,17 +389,16 @@ jobs:
           BASE_BRANCH: release-0
           BRANCH: ${{ needs.prepare-react17.outputs.branch }}
           SHA: ${{ needs.prepare-react17.outputs.sha }}
-          PR: ${{ needs.prepare-react17.outputs.pr }}
+          PR: ${{ needs.open-react17.outputs.pr }}
           VERIFIED_MAIN: ${{ needs.preflight.outputs.main_sha }}
         run: bash scripts/release/finalize-pr.sh
       - name: Report stopped React 17 release
         if: failure()
         env:
-          PR: ${{ needs.prepare-react17.outputs.pr }}
+          PR: ${{ needs.open-react17.outputs.pr }}
         run: |
           echo '### React 17 ещё не опубликована' >> "$GITHUB_STEP_SUMMARY"
           echo "Проверьте состояние PR #${PR}. При истечении ожидания одобрите PR и повторите failed jobs. Если PR уже слит, продолжайте текущий прогон без нового бампа; при изменении main или release-0 см. docs/human/release.md." >> "$GITHUB_STEP_SUMMARY"
-
 
   publish-react17:
     needs: [preflight, finalize-react17]
@@ -441,7 +433,6 @@ jobs:
     outputs:
       sha: ${{ steps.prepare.outputs.sha }}
       branch: ${{ steps.prepare.outputs.branch }}
-      pr: ${{ steps.checks.outputs.pr }}
 
     steps:
       # Текущая вершина main, а не проверенный предполётом SHA: релизный
@@ -509,7 +500,7 @@ jobs:
           DUDIM_AI_GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
         run: |
           set -eu
-          npm version "${VERSION}" --no-git-tag-version
+          npm version "${VERSION}" --no-git-tag-version --ignore-scripts
 
           cat > "stories/release-notes/v1/${NEXT}.mdx" <<EOF
           import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
@@ -541,67 +532,44 @@ jobs:
             echo "sha=$(git rev-parse HEAD)"
           } >> "$GITHUB_OUTPUT"
 
-      # Релизный PR проходит обязательные проверки и человеческое ревью.
-      # Бот не имеет исключения из правил main.
-      - name: Open PR and wait for required checks
+      - name: Report preparation failure
+        if: failure()
+        env:
+          BRANCH: ${{ steps.prepare.outputs.branch }}
+          V0: ${{ needs.preflight.outputs.v0 }}
+          VERSION: ${{ needs.preflight.outputs.version }}
+        run: |
+          {
+            echo "### Подготовка ${VERSION} остановлена"
+            echo "${V0} уже опубликована. ${VERSION} ещё не опубликована."
+            echo "Если ветка ${BRANCH:-prerelease} успела создаться, проверьте её и связанный PR."
+            echo 'После исправления причины повторите подготовку с зависимыми jobs; новый коммит потребует нового ревью.'
+            echo 'При изменении main сначала восстановите содержимое по docs/human/release.md.'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  open-react18:
+    needs: [preflight, prepare-react18]
+    runs-on: ubuntu-latest
+    outputs:
+      pr: ${{ steps.checks.outputs.pr }}
+    steps:
+      # A fresh runner and the exact workflow commit, with no dependency execution.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.workflow_sha }}
+          persist-credentials: false
+      - name: Open PR and wait for all required checks
         id: checks
         timeout-minutes: 60
         env:
           GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
-          BRANCH: ${{ steps.prepare.outputs.branch }}
+          BRANCH: ${{ needs.prepare-react18.outputs.branch }}
           VERSION: ${{ needs.preflight.outputs.version }}
           BASE_BRANCH: main
         run: bash scripts/release/open-pr.sh
 
-      # Ветку и PR после падения намеренно НЕ удаляем: в них лежит релизный
-      # коммит и результаты проверок — то, по чему разбирают причину. Но
-      # молча оставленный мусор через месяц уже никто не свяжет с релизом,
-      # поэтому пишем в summary, что именно осталось и что с этим делать.
-      # Джоба стартует только после публикации 0.Y.0, поэтому «ничего
-      # не опубликовано» здесь всегда про 1.Y.0 — так и пишем, иначе summary
-      # выглядит как «релиза не было», хотя половина уже вышла.
-      - name: Report leftovers on failure
-        if: failure()
-        env:
-          BRANCH: ${{ steps.prepare.outputs.branch }}
-          PR: ${{ steps.checks.outputs.pr }}
-          V0: ${{ needs.preflight.outputs.v0 }}
-          VERSION: ${{ needs.preflight.outputs.version }}
-        run: |
-          set -u
-          if [ -z "${BRANCH}" ]; then
-            {
-              echo "### Релиз \`${VERSION}\` остановлен до создания релизной ветки"
-              echo ""
-              echo "Релизной ветки нет, \`${VERSION}\` не опубликована."
-              echo "\`${V0}\` уже опубликована — релиз выпущен наполовину,"
-              echo "см. docs/human/release.md § «Если релиз выпущен наполовину»."
-            } >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-          {
-            echo "### Релиз остановлен на проверках"
-            echo ""
-            echo "Осталось в репозитории:"
-            echo ""
-            echo "- ветка \`${BRANCH}\` с релизным коммитом"
-            if [ -n "${PR}" ]; then
-              echo "- PR #${PR} — в нём видно, какая проверка упала"
-            else
-              echo "- PR создать не успели"
-            fi
-            echo ""
-            echo "\`${VERSION}\` не опубликована (\`${V0}\` — уже). Почини причину"
-            echo "и перезапусти упавшие джобы: прогон переиспользует ветку и PR,"
-            echo "force-push обновит коммит."
-            echo "Если \`${VERSION}\` на этой неделе решено не выпускать — удали ветку"
-            echo "(PR закроется сам) и верни \`latest\` во внутреннем registry: он остался"
-            echo "на React 17-сборке — docs/human/release.md § «Если релиз выпущен наполовину»."
-          } >> "$GITHUB_STEP_SUMMARY"
-
-
   finalize-react18:
-    needs: [preflight, prepare-react18]
+    needs: [preflight, prepare-react18, open-react18]
     runs-on: ubuntu-latest
     outputs:
       sha: ${{ steps.merge.outputs.sha }}
@@ -609,7 +577,7 @@ jobs:
       # A retry after a successful merge must not repeat preparation on main.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ needs.prepare-react18.outputs.sha }}
+          ref: ${{ github.workflow_sha }}
           fetch-depth: 0
           persist-credentials: false
 
@@ -620,7 +588,7 @@ jobs:
           GH_TOKEN: ${{ secrets.DUDIM_AI_GH_TOKEN }}
           BRANCH: ${{ needs.prepare-react18.outputs.branch }}
           SHA: ${{ needs.prepare-react18.outputs.sha }}
-          PR: ${{ needs.prepare-react18.outputs.pr }}
+          PR: ${{ needs.open-react18.outputs.pr }}
           BASE_BRANCH: main
         run: bash scripts/release/finalize-pr.sh
 
@@ -635,7 +603,7 @@ jobs:
         if: failure()
         env:
           BRANCH: ${{ needs.prepare-react18.outputs.branch }}
-          PR: ${{ needs.prepare-react18.outputs.pr }}
+          PR: ${{ needs.open-react18.outputs.pr }}
           V0: ${{ needs.preflight.outputs.v0 }}
           VERSION: ${{ needs.preflight.outputs.version }}
         run: |
@@ -674,7 +642,6 @@ jobs:
             echo "(PR закроется сам) и верни \`latest\` во внутреннем registry: он остался"
             echo "на React 17-сборке — docs/human/release.md § «Если релиз выпущен наполовину»."
           } >> "$GITHUB_STEP_SUMMARY"
-
 
   publish-react18:
     needs: [preflight, finalize-react18]

@@ -82,5 +82,6 @@ git merge-base --is-ancestor "$MERGED" "origin/$BASE_BRANCH" || {
 # Also checked on retries after a successful merge, before handing off to publish.
 check_main
 echo "sha=$MERGED" >> "$GITHUB_OUTPUT"
-gh api --method DELETE "repos/${GITHUB_REPOSITORY}/git/refs/heads/${BRANCH}" \
-  || echo 'PR слит; одноразовую ветку можно удалить вручную'
+# REST deletion cannot require an expected head SHA. Leave cleanup to the owner
+# (GitHub may already have removed the branch according to repository settings).
+echo "PR слит. Если ветка $BRANCH ещё существует, проверьте её перед ручным удалением."

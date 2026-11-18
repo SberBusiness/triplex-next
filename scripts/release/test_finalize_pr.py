@@ -43,8 +43,6 @@ elif args[:3] == ['api', '--method', 'PUT']:
         sys.exit(1)
     (root / 'merged').touch()
     print('c' * 40)
-elif args[:3] == ['api', '--method', 'DELETE']:
-    assert args[3].endswith('/git/refs/heads/' + os.environ['BRANCH'])
 else:
     raise AssertionError(args)
 '''
@@ -67,6 +65,7 @@ elif args[0] == 'diff':
             sys.exit(1)
 elif args[0] == 'merge-base':
     assert args[1:] == ['--is-ancestor', 'c' * 40, 'origin/' + os.environ['BASE_BRANCH']]
+    assert (root / 'base_fetched_after_merge').exists(), 'stale target branch'
     if case == 'not_in_base':
         sys.exit(1)
 elif args[:3] == ['fetch', 'origin', 'c' * 40] and case == 'retry_after_merge':
@@ -74,6 +73,9 @@ elif args[:3] == ['fetch', 'origin', 'c' * 40] and case == 'retry_after_merge':
     if not failed.exists():
         failed.touch()
         sys.exit(1)
+elif args[:3] == ['fetch', 'origin', os.environ['BASE_BRANCH']]:
+    if (root / 'merged').exists() or case == 'already_merged':
+        (root / 'base_fetched_after_merge').touch()
 elif args[0] not in ('fetch', 'cat-file'):
     raise AssertionError(args)
 '''
@@ -112,6 +114,7 @@ class FinalizeReleaseTests(unittest.TestCase):
             if no_github:
                 self.assertFalse(any(call[0] == 'gh' for call in calls))
             self.assertFalse(any('--admin' in call or call[:2] == ['git', 'push'] for call in calls))
+            self.assertFalse(any(call[:4] == ['gh', 'api', '--method', 'DELETE'] for call in calls))
             if succeeds or retry:
                 self.assertEqual((root / 'output').read_text(), f'sha={MERGED}\n')
                 self.assertEqual(sum(call[:4] == ['gh', 'api', '--method', 'PUT'] for call in calls),

@@ -29,6 +29,39 @@ export interface IDropdownDesktopProps extends React.HTMLAttributes<HTMLDivEleme
 
 const SIZE_TO_CLASS_NAME = createSizeToClassNameMap(styles);
 
+/** Поверхностное сравнение inline-стилей позиционирования. */
+const isSameStyle = (a: React.CSSProperties, b: React.CSSProperties) => {
+    const keys = Object.keys(a) as (keyof React.CSSProperties)[];
+    return keys.length === Object.keys(b).length && keys.every((key) => key in b && a[key] === b[key]);
+};
+
+/** Стиль до первого расчёта позиции. Один и тот же объект, чтобы повторная установка не вызывала рендер. */
+const HIDDEN_STYLE: React.CSSProperties = { opacity: 0 };
+
+/** Клавиши прокрутки страницы. */
+const SCROLL_KEYS = [
+    "SPACE",
+    "PAGE_UP",
+    "PAGE_DOWN",
+    "END",
+    "HOME",
+    "ARROW_LEFT",
+    "ARROW_UP",
+    "ARROW_RIGHT",
+    "ARROW_DOWN",
+] as const;
+
+/** Запрещает клавишам прокрутки двигать страницу, пока фокус на body. */
+const createKeyDownHandler = () => (event: KeyboardEvent) => {
+    if (event.target === document.body) {
+        const key = event.code || event.keyCode;
+
+        if (SCROLL_KEYS.some((scrollKey) => isKey(key, scrollKey))) {
+            event.preventDefault();
+        }
+    }
+};
+
 /** Отступ между управляющим элементом и выпадающим меню, px. */
 const TARGET_OFFSET = 4;
 
@@ -52,8 +85,9 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
         setOpened,
         ...rest
     } = props;
-    const [styleState, setStyleState] = useState<React.CSSProperties>({ opacity: 0 });
+    const [styleState, setStyleState] = useState<React.CSSProperties>(HIDDEN_STYLE);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
+    const positionTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
     const { scopeClassName } = useToken();
     const classNames = clsx(styles.dropdownDesktop, SIZE_TO_CLASS_NAME[size], scopeClassName, className);
@@ -64,40 +98,6 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
             event.preventDefault();
         }
     }, []);
-
-    const keyDownHandler = useCallback((event: KeyboardEvent) => {
-        if (event.target === document.body) {
-            const key = event.code || event.keyCode;
-
-            if (
-                isKey(key, "SPACE") ||
-                isKey(key, "PAGE_UP") ||
-                isKey(key, "PAGE_DOWN") ||
-                isKey(key, "END") ||
-                isKey(key, "HOME") ||
-                isKey(key, "ARROW_LEFT") ||
-                isKey(key, "ARROW_UP") ||
-                isKey(key, "ARROW_RIGHT") ||
-                isKey(key, "ARROW_DOWN")
-            ) {
-                event.preventDefault();
-            }
-        }
-    }, []);
-
-    /** Управление подпиской на события, блокирующие скролл страницы вне дропдауна. */
-    const toggleScrollEventListener = useCallback(
-        (add: boolean) => {
-            if (add) {
-                document.addEventListener("wheel", wheelHandler, { passive: false });
-                document.addEventListener("keydown", keyDownHandler);
-            } else {
-                document.removeEventListener("wheel", wheelHandler);
-                document.removeEventListener("keydown", keyDownHandler);
-            }
-        },
-        [wheelHandler, keyDownHandler],
-    );
 
     /** Расчёт положения по горизонтали. */
     const calculatePositionHorizontal = useCallback(
@@ -161,7 +161,8 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
         calculatePositionVertical(css, dropdownRect, targetRect);
         calculatePositionHorizontal(css, targetRect, expectedWidth);
 
-        setStyleState(css);
+        // Без смены значений возвращаем прежний объект, чтобы скролл и ресайз не вызывали лишних рендеров.
+        setStyleState((prev) => (isSameStyle(prev, css) ? prev : css));
     }, [targetRef, width, calculatePositionVertical, calculatePositionHorizontal]);
 
     useEffect(() => {
@@ -169,7 +170,7 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
             // Положение можно посчитать только после того, как меню отрендерено и его размеры измеримы.
             setPosition();
         } else {
-            setStyleState({ opacity: 0 });
+            setStyleState(HIDDEN_STYLE);
         }
     }, [opened, setPosition]);
 
@@ -185,30 +186,48 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
 
     /** Планирует перерасчёт позиции меню после обработки текущего события. */
     const updatePosition = useCallback(() => {
-        setTimeout(setPosition);
+        clearTimeout(positionTimeoutRef.current);
+        positionTimeoutRef.current = setTimeout(setPosition);
     }, [setPosition]);
 
     useEffect(() => {
         if (opened) {
             document.addEventListener("scroll", updatePosition, true);
             window.addEventListener("resize", updatePosition);
-            toggleScrollEventListener(true);
-            const unlockBodyScroll = lockBodyScroll(styles.dropdownDesktopScrollLock);
-            updatePosition();
 
             return () => {
                 document.removeEventListener("scroll", updatePosition, true);
                 window.removeEventListener("resize", updatePosition);
-                toggleScrollEventListener(false);
+                clearTimeout(positionTimeoutRef.current);
+            };
+        }
+    }, [opened, updatePosition]);
+
+    /** Блокировка скролла страницы вне дропдауна. Не зависит от параметров позиционирования, чтобы не сниматься при их смене. */
+    useEffect(() => {
+        if (opened) {
+            document.addEventListener("wheel", wheelHandler, { passive: false });
+            // Обработчик уникален для экземпляра: иначе cleanup одного дропдауна снимет общий обработчик у остальных.
+            const onKeyDown = createKeyDownHandler();
+            document.addEventListener("keydown", onKeyDown);
+            const unlockBodyScroll = lockBodyScroll(styles.dropdownDesktopScrollLock);
+
+            return () => {
+                document.removeEventListener("wheel", wheelHandler);
+                document.removeEventListener("keydown", onKeyDown);
                 unlockBodyScroll();
             };
         }
-    }, [opened, updatePosition, toggleScrollEventListener]);
+    }, [opened, wheelHandler]);
 
-    const setRef = (instance: HTMLDivElement | null) => {
-        dropdownRef.current = instance;
-        setForwardedRef(ref, instance);
-    };
+    /** Стабильный callback ref: внешний ref не вызывается с null/элементом на каждом рендере. */
+    const setRef = useCallback(
+        (instance: HTMLDivElement | null) => {
+            dropdownRef.current = instance;
+            setForwardedRef(ref, instance);
+        },
+        [ref],
+    );
 
     if (!opened) {
         return null;

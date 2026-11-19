@@ -35,7 +35,7 @@ version: "1.0"
 
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
-| `verticalMargin` | `TBodyPageVerticalMargin` | `LARGE` | Вертикальные отступы: `LARGE` = 24px (16px на узких экранах), `SMALL` = 16px (8px на узких), `NONE` = 0. Одно значение задаёт обе стороны; объект `{top, bottom}` — каждую отдельно, обе стороны указываются явно. В LightBox используется `SMALL`. |
+| `verticalMargin` | `TBodyPageVerticalMargin` | `LARGE` | Вертикальные отступы: `LARGE` = 24px (16px на узких экранах), `SMALL` = 16px во всех режимах, `NONE` = 0. Одно значение задаёт обе стороны; объект `{top, bottom}` — каждую отдельно, обе стороны указываются явно. В LightBox используется `SMALL`. |
 | `size` | `EComponentSize` | — | Размер острова (Island). **Доступен только для `type=FIRST`**; для `type=SECOND` типизирован как `never`. |
 
 ### Тип verticalMargin
@@ -74,7 +74,7 @@ type TBodyPageVerticalMargin = EBodyPageVerticalMargin | IBodyPageVerticalMargin
 Собственных CSS-переменных нет. Внешний вид карточки наследуется от `Island` (`EIslandType.TYPE_1`).
 Вертикальные отступы заданы фиксированными значениями в `styles/BodyPage.module.less`
 односторонними классами `marginTop{Large,Small,None}` / `marginBottom{Large,Small,None}`
-(24/16/0px и адаптив 16/8/0px на `@screen-sm-max`).
+(24/16/0px и адаптив 16/16/0px на `@screen-sm-max`).
 
 ---
 
@@ -123,7 +123,7 @@ type TBodyPageVerticalMargin = EBodyPageVerticalMargin | IBodyPageVerticalMargin
 | `Playground` | `Playground.tsx` | Интерактивный контроль `type` и `verticalMargin` |
 | `Default` | `Default.tsx` | Минимальный пример (FIRST, контент в карточке) |
 | `Types` | `Types.tsx` | Сравнение типов FIRST и SECOND |
-| `VerticalMargins` | `VerticalMargins.tsx` | Отступы LARGE (24px), SMALL (16px), NONE (0) и асимметричные комбинации |
+| `VerticalMargins` | `VerticalMargins.tsx` | Отступы LARGE (24px, в адаптиве 16px), SMALL (16px), NONE (0) и асимметричные комбинации |
 | `VisualTests` | `VisualTests.tsx` | Матрица type × verticalMargin для скриншот-регрессии |
 
 ---
@@ -135,3 +135,4 @@ type TBodyPageVerticalMargin = EBodyPageVerticalMargin | IBodyPageVerticalMargin
 | 2026-06-18 | Создан документ. AI-рефакторинг (clsx order, JSDoc), unit-тесты, миграция stories на modern pattern. |
 | 2026-08-26 | TRI-121: добавлено `EBodyPageVerticalMargin.NONE`; `verticalMargin` принимает объект `{top, bottom}` (обе стороны обязательны) для независимых отступов сверху и снизу. LESS переразбит на односторонние классы. |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`LightBox`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-11-18 | Адаптивный отступ SMALL увеличен с 8 до 16px сверху и снизу. Подписи VerticalMargins учитывают текущую ширину экрана. |

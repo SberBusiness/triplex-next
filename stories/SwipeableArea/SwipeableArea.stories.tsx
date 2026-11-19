@@ -159,7 +159,7 @@ export const Example: StoryObj<typeof SwipeableArea> = {
 };
 
 export const VisualTests: StoryObj<typeof SwipeableArea> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

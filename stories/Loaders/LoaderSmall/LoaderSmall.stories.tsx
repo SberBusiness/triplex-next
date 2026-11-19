@@ -112,7 +112,7 @@ export const Sizes: Story = {
 
 export const VisualTests: Story = {
     name: "Visual tests",
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     decorators: [
         (Story) => (
             <>

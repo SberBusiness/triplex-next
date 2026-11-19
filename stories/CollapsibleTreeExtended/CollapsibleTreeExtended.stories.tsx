@@ -115,7 +115,7 @@ export const CustomToggle: Story = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsExample,
     parameters: {
         controls: { disable: true },

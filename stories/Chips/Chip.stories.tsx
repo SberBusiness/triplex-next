@@ -131,7 +131,7 @@ export const WithNotificationIcon: StoryObj<typeof Chip> = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: DefaultExample,
     parameters: {
         controls: { disable: true },

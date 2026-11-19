@@ -3,5 +3,6 @@
 
 # Инфраструктуру и правила ревью проверяет владелец сервера.
 /scripts/deploy/ @dudim
+/scripts/release/ @dudim
 /.github/workflows/ @dudim
 /.github/CODEOWNERS @dudim

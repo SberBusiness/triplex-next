@@ -1,6 +1,6 @@
 ---
 name: release-react17
-description: React 17-релиз triplex-next (0.Y.0) — первая половина выпуска: предусловия на уже перелитую человеком ветку release-0, локальные гейты (сборка, unit-тесты), перенос release notes v1 → v0, бамп версии, прямой push в release-0 и GitHub Release без пометки latest. Под-skill для release; выпускается ДО React 18-половины. Ручной путь — еженедельный релиз делает release-weekly.yml по расписанию GitHub.
+description: React 17-релиз triplex-next (0.Y.0) — первая половина выпуска: предусловия на уже перелитую человеком ветку release-0, локальные гейты (сборка, unit-тесты), перенос release notes v1 → v0, бамп версии, PR в release-0 с обязательными проверками и ревью и GitHub Release без пометки latest. Под-skill для release; выпускается ДО React 18-половины. Ручной путь — еженедельный релиз делает release-weekly.yml по расписанию GitHub.
 ---
 
 # release-react17
@@ -45,15 +45,11 @@ description: React 17-релиз triplex-next (0.Y.0) — первая поло�
 
 ## Ключевое отличие от [React 18-части](../release-react18/SKILL.md)
 
-**CI на `release-0` запускается на push** ([`ci.yml`](../../../.github/workflows/ci.yml),
-триггер `push: branches: [release-0]`) — в том числе на релизный коммит
-этого skill'а. Но **дождаться** его нельзя: GitHub Release создаётся сразу
-после push, и прогон, стартующий одновременно, ничего не защищает.
-
-Значит гейтов два: зелёный прогон на вершине `release-0` *после ручного
-перелития* (предусловие шага 1) и локальные гейты шага 2. Пропускать вторые
-нельзя — релизный коммит меняет версию и notes уже после того, как первый
-прогон отработал.
+`release-0` защищена так же, как `main`: обязательный PR, актуальная база,
+зелёные проверки и одобрение владельца кода без исключений для бота/админа.
+После локальных гейтов создаётся `prerelease-<V0>` → `release-0`; публикация
+разрешена только после проверок, ревью и слияния PR. Главное отличие —
+React 17-зависимости и notes v0; эта половина публикуется первой.
 
 ---
 
@@ -68,15 +64,17 @@ React 17-адаптации, а не случайный дрейф, поэтом
 конфликты.
 
 ```bash
-git checkout release-0 && git pull origin release-0
+git fetch origin main release-0
+git switch -c sync-release-0-<дата> origin/release-0
 git merge --no-commit --no-ff origin/main
 ```
 
 `--no-commit` останавливает слияние перед коммитом, даже если конфликтов нет:
 lock-файл и аудит (см. ниже) должны войти в сам коммит слияния.
 
-Мерж делается **напрямую в `release-0`, без PR** — осознанное исключение из
-общего правила, зафиксированное в [`docs/ai/commits.md`](../../../docs/ai/commits.md).
+Изменения отправляются PR из временной ветки в `release-0`. Нужны CI,
+ревью владельца кода и **Create a merge commit**, без squash/rebase:
+предполёт проверяет сохранённое родство с `main`. Прямой push запрещён.
 
 **Общий принцип разрешения конфликтов:** из main берётся *логика и
 поведение*, из `release-0` сохраняется *React 17-совместимость* — версии
@@ -89,10 +87,17 @@ lock-файл и аудит (см. ниже) должны войти в сам �
 | `package.json` — React-зависимости | **Всегда из `release-0`**: `react`/`react-dom` `17.0.2`, `@types/react`/`@types/react-dom` `17.0.2`, `@testing-library/react` `12.1.5`, `focus-trap-react` `10.3.0`, `react-resize-detector` `9.1.0`, `@types/react-transition-group` `4.4.9`, `peerDependencies` — `^16.8.0 \|\| ^17.0.0` |
 | `package.json` — всё остальное | Из main (новые/обновлённые зависимости, скрипты, конфиги) |
 | `package-lock.json` | Руками не разрешать. Взять сторону main, перегенерировать `npm install`, затем проверить аудит — см. «Lock-файл и аудит» ниже |
-| `.github/workflows/release.yml`, `release-weekly.yml` | **Из main.** Копии в `release-0` не используются ни на одном пути: для события `release` GitHub берёт workflow из ветки по умолчанию, при `workflow_call` — из ветки вызывающего, а расписание живёт только в main. Брать main — значит сокращать расхождение |
+| `.github/workflows/` целиком | **Из main**, включая добавленные и удалённые файлы. Перед слиянием синхронизации каталог должен полностью совпадать с main: иначе GITHUB_TOKEN не сможет создать Release |
 | `stories/release-notes/v0/*` | Из `release-0` (в main их нет) |
 | `stories/release-notes/v1/*` | Из main |
 | `src/**` | По принципу выше — см. известные адаптации ниже |
+
+До коммита синхронизации перенеси и проверь весь каталог workflow:
+
+```bash
+git restore --source=origin/main --staged --worktree -- .github/workflows
+git diff --quiet origin/main -- .github/workflows
+```
 
 ### Lock-файл и аудит
 
@@ -176,20 +181,26 @@ git diff --name-only origin/release-0..HEAD -- src | \
 адаптировать (см. [`docs/ai/codestyle.md`](../../../docs/ai/codestyle.md) и
 правило про совместимость с React 17).
 
-Дальше — push `release-0` и зелёный CI. С этого момента ветка готова
-к релизу.
+Дальше — PR синхронизации, проверки, ревью и merge commit в `release-0`.
+Дождаться зелёного CI на её новой вершине; после этого ветка готова к релизу.
 
 ---
 
 ## 1. Предусловия
 
+Проверки и сохранение SHA выполняй в одном сеансе оболочки. Если сеанс
+прервался до сохранения, начни предполёт заново: подготовка ещё не началась.
+
 ```bash
 git status --porcelain
 git fetch origin main release-0
+PREFLIGHT_MAIN_SHA=$(git rev-parse origin/main) || exit 1
+PREFLIGHT_RELEASE0_SHA=$(git rev-parse origin/release-0) || exit 1
 gh release view <V0> 2>&1 | head -3
 gh release view <V1> 2>&1 | head -3
-git show origin/release-0:package.json | grep -m1 '"version"'
-git merge-base --is-ancestor origin/main origin/release-0
+git show "${PREFLIGHT_RELEASE0_SHA}:package.json" | grep -m1 '"version"'
+git merge-base --is-ancestor "$PREFLIGHT_MAIN_SHA" "$PREFLIGHT_RELEASE0_SHA"
+git diff --quiet "$PREFLIGHT_MAIN_SHA" "$PREFLIGHT_RELEASE0_SHA" -- .github/workflows
 ```
 
 Проверки — при провале остановись и сообщи разработчику:
@@ -209,10 +220,10 @@ git merge-base --is-ancestor origin/main origin/release-0
 `release-0`:
 
 ```bash
-git merge-base --is-ancestor origin/main origin/release-0
+git merge-base --is-ancestor "$PREFLIGHT_MAIN_SHA" "$PREFLIGHT_RELEASE0_SHA"
 ```
 
-Сверять можно прямо с вершиной `origin/main`: эта половина идёт первой, до
+Сверяем зафиксированный `PREFLIGHT_MAIN_SHA`: эта половина идёт первой, до
 того как React 18-часть добавит в `main` коммит с бампом. Проверка
 индифферентна к собственным коммитам `release-0` поверх мержа — их может быть
 сколько угодно, включая правки после разрешения конфликтов; падает она только
@@ -221,7 +232,7 @@ git merge-base --is-ancestor origin/main origin/release-0
 При провале покажи, чего именно не хватает, — без этого сообщение бесполезно:
 
 ```bash
-git log origin/main --not origin/release-0 --oneline
+git log "$PREFLIGHT_MAIN_SHA" --not "$PREFLIGHT_RELEASE0_SHA" --oneline
 ```
 
 Разрешать ситуацию самостоятельно (доливать main) **нельзя**: мерж — ручной
@@ -232,22 +243,61 @@ git log origin/main --not origin/release-0 --oneline
 ```bash
 gh run list --workflow=ci.yml --branch release-0 --limit 1 \
   --json headSha,status,conclusion,url
-git rev-parse origin/release-0
+printf '%s\n' "$PREFLIGHT_RELEASE0_SHA"
 ```
 
-`headSha` прогона должен совпадать с вершиной `origin/release-0`,
+`headSha` прогона должен совпадать с зафиксированным `PREFLIGHT_RELEASE0_SHA`,
 `status` = `completed`, `conclusion` = `success`. Прогон на другом коммите
 не считается — значит проверялось не то состояние ветки.
 
-## 2. Перейти в `release-0` и прогнать гейты
-
-Первым делом — переключиться на ветку. Все дальнейшие шаги (гейты, бамп,
-коммит, push) идут в `release-0`, а текущей веткой может быть любая:
-предполёт читал всё через `origin/`, чекаут не трогая.
+Только после успешного прохождения всех предусловий сохрани SHA. Ветки
+не должны успеть сдвинуться за время проверки; иначе повтори предполёт,
+пока файл состояния ещё не создан:
 
 ```bash
-git checkout release-0
-git pull origin release-0
+: "${PREFLIGHT_MAIN_SHA:?}" "${PREFLIGHT_RELEASE0_SHA:?}" "${V0:?}"
+git fetch origin main release-0 || exit 1
+[[ $(git rev-parse origin/main) == "$PREFLIGHT_MAIN_SHA" ]] || exit 1
+[[ $(git rev-parse origin/release-0) == "$PREFLIGHT_RELEASE0_SHA" ]] || exit 1
+STATE_FILE="$(git rev-parse --git-path "triplex-release-${V0}-main-sha")"
+( set -o noclobber; printf '%s %s\n' "$PREFLIGHT_MAIN_SHA" "$PREFLIGHT_RELEASE0_SHA" > "$STATE_FILE" ) || {
+  echo 'Состояние уже начатой подготовки существует: продолжите прежнюю попытку'; exit 1;
+}
+```
+
+**Если сеанс прервался после сохранения, но до создания ветки:** прочитай
+оба SHA из файла (это данные, не shell-скрипт). Старый файл только с одним
+SHA не перезаписывай: остановись для восстановления исходной попытки
+мейнтейнером. Имя файла сохранено для защиты от повторного предполёта:
+
+```bash
+STATE_FILE="$(git rev-parse --git-path "triplex-release-${V0:?}-main-sha")"
+read -r PREFLIGHT_MAIN_SHA PREFLIGHT_RELEASE0_SHA < "$STATE_FILE" || exit 1
+[[ "$PREFLIGHT_MAIN_SHA" =~ ^[a-f0-9]{40}$ && "$PREFLIGHT_RELEASE0_SHA" =~ ^[a-f0-9]{40}$ ]] || exit 1
+git fetch origin main release-0 || exit 1
+[[ $(git rev-parse origin/main) == "$PREFLIGHT_MAIN_SHA" ]] || exit 1
+[[ $(git rev-parse origin/release-0) == "$PREFLIGHT_RELEASE0_SHA" ]] || exit 1
+```
+
+Если вершины не изменились и локальной/удалённой `prerelease-<V0>` и её PR
+ещё нет, переходи к шагу 2. Если ветка или PR уже есть — продолжай именно
+её подготовку/ревью, не повторяй бамп. Если вершины изменились, новый
+предполёт допустим только после подтверждения отсутствия локальной ветки,
+удалённой ветки и любого PR этой попытки (включая закрытый и слитый).
+Проверь их через `git show-ref`, успешный `git ls-remote origin
+refs/heads/prerelease-<V0>` и успешный `gh pr list --state all --head
+prerelease-<V0> --base release-0`. Ошибка запроса не означает отсутствие.
+Лишь в этом случае сохрани старый файл как архив вне пути `STATE_FILE`
+и начни предусловия заново. При наличии следов подготовки или сомнениях
+остановись и передай восстановление мейнтейнеру.
+
+## 2. Создать релизную ветку от `release-0` и прогнать гейты
+
+Все дальнейшие шаги выполняются в отдельной ветке `prerelease-<V0>`.
+Исходное состояние — проверенная вершина `origin/release-0`.
+
+```bash
+git switch -c prerelease-<V0> "$PREFLIGHT_RELEASE0_SHA"
 ```
 
 Рабочее дерево должно остаться чистым, а `git rev-parse HEAD` — совпасть
@@ -342,7 +392,7 @@ git diff --stat
 git diff -- package.json "stories/release-notes/v0/<V0>.mdx"
 ```
 
-Ожидается ровно четыре файла: `package.json`, `package-lock.json` и два
+Ожидается четыре файла (три, если notes текущей версии уже заполнены): `package.json`, `package-lock.json` и два
 `v0/*.mdx`. Что-то ещё — стоп: в дерево попало постороннее.
 
 Считай по `git status --short`: `<NEXT0>.mdx` ты только что создал, он
@@ -358,7 +408,7 @@ untracked, и в `git diff --stat` его не будет.
 git add package.json package-lock.json \
   "stories/release-notes/v0/<V0>.mdx" "stories/release-notes/v0/<NEXT0>.mdx"
 git commit -m "<TRI-XXX> Подготовка релиза <V0>"     # от бота, если задан TRIPLEX_BOT_GH_TOKEN
-git push origin release-0
+git push -u origin prerelease-<V0>
 ```
 
 Пути к notes указывай точно — `git add stories/release-notes/v0/` затянул бы
@@ -366,7 +416,37 @@ git push origin release-0
 
 Авторство бота — по паттерну из [`docs/ai/commits.md`](../../../docs/ai/commits.md).
 
-## 5. Выпуск: GitHub Release
+## 5. PR, проверки и человеческое ревью
+
+Создать PR от бота по `docs/ai/commits.md`: `prerelease-<V0>` → `release-0`.
+Дождаться зелёных обязательных проверок и одобрения владельца кода; новые
+коммиты требуют повторного одобрения. Не использовать `--admin`, прямой push
+или снятие защиты. Пока одобрения нет — остановиться с ссылкой на PR.
+
+Перед продолжением после ревью восстановить исходный SHA из файла в git-каталоге.
+Файл не входит в коммит и переживает смену оболочки. Если потерян файл или
+рабочая копия, **остановиться**: нельзя подставлять свежий `origin/main`.
+
+```bash
+STATE_FILE="$(git rev-parse --git-path "triplex-release-${V0:?}-main-sha")"
+read -r PREFLIGHT_MAIN_SHA PREFLIGHT_RELEASE0_SHA < "$STATE_FILE" || exit 1
+[[ "$PREFLIGHT_MAIN_SHA" =~ ^[a-f0-9]{40}$ && "$PREFLIGHT_RELEASE0_SHA" =~ ^[a-f0-9]{40}$ ]] || exit 1
+git cat-file -e "${PREFLIGHT_MAIN_SHA}^{commit}" || exit 1
+```
+
+Перед слиянием проверить неизменность базы `release-0` и содержимого `main`
+относительно предполёта. Слить обычным merge с закреплённым head SHA.
+Получить SHA слияния из PR, fetch этого SHA и проверить
+`git diff --exit-code <PREPARED_SHA> <MERGED_SHA> --`. Публиковать только
+`MERGED_SHA`, чтобы новые коммиты в ветке не попали в релиз после ревью.
+После слияния повторно выполнить `git fetch origin main release-0`, проверить
+`git merge-base --is-ancestor <MERGED_SHA> origin/release-0` и
+`git diff --exit-code "$PREFLIGHT_MAIN_SHA" origin/main --`. Это повторная
+сверка заморозки перед публикацией; при новом сеансе сначала повторно
+прочитать сохранённый SHA указанным выше блоком. При отказе любой проверки — не создавать
+GitHub Release; восстановление описано в `docs/human/release.md`.
+
+## 6. Выпуск с проверенного SHA через Release workflow
 
 **Точка невозврата.** Текст notes собирается из `v0/<V0>.mdx` по канону из
 [`release`](../release/SKILL.md), раздел «Преобразование MDX → release notes»
@@ -380,18 +460,23 @@ git push origin release-0
 
 ```bash
 node scripts/releaseNotesMd.js stories/release-notes/v0/<V0>.mdx > /tmp/notes-<V0>.md
-gh release create <V0> --target release-0 --title "<V0>" --latest=false \
-  --notes-file /tmp/notes-<V0>.md
+gh workflow run release.yml --ref main \
+  -f tag=<V0> -f target=release-0 -f sha=<MERGED_SHA> -f make_latest=false
 ```
 
 Скрипт [`scripts/releaseNotesMd.js`](../../../scripts/releaseNotesMd.js) —
 исполняемая форма канона «Преобразование MDX → release notes» из
 [`release`](../release/SKILL.md); ручная сборка текста эквивалентна.
 
-`--latest=false` обязателен: пометка Latest на GitHub должна достаться `1.x`.
+`make_latest=false` обязателен: пометка Latest на GitHub должна достаться `1.x`.
+Release workflow берёт notes из MDX **переданного SHA**, после сборки и
+публикации создаёт GitHub Release. В summary ручного выпуска зафиксируй run URL.
+Не заменяй этот вызов на `gh release create --target <MERGED_SHA>`: гейт
+события `release: published` требует `target_commitish=release-0`. И не
+подменяй SHA подвижной вершиной ветки; отдельный вход `sha` закрепляет сборку.
 
 
-## 6. Дождаться публикации и проверить npm
+## 7. Дождаться публикации и проверить npm
 
 ```bash
 gh run list --workflow=release.yml --limit 1
@@ -465,7 +550,7 @@ npm dist-tag add @sberbusiness/triplex-next@<предыдущая 1.x> latest \
 
 - Не мержить `main` в `release-0` — это ручной шаг мейнтейнера. Не «дотягивать»
   ветку самостоятельно при провале `is-ancestor`.
-- Не пушить в `release-0` при упавшем гейте.
+- Не пушить напрямую в `release-0`; не сливать PR при упавшем гейте или без ревью.
 - Не менять смысл release notes при переносе v1 → v0 и не перезаписывать
   заполненный человеком `v0/<V0>.mdx`.
 - Не помечать `0.x` как Latest на GitHub.

@@ -205,13 +205,17 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
             className={styles.dropdown}
             opened={opened}
             setOpened={setOpened}
-            size={size}
+            size={size === EComponentSize.LG ? EComponentSize.MD : size}
             width={EDropdownWidth.MIN_TARGET}
             targetRef={targetRef}
             ref={dropdownRef}
         >
             <DropdownListContext.Provider value={dropdownListContext}>
-                <DropdownList dropdownOpened={opened} id={instanceId.current} size={size}>
+                <DropdownList
+                    dropdownOpened={opened}
+                    id={instanceId.current}
+                    size={size === EComponentSize.LG ? EComponentSize.MD : size}
+                >
                     {tabs.map((tab, index) => {
                         const { id, label: tabLabel, showNotificationIcon, ...htmlButtonAttributes } = tab;
 

@@ -195,7 +195,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                 <ButtonDropdownExtended.Dropdown
                     {...restDropdownAttributes}
                     className={classNames}
-                    size={size}
+                    size={size === EComponentSize.LG ? EComponentSize.MD : size}
                     width={EDropdownWidth.MIN_TARGET}
                     alignment={EDropdownAlignment.RIGHT}
                     opened={opened}
@@ -231,7 +231,11 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
                         ),
                     }}
                 >
-                    <DropdownList dropdownOpened={opened} id={instanceId} size={size}>
+                    <DropdownList
+                        dropdownOpened={opened}
+                        id={instanceId}
+                        size={size === EComponentSize.LG ? EComponentSize.MD : size}
+                    >
                         {options.map(({ label, ...restOption }) => (
                             <DropdownList.Item
                                 {...restOption}

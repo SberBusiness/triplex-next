@@ -187,7 +187,7 @@ export const ReversedPick: StoryObj<typeof Calendar> = {
 };
 
 export const VisualTests: StoryObj<typeof Calendar> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

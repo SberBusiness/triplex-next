@@ -224,7 +224,7 @@ const VISUAL_SELECT_OPTIONS: ISelectExtendedFieldDefaultOption[] = [
 ];
 
 export const VisualTests: StoryObj<typeof Pagination> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

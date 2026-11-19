@@ -149,7 +149,7 @@ export const Disabled: StoryObj<typeof CollapsibleTree> = {
 };
 
 export const VisualTests: StoryObj<typeof CollapsibleTree> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsExample,
     parameters: {
         controls: { disable: true },

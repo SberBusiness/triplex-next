@@ -188,7 +188,7 @@ export const ManySteps: StoryObj<typeof Stepper> = {
 };
 
 export const VisualTests: StoryObj<typeof Stepper> = {
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

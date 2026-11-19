@@ -131,7 +131,7 @@ export const MaskedInput: Story = {
 };
 
 export const VisualTests: StoryObj<typeof FormField> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsExample,
     parameters: { controls: { disable: true }, docs: { canvas: { sourceState: "none" }, codePanel: false } },
 };

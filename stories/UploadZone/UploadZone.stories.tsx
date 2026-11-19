@@ -115,7 +115,7 @@ export const Production: StoryObj<typeof UploadZone> = {
 };
 
 export const VisualTests: StoryObj<typeof UploadZone> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

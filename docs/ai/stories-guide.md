@@ -353,11 +353,11 @@ import { action } from "storybook/actions";
 
 ### Параметры Visual tests
 
-Visual tests скрыта из документации (`"!autodocs"`) и сайдбара (`"!dev"`) и не показывает код: она нужна только для скриншот-тестов, test-runner её снимает:
+Visual tests скрыта из документации (`"!autodocs"`) и сайдбара production-сборки (`"visual-test"`, настройка `tags` в `.storybook/main.ts`) и не показывает код: она нужна только для скриншот-тестов, test-runner её снимает:
 
 ```tsx
 export const VisualTests: Story = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {
@@ -377,7 +377,7 @@ export const VisualTests: Story = {
 
 ```tsx
 export const VisualTests: Story = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {
@@ -678,7 +678,7 @@ export { default as SizesSource } from "./Sizes?raw";
 - [ ] Нет дублирующих скриншотов — визуально идентичные стори исключены через `testRunner: { skip: true }`
 - [ ] Все ключевые визуальные состояния покрыты (размеры, статусы, заполненные поля, фокус)
 - [ ] Если основных сторей недостаточно — создана Visual tests с недостающими состояниями
-- [ ] Visual tests скрыта из autodocs и сайдбара (`tags: ["!autodocs", "!dev"]`) и не показывает код
+- [ ] Visual tests скрыта из autodocs и сайдбара production-сборки (`tags: ["!autodocs", "visual-test"]`) и не показывает код
 - [ ] Если компонент требует взаимодействия (dropdown, tooltip, modal, popover) — реализован `play` в Visual tests
 - [ ] Данные в Visual tests захардкожены (нет `new Date()`, `Math.random()`)
 - [ ] Контейнеры имеют фиксированные размеры для стабильного layout'а

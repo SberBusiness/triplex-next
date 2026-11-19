@@ -214,7 +214,7 @@ describe("SelectField", () => {
         expect(target).toHaveAttribute("data-size", EComponentSize.LG);
     });
 
-    it("Should pass size to dropdown", async () => {
+    it("Should use MD dropdown for LG field", async () => {
         render(<SelectField {...defaultProps} size={EComponentSize.LG} data-testid="select-field" />);
 
         fireEvent.click(screen.getByTestId("select-extended-field-target"));
@@ -222,7 +222,7 @@ describe("SelectField", () => {
         await waitFor(() => {
             expect(screen.getByTestId("select-extended-field-dropdown-default")).toHaveAttribute(
                 "data-size",
-                EComponentSize.LG,
+                EComponentSize.MD,
             );
         });
     });

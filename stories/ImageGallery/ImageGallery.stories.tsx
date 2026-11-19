@@ -201,7 +201,7 @@ export const InsideLightBoxStory: StoryObj<typeof ImageGallery> = {
  * (стрелка «вперёд» disabled, плюс блюр-слой). Фиксирует disabled-состояния стрелок.
  */
 export const VisualTestsArrows: StoryObj<typeof ImageGallery> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

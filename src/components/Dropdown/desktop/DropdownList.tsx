@@ -66,7 +66,7 @@ export const DropdownList: IDropdownListComponent = Object.assign(
 
         // Внутренний ref нужен для прокрутки независимо от формы внешнего ref.
         const containerRef = useRef<HTMLDivElement>(null);
-        const combinedRef = mergeRefs(ref, containerRef);
+        const combinedRef = useMemo(() => mergeRefs(ref, containerRef), [ref, containerRef]);
 
         const listItemsProps = getListItemsProps(children);
         const listItemIds = listItemsProps.map(({ id }) => id);

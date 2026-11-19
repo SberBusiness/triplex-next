@@ -79,6 +79,15 @@ updates:
       # Снять, когда все трое поддержат TS 7. Версию 6.x правило пропускает.
       - dependency-name: "typescript"
         versions: [">=7"]
+      # eslint 10 не поддерживает eslint-plugin-react: последняя версия 7.37.5
+      # объявляет peer eslint "... ^8 || ^9.7", npm падает с ERESOLVE (#796).
+      # @eslint/js 10 требует eslint ^10, поэтому держим их вместе (#751).
+      # Остальные плагины eslint 10 уже принимают. Снять, когда
+      # eslint-plugin-react выпустит версию с поддержкой eslint 10.
+      - dependency-name: "eslint"
+        versions: [">=10"]
+      - dependency-name: "@eslint/js"
+        versions: [">=10"]
     # Конвенция TRI-XXX на бота не распространяется, см. docs/ai/commits.md.
     commit-message:
       prefix: deps

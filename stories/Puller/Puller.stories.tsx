@@ -180,7 +180,7 @@ export const RenderContainer: StoryObj<typeof Puller> = {
 };
 
 export const VisualTests: StoryObj<typeof Puller> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

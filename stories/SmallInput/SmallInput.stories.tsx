@@ -153,7 +153,7 @@ export const Production: StoryObj<typeof SmallInput> = {
 };
 
 export const VisualTests: StoryObj<typeof SmallInput> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

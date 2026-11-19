@@ -190,7 +190,7 @@ export const Example: StoryObj<typeof MasterTable> = {
 
 export const VisualTests: StoryObj<typeof MasterTable> = {
     name: "Visual tests",
-    tags: ["!autodocs"],
+    tags: ["!autodocs", "visual-test"],
     decorators: [withoutAnimation],
     render: VisualTestsRender,
     parameters: {

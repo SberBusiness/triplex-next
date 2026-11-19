@@ -15,6 +15,11 @@ const config: StorybookConfig = {
     stories: ["../stories/**/*.stories.@(ts|tsx|mdx)", "../stories/**/*.mdx"],
     // для отладки конкретного компонента
     // stories: ["../stories/OrderedList/OrderedList.stories.tsx"],
+    tags: async (_, { configType }) => ({
+        "visual-test": {
+            excludeFromSidebar: configType === "PRODUCTION",
+        },
+    }),
     typescript: {
         reactDocgen: "react-docgen-typescript",
         reactDocgenTypescriptOptions: {

@@ -109,7 +109,7 @@ export const Production: StoryObj<typeof MonthYearRange> = {
 };
 
 export const VisualTests: StoryObj<typeof MonthYearRange> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

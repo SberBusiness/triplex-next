@@ -14,24 +14,28 @@ type TDropdownListProps = React.ComponentProps<typeof DropdownList>;
  * Управляющий элемент со связкой useDropdownListKeyboard: клавиши списку передаются с него.
  * Результат handleKeyDown записывается в data-handled.
  */
-const KeyboardHarness = ({ dropdownOpened = true, ...listProps }: Partial<TDropdownListProps>) => {
-    const { context, activeDescendant, handleKeyDown } = useDropdownListKeyboard();
+const KeyboardHarness = React.forwardRef<HTMLDivElement, Partial<TDropdownListProps>>(
+    ({ dropdownOpened = true, ...listProps }, ref) => {
+        const { context, activeDescendant, handleKeyDown } = useDropdownListKeyboard();
 
-    return (
-        <DropdownListContext.Provider value={context}>
-            <button
-                type="button"
-                aria-activedescendant={activeDescendant}
-                onKeyDown={(event) => {
-                    event.currentTarget.dataset.handled = String(handleKeyDown(event));
-                }}
-            >
-                Trigger
-            </button>
-            <DropdownList dropdownOpened={dropdownOpened} {...listProps} />
-        </DropdownListContext.Provider>
-    );
-};
+        return (
+            <DropdownListContext.Provider value={context}>
+                <button
+                    type="button"
+                    aria-activedescendant={activeDescendant}
+                    onKeyDown={(event) => {
+                        event.currentTarget.dataset.handled = String(handleKeyDown(event));
+                    }}
+                >
+                    Trigger
+                </button>
+                <DropdownList dropdownOpened={dropdownOpened} {...listProps} ref={ref} />
+            </DropdownListContext.Provider>
+        );
+    },
+);
+
+KeyboardHarness.displayName = "KeyboardHarness";
 
 const DEFAULT_ITEMS = [
     <DropdownList.Item key="item-1" id="item-1">
@@ -94,12 +98,32 @@ describe("DropdownList", () => {
         expect(DropdownList.Item).toBe(DropdownListItem);
     });
 
-    it("assigns listRef to the list container", () => {
-        const listRef = React.createRef<HTMLDivElement>();
+    it("forwards an object ref to the list container and clears it on unmount", () => {
+        const ref = React.createRef<HTMLDivElement>();
 
-        renderList({ listRef });
+        const { unmount } = renderList({ ref });
 
-        expect(listRef.current).toBe(screen.getByRole("listbox"));
+        expect(ref.current).toBe(screen.getByRole("listbox"));
+        unmount();
+        expect(ref.current).toBeNull();
+    });
+
+    it("keeps a callback ref attached across renders and clears it on unmount", () => {
+        const ref = vi.fn();
+        const { rerender, unmount } = renderList({ ref });
+        const list = screen.getByRole("listbox");
+
+        expect(ref).toHaveBeenCalledWith(list);
+        ref.mockClear();
+        rerender(
+            <KeyboardHarness ref={ref} loading>
+                {DEFAULT_ITEMS}
+            </KeyboardHarness>,
+        );
+        expect(ref).not.toHaveBeenCalled();
+
+        unmount();
+        expect(ref).toHaveBeenCalledExactlyOnceWith(null);
     });
 
     it("renders a loader item when loading", () => {
@@ -674,8 +698,8 @@ describe("DropdownList", () => {
     });
 
     /**
-     * Прокрутка работает через внутренний ref контейнера, когда listRef не передан снаружи,
-     * поэтому тест намеренно не использует listRef.
+     * Прокрутка работает через внутренний ref контейнера, когда внешний ref не передан,
+     * поэтому тест намеренно не использует внешний ref.
      */
     describe("scrolling", () => {
         /**
@@ -702,8 +726,8 @@ describe("DropdownList", () => {
         ];
 
         /**
-         * Прокрутка работает через внутренний ref контейнера, когда listRef не передан снаружи,
-         * поэтому тест намеренно не использует listRef.
+         * Прокрутка работает через внутренний ref контейнера, когда внешний ref не передан,
+         * поэтому тест намеренно не использует внешний ref.
          */
         it("scrolls the list container to the item that becomes active", () => {
             renderList();

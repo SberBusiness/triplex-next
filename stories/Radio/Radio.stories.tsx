@@ -140,7 +140,7 @@ export const WithoutLabel: TStory = {
 };
 
 export const VisualTests: TStory = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: { canvas: { sourceState: "none" }, codePanel: false },
@@ -158,7 +158,7 @@ export const VisualTests: TStory = {
 };
 
 export const VisualTestsCheckedHover: TStory = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: { canvas: { sourceState: "none" }, codePanel: false },

@@ -290,7 +290,7 @@ export const RenderContainer: StoryObj<typeof Tooltip> = {
 };
 
 export const VisualTests: StoryObj<typeof Tooltip> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

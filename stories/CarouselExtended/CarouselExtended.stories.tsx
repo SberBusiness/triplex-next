@@ -158,7 +158,7 @@ export const Example: StoryObj<typeof CarouselExtended> = {
 };
 
 export const VisualTests: StoryObj<typeof CarouselExtended> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

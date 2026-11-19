@@ -10,13 +10,13 @@ const OPTIONS: ISelectFieldOption[] = [
 ];
 
 /** Раскрытый список: подсветка выбранной опции и позиционирование выпадающего блока. Раскрывается play-функцией. */
-const OpenedSelect = () => {
+const OpenedSelect = ({ size = EComponentSize.MD }: { size?: EComponentSize }) => {
     const [value, setValue] = useState<ISelectFieldOption | undefined>(OPTIONS[1]);
 
     return (
         <div style={{ width: "240px" }}>
             <SelectField
-                size={EComponentSize.MD}
+                size={size}
                 value={value}
                 options={OPTIONS}
                 onChange={setValue}
@@ -81,9 +81,9 @@ const DisabledSelect = () => (
     </div>
 );
 
-export const VisualTests = () => (
+export const VisualTests = ({ openedSize = EComponentSize.MD }: { openedSize?: EComponentSize }) => (
     <div style={{ display: "flex", alignItems: "flex-start", gap: "24px", flexWrap: "wrap", height: "360px" }}>
-        <OpenedSelect />
+        <OpenedSelect size={openedSize} />
         <LongValueSelect />
         <LoadingSmallSelect />
         <DisabledSelect />

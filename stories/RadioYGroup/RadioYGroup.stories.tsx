@@ -72,7 +72,7 @@ export const States: Story = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },
@@ -97,7 +97,7 @@ export const VisualTests: Story = {
 };
 
 export const VisualTestsCheckedHover: Story = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

@@ -240,7 +240,7 @@ export const Production: StoryObj<typeof TextField> = {
 };
 
 export const VisualTests: StoryObj<typeof TextField> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

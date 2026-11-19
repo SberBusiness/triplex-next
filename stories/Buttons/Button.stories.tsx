@@ -279,7 +279,7 @@ export const TextWithIcon: Story = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     args: {
         children: "Button text",
         theme: EButtonTheme.GENERAL,

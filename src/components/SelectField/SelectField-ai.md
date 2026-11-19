@@ -45,7 +45,7 @@ version: "1.0"
 
 | Prop | Тип | Описание |
 |---|---|---|
-| `size` | `EComponentSize` | Размер. Задаётся один раз и применяется и к полю выбора, и к выпадающему блоку со списком |
+| `size` | `EComponentSize` | Размер поля выбора; выпадающий блок и список для LG используют MD, для SM и MD — размер поля |
 | `options` | `ISelectFieldOption[]` | Список опций. `ISelectFieldOption` — это `ISelectExtendedFieldDefaultOption`: `id`, `value`, `label` плюс props `DropdownListItem` |
 | `onChange` | `(option: ISelectFieldOption) => void` | Вызывается с **объектом опции** (не с `id` и не с `value`). Список после выбора закрывается сам |
 
@@ -195,6 +195,7 @@ version: "1.0"
 | `Loading` | `Loading.tsx` | Состояние загрузки: лоадер вместо каретки, список не раскрывается |
 | `WithDescription` | `WithDescription.tsx` | Композиция с `FormGroup` и `FormFieldDescription`: описание и текст ошибки под полем |
 | `Example` | `Example.tsx` | Production-like композиция: зависимые списки «Организация» → «Счёт списания» |
+| `VisualTestsOpenedLG` | `VisualTests.tsx` | Открытый список MD у поля LG; раскрывается через `play` |
 | `VisualTests` | `VisualTests.tsx` | Скриншот-регрессия: раскрытый список с подсвеченной опцией (через `play`), длинное значение, загрузка в размере SM, пустое заблокированное поле |
 
 `Playground` исключён из скриншот-тестов, `WithDescription` — тоже: поле в нём повторяет
@@ -211,3 +212,5 @@ version: "1.0"
 | 2026-10-21 | Переход на `Puller` (TRIPLEX-961): мобильный элемент списка — `PullerListItem` (бывший `DropdownMobileListItem`). |
 | 2026-10-29 | TRIPLEX-1028: Enter / Space на кнопке очистки и других фокусируемых элементах внутри поля больше не открывают список, клик по таким элементам, кроме очистки, — не переключает. Клавиши открытия — см. «Accessibility». `targetProps.onClear` получает событие клика. |
 | 2026-11-05 | TRIPLEX-1039: связку поля со списком (`DropdownListContext`, `aria-activedescendant`) ведёт `SelectExtendedField`. |
+| 2026-11-19 | Для размера LG выпадающий блок и список используют MD; размер управляющего элемента остаётся LG. |
+| 2026-11-19 | Добавлен visual-сценарий `VisualTestsOpenedLG`: открытый список MD у поля LG. |

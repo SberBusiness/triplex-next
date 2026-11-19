@@ -97,7 +97,7 @@ export const SelectField = React.forwardRef<HTMLDivElement, ISelectFieldProps>((
     const renderDropdown = (dropdownProvideProps: ISelectExtendedFieldDropdownProvideProps) => (
         <SelectExtendedFieldDropdownDefault
             {...dropdownProvideProps}
-            size={size}
+            size={size === EComponentSize.LG ? EComponentSize.MD : size}
             width={EDropdownWidth.TARGET}
             dropdownProps={dropdownProps}
             dropdownListItemClassName={dropdownListItemClassName}

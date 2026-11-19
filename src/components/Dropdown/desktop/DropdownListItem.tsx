@@ -8,21 +8,21 @@ import styles from "../styles/DropdownDesktopList.module.less";
 
 /** Свойства компонента DropdownListItem. */
 export interface IDropdownListItemProps extends React.HTMLAttributes<HTMLDivElement>, TestProps {
-    /** Идентификатор элемента. */
+    /** Уникальный в документе идентификатор опции для навигации и aria-activedescendant. */
     id: string;
     /**
-     * Обработчик выбора текущего элемента. Вызывается по клику, а когда элемент активен — по клавишам
-     * keyCodesForSelection.
+     * Обработчик выбора. По клику вызывается перед onClick, с клавиатуры — через DropdownList
+     * по клавишам keyCodesForSelection активной опции.
      */
     onSelect?: () => void;
-    /** Флаг - текущий элемент выбран. */
+    /** Опция выбрана. Управляет aria-selected и оформлением опции. По умолчанию false. */
     selected?: boolean;
     /**
      * Коды клавиш для выбора элемента с помощью клавиатуры. По умолчанию [SPACE, ENTER]. Обрабатывает DropdownList.
      * Если клавиши приходят из поля ввода, задайте [ENTER], иначе пробел выберет элемент вместо ввода.
      */
     keyCodesForSelection?: number[];
-    /** Флаг отображения значка новых уведомлений. */
+    /** Показывает Badge.Dot в углу опции. По умолчанию false. */
     showNotificationIcon?: boolean;
 }
 

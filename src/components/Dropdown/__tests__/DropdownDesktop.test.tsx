@@ -254,6 +254,26 @@ describe("DropdownDesktop", () => {
             expect(prevented).toBe(false);
         });
 
+        it("keeps preventing scrolling keys while another dropdown stays opened", () => {
+            const { rerender } = render(
+                <>
+                    <DropdownWithTarget />
+                    <DropdownWithTarget />
+                </>,
+            );
+
+            rerender(
+                <>
+                    <DropdownWithTarget opened={false} />
+                    <DropdownWithTarget />
+                </>,
+            );
+
+            const prevented = !fireEvent.keyDown(document.body, { code: "PageDown" });
+
+            expect(prevented).toBe(true);
+        });
+
         it("stops preventing wheel events after closing", () => {
             const { rerender } = render(<DropdownWithTarget />);
 

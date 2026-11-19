@@ -157,7 +157,7 @@ export const Sizes: StoryObj<typeof SelectField> = {
         controls: { disable: true },
         docs: {
             description: {
-                story: "Размеры SM / MD / LG. Размер задаётся один раз и применяется и к полю, и к выпадающему блоку.",
+                story: "Размеры SM / MD / LG. Для поля LG выпадающий блок использует MD; для SM и MD размеры поля и списка совпадают.",
             },
             source: {
                 code: SizesSource,

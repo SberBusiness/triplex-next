@@ -53,7 +53,7 @@ version: "1.0"
 
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
-| `size` | `EComponentSize` | `EComponentSize.LG` | Размер поля и выпадающего списка |
+| `size` | `EComponentSize` | `EComponentSize.LG` | Размер поля; список для LG использует MD, для SM и MD — размер поля |
 | `status` | `EFormFieldStatus` | `EFormFieldStatus.DEFAULT` | `DISABLED` блокирует ввод и подавляет Tooltip |
 | `label` | `string` | — | Лейбл над полем ввода |
 | `placeholder` | `string` | — | Подсказка в пустом поле |
@@ -272,3 +272,4 @@ version: "1.0"
 | 2026-10-21 | Переход на `Puller` (TRIPLEX-961): мобильный вариант собран из частей нижней шторки `Puller` (бывший `DropdownMobile*`). |
 | 2026-11-05 | TRIPLEX-1039: клавиши списку передаёт поле ввода через `useDropdownListKeyboard`: нажатия вне поля не двигают и не выбирают опции. `aria-activedescendant` больше не сбрасывается при вводе — указывает на опцию, которую выберет `Enter`; при фильтрации остаётся на той же опции. Кастомному `renderDropdownListItem` больше не нужен ref. |
 | 2026-11-13 | TRIPLEX-1048: добавлен `dropdownProps` (с `pullerProps` для мобильной шторки), ширина списка по умолчанию `EDropdownWidth.TARGET`. Мобильная шторка — `Puller` без `Dropdown`; фокус не затирает запрос, `clearInputOnFocus` вызывает `onFilter("")`. |
+| 2026-11-19 | Для размера LG выпадающий блок и список используют MD; размер управляющего элемента остаётся LG. |

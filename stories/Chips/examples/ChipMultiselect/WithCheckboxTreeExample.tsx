@@ -118,7 +118,9 @@ export const WithCheckboxTreeExample = () => {
     const renderDropdownContent = () => {
         const renderCheckboxes = !filter || (filteredCheckboxesId.length && filter);
         return renderCheckboxes ? (
-            <CheckboxTreeExtended>{checkboxes.map((checkbox) => renderCheckboxNode(checkbox))}</CheckboxTreeExtended>
+            <CheckboxTreeExtended size={EComponentSize.MD}>
+                {checkboxes.map((checkbox) => renderCheckboxNode(checkbox))}
+            </CheckboxTreeExtended>
         ) : (
             <div className="not-found md">
                 <Text size={ETextSize.B3}>Nothing was found</Text>

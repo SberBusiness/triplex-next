@@ -148,13 +148,13 @@ export const Example: TStory = {
 };
 
 export const VisualTests: TStory = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: VISUAL_TEST_PARAMETERS,
     render: VisualTestsRender,
 };
 
 export const VisualTestsFocused: TStory = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: VISUAL_TEST_PARAMETERS,
     render: VisualTestsFocusedRender,
     play: async ({ canvas, userEvent }) => {
@@ -163,7 +163,7 @@ export const VisualTestsFocused: TStory = {
 };
 
 export const VisualTestsErrorFocused: TStory = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: VISUAL_TEST_PARAMETERS,
     render: VisualTestsErrorFocusedRender,
     play: async ({ canvas, userEvent }) => {
@@ -172,7 +172,7 @@ export const VisualTestsErrorFocused: TStory = {
 };
 
 export const VisualTestsSubmitHovered: TStory = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         ...VISUAL_TEST_PARAMETERS,
         testRunner: { hoverSelector: 'button[aria-label="Отправить код"]' },
@@ -184,7 +184,7 @@ export const VisualTestsSubmitHovered: TStory = {
 };
 
 export const VisualTestsRefreshHovered: TStory = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         ...VISUAL_TEST_PARAMETERS,
         testRunner: { hoverSelector: 'button[aria-label="Запросить новый код"]' },

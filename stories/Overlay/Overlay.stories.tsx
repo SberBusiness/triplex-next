@@ -141,7 +141,7 @@ export const Fixed: StoryObj<typeof Overlay> = {
 };
 
 export const VisualTests: StoryObj<typeof Overlay> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

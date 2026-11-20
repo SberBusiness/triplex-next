@@ -220,7 +220,7 @@ export const WithFooterButtons: StoryObj<typeof DatePickerExtended> = {
 };
 
 export const VisualTests: StoryObj<typeof DatePickerExtended> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },
@@ -233,7 +233,7 @@ export const VisualTests: StoryObj<typeof DatePickerExtended> = {
 };
 
 export const VisualTestsMonthYear: StoryObj<typeof DatePickerExtended> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsMonthYearRender,
     parameters: {
         controls: { disable: true },
@@ -246,7 +246,7 @@ export const VisualTestsMonthYear: StoryObj<typeof DatePickerExtended> = {
 };
 
 export const VisualTestsAlignmentRight: StoryObj<typeof DatePickerExtended> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsAlignmentRightRender,
     parameters: {
         controls: { disable: true },

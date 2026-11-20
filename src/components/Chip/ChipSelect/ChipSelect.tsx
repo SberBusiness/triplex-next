@@ -1,4 +1,5 @@
 import React from "react";
+import { EComponentSize } from "../../../enums/EComponentSize";
 import clsx from "clsx";
 import {
     ISelectExtendedFieldDropdownProvideProps,
@@ -58,7 +59,7 @@ export const ChipSelect = React.forwardRef<HTMLDivElement, IChipSelectProps>(
             <SelectExtendedFieldDropdownDefault
                 {...props}
                 mobileTitle={label}
-                size={size}
+                size={size === EComponentSize.LG ? EComponentSize.MD : size}
                 onChange={onChange}
                 options={options}
                 value={value}

@@ -296,7 +296,7 @@ export const MobileView: StoryObj<typeof Dropdown> = {
 };
 
 export const VisualTests: StoryObj<typeof Dropdown> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

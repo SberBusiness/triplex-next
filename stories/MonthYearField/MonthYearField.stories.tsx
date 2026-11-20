@@ -168,7 +168,7 @@ export const Production: StoryObj<typeof MonthYearField> = {
 };
 
 export const VisualTests: StoryObj<typeof MonthYearField> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {
@@ -180,7 +180,7 @@ export const VisualTests: StoryObj<typeof MonthYearField> = {
 };
 
 export const VisualTestsOpen: StoryObj<typeof MonthYearField> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

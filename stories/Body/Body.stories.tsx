@@ -63,7 +63,7 @@ export const Example: StoryObj<typeof Body> = {
 };
 
 export const VisualTests: StoryObj<typeof Body> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

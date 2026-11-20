@@ -242,6 +242,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 родителя. Отдельные stories для каждой части не являются условием завершения.
 В разделе Stories AI.md атома можно ссылаться на соответствующие примеры родителя.
 
+Задачи для списка опций — DropdownList (TRI-187) и DropdownListItem (TRI-186).
+
 | Компонент | AI.md | AI refactoring |
 |---|---|---|
 | AlertProcessSpoiler | ✅ | ✅ |
@@ -264,8 +266,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ColumnSettingsSortableListItem | ✅ | ✅ |
 | ConfirmClose | ✅ | ✅ |
 | DropdownDesktop | ⬜ | ◐ |
-| DropdownList | ⬜ | ◐ |
-| DropdownListItem | ⬜ | ◐ |
+| DropdownList | ✅ | ✅ |
+| DropdownListItem | ✅ | ✅ |
 | FormFieldClear | ⬜ | ◐ |
 | FormFieldCounter | ✅ | ✅ |
 | FormFieldDescription | ✅ | ✅ |

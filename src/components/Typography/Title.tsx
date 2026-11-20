@@ -23,17 +23,17 @@ const FONT_WEIGHT_TO_CLASS_NAME_MAP: Record<EFontWeightTitle, string> = {
 };
 
 /** Свойства компонента Title. */
-export type TTitleProps<T extends keyof JSX.IntrinsicElements> = {
+export type TTitleProps<T extends keyof React.JSX.IntrinsicElements> = {
     /** Размер текста. */
     size: ETitleSize;
     /** Толщина шрифта. */
     weight?: EFontWeightTitle;
 } & ITypographyProps &
-    JSX.IntrinsicElements[T];
+    React.JSX.IntrinsicElements[T];
 
 /** Заголовок (типографика). */
-export const Title = forwardRef<HTMLElement, TTitleProps<keyof JSX.IntrinsicElements>>(
-    <T extends keyof JSX.IntrinsicElements = "h1">(
+export const Title = forwardRef<HTMLElement, TTitleProps<keyof React.JSX.IntrinsicElements>>(
+    <T extends keyof React.JSX.IntrinsicElements = "h1">(
         {
             children,
             className,

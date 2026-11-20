@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import type { TElementRef } from "../../types/ElementRef";
 import clsx from "clsx";
 import { isKey, EVENT_KEY_CODES } from "../../utils/keyboard";
 import { KeyDownListener } from "../KeyDownListener";
@@ -36,9 +37,9 @@ export interface ISelectExtendedFieldDropdownProvideProps {
     /** Функция открытия/закрытия выпадающего блока. */
     setOpened: (opened: boolean) => void;
     /** Ссылка на поле выбора. По ней выпадающий блок считает своё положение. */
-    targetRef: React.RefObject<HTMLDivElement>;
+    targetRef: TElementRef<HTMLDivElement>;
     /** Ссылка на выпадающий блок. Нужна, чтобы клик внутри него не закрывал список. */
-    dropdownRef: React.RefObject<HTMLDivElement>;
+    dropdownRef: TElementRef<HTMLDivElement>;
 }
 
 /** Свойства компонента SelectExtendedField. */

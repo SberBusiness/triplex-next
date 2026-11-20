@@ -17,7 +17,7 @@ import { useMobileView } from "../../MobileView";
 import styles from "../styles/IslandAccordion.module.less";
 
 /** Свойства компонента IslandAccordionItem. */
-export interface IIslandAccordionItemProps extends Omit<React.HTMLAttributes<HTMLLIElement>, "title"> {
+export interface IIslandAccordionItemProps extends Omit<React.HTMLAttributes<HTMLLIElement>, "title" | "onToggle"> {
     /** Нода с названием заголовка. */
     title: React.ReactNode;
     /** Идентификатор элемента. Проставляется на корневой `<li>` и передаётся в onToggle и onRemove. */

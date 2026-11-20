@@ -1,4 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
+import type { TElementRef } from "../../../types/ElementRef";
 import clsx from "clsx";
 import { EDropdownAlignment, EDropdownDirection, EDropdownWidth } from "./enums";
 import { EComponentSize } from "../../../enums/EComponentSize";
@@ -15,7 +16,7 @@ export interface IDropdownDesktopProps extends React.HTMLAttributes<HTMLDivEleme
     /** Устанавливает флаг opened. */
     setOpened: (opened: boolean) => void;
     /** Ссылка на управляющий элемент. */
-    targetRef: React.RefObject<HTMLElement>;
+    targetRef: TElementRef<HTMLElement>;
     /** Размер дропдауна. */
     size?: EComponentSize;
     /** Направление выпадающего меню. */

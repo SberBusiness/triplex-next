@@ -65,7 +65,7 @@ version: "1.0"
 
 - `forwardRef` на `MaskedField` — не убирать. Внешний `ref` указывает на корневой `<div>` `FormField`.
 - Публичный API (`IMaskedFieldProps`: `maskedInputProps` + `label`/`prefix`/`postfix`/`description`/`counter` + унаследованные `size`/`status`/`active`) — изменение имён/типов/значений enum — breaking change.
-- Ссылка на элемент input передаётся только через `maskedInputProps.forwardedRef`. `maskedInputProps.ref` (`React.RefObject<HTMLDivElement>`) попадает на корневой `<div>` обёртки `FormFieldMaskedInput` — это ref самого `FormFieldMaskedInput`, а не поля ввода.
+- Ссылка на элемент input передаётся только через `maskedInputProps.forwardedRef`. `maskedInputProps.ref` (`{ readonly current: HTMLDivElement | null }`) попадает на корневой `<div>` обёртки `FormFieldMaskedInput` — это ref самого `FormFieldMaskedInput`, а не поля ввода.
 - `maskedInputProps.value` обязателен: `FormFieldMaskedInput` — контролируемый компонент. `defaultValue` исключён из props (`Omit<MaskedInputProps, ... | "defaultValue">`) и не передаётся внутрь `<input>`: `react-text-mask` подставляет его равным `value`, а на контролируемом поле это даёт предупреждение React о смешении controlled и uncontrolled.
 - Маски и подсказки берутся из `FormFieldMaskedInput.presets` — состав пресетов и их значения часть публичного API.
 - Уникальный `id` для связки label↔input генерируется через `lodash uniqueId` в `FormFieldInput` — не заменять на `useId` (React 17 совместимость через release-0).
@@ -121,3 +121,4 @@ version: "1.0"
 | 2026-08-12 | Исправления в `FormFieldMaskedInput` по ревью PR #515: убрана мутация prop `value` в `getValue()`, `defaultValue` больше не уходит в `<input>` (предупреждение React о controlled/uncontrolled) и исключён из `IFormFieldMaskedInputProps` |
 | 2026-09-09 | Исправлено: значение с кодом страны раскладывалось по маске телефона со сдвигом и теряло последнюю цифру. Нормализация номера вынесена в `normalizePhoneText` и применяется и к внешнему `value`, и к слою с маской |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`FormFieldMaskedInput`); из `related` убраны несимметричные имена (`MonthYearField`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-11-20 | Объектные ссылки на элементы принимают результат `useRef(null)` с типами React 18 и 19. |

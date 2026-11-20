@@ -61,11 +61,11 @@ version: "1.0"
 | `strikethrough` | `boolean` | — | Зачёркивание. |
 | `tag` | `string` | `"span"` | HTML-тег корневого элемента. |
 
-Компонент типизирован как `TCaptionProps<T extends keyof JSX.IntrinsicElements>` и принимает все атрибуты соответствующего HTML-элемента через spread.
+Компонент типизирован как `TCaptionProps<T extends keyof React.JSX.IntrinsicElements>` и принимает все атрибуты соответствующего HTML-элемента через spread.
 
 ### Ограничения
 
-- Внешний тип `forwardRef<HTMLElement, TCaptionProps<keyof JSX.IntrinsicElements>>` «растворяет» дженерик: TypeScript не сужает атрибуты под конкретный `tag`. Известное ограничение публичного API, не исправлять без обсуждения (breaking).
+- Внешний тип `forwardRef<HTMLElement, TCaptionProps<keyof React.JSX.IntrinsicElements>>` «растворяет» дженерик: TypeScript не сужает атрибуты под конкретный `tag`. Известное ограничение публичного API, не исправлять без обсуждения (breaking).
 - `EFontWeightCaption` дублирует значения `EFontWeightText` — это два независимых публичных enum, объединять нельзя (breaking).
 - `EFontType.BRAND` дополнительно задаёт `user-select: none` (особенность стилей `Typography.module.less`).
 
@@ -131,3 +131,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-07-20 | Создан документ. AI-рефакторинг: decoration-логика вынесена во внутренний хелпер `getTextDecorationClassName` (`utils.ts`), комментарии переведены в JSDoc, unit-тесты расширены (все значения `ECaptionSize`/`EFontWeightCaption`, дефолты). Stories переведены на modern pattern (`examples/Caption/`). |
+| 2026-11-20 | Обновлены типы для совместимости с React 19. |

@@ -58,7 +58,7 @@ version: "1.0"
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
 | `id` | `string` | — | Обязательный идентификатор узла в дереве |
-| `checkbox` | `(props: ICheckboxTreeExtendedCheckboxProvideProps) => JSX.Element` | — | Render-функция чекбокса узла. Обязательна |
+| `checkbox` | `(props: ICheckboxTreeExtendedCheckboxProvideProps) => React.JSX.Element` | — | Render-функция чекбокса узла. Обязательна |
 | `children` | `React.ReactNode` | — | Вложенные `CheckboxTreeExtended.Node` |
 | `opened` | `boolean` | — | Игнорируется, пока дерево статично (см. «Инварианты») |
 | `className` | `string` | — | Мерджится с собственным классом узла `<li>` |
@@ -238,3 +238,4 @@ Checkbox.BorderColor_Focus
 | 2026-09-17 | TRI-22: `CheckboxTreeExtended` обёрнут `forwardRef` — `ref` отдаёт корневой `<ul>`; тип переименован в `ICheckboxTreeExtendedFC`, старое имя оставлено deprecated-алиасом |
 | 2026-10-21 | Добавлена ссылка на отдельную документацию `CheckboxTreeExtended.Checkbox` с контрактом фокуса и наследуемых props; добавлена скрытая `VisualTests` с состояниями `.Checkbox` в дереве. |
 | 2026-10-21 | Добавлена ссылка на документацию CheckboxTreeExtendedNode, уточнены его экспорты, отсутствие внешнего ref и поддерживаемые клавиши навигации |
+| 2026-11-20 | Обновлены типы для совместимости с React 19. |

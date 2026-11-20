@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import type { TElementRef } from "../../types/ElementRef";
 import clsx from "clsx";
 import { Dropdown, DropdownList, DropdownListContext, useDropdownListKeyboard } from "../Dropdown";
 import { isKey } from "../../utils/keyboard";
@@ -35,7 +36,7 @@ export interface IButtonDropdownExtendedProps extends React.HTMLAttributes<HTMLD
     /** Функция, отрисовывающая выпадающий блок. */
     renderDropdown: (props: IButtonDropdownExtendedDropdownProvideProps) => React.ReactNode;
     /** Ссылка на выпадающий блок. Нужна, чтобы клик внутри блока не считался кликом снаружи. */
-    dropdownRef: React.RefObject<HTMLElement>;
+    dropdownRef: TElementRef<HTMLElement>;
     /** Закрытие выпадающего блока при нажатии клавиши Tab. */
     closeOnTab?: boolean;
 }

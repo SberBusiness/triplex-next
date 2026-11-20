@@ -38,7 +38,7 @@ version: "1.0"
 |---|---|---|
 | `opened` | `boolean` | Состояние открытости. Компонент полностью управляемый: собственного state открытости нет |
 | `setOpened` | `(opened: boolean) => void` | Изменение состояния открытости. Используется мобильной версией (закрытие по тапу на подложку); в десктопной версии не вызывается |
-| `targetRef` | `React.RefObject<HTMLElement>` | Ссылка на управляющий элемент. От его `getBoundingClientRect()` считается положение меню |
+| `targetRef` | `{ readonly current: HTMLElement \| null }` | Ссылка на управляющий элемент. От его `getBoundingClientRect()` считается положение меню |
 
 ### Опциональные props
 
@@ -220,3 +220,4 @@ DropdownList.Background_Selected
 | 2026-11-05 | **Breaking** (TRIPLEX-1039): `DropdownList` / `DropdownListItem` больше не подписываются на `keydown` документа — клавиши передаёт управляющий элемент через новый хук `useDropdownListKeyboard`; в `IDropdownListContext` добавлено обязательное поле `registerKeyDownHandler`. `DropdownList` хранит активный элемент по `id` и больше не клонирует children: `DropdownListItem` сам берёт активность и размер из списка и обрабатывает наведение, props `active` и `size` удалены. Исправления клавиатурной навигации и `aria-activedescendant`. |
 | 2026-11-17 | Добавлены ссылки на документацию `DropdownList` (TRI-187) и `DropdownListItem` (TRI-186). |
 | 2026-11-19 | **Breaking:** `DropdownList` переведён на `forwardRef`, prop `listRef` удалён. Ссылка на контейнер передаётся через `ref`. |
+| 2026-11-20 | Объектные ссылки на элементы принимают результат `useRef(null)` с типами React 18 и 19. |

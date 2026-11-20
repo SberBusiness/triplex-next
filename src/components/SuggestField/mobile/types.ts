@@ -10,7 +10,7 @@ export interface ISuggestFieldMobileProps<
 /** Свойства компонента SuggestFieldMobileDropdown. */
 export interface ISuggestFieldMobileDropdownProps<T extends ISuggestFieldOption = ISuggestFieldOption>
     extends
-        Omit<IPullerProps, "onSelect">,
+        Omit<IPullerProps, "onSelect" | "onScrollEnd">,
         Pick<
             ISuggestFieldMobileProps<T>,
             | "value"

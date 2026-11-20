@@ -133,4 +133,4 @@ export const SuggestFieldMobileDropdown = React.forwardRef(SuggestFieldMobileDro
     T extends ISuggestFieldOption = ISuggestFieldOption,
 >(
     props: ISuggestFieldMobileDropdownProps<T> & React.RefAttributes<HTMLDivElement>,
-) => JSX.Element;
+) => React.JSX.Element;

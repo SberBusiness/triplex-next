@@ -106,4 +106,4 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
  */
 export const ChipSuggestDropdown = React.forwardRef(ChipSuggestDropdownBase) as <T extends ISuggestOption>(
     props: IChipSuggestDropdownProps<T> & React.RefAttributes<HTMLDivElement>,
-) => JSX.Element;
+) => React.JSX.Element;

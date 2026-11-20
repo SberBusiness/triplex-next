@@ -34,7 +34,7 @@ export interface ICollapsibleTreeExtendedNodeHeaderProvideProps
 
 /** Свойства CollapsibleTreeExtendedNode. */
 export interface ICollapsibleTreeExtendedNodeProps
-    extends Omit<ITreeViewNodeProps, "children">, Pick<IAccordionBaseProps, "onToggle" | "toggle"> {
+    extends Omit<ITreeViewNodeProps, "children" | "onToggle">, Pick<IAccordionBaseProps, "onToggle" | "toggle"> {
     /** Содержимое задаётся через renderBody; children не поддерживается. */
     children?: never;
     /** Рендер-функция раскрываемого содержимого ноды (обычно дочерние ноды). */
@@ -58,7 +58,7 @@ export interface ICollapsibleTreeExtendedNodeProps
 export class CollapsibleTreeExtendedNode extends React.Component<ICollapsibleTreeExtendedNodeProps> {
     public static displayName = "CollapsibleTreeExtendedNode";
 
-    public render(): JSX.Element {
+    public render(): React.JSX.Element {
         const { opened: openedProp, onToggle, renderBody, renderHeader, toggle, ...treeNodeProps } = this.props;
 
         return (

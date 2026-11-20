@@ -29,6 +29,19 @@ describe("FormFieldDescription", () => {
         expect(screen.getByTestId("description")).toHaveClass("withCounter");
     });
 
+    it("applies the counter modifier only to the nearest description", () => {
+        render(
+            <FormFieldDescription data-testid="outer-description">
+                <FormFieldDescription data-testid="inner-description">
+                    <FormFieldCounter>0/10</FormFieldCounter>
+                </FormFieldDescription>
+            </FormFieldDescription>,
+        );
+
+        expect(screen.getByTestId("inner-description")).toHaveClass("withCounter");
+        expect(screen.getByTestId("outer-description")).not.toHaveClass("withCounter");
+    });
+
     it("removes the counter modifier when the counter unmounts", () => {
         const { rerender } = render(
             <FormFieldDescription data-testid="description">

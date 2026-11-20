@@ -134,6 +134,7 @@ ModalWindow.Background
 
 | Дата | Изменение |
 |---|---|
+| 2026-11-20 | Вертикальная полоса прокрутки внешнего контейнера появляется только при переполнении (`overflow-y: auto` вместо `scroll`). |
 | 2026-05-04 | Создан документ. AI-рефакторинг: добавлены JSDoc на компоненты и props, экспортирован `IModalWindowContentProps`, унифицированы импорты в `ModalWindowClose`, добавлен `displayName` субкомпонентам. Stories мигрированы в modern pattern (папка `examples/`, `?raw`, публичные импорты). Добавлены unit-тесты на `ModalWindowContent`, `ModalWindowClose`, `ModalWindowBody`, `ModalWindowHeader`, `ModalWindowFooter`. |
 | 2026-05-06 | Возвращён `forwardRef` в `ModalWindowContent` и `ModalWindowViewManager` (обязательный инвариант проекта). Удалён захардкоженный `title="Закрыть"` из `ModalWindowClose` — для мультиязычной библиотеки текст подсказки должен приходить от потребителя. **Breaking:** теперь `title` не подставляется автоматически. |
 | 2026-06-25 | Fix: устранено падение `focus-trap` `"must have at least one container with at least one tabbable node"` при открытии модалки без tabbable-узлов (асинхронный контент/лоадер). Добавлены `fallbackFocus` на dialog-узел и `tabIndex={-1}` на `role="dialog"`. Регрессия проявилась после синхронной активации ловушки в рефакторинге 1.28.0. Добавлен интеграционный тест на реальном `focus-trap`. |

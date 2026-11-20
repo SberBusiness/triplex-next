@@ -195,6 +195,8 @@ MultiselectField.Divider_Color
 
 ## История изменений
 
+- 2026-11-20: в Storybook-примерах чекбоксы в dropdown поля LG используют MD; в примерах с CheckboxTreeExtended явно задан MD.
+
 | Дата | Изменение |
 |---|---|
 | 2026-09-03 | Создан документ AI-ready для `MultiselectField` (TRI-61). |

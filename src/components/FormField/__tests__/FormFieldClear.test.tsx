@@ -20,8 +20,8 @@ describe("FormFieldClear", () => {
         expect(prevented).toBe(true);
     });
 
-    it("calls onMouseDown with the event", () => {
-        const handleMouseDown = vi.fn();
+    it("calls onMouseDown after preventing the default action", () => {
+        const handleMouseDown = vi.fn((event: React.MouseEvent<HTMLButtonElement>) => event.defaultPrevented);
 
         render(<FormFieldClear aria-label="Clear" onMouseDown={handleMouseDown} />);
 
@@ -30,6 +30,7 @@ describe("FormFieldClear", () => {
 
         expect(handleMouseDown).toHaveBeenCalledTimes(1);
         expect(handleMouseDown).toHaveBeenCalledWith(expect.objectContaining({ target: button, type: "mousedown" }));
+        expect(handleMouseDown).toHaveReturnedWith(true);
     });
 
     it("calls onClick", () => {

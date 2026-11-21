@@ -53,10 +53,7 @@ jobs:
   # ------------------------------------------------------------------
   preflight:
     runs-on: ubuntu-latest
-    # actions: read — для чтения прогонов ci.yml на release-0. Явный блок
-    # обнуляет все неперечисленные scope, а вызов `gh api` ниже заглушён
-    # (`2>/dev/null || echo ""`), поэтому отказ в правах выглядел бы как
-    # «на release-0 нет прогонов ci.yml» и тихо отменял релиз.
+    # Предполёт читает push-прогон ci.yml на проверяемом коммите release-0.
     permissions:
       contents: read
       actions: read
@@ -144,15 +141,15 @@ jobs:
 
           # CI зелёный ровно на вершине release-0.
           TIP=$(git rev-parse origin/release-0)
-          RUN=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/ci.yml/runs?branch=release-0&per_page=1" \
-            --jq '.workflow_runs[0] | "\(.head_sha) \(.status) \(.conclusion)"' 2>/dev/null || echo "")
-          if [ -z "${RUN}" ]; then fail "на release-0 нет прогонов ci.yml"; fi
-          set -- ${RUN}
-          if [ "$1" != "${TIP}" ]; then
-            fail "последний прогон ci.yml на release-0 — коммит \`${1:0:8}\`, а вершина \`${TIP:0:8}\`: проверялось не то состояние"
+          RUN=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/ci.yml/runs?branch=release-0&event=push&head_sha=${TIP}&per_page=1" \
+            --jq '.workflow_runs[] | "\(.head_sha) \(.status) \(.conclusion)"') || exit 1
+          if [ -z "${RUN}" ]; then fail "нет push-прогона ci.yml на вершине release-0 \`${TIP:0:8}\`"; fi
+          read -r CI_SHA CI_STATUS CI_CONCLUSION <<< "${RUN}"
+          if [ "${CI_SHA}" != "${TIP}" ]; then
+            fail "прогон ci.yml на release-0 — коммит \`${CI_SHA:0:8}\`, а вершина \`${TIP:0:8}\`: проверялось не то состояние"
           fi
-          if [ "$2" != "completed" ] || [ "$3" != "success" ]; then
-            fail "CI на вершине release-0 не зелёный: \`$2/$3\`"
+          if [ "${CI_STATUS}" != "completed" ] || [ "${CI_CONCLUSION}" != "success" ]; then
+            fail "CI на вершине release-0 не зелёный: \`${CI_STATUS}/${CI_CONCLUSION}\`"
           fi
 
           {

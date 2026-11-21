@@ -4,4 +4,29 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Title>v0.56.0</Title>
 
+<Heading>Ломающие изменения</Heading>
+
+**DropdownList**
+
+- Компонент переведён на `forwardRef`, свойство `listRef` удалено.
+
 <Heading>Изменения</Heading>
+
+**BodyPage**
+
+- В адаптивном режиме вертикальные отступы `SMALL` увеличены с 8 до 16px сверху и снизу.
+
+**ButtonDropdown / SelectField / SuggestField / Tabs / TabsLine / ChipSelect / ChipSuggest / ChipSort**
+
+- В компонентах размера LG выпадающий блок теперь использует размер MD вместо LG.
+
+**Dropdown, SelectExtendedField**
+
+- Рефакторинг без изменений поведения.
+
+**SuggestField**
+
+- Добавлено: свойство `dropdownProps` — настройки выпадающего списка, например `dropdownProps={{ width: EDropdownWidth.MIN_TARGET }}`. Колбэки `dropdownProps.onOpen` и `dropdownProps.onClose` вызываются при открытии и закрытии списка на обеих платформах. Шторка на мобильной ширине настраивается через `dropdownProps.pullerProps`, остальные поля, кроме колбэков, на ней не применяются.
+- Исправлено: `SuggestFieldMobileDropdown` теперь применяет свойства `Puller` (например, `className`); на ширине от 768px вместо шторки больше не открывается пустое десктопное меню.
+- Исправлено: в мобильной шторке возврат фокуса в поле ввода (например, Shift+Tab с кнопки закрытия) больше не заменяет введённый запрос на `label` значения. При открытии поле ввода показывает актуальный `label`, даже если он сменился у того же `value.id`.
+- Изменено: на мобильной ширине `clearInputOnFocus` при очистке поля ввода шторки вызывает `onFilter("")`, как на десктопе.

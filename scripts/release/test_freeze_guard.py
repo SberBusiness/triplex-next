@@ -13,34 +13,40 @@ class FreezeGuardTests(unittest.TestCase):
         jobs = yaml.safe_load(workflow.read_text())['jobs']
         commands = next(step['run'] for step in jobs['build-and-publish']['steps']
                         if step.get('name') == 'Validate release tag against checkout')
-        classification = commands
-        script = '''set -euo pipefail
+        script = """set -euo pipefail
 gh() {
-  [[ "$*" == "api --include repos/test/repo/commits/refs/tags/0.99.0" ]] || return 99
-  printf '%s\\n' "$TEST_RESPONSE"; return "$TEST_EXIT"
+  case "$*" in
+    'api --include repos/test/repo/git/ref/tags/0.99.0')
+      printf 'HTTP/2.0 %s\\r\\n\\r\\n{}\\n' "$REF_STATUS"
+      [[ "$REF_STATUS" == 200 ]] ;;
+    'api repos/test/repo/commits/refs/tags/0.99.0 --jq .sha')
+      [[ "$REF_STATUS" == 200 ]] || return 99
+      printf '%s' "$COMMIT_SHA"; return "$COMMIT_EXIT" ;;
+    *) return 99 ;;
+  esac
 }
 git() { [[ "$*" == 'rev-parse HEAD' ]] || return 99; printf '%s' "$TEST_CHECKOUT_SHA"; }
-''' + classification
+""" + commands
+        checkout = 'a' * 40
         cases = (
-            ('HTTP/2.0 200 OK\r\n\r\n{"sha":"' + 'a' * 40 + '"}', 0, True),
-            ('HTTP/2.0 200 OK\n\n{"sha":"' + 'a' * 40 + '"}', 0, True),
-            ('HTTP/2.0 200 OK\n\n{"sha":"' + 'b' * 40 + '"}', 0, False),
-            ('HTTP/2.0 404 Not Found\n\n{}', 1, True),
-            ('HTTP/2.0 403 Forbidden\n\n{}', 1, False),
-            ('HTTP/2.0 503 Unavailable\n\n{}', 1, False),
-            ('', 1, False),
-            ('HTTP/2.0 200 OK\n\n{}', 0, False),
-            ('HTTP/2.0 200 OK\n\nnot-json', 0, False),
+            (200, checkout, 0, True),
+            (200, 'b' * 40, 0, False),
+            (200, 'null', 0, False),
+            (200, '', 1, False),
+            (404, '', 1, True),
+            (403, '', 1, False),
+            (422, '', 1, False),
+            (503, '', 1, False),
         )
-        for response, code, succeeds, required in ((*case, required) for case in cases for required in (False, True)):
-            with self.subTest(response=response, required=required):
-                result = subprocess.run(['bash', '-c', script], check=False, capture_output=True,
-                                        text=True, timeout=5, env=dict(os.environ, GITHUB_REPOSITORY='test/repo',
-                                        RELEASE_TAG='0.99.0', SHA='', TEST_CHECKOUT_SHA='a' * 40, REQUIRE_TAG=str(required).lower(),
-                                        TEST_RESPONSE=response, TEST_EXIT=str(code)))
-                self.assertEqual(result.returncode == 0, succeeds and not (required and code == 1), result.stdout + result.stderr)
-                if 'b' * 40 in response:
-                    self.assertIn('уже есть и указывает на bbbbbbbb, а собираем aaaaaaaa', result.stdout)
+        for status, commit, code, succeeds in cases:
+            for required in (False, True):
+                with self.subTest(status=status, commit=commit, required=required):
+                    result = subprocess.run(['bash', '-c', script], capture_output=True, text=True, timeout=5,
+                                            env=dict(os.environ, GITHUB_REPOSITORY='test/repo', RELEASE_TAG='0.99.0',
+                                                     TEST_CHECKOUT_SHA=checkout, REQUIRE_TAG=str(required).lower(),
+                                                     REF_STATUS=str(status), COMMIT_SHA=commit, COMMIT_EXIT=str(code)))
+                    self.assertEqual(result.returncode == 0, succeeds and not (required and status == 404),
+                                     result.stdout + result.stderr)
 
     def test_release_status_distinguishes_not_found_from_api_failure(self):
         workflow = Path(__file__).resolve().parents[2] / '.github/workflows/release-freeze-guard.yml'

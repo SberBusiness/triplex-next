@@ -175,11 +175,22 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
     useEffect(() => {
         if (!opened || dropdownRef.current === null || targetRef.current === null) return;
 
-        const observer = new ResizeObserver(setPosition);
+        let frame: number | undefined;
+        const observer = new ResizeObserver(() => {
+            // Соседние поля могут изменить раскладку в том же цикле ResizeObserver.
+            if (frame !== undefined) return;
+            frame = requestAnimationFrame(() => {
+                frame = undefined;
+                setPosition();
+            });
+        });
 
         observer.observe(dropdownRef.current);
         observer.observe(targetRef.current);
-        return () => observer.disconnect();
+        return () => {
+            observer.disconnect();
+            if (frame !== undefined) cancelAnimationFrame(frame);
+        };
     }, [opened, targetRef, setPosition]);
 
     /** Планирует перерасчет позиции дропдауна в следующем кадре. */

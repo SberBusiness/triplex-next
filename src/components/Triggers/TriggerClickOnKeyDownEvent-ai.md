@@ -38,7 +38,7 @@ version: "1.0"
 | Prop | Тип | Описание |
 |---|---|---|
 | `eventKeyCode` | `number \| number[]` | Код клавиши из `EVENT_KEY_CODES` или массив кодов. Тип переиспользуется из `IKeyDownListenerProps` через `Pick` |
-| `targetRef` | `React.RefObject<HTMLButtonElement>` | Ссылка на кнопку, по которой выполняется клик. Кнопка не обязана находиться внутри `children` |
+| `targetRef` | `{ readonly current: HTMLButtonElement \| null }` | Ссылка на кнопку, по которой выполняется клик. Кнопка не обязана находиться внутри `children` |
 | `children` | `React.ReactElement` | Рендерится как есть. Обязателен по типу (в отличие от `KeyDownListener`), обёртки над ним компонент не создаёт |
 
 ### Особенности поведения
@@ -89,7 +89,7 @@ version: "1.0"
 - **Имена props `children`, `eventKeyCode`, `targetRef`** и barrel-экспорт
   `TriggerClickOnKeyDownEvent` из `src/components/Triggers/index.ts` — публичное
   API, не менять.
-- **Тип `targetRef` — `RefObject<HTMLButtonElement>`**, а не `Ref`: компоненту
+- **Тип `targetRef` — `{ readonly current: HTMLButtonElement | null }`**, а не `Ref`: компоненту
   нужен доступ к `.current`, callback-ref сюда не подходит.
 - **Проверка `offsetParent !== null`** — часть контракта, а не оптимизация. Её
   снятие сломает `LightBoxClose`/`LightBoxArrow`: клавиша начнёт кликать скрытые
@@ -158,3 +158,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-09-17 | Создан документ. AI-рефакторинг (TRI-101): JSDoc на props и на обработчик клавиши, ветвление в обработчике сведено к одной проверке, импорт React поднят в начало файла; unit-тесты (9 кейсов), stories по modern pattern. `forwardRef` осознанно отсутствует. По итогам ревью PR #628 `ITriggerClickOnKeyDownEventProps` стал экспортируемым — аддитивное расширение публичного API, приведение к общей конвенции репозитория. |
+| 2026-11-20 | Объектные ссылки на элементы принимают результат `useRef(null)` с типами React 18 и 19. |

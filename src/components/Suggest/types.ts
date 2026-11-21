@@ -75,7 +75,7 @@ export interface ISuggestTargetProvidedProps
 /** Свойства компонента SuggestDropdown. */
 export interface ISuggestDropdownProps<T extends ISuggestOption = ISuggestOption>
     extends
-        Omit<IDropdownProps, "onSelect">,
+        Omit<IDropdownProps, "onSelect" | "onScrollEnd">,
         Pick<
             ISuggestProps<T>,
             | "value"

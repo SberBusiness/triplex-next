@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from "react";
+import type { TElementRef } from "../../../types/ElementRef";
 import { defaultsDeep } from "lodash-es";
 import { TDesignTokens, TDesignTokensPartial } from "../../DesignTokens/types/DesignTokensTypes";
 import { ThemeProviderContext } from "../ThemeProviderContext";
@@ -18,7 +19,7 @@ interface IThemeProviderViewProps {
     /** Classname, который добавлен к элементу из scopeRef для создания области видимости css-переменных. */
     scopeClassName: string;
     /** Ref на HTML элемент, внутри которого будет действовать текущий конфиг. */
-    scopeRef: React.RefObject<HTMLElement>;
+    scopeRef: TElementRef<HTMLElement>;
     /** Контент, внутри которого действуют тема и токены. */
     children?: React.ReactNode;
 }

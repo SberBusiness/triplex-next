@@ -1,4 +1,5 @@
 import React from "react";
+import type { TElementRef } from "../../types/ElementRef";
 import { IKeyDownListenerProps, KeyDownListener } from "../KeyDownListener/KeyDownListener";
 
 /**
@@ -8,7 +9,7 @@ export interface ITriggerClickOnKeyDownEventProps extends Pick<IKeyDownListenerP
     /** Содержимое. Рендерится как есть, без обёртки и без собственной разметки. */
     children: React.ReactElement;
     /** Ссылка на кнопку, по которой выполняется клик. Скрытая кнопка кликом не вызывается. */
-    targetRef: React.RefObject<HTMLButtonElement>;
+    targetRef: TElementRef<HTMLButtonElement>;
 }
 
 /**

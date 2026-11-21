@@ -12,7 +12,7 @@ import styles from "./styles/DocumentNumberEdit.module.less";
 /** Свойства компонента DocumentNumberEdit. */
 export interface IDocumentNumberEditProps extends ISmallInputProps {
     /** Номер документа. */
-    value?: React.ReactText;
+    value?: string | number;
     /** Текст кнопки редактирования номера. Например, "Изменить". */
     buttonLabel: string;
     /** Текст кнопки редактирования, когда номер не задан. Например, "Задать номер". */

@@ -78,7 +78,7 @@ describe("RadioYGroup", () => {
 
         unmount();
 
-        expect(refCallback).toHaveBeenLastCalledWith(null);
+        expect(refCallback.mock.lastCall?.[0]).toBeNull();
     });
 
     it("passes click events to the root handler", async () => {

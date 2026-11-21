@@ -63,11 +63,11 @@ version: "1.0"
 | `strikethrough` | `boolean` | — | Зачёркивание. |
 | `tag` | `string` | `"span"` | HTML-тег корневого элемента (`span`, `div`, `p` и т.д.). |
 
-Компонент типизирован как `TTextProps<T extends keyof JSX.IntrinsicElements>` и принимает все атрибуты соответствующего HTML-элемента (включая `className`, `style`, `aria-*`, `data-*`) через spread.
+Компонент типизирован как `TTextProps<T extends keyof React.JSX.IntrinsicElements>` и принимает все атрибуты соответствующего HTML-элемента (включая `className`, `style`, `aria-*`, `data-*`) через spread.
 
 ### Ограничения
 
-- Внешний тип `forwardRef<HTMLElement, TTextProps<keyof JSX.IntrinsicElements>>` «растворяет» дженерик: TypeScript не сужает атрибуты под конкретный `tag`. Известное ограничение публичного API, не исправлять без обсуждения (breaking).
+- Внешний тип `forwardRef<HTMLElement, TTextProps<keyof React.JSX.IntrinsicElements>>` «растворяет» дженерик: TypeScript не сужает атрибуты под конкретный `tag`. Известное ограничение публичного API, не исправлять без обсуждения (breaking).
 - `EFontType.BRAND` дополнительно задаёт `user-select: none` (особенность стилей `Typography.module.less`, унаследованная от дизайна).
 
 ---
@@ -139,3 +139,4 @@ Typography.{Type}Invert_Color
 | Дата | Изменение |
 |---|---|
 | 2026-07-20 | Создан документ. AI-рефакторинг: decoration-логика вынесена во внутренний хелпер `getTextDecorationClassName` (`utils.ts`), комментарии map-констант и членов enum переведены в JSDoc, unit-тесты расширены (все значения `ETextSize`/`EFontWeightText`/`ELineType`, дефолты). Stories переведены на modern pattern (`examples/Text/`). |
+| 2026-11-20 | Обновлены типы для совместимости с React 19. |

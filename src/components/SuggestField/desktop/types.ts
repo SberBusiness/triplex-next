@@ -1,3 +1,4 @@
+import type React from "react";
 import { ISuggestFieldOption, ISuggestFieldProps } from "../types";
 import { IDropdownDesktopProps, IDropdownListProps, IDropdownListItemProps } from "../../Dropdown";
 
@@ -6,17 +7,17 @@ export interface ISuggestFieldDesktopProps<
     T extends ISuggestFieldOption = ISuggestFieldOption,
 > extends ISuggestFieldProps<T> {
     /** Рендер-функция компонента Dropdown. */
-    renderDropdown?: (props: ISuggestFieldDesktopDropdownProps<T>) => JSX.Element;
+    renderDropdown?: (props: ISuggestFieldDesktopDropdownProps<T>) => React.JSX.Element;
     /** Рендер-функция компонента DropdownList. */
-    renderDropdownList?: (props: ISuggestFieldDesktopDropdownListProvideProps) => JSX.Element;
+    renderDropdownList?: (props: ISuggestFieldDesktopDropdownListProvideProps) => React.JSX.Element;
     /** Рендер-функция компонента DropdownListItem. */
-    renderDropdownListItem?: (props: ISuggestFieldDesktopDropdownListItemProvideProps) => JSX.Element;
+    renderDropdownListItem?: (props: ISuggestFieldDesktopDropdownListItemProvideProps) => React.JSX.Element;
 }
 
 /** Свойства компонента SuggestFieldDesktopDropdown. */
 export interface ISuggestFieldDesktopDropdownProps<T extends ISuggestFieldOption = ISuggestFieldOption>
     extends
-        Omit<IDropdownDesktopProps, "onSelect">,
+        Omit<IDropdownDesktopProps, "onSelect" | "onScrollEnd">,
         Pick<ISuggestFieldDesktopProps<T>, "value" | "options" | "onSelect" | "onScrollEnd"> {
     /** Идентификатор DropdownList. */
     listId: string;
@@ -25,9 +26,9 @@ export interface ISuggestFieldDesktopDropdownProps<T extends ISuggestFieldOption
     /** Состояние загрузки DropdownList. */
     listLoading?: boolean;
     /** Рендер-функция компонента DropdownList. */
-    renderList?: (props: ISuggestFieldDesktopDropdownListProvideProps) => JSX.Element;
+    renderList?: (props: ISuggestFieldDesktopDropdownListProvideProps) => React.JSX.Element;
     /** Рендер-функция компонента DropdownListItem. */
-    renderListItem?: (props: ISuggestFieldDesktopDropdownListItemProvideProps) => JSX.Element;
+    renderListItem?: (props: ISuggestFieldDesktopDropdownListItemProvideProps) => React.JSX.Element;
 }
 
 /** Свойства, передаваемые в рендер-функцию DropdownList. */

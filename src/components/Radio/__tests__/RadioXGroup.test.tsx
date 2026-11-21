@@ -84,7 +84,7 @@ describe("RadioXGroup", () => {
 
         unmount();
 
-        expect(ref).toHaveBeenLastCalledWith(null);
+        expect(ref.mock.lastCall?.[0]).toBeNull();
     });
 
     it("allows native radio selection and bubbles onChange from enabled radios", async () => {

@@ -379,6 +379,9 @@ describe("ModalWindow", () => {
             const focusTrap = screen.getByTestId("focus-trap");
             const container = focusTrap.children[0] as HTMLElement;
             expect(container).toHaveClass("custom-container-class");
+            expect(cssTransitionMock).toHaveBeenCalledWith(
+                expect.objectContaining({ nodeRef: { current: container } }),
+            );
         });
 
         it("should merge multiple classes correctly", () => {

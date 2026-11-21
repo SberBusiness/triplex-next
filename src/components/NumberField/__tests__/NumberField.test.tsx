@@ -44,8 +44,8 @@ describe("NumberField", () => {
 
         unmount();
 
-        expect(rootRef).toHaveBeenLastCalledWith(null);
-        expect(inputRef).toHaveBeenLastCalledWith(null);
+        expect(rootRef.mock.lastCall?.[0]).toBeNull();
+        expect(inputRef.mock.lastCall?.[0]).toBeNull();
     });
 
     it("renders prefix and postfix inside the field and description with counter below it", () => {

@@ -8,7 +8,7 @@ import { EComponentSize } from "../../enums/EComponentSize";
 import styles from "./styles/Spoiler.module.less";
 
 /** Базовые свойства компонента Spoiler. */
-export interface ISpoilerBaseProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ISpoilerBaseProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onToggle"> {
     /** Текст кнопки в свёрнутом состоянии — приглашение раскрыть содержимое. */
     labelExpand: string;
     /** Текст кнопки в раскрытом состоянии. Без него в раскрытом состоянии у кнопки остаётся только иконка. */

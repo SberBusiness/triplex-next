@@ -90,6 +90,8 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
     // Сама модалка скрывается/показывается через CSSTransition (mountOnEnter / unmountOnExit).
     const [mountNode] = useState<HTMLDivElement>(getOrCreateMountNode);
 
+    const containerRef = useRef<HTMLDivElement>(null);
+
     // Узел role="dialog". Используется как fallbackFocus для FocusTrap: ловушка активируется
     // синхронно при открытии, и если внутри ещё нет tabbable-узлов (контент грузится асинхронно,
     // показан лоадер и т.п.), focus-trap без fallback падает с
@@ -160,6 +162,7 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
             <Portal container={mountNode}>
                 <CSSTransition
                     in={isOpen}
+                    nodeRef={containerRef}
                     timeout={animationExitTime}
                     classNames="global-modalWindowTransition"
                     appear // Нужен для срабатывания onEnter.
@@ -179,7 +182,7 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
                             ...focusTrapProps?.focusTrapOptions,
                         }}
                     >
-                        <div className={classNameContainer} style={topPositionStyle}>
+                        <div ref={containerRef} className={classNameContainer} style={topPositionStyle}>
                             <div className={styles.modalWindowBackdrop} />
                             <div
                                 role="dialog"

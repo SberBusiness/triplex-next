@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import type { TElementRef } from "../../types/ElementRef";
 import moment from "moment";
 import { FocusTrapProps } from "focus-trap-react";
 import { isKey } from "../../utils/keyboard";
@@ -18,7 +19,7 @@ export interface IDatePickerExtendedProps
         Pick<IDropdownProps, "alignment">,
         Omit<ICalendarProps, "adaptiveMode"> {
     /** Ссылка на целевой элемент для Dropdown. По умолчанию — корневой элемент компонента. */
-    dropdownTargetRef?: React.RefObject<HTMLElement>;
+    dropdownTargetRef?: TElementRef<HTMLElement>;
     /** Рендер-функция целевого элемента. */
     renderTarget: () => React.ReactNode;
     /** Рендер-функция целевого элемента в заголовке Puller. */

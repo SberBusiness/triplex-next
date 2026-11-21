@@ -21,17 +21,17 @@ const FONT_WEIGHT_TO_CLASS_NAME_MAP: Record<EFontWeightCaption, string> = {
 };
 
 /** Свойства компонента Caption. */
-export type TCaptionProps<T extends keyof JSX.IntrinsicElements> = {
+export type TCaptionProps<T extends keyof React.JSX.IntrinsicElements> = {
     /** Размер текста. */
     size: ECaptionSize;
     /** Толщина шрифта. */
     weight?: EFontWeightCaption;
 } & ITypographyProps &
-    JSX.IntrinsicElements[T];
+    React.JSX.IntrinsicElements[T];
 
 /** Подпись (типографика). */
-export const Caption = forwardRef<HTMLElement, TCaptionProps<keyof JSX.IntrinsicElements>>(
-    <T extends keyof JSX.IntrinsicElements = "span">(
+export const Caption = forwardRef<HTMLElement, TCaptionProps<keyof React.JSX.IntrinsicElements>>(
+    <T extends keyof React.JSX.IntrinsicElements = "span">(
         {
             children,
             className,

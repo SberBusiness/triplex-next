@@ -1,4 +1,5 @@
 import React, { useLayoutEffect, useMemo } from "react";
+import type { TElementRef } from "../../types/ElementRef";
 import canUseDom from "rc-util/es/Dom/canUseDom";
 import { removeCSS, updateCSS } from "rc-util/es/Dom/dynamicCSS";
 import { TDesignTokensPartial } from "../DesignTokens/types/DesignTokensTypes";
@@ -22,7 +23,7 @@ export interface IThemeProviderProps {
     /** Classname, который добавлен к элементу из scopeRef для создания области видимости css-переменных. */
     scopeClassName?: string;
     /** Ref на HTML элемент, внутри которого будет действовать текущий конфиг. */
-    scopeRef: React.RefObject<HTMLElement>;
+    scopeRef: TElementRef<HTMLElement>;
     /** Дизайн-тема Triplex Next. @default ETriplexNextTheme.LIGHT */
     theme?: ETriplexNextTheme;
     /** Переопределяемые токены. */

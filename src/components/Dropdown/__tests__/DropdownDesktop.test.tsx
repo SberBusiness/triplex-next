@@ -91,6 +91,18 @@ describe("DropdownDesktop", () => {
         expect(ref.current).toBe(getDropdown());
     });
 
+    it("passes the root element to a callback ref and clears it on close", () => {
+        const dropdownRef = vi.fn<(element: HTMLDivElement | null) => void>();
+        const { rerender } = render(<DropdownWithTarget dropdownRef={dropdownRef} />);
+
+        expect(dropdownRef).toHaveBeenLastCalledWith(getDropdown());
+        expect(dropdownRef.mock.lastCall?.[0]).toBeInstanceOf(HTMLDivElement);
+
+        rerender(<DropdownWithTarget opened={false} dropdownRef={dropdownRef} />);
+
+        expect(dropdownRef).toHaveBeenLastCalledWith(null);
+    });
+
     it("passes html attributes to the root element", () => {
         render(<DropdownWithTarget id="dropdown-id" role="menu" />);
 
@@ -259,6 +271,26 @@ describe("DropdownDesktop", () => {
             const prevented = !fireEvent.keyDown(screen.getByText("Dropdown content"), { code: "ArrowDown" });
 
             expect(prevented).toBe(false);
+        });
+
+        it("keeps preventing scrolling keys while another dropdown stays opened", () => {
+            const { rerender } = render(
+                <>
+                    <DropdownWithTarget />
+                    <DropdownWithTarget />
+                </>,
+            );
+
+            rerender(
+                <>
+                    <DropdownWithTarget opened={false} />
+                    <DropdownWithTarget />
+                </>,
+            );
+
+            const prevented = !fireEvent.keyDown(document.body, { code: "PageDown" });
+
+            expect(prevented).toBe(true);
         });
 
         it("stops preventing wheel events after closing", () => {

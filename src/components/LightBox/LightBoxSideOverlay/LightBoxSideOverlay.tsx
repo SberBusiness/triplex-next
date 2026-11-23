@@ -13,8 +13,7 @@ import { LightBoxSideOverlayLoader } from "./LightBoxSideOverlayLoader";
 import { FocusTrapUtils } from "../../../utils/focus/FocusTrapUtils";
 import { LightBoxSideOverlayCloseMobile } from "./LightBoxSideOverlayCloseMobile";
 import { LightBoxSideOverlayCloseDesktop } from "./LightBoxSideOverlayCloseDesktop";
-import { EComponentSize } from "../../../enums/EComponentSize";
-import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
+import { ELightBoxSize } from "../enums";
 import styles from "./styles/LightBoxSideOverlay.module.less";
 
 /** Свойства компонента LightBoxSideOverlay. */
@@ -31,10 +30,16 @@ export interface ILightBoxSideOverlayProps
     /** Открыт TopOverlay в текущем SideOverlay. */
     isTopOverlayOpened?: boolean;
     /** Размер компонента. */
-    size?: EComponentSize;
+    size?: ELightBoxSize;
 }
 
-const sizeToClassNameMap = createSizeToClassNameMap(styles);
+/** Соответствие размера имени CSS-класса. */
+const SIZE_TO_CLASS_NAME_MAP: Record<ELightBoxSize, string> = {
+    [ELightBoxSize.SM]: styles.sm,
+    [ELightBoxSize.MD]: styles.md,
+    [ELightBoxSize.LG]: styles.lg,
+    [ELightBoxSize.XL]: styles.xl,
+};
 
 /** Заглушка для OverlayBase: состояние открытия SideOverlay управляется снаружи через prop opened. */
 const setOpened = () => {};
@@ -52,7 +57,7 @@ const LightBoxSideOverlayBase = React.forwardRef<HTMLDivElement, ILightBoxSideOv
             onClose,
             onOpen,
             opened,
-            size = EComponentSize.MD,
+            size = ELightBoxSize.MD,
             ...htmlDivAttributes
         },
         ref,
@@ -111,13 +116,18 @@ const LightBoxSideOverlayBase = React.forwardRef<HTMLDivElement, ILightBoxSideOv
             </div>
         );
 
-        const classNameOverlayWrapper = clsx(className, styles.lightBoxSideOverlayWrapper, sizeToClassNameMap[size], {
-            [styles.closing]: closing,
-            [styles.opened]: opened,
-            [styles.overflowXHidden]: Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading),
-            [styles.overflowYHidden]:
-                Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading) || Boolean(isTopOverlayOpened),
-        });
+        const classNameOverlayWrapper = clsx(
+            className,
+            styles.lightBoxSideOverlayWrapper,
+            SIZE_TO_CLASS_NAME_MAP[size],
+            {
+                [styles.closing]: closing,
+                [styles.opened]: opened,
+                [styles.overflowXHidden]: Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading),
+                [styles.overflowYHidden]:
+                    Boolean(isTopLevelSideOverlayOpened) || Boolean(isLoading) || Boolean(isTopOverlayOpened),
+            },
+        );
 
         const renderOverlay = (provideProps: IOverlayChildrenProvideProps) => (
             <>

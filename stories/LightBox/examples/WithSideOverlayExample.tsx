@@ -18,6 +18,7 @@ import {
     EIslandType,
     FocusTrapUtils,
     EComponentSize,
+    ELightBoxSize,
     MobileView,
 } from "@sberbusiness/triplex-next";
 
@@ -53,10 +54,13 @@ const PoemBlock: React.FC = () => (
 
 export const WithSideOverlayExample = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [openedSideOverlayXL, setOpenedSideOverlayXL] = useState(false);
     const [openedSideOverlayLG, setOpenedSideOverlayLG] = useState(false);
     const [openedSideOverlayMD, setOpenedSideOverlayMD] = useState(false);
     const [openedSideOverlaySM, setOpenedSideOverlaySM] = useState(false);
 
+    const handleOpenSideOverlayXL = () => setOpenedSideOverlayXL(true);
+    const handleCloseSideOverlayXL = () => setOpenedSideOverlayXL(false);
     const handleOpenSideOverlayLG = () => setOpenedSideOverlayLG(true);
     const handleCloseSideOverlayLG = () => setOpenedSideOverlayLG(false);
     const handleOpenSideOverlayMD = () => setOpenedSideOverlayMD(true);
@@ -73,11 +77,84 @@ export const WithSideOverlayExample = () => {
         </LightBox.Controls>
     );
 
+    const renderLightBoxSideOverlayXL = () => (
+        <LightBox.SideOverlay
+            key="sideOverlayXL"
+            opened={openedSideOverlayXL}
+            size={ELightBoxSize.XL}
+            isTopLevelSideOverlayOpened={openedSideOverlayLG || openedSideOverlayMD || openedSideOverlaySM}
+        >
+            <Page>
+                <Page.Header type={EHeaderPageType.FIRST} sticky>
+                    <Page.Header.Title>
+                        <Page.Header.Title.Content>
+                            <MobileView
+                                fallback={
+                                    <Title
+                                        tag="h1"
+                                        size={ETitleSize.H1}
+                                        tabIndex={-1}
+                                        // Устанавливает фокус на первый элемент при открытии LightBox.
+                                        {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                    >
+                                        Евгений Онегин
+                                    </Title>
+                                }
+                            >
+                                <Title tag="h2" size={ETitleSize.H2}>
+                                    Евгений Онегин
+                                </Title>
+                            </MobileView>
+                        </Page.Header.Title.Content>
+                        <Page.Header.Title.Controls>
+                            {/* Кнопка закрытия SideOverlay для мобильного устройства. Отображается только на мобильном устройстве, внутри заголовка SideOverlay. */}
+                            <LightBox.SideOverlay.CloseMobile
+                                data-test-id="lightbox-side-overlay-close"
+                                onClick={handleCloseSideOverlayXL}
+                            />
+                        </Page.Header.Title.Controls>
+                    </Page.Header.Title>
+                </Page.Header>
+
+                <Page.Body type={EBodyPageType.SECOND}>
+                    {[0, 1, 2].map((index) => (
+                        <React.Fragment key={index}>
+                            <PoemBlock />
+                            {index < 2 && <Gap size={16} />}
+                        </React.Fragment>
+                    ))}
+                </Page.Body>
+
+                <Page.Footer type={EFooterPageType.FIRST} sticky>
+                    <Page.Footer.Description>
+                        <Page.Footer.Description.Content>А. С. Пушкин</Page.Footer.Description.Content>
+                        <Page.Footer.Description.Controls>
+                            <Button
+                                theme={EButtonTheme.GENERAL}
+                                size={EComponentSize.MD}
+                                onClick={handleOpenSideOverlayLG}
+                            >
+                                Открыть SideOverlay LG
+                            </Button>
+                        </Page.Footer.Description.Controls>
+                    </Page.Footer.Description>
+                </Page.Footer>
+            </Page>
+
+            {/* Кнопка закрытия SideOverlay для десктопа. Отображается только на десктопе, справа от заголовка SideOverlay. */}
+            <LightBox.SideOverlay.CloseDesktop
+                data-test-id="lightbox-side-overlay-close"
+                clickByEsc={!openedSideOverlayLG && !openedSideOverlayMD && !openedSideOverlaySM}
+                onClick={handleCloseSideOverlayXL}
+            />
+        </LightBox.SideOverlay>
+    );
+
     const renderLightBoxSideOverlayLG = () => (
         <LightBox.SideOverlay
             key="sideOverlayLG"
             opened={openedSideOverlayLG}
-            size={EComponentSize.LG}
+            size={ELightBoxSize.LG}
             isTopLevelSideOverlayOpened={openedSideOverlayMD || openedSideOverlaySM}
         >
             <Page>
@@ -150,7 +227,7 @@ export const WithSideOverlayExample = () => {
         <LightBox.SideOverlay
             key="sideOverlayMD"
             opened={openedSideOverlayMD}
-            size={EComponentSize.MD}
+            size={ELightBoxSize.MD}
             isTopLevelSideOverlayOpened={openedSideOverlaySM}
         >
             <Page>
@@ -218,7 +295,7 @@ export const WithSideOverlayExample = () => {
     );
 
     const renderLightBoxSideOverlaySM = () => (
-        <LightBox.SideOverlay key="sideOverlaySM" opened={openedSideOverlaySM} size={EComponentSize.SM}>
+        <LightBox.SideOverlay key="sideOverlaySM" opened={openedSideOverlaySM} size={ELightBoxSize.SM}>
             <Page>
                 <Page.Header type={EHeaderPageType.FIRST} sticky>
                     <Page.Header.Title>
@@ -280,6 +357,7 @@ export const WithSideOverlayExample = () => {
 
     const renderLightBoxSideOverlays = () => (
         <>
+            {renderLightBoxSideOverlayXL()}
             {renderLightBoxSideOverlayLG()}
             {renderLightBoxSideOverlayMD()}
             {renderLightBoxSideOverlaySM()}
@@ -293,7 +371,7 @@ export const WithSideOverlayExample = () => {
             </Button>
 
             {isOpen ? (
-                <LightBox isLoading={false} isSideOverlayOpened={openedSideOverlayLG} isTopOverlayOpened={false}>
+                <LightBox isLoading={false} isSideOverlayOpened={openedSideOverlayXL} isTopOverlayOpened={false}>
                     <LightBox.Content key="content" isLoading={false}>
                         <Page>
                             <Page.Header type={EHeaderPageType.FIRST} sticky>
@@ -327,9 +405,9 @@ export const WithSideOverlayExample = () => {
                                         <Button
                                             theme={EButtonTheme.GENERAL}
                                             size={EComponentSize.MD}
-                                            onClick={handleOpenSideOverlayLG}
+                                            onClick={handleOpenSideOverlayXL}
                                         >
-                                            SideOverlay LG
+                                            SideOverlay XL
                                         </Button>
                                     </Page.Header.Title.Controls>
                                 </Page.Header.Title>

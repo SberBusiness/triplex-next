@@ -15,6 +15,8 @@ import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Spoiler } from "../../src/components/Spoiler";
 import "./styles.less";
+import { ELightBoxSize } from "../../src/components/LightBox/enums";
+import { SideOverlayVisualTestsRender } from "./examples";
 
 const STORY_META_DESCRIPTION = `
 Компонент **LightBox** отображает крупный контент поверх страницы. Структура включает заголовок, тело, футер и дополнительные оверлеи.
@@ -24,6 +26,7 @@ const STORY_META_DESCRIPTION = `
 const meta = {
     title: "Components/LightBox/LightBoxInitialOpened",
     component: LightBox,
+    tags: ["visual-test", "!autodocs"],
     parameters: {
         layout: "fullscreen",
         docs: {
@@ -222,4 +225,35 @@ export const Default: Story = {
             },
         },
     },
+};
+
+// Полноэкранные оверлеи снимаются отдельно, чтобы размеры не перекрывали друг друга.
+const SIDE_OVERLAY_VISUAL_PARAMETERS = {
+    testRunner: { skip: false },
+    controls: { disable: true },
+    docs: { canvas: { sourceState: "none" }, codePanel: false },
+};
+
+export const SideOverlaySMVisualTests: Story = {
+    tags: ["visual-test", "!autodocs"],
+    render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.SM} />,
+    parameters: SIDE_OVERLAY_VISUAL_PARAMETERS,
+};
+
+export const SideOverlayMDVisualTests: Story = {
+    tags: ["visual-test", "!autodocs"],
+    render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.MD} />,
+    parameters: SIDE_OVERLAY_VISUAL_PARAMETERS,
+};
+
+export const SideOverlayLGVisualTests: Story = {
+    tags: ["visual-test", "!autodocs"],
+    render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.LG} />,
+    parameters: SIDE_OVERLAY_VISUAL_PARAMETERS,
+};
+
+export const SideOverlayXLVisualTests: Story = {
+    tags: ["visual-test", "!autodocs"],
+    render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.XL} />,
+    parameters: SIDE_OVERLAY_VISUAL_PARAMETERS,
 };

@@ -79,9 +79,24 @@ version: "1.0"
   Отслеживают собственную ширину через `ResizeObserver`.
 - `LightBox.SideOverlay`: `opened` (управляется снаружи), `onOpen`/`onClose` (вызываются по
   окончании CSS-анимации), `isLoading`, `isTopLevelSideOverlayOpened` (открыт другой SideOverlay
-  поверх), `isTopOverlayOpened`, `size` (`EComponentSize` SM/MD/LG),
+  поверх), `isTopOverlayOpened`, `size` (`ELightBoxSize` SM/MD/LG/XL, по умолчанию MD),
   субкомпоненты `SideOverlay.CloseDesktop` / `SideOverlay.CloseMobile`.
 - `LightBox.TopOverlay` — реэкспорт компонента `TopOverlay`.
+
+Ширина панели `LightBox.SideOverlay` — 1200px, ограничена доступным пространством
+(на десктопе с внешними отступами по 16px). Размер `size` задаёт ширину вложенного `Page`:
+
+| Размер SideOverlay | Ширина Page | Ширина Page.Body без боковых отступов Page |
+|---|---|---|
+| `SM` | 584px | 520px |
+| `MD` | 744px | 680px |
+| `LG` | 864px | 800px |
+| `XL` | 1056px | 992px |
+
+Значения приведены для широкого экрана: `Page` включает отступы по 32px.
+На узких экранах ширина ограничивается доступным пространством.
+`size` SideOverlay теперь принимает `ELightBoxSize`: прежние значения `EComponentSize`
+нужно заменить на соответствующие значения `ELightBoxSize`.
 
 ---
 
@@ -195,7 +210,9 @@ css-переменную `--lightBox-scroll-width`, которую вычита�
 Основные истории: `stories/LightBox/LightBox.stories.tsx`
 Файлы примеров: `stories/LightBox/examples/`
 Визуальная регрессия: `stories/LightBox/LightBoxInitialOpened.stories.tsx` (лайтбокс, открытый
-сразу при рендере — для скриншот-тестов; baseline в `__screenshots__/`).
+сразу при рендере — для скриншот-тестов; baseline в `__screenshots__/`). Весь набор
+помечен `visual-test` и `!autodocs`: скрыт из сайдбара production-сборки и autodocs,
+доступен локально и скриншотному test-runner.
 
 | Story | Example file | Что демонстрирует |
 |---|---|---|
@@ -212,6 +229,7 @@ css-переменную `--lightBox-scroll-width`, которую вычита�
 | `WithTopOverlay` | `WithTopOverlayExample.tsx` | Верхняя панель |
 | `WithTopOverlayInSideOverlay` | `WithTopOverlayInSideOverlayExample.tsx` | TopOverlay внутри SideOverlay |
 | `LightBoxInitialOpened/Default` | — | Visual regression: лайтбокс, открытый сразу при рендере (`LightBoxInitialOpened.stories.tsx`, baseline в `__screenshots__/`) |
+| `LightBoxInitialOpened/SideOverlaySMVisualTests`, `SideOverlayMDVisualTests`, `SideOverlayLGVisualTests`, `SideOverlayXLVisualTests` | `SideOverlayVisualTests.tsx` | Visual regression: открытый SideOverlay каждого размера, отдельный снимок на xs/xl; полноэкранные панели снимаются отдельно, чтобы не перекрывать друг друга |
 
 ---
 

@@ -18,6 +18,7 @@ import {
     EIslandType,
     FocusTrapUtils,
     EComponentSize,
+    ELightBoxSize,
     MobileView,
     Confirm,
     EConfirmParentComponent,
@@ -126,7 +127,7 @@ export const WithTopOverlayInSideOverlayExample = () => {
         <LightBox.SideOverlay
             key="sideOverlayMD"
             opened={openedSideOverlayMD}
-            size={EComponentSize.MD}
+            size={ELightBoxSize.MD}
             isTopLevelSideOverlayOpened={false}
             isTopOverlayOpened={openedTopOverlay}
         >

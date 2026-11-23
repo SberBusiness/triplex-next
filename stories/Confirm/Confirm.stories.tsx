@@ -143,7 +143,7 @@ export const Example: StoryObj<typeof Confirm> = {
 };
 
 export const VisualTests: StoryObj<typeof Confirm> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

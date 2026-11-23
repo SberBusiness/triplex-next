@@ -1,7 +1,7 @@
 ---
 component: Dropdown
 category: Dropdown
-related: [DropdownDesktop, ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, Puller, LoaderSmall]
+related: [DropdownDesktop, DropdownList, ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, Puller, LoaderSmall]
 tokens:
   - Dropdown.Background
   - Dropdown.Shadow
@@ -65,7 +65,7 @@ version: "1.0"
 | `dropdownOpened` | `boolean` | — | Обязательный. Пока `true`, список регистрирует свой клавиатурный обработчик в `DropdownListContext` |
 | `size` | `EComponentSize` | `MD` | Размер списка. Задаёт размер каждому `DropdownList.Item` (через внутренний контекст списка) |
 | `loading` | `boolean` | `false` | Добавляет в конец списка служебный элемент с лоадером |
-| `listRef` | `React.RefObject<HTMLDivElement>` | — | Внешняя ссылка на контейнер списка. Если не передана, используется внутренняя |
+| `ref` | `React.Ref<HTMLDivElement>` | — | Ссылка на корневой контейнер списка: object ref или callback ref |
 
 | Prop `DropdownList.Item` | Тип | По умолчанию | Описание |
 |---|---|---|---|
@@ -101,7 +101,7 @@ const { context, activeDescendant, handleKeyDown } = useDropdownListKeyboard();
 ### Ограничения
 
 - `DropdownList` в качестве `children` принимает `DropdownList.Item` — напрямую или в компоненте-обёртке (так работает `renderDropdownListItem` у `SuggestField`). `id`, `selected`, `onSelect` и `keyCodesForSelection` список читает из props прямого child: обёртка должна получать их сама и передавать вложенному `DropdownList.Item`, а `onSelect`, заданный только внутри обёртки, с клавиатуры не вызывается. Children без prop `id` в навигации не участвуют и рендерятся как есть. Пункты внутри `Fragment` не поддерживаются.
-- `DropdownList` — не `forwardRef`-компонент: ссылка на контейнер списка передаётся через prop `listRef`.
+- `DropdownList` использует `forwardRef`: `ref` указывает на корневой прокручиваемый `<div role="listbox">`.
 - Закрытие по `Escape`, `Tab` и клику вне меню `Dropdown` **не реализует**. Это ответственность потребителя либо `ButtonDropdownExtended`.
 - Без `DropdownListContext.Provider` со значением из `useDropdownListKeyboard` клавиатурной навигации по списку нет: работают только клик и наведение.
 
@@ -136,7 +136,7 @@ DropdownList.Background_Selected
 - Пока десктопное меню открыто, на `document.body` висит класс блокировки скролла, а на документе — обработчики `wheel` и `keydown` (`DropdownDesktop`, только для блокировки прокрутки). Снятие обработчиков в cleanup эффекта обязательно. Класс вешается только через `lockBodyScroll` (`src/utils/scroll/bodyScrollLock.ts`): прямой `classList.remove` снял бы блокировку при другом открытом меню.
 - Числовой формат `keyCodesForSelection` (`number[]`, а не `KeyboardEvent.code`) — часть публичного API.
 - Хелперы из `desktop/utils.ts` внутренние: не экспортировать их через barrel.
-- `listRef` у `DropdownList`, `setActiveDescendant` и `registerKeyDownHandler` из `DropdownListContext` должны быть стабильными между рендерами (ref из `useRef`, функции из `useDropdownListKeyboard`). Нестабильный `setActiveDescendant` сбрасывает `aria-activedescendant` на каждый рендер.
+- `setActiveDescendant` и `registerKeyDownHandler` из `DropdownListContext` должны быть стабильными между рендерами (функции из `useDropdownListKeyboard`). Нестабильный `setActiveDescendant` сбрасывает `aria-activedescendant` на каждый рендер.
 - `DropdownList` и `DropdownListItem` не подписываются на клавиатуру `document`. Клавиши передаёт управляющий элемент через `useDropdownListKeyboard`: иначе список ловит то же нажатие, которым его открыли (`Space` выберет первый пункт, `ArrowDown` перескочит на второй).
 - Контейнеры, связывающие список со своим управляющим элементом (`ButtonDropdownExtended`, `SelectExtendedField`), передают клавиши списку в фазе **bubble** корневого `onKeyDown`, не в capture: между нативными слушателями фаз capture и bubble браузер выполняет микротаски, React успевает закоммитить выбор пункта, и управляющий элемент видит уже закрытый список — `Enter` открыл бы его снова. В jsdom этот эффект не воспроизводится, его ловит e2e `e2e/tests/dropdownKeyboard.spec.ts`.
 - Один `DropdownList` на одно значение `DropdownListContext`: обработчик клавиатуры у контекста один, и при нескольких открытых списках клавиши получит только последний отрендеренный. Для второго списка нужен свой `useDropdownListKeyboard` и свой Provider.
@@ -161,8 +161,8 @@ DropdownList.Background_Selected
 **Десктоп (`src/components/Dropdown/desktop/`):**
 
 - [DropdownDesktop](DropdownDesktop-ai.md) — десктопный контейнер с позиционированием и блокировкой прокрутки страницы. `Dropdown` рендерит его напрямую или как fallback `MobileView`.
-- `DropdownList` — контейнер списка с клавиатурной навигацией, `role="listbox"`. Статическое свойство `DropdownList.Item`.
-- `DropdownListItem` — элемент списка, `role="option"`, выбор мышью и клавиатурой.
+- [DropdownList](DropdownList-ai.md) — контейнер списка с клавиатурной навигацией и `role="listbox"`.
+- [DropdownListItem](DropdownListItem-ai.md) — элемент списка с `role="option"` и выбором мышью или клавиатурой. Доступен как `DropdownList.Item`.
 
 **Мобильная версия:**
 
@@ -218,3 +218,6 @@ DropdownList.Background_Selected
 | 2026-10-23 | Исправлено: закрытие одного из открытых `DropdownDesktop` снимало блокировку скролла страницы при другом открытом меню. **Breaking:** класс блокировки на `body` переименован `.dropdownDesktopOverflowHidden` → `.dropdownDesktopScrollLock`. |
 | 2026-10-31 | Мобильная версия рендерится в `pullerProps.renderContainer`, если он задан, иначе в `document.body` (TRIPLEX-961). |
 | 2026-11-05 | **Breaking** (TRIPLEX-1039): `DropdownList` / `DropdownListItem` больше не подписываются на `keydown` документа — клавиши передаёт управляющий элемент через новый хук `useDropdownListKeyboard`; в `IDropdownListContext` добавлено обязательное поле `registerKeyDownHandler`. `DropdownList` хранит активный элемент по `id` и больше не клонирует children: `DropdownListItem` сам берёт активность и размер из списка и обрабатывает наведение, props `active` и `size` удалены. Исправления клавиатурной навигации и `aria-activedescendant`. |
+| 2026-11-17 | Добавлены ссылки на документацию `DropdownList` (TRI-187) и `DropdownListItem` (TRI-186). |
+| 2026-11-19 | **Breaking:** `DropdownList` переведён на `forwardRef`, prop `listRef` удалён. Ссылка на контейнер передаётся через `ref`. |
+| 2026-11-21 | Десктопное меню пересчитывает координаты после измерения соседних полей в одном кадре. Исправлено смещение меню в строке с несколькими MultiselectField. |

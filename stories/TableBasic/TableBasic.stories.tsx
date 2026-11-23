@@ -362,7 +362,7 @@ export const ExampleProduction: Story = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     decorators: freezeAnimations,
     parameters: {

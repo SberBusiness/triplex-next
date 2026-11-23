@@ -47,7 +47,7 @@ version: "1.0"
 | `label` | `React.ReactNode` | Название поля. Показывается на чипсе, пока значение не выбрано, и лейблом над полем фильтрации внутри списка — то есть отображается всегда, даже при выбранном значении |
 | `value` | `T \| undefined` | Выбранная опция (из `ISuggestProps`). Контролируемое значение: сброс делает потребитель в `targetProps.clearSelected` |
 | `options` | `T[]` | Список опций (из `ISuggestProps`). Фильтрует потребитель в ответ на `onFilter` |
-| `size` | `EComponentSize` | Размер (из `ISuggestProps`). Раздаётся target-элементу и выпадающему списку |
+| `size` | `EComponentSize` | Размер (из `ISuggestProps`). Задаёт размер target-элемента по умолчанию; `targetProps.size` его переопределяет. Без `dropdownProps.size` список для LG использует MD, для SM и MD — значение `size`. `dropdownProps.size` переопределяет исходный размер выпадающего блока; LG преобразуется в MD. `targetProps.size` на список не влияет |
 | `onSelect` | `(value: T \| undefined) => void` | Выбор опции (из `ISuggestProps`) |
 | `onFilter` | `(value: string) => void` | Изменение поля фильтрации (из `ISuggestProps`) |
 
@@ -58,7 +58,7 @@ version: "1.0"
 | `type` | `EChipType` | `EChipType.TYPE_1` (дефолт `Chip`) | Тип чипса. Задавать только здесь: `targetProps.type` не работает — см. «Инварианты» |
 | `displayedValue` | `React.ReactNode` | — | Что показать на чипсе вместо `value.label`. Учитывается только при выбранном `value` |
 | `targetProps` | `IChipSuggestTargetProps<T>` | — | Props target-элемента. Через него передаётся `clearSelected`, а также props `Chip` (`disabled`, `className`, `data-*`, `onClick`, `size`). Исключение — см. «Инварианты»: `targetProps.type` не применяется никогда |
-| `dropdownProps` | `Omit<IChipSuggestDropdownProps<T>, "targetRef">` | — | Props выпадающего списка: props `Dropdown` (`onOpen`, `onClose`, `pullerProps`, …) плюс `focusTrapProps`. `targetRef` проставляет сам `ChipSuggest` |
+| `dropdownProps` | `Omit<IChipSuggestDropdownProps<T>, "targetRef">` | — | Props выпадающего списка: props `Dropdown` (`onOpen`, `onClose`, `pullerProps`, …) плюс `focusTrapProps`. `size` переопределяет основной `size` для выпадающего блока и списка: SM → SM, MD → MD, LG → MD. `targetRef` проставляет сам `ChipSuggest` |
 
 `className` попадает на корневой `<div>` (рядом с внутренним классом `chipGroupItem`),
 остальные `React.HTMLAttributes<HTMLDivElement>` уходят в `Suggest`.
@@ -237,3 +237,4 @@ version: "1.0"
 | 2026-10-21 | **Breaking** (TRIPLEX-961): prop `mobileViewProps` в `dropdownProps` переименован в `pullerProps`. |
 | 2026-11-05 | Исправлено (TRIPLEX-1039): поле фильтрации получает `aria-activedescendant` активной опции. Клавиши списку передаёт `Suggest`. |
 | 2026-11-06 | Исправлено (TRI-0): `targetProps.onKeyDown` вызывается для всех клавиш, а не только для `Enter`/`Space`; `targetProps.disabled` отключает встроенную кнопку очистки. |
+| 2026-11-19 | Для размера LG выпадающий блок и список используют MD; размер управляющего элемента остаётся LG. |

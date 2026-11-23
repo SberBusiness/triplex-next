@@ -134,7 +134,7 @@ export const OpenFromAvatar: StoryObj<typeof ImageGalleryExtended> = {
  * disabled). Фиксирует disabled-состояния стрелок на границах диапазона.
  */
 export const VisualTestsArrows: StoryObj<typeof ImageGalleryExtended> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

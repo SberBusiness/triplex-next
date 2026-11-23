@@ -261,7 +261,7 @@ export const Amounts: StoryObj<typeof SliderRange> = {
 };
 
 export const VisualTests: StoryObj<typeof SliderRange> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

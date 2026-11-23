@@ -60,7 +60,7 @@ React-код по этому дереву пишет AI-агент.
       "env": {
         "PIXSO_MCP_URL": "https://<хост инсталляции>/api/mcp/mcp",
         "PIXSO_MCP_TOKEN": "${PIXSO_MCP_TOKEN}",
-        "PIXSO_AUTH_STYLE": "bearer"
+        "PIXSO_AUTH_STYLE": "dual"
       }
     }
   }
@@ -72,9 +72,9 @@ React-код по этому дереву пишет AI-агент.
 вместо `${PIXSO_MCP_TOKEN}` укажите
 `${env:PIXSO_MCP_TOKEN}`.
 
-В примере используется `bearer` — формат авторизации по умолчанию. При ответе `401` проверьте
-актуальность токена и требования инсталляции: если шлюз ожидает токен в двух заголовках,
-замените `PIXSO_AUTH_STYLE` на `dual`.
+В примере явно задан `dual` — формат авторизации для шлюза, который ожидает токен в двух
+заголовках. При ответе `401` проверьте актуальность токена и соответствие `PIXSO_AUTH_STYLE`
+требованиям своей инсталляции.
 
 ### Ссылка на фрейм
 
@@ -285,7 +285,7 @@ description: >-
     </thead>
     <tbody>
         <tr><td>Нет соединения с локальным Pixso</td><td>Local MCP включён, макет открыт и активен, адрес в <code>PIXSO_MCP_URL</code> совпадает с адресом клиента.</td></tr>
-        <tr><td>Remote MCP отвечает <code>401</code></td><td>Актуальность токена и <code>PIXSO_AUTH_STYLE</code>; если инсталляция не принимает <code>bearer</code>, проверьте <code>dual</code>.</td></tr>
+        <tr><td>Remote MCP отвечает <code>401</code></td><td>Актуальность токена и соответствие <code>PIXSO_AUTH_STYLE</code> требованиям инсталляции; в примере Remote MCP используется <code>dual</code>.</td></tr>
         <tr><td>Вызов не успевает завершиться</td><td>Увеличьте таймаут MCP-вызова в клиенте до 120 секунд или больше.</td></tr>
         <tr><td>Макет разобран частично</td><td>Запросите <code>get_conversion_report</code>, проверьте <code>truncated</code>, несопоставленные узлы и требования к макету.</td></tr>
         <tr><td>Агент использует неверные props или иконки</td><td>Убедитесь, что подключён <code>triplex</code> и агент вызывает <code>get_component</code> и <code>list_icons</code>, а компоненты с <code>component.confidence</code> меньше 1 сверяет с документацией.</td></tr>

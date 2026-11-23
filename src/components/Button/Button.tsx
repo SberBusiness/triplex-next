@@ -123,17 +123,22 @@ const renderLoadingIcon = (theme: EButtonTheme, size: EComponentSize) => {
     return <LoaderSmall theme={loaderTheme} size={size} />;
 };
 
-const preventLoadingClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-};
-
 /**
  * Кнопка — основной интерактивный элемент для запуска действий.
  * Поддерживает пять тем (EButtonTheme), три размера, состояние загрузки, иконку и блочный режим.
  */
 export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, ref) => {
     const { children, className, disabled, theme, size = EComponentSize.MD, block, loading, icon, ...rest } = props;
+
+    const handleLoadingClickCapture: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+        // Программный click() нужен, в частности, для закрытия Confirm по Escape.
+        if (event.isTrusted) {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+        rest.onClickCapture?.(event);
+    };
 
     // aria-expanded остаётся в rest и попадает на DOM-элемент, здесь читается для визуального состояния «раскрыто».
     // Тип атрибута — Booleanish: строковое "false" — валидное «закрытое» состояние, поэтому truthy-проверки недостаточно.
@@ -163,7 +168,7 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
             tabIndex={loading ? -1 : undefined}
             disabled={disabled}
             {...rest}
-            onClickCapture={loading ? preventLoadingClick : rest.onClickCapture}
+            onClickCapture={loading ? handleLoadingClickCapture : rest.onClickCapture}
             ref={ref}
         >
             <span className={styles.content}>

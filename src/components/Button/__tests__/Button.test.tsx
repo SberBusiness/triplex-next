@@ -144,35 +144,19 @@ describe("Button", () => {
         expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click" }));
     });
 
-    it("blocks activation of a focused button while loading", async () => {
-        const user = userEvent.setup();
+    it("passes a programmatic click to both click handlers while loading", () => {
+        const onClickCapture = vi.fn();
         const onClick = vi.fn();
-        const onSubmit = vi.fn((event: React.FormEvent) => event.preventDefault());
-        const renderButton = (loading: boolean) => (
-            <form onSubmit={onSubmit}>
-                <Button theme={EButtonTheme.GENERAL} type="submit" loading={loading} onClick={onClick}>
-                    Submit
-                </Button>
-            </form>
+        render(
+            <Button theme={EButtonTheme.GENERAL} loading onClickCapture={onClickCapture} onClick={onClick}>
+                Loading
+            </Button>,
         );
-        const { rerender } = render(renderButton(false));
-        const button = getButton();
-        await user.click(button);
-        expect(button).toHaveFocus();
-        expect(onClick).toHaveBeenCalledTimes(1);
-        expect(onSubmit).toHaveBeenCalledTimes(1);
 
-        rerender(renderButton(true));
-        expect(button).toHaveFocus();
-        await user.keyboard("{Enter}[Space]");
-        button.click();
-        expect(onClick).toHaveBeenCalledTimes(1);
-        expect(onSubmit).toHaveBeenCalledTimes(1);
+        getButton().click();
 
-        rerender(renderButton(false));
-        await user.keyboard("{Enter}");
-        expect(onClick).toHaveBeenCalledTimes(2);
-        expect(onSubmit).toHaveBeenCalledTimes(2);
+        expect(onClickCapture).toHaveBeenCalledTimes(1);
+        expect(onClick).toHaveBeenCalledTimes(1);
     });
 
     it("is disabled and does not call onClick when disabled prop is set", async () => {

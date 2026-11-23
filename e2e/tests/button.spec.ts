@@ -20,6 +20,36 @@ test.describe("Button", () => {
         await expect(button).toBeEnabled();
     });
 
+    test("should block Enter and Space on a focused loading button", async ({ page }) => {
+        await page.goto("/iframe.html?id=components-buttons-button--playground&args=loading:!true");
+        const button = page.getByRole("button");
+        await expect(button).toHaveClass(/loading/);
+        await button.evaluate((element) => {
+            const form = document.createElement("form");
+            form.id = "loading-button-form";
+            form.addEventListener("submit", (event) => {
+                event.preventDefault();
+                element.setAttribute("data-submitted", "true");
+            });
+            document.body.append(form);
+            element.setAttribute("form", form.id);
+            element.setAttribute("type", "submit");
+            window.addEventListener("click", (event) => {
+                if (event.target === element) {
+                    element.setAttribute("data-clicked", "true");
+                }
+            });
+        });
+
+        await button.focus();
+        await page.keyboard.press("Enter");
+        await page.keyboard.press("Space");
+
+        await expect(button).toBeFocused();
+        await expect(button).not.toHaveAttribute("data-clicked");
+        await expect(button).not.toHaveAttribute("data-submitted");
+    });
+
     test("should change background color on hover", async ({ page }) => {
         const button = await getButtons(
             page,

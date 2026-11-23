@@ -12,6 +12,34 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: TriplexPreviousSBSansDisplay;
+    src: url("./assets/SBSansDisplay-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: TriplexPreviousSBSansDisplay;
+    src: url("./assets/SBSansDisplay-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: TriplexPreviousSBSansDisplay;
+    src: url("./assets/SBSansDisplay-SemiBold.woff2") format("woff2");
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: TriplexPreviousSBSansDisplay;
+    src: url("./assets/SBSansDisplay-Bold.woff2") format("woff2");
+    font-weight: 700;
+    font-style: normal;
+}
+
 .fontComparison {
     max-width: 1100px;
     margin: 0 auto;
@@ -90,6 +118,10 @@
         &.previous {
             --triplex-next-runtime-FontComparison-Regular_FontFamily: TriplexPreviousSBSansText;
             --triplex-next-runtime-FontComparison-Semibold_FontFamily: TriplexPreviousSBSansText;
+
+            .displaySample {
+                font-family: TriplexPreviousSBSansDisplay, Arial, sans-serif;
+            }
         }
 
         &.current {
@@ -132,6 +164,11 @@
     .normalSample {
         font-size: 14px;
         line-height: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .displaySample {
+        display: block;
         overflow-wrap: anywhere;
     }
 

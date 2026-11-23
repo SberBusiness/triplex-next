@@ -11,7 +11,7 @@ const meta = {
         docs: {
             description: {
                 component:
-                    "Старый и новый SB Sans Text на одинаковых примерах. Сравните читаемость, насыщенность и вертикальное выравнивание. Текст и значения полей синхронизированы между колонками. Для проверки на тёмном фоне переключите тему Storybook.",
+                    "Сравнение SB Sans Text и SB Sans Display из main и архива от 18.11 на одинаковых примерах. Текст и значения полей синхронизированы между колонками. Для проверки на тёмном фоне переключите тему Storybook.",
             },
             page: () => (
                 <>
@@ -38,6 +38,14 @@ export const Default: Story = {
             fonts.load("600 16px TriplexPreviousSBSansText"),
             fonts.load("400 16px SBSansText"),
             fonts.load("600 16px SBSansTextSemibold"),
+            fonts.load("400 20px TriplexPreviousSBSansDisplay"),
+            fonts.load("500 20px TriplexPreviousSBSansDisplay"),
+            fonts.load("600 20px TriplexPreviousSBSansDisplay"),
+            fonts.load("700 20px TriplexPreviousSBSansDisplay"),
+            fonts.load("400 20px SBSansDisplay"),
+            fonts.load("500 20px SBSansDisplayMedium"),
+            fonts.load("600 20px SBSansDisplaySemibold"),
+            fonts.load("700 20px SBSansDisplayBold"),
         ]);
     },
     parameters: {

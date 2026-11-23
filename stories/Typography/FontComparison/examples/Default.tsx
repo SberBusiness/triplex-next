@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import clsx from "clsx";
-import { Button, EButtonTheme, EComponentSize, EFormFieldStatus, TextField } from "@sberbusiness/triplex-next";
+import {
+    Button,
+    EButtonTheme,
+    EComponentSize,
+    EFontWeightTitle,
+    EFormFieldStatus,
+    ETitleSize,
+    TextField,
+    Title,
+} from "@sberbusiness/triplex-next";
 import { DefaulticonStrokePrdIcon24 } from "@sberbusiness/icons-next";
 import styles from "../FontComparison.module.less";
 
@@ -11,9 +20,15 @@ const COMPONENT_SIZES = [
     { size: EComponentSize.LG, fontSize: 16 },
 ];
 const VERSIONS = [
-    { key: "previous", label: "До обновления" },
-    { key: "current", label: "Новый шрифт" },
+    { key: "previous", label: "Текущая версия из main" },
+    { key: "current", label: "Архив SB Sans 18.11" },
 ] as const;
+const DISPLAY_WEIGHTS = [
+    { weight: EFontWeightTitle.REGULAR, label: "Regular" },
+    { weight: EFontWeightTitle.MEDIUM, label: "Medium" },
+    { weight: EFontWeightTitle.SEMIBOLD, label: "Semibold" },
+    { weight: EFontWeightTitle.BOLD, label: "Bold" },
+];
 
 const renderPair = (key: string, render: (label: string) => React.ReactNode) => (
     <div className={styles.pair} key={key}>
@@ -44,13 +59,13 @@ export const Default = () => {
                 {VERSIONS.map(({ key, label }) => (
                     <div className={styles.columnHeading} key={key}>
                         <strong>{label}</strong>
-                        <span>SB Sans Text · Regular / Semibold</span>
+                        <span>SB Sans Text / SB Sans Display</span>
                     </div>
                 ))}
             </div>
 
             <section className={styles.section} aria-labelledby="font-comparison-text">
-                <h2 id="font-comparison-text">Текст 10–16 px</h2>
+                <h2 id="font-comparison-text">SB Sans Text · 10–16 px</h2>
                 <p className={styles.hint}>
                     Первая строка — Regular, вторая — Semibold. Третья — похожие символы в Regular. Высота строки
                     одинакова.
@@ -62,7 +77,7 @@ export const Default = () => {
                             <div className={styles.textSamples} style={{ fontSize }}>
                                 <p className={styles.regular}>{sampleText}</p>
                                 <p className={styles.semibold}>{sampleText}</p>
-                                <p className={styles.regular}>Aa Bb 0O 1lI Ёё — № 123</p>
+                                <p className={styles.regular}>Aa Bb 0O 1lI Ёё — № 123 · ★ ✓ ⚠</p>
                             </div>
                         ))}
                     </div>
@@ -77,6 +92,29 @@ export const Default = () => {
                         <div>Получатель: Иван Петров</div>
                         <div>Сумма перевода: 12 345,67 ₽</div>
                         <div>Назначение: оплата по договору № 123</div>
+                    </div>
+                ))}
+            </section>
+
+            <section className={styles.section} aria-labelledby="font-comparison-display">
+                <h2 id="font-comparison-display">SB Sans Display · заголовки</h2>
+                <p className={styles.hint}>Размеры сверху вниз — 28, 24 и 20 px.</p>
+                {DISPLAY_WEIGHTS.map(({ weight, label }) => (
+                    <div className={styles.example} key={weight}>
+                        <h3>{label}</h3>
+                        {renderPair(`display-${weight}`, () =>
+                            Object.values(ETitleSize).map((size) => (
+                                <Title
+                                    key={size}
+                                    tag="span"
+                                    size={size}
+                                    weight={weight}
+                                    className={styles.displaySample}
+                                >
+                                    {sampleText}
+                                </Title>
+                            )),
+                        )}
                     </div>
                 ))}
             </section>

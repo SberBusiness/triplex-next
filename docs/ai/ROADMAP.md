@@ -230,19 +230,12 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | UploadZone | ✅ | ✅ | ✅ |
 | WindowResizeListener | ✅ | ✅ | ✅ |
 
-Задачи для завершения основной таблицы: ChipDatePicker — TRI-136, ChipSelect — TRI-131.
-
 ##### Атомы составных компонентов
-
-Задачи: [FormFieldCounter (TRI-194)](https://linear.app/triplex-next/issue/TRI-194/formfieldcounter-ai-ready-phase-1),
-[FormFieldDescription (TRI-195)](https://linear.app/triplex-next/issue/TRI-195/formfielddescription-ai-ready-phase-1).
 
 Для атомов отслеживаются **AI.md** и **AI refactoring**. Примеры использования
 и визуальные состояния проверяются в существующих stories компонента или его
 родителя. Отдельные stories для каждой части не являются условием завершения.
 В разделе Stories AI.md атома можно ссылаться на соответствующие примеры родителя.
-
-Задачи для списка опций — DropdownList (TRI-187) и DropdownListItem (TRI-186).
 
 | Компонент | AI.md | AI refactoring |
 |---|---|---|

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useLayoutEffect } from "react";
 import clsx from "clsx";
 import { FormFieldDescriptionContext } from "../FormFieldDescriptionContext";
 import styles from "../styles/FormFieldCounter.module.less";
@@ -8,12 +8,12 @@ export interface IFormFieldCounterProps extends React.HTMLAttributes<HTMLDivElem
 
 /**
  * Отображает переданное значение счётчика. Расчёт длины и ограничение ввода задаёт потребитель.
- * При монтировании включает режим счётчика у ближайшего FormFieldDescription, при размонтировании выключает.
+ * До первой отрисовки включает режим счётчика у ближайшего FormFieldDescription, при размонтировании выключает.
  */
 export const FormFieldCounter: React.FC<IFormFieldCounterProps> = ({ children, className, ...rest }) => {
     const { setWithCounter } = useContext(FormFieldDescriptionContext);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         setWithCounter(true);
 
         return () => setWithCounter(false);

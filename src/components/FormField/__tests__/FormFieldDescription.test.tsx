@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { render, screen } from "@testing-library/react";
 import { FormFieldCounter, FormFieldDescription } from "@sberbusiness/triplex-next/components";
+import { FormFieldDescriptionContext } from "../FormFieldDescriptionContext";
 
 describe("FormFieldDescription", () => {
     it("renders children inside the root element", () => {
@@ -40,6 +41,33 @@ describe("FormFieldDescription", () => {
 
         expect(screen.getByTestId("inner-description")).toHaveClass("withCounter");
         expect(screen.getByTestId("outer-description")).not.toHaveClass("withCounter");
+    });
+
+    it("does not re-render context consumers when the counter modifier toggles", () => {
+        let renderCount = 0;
+        const ContextConsumer = () => {
+            useContext(FormFieldDescriptionContext);
+            renderCount++;
+            return null;
+        };
+
+        // Один и тот же элемент между рендерами: React перерисует его только при смене значения контекста.
+        const consumer = <ContextConsumer />;
+
+        const { rerender } = render(
+            <FormFieldDescription data-testid="description">
+                {consumer}
+                <FormFieldCounter>0/10</FormFieldCounter>
+            </FormFieldDescription>,
+        );
+
+        expect(screen.getByTestId("description")).toHaveClass("withCounter");
+        expect(renderCount).toBe(1);
+
+        rerender(<FormFieldDescription data-testid="description">{consumer}</FormFieldDescription>);
+
+        expect(screen.getByTestId("description")).not.toHaveClass("withCounter");
+        expect(renderCount).toBe(1);
     });
 
     it("removes the counter modifier when the counter unmounts", () => {

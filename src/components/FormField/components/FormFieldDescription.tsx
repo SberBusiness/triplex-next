@@ -12,7 +12,8 @@ export interface IFormFieldDescriptionProps extends React.HTMLAttributes<HTMLDiv
  */
 export const FormFieldDescription: React.FC<IFormFieldDescriptionProps> = ({ children, className, ...rest }) => {
     const [withCounter, setWithCounter] = useState(false);
-    const contextValue = useMemo<IFormFieldDescriptionContext>(() => ({ withCounter, setWithCounter }), [withCounter]);
+    // Стабильное значение: переключение раскладки не перерисовывает потребителей контекста.
+    const contextValue = useMemo<IFormFieldDescriptionContext>(() => ({ setWithCounter }), []);
 
     return (
         <FormFieldDescriptionContext.Provider value={contextValue}>

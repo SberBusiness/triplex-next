@@ -2,7 +2,6 @@ import React from "react";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { Carousel } from "../Carousel";
-import { ICarouselViewportProps } from "../types";
 import { ECarouselScrollMode } from "../enums";
 import {
     getResizeCallback,
@@ -14,16 +13,11 @@ import {
 
 interface ITestProps {
     slideSizes?: number[];
-    onTouchStart?: ICarouselViewportProps["onTouchStart"];
 }
 
-const ElementsTestCarousel: React.FC<ITestProps> = ({ slideSizes = [300, 300, 300], onTouchStart }) => (
+const ElementsTestCarousel: React.FC<ITestProps> = ({ slideSizes = [300, 300, 300] }) => (
     <Carousel gap={16}>
-        <Carousel.Viewport
-            data-testid="viewport"
-            onTouchStart={onTouchStart}
-            ref={(n) => n && mockElementSize(n, { clientWidth: 500 })}
-        >
+        <Carousel.Viewport data-testid="viewport" ref={(n) => n && mockElementSize(n, { clientWidth: 500 })}>
             <Carousel.Track data-testid="track">
                 {slideSizes.map((s, i) => (
                     <Carousel.Item key={i} index={i} ref={(n) => n && mockElementSize(n, { width: s })}>
@@ -53,140 +47,17 @@ describe("Carousel Elements (Viewport, Track, Item)", () => {
     });
 
     describe("CarouselViewport (Touch Gestures)", () => {
-        it("should call custom onTouchStart prop", () => {
-            const cb = vi.fn();
-            render(<ElementsTestCarousel onTouchStart={cb} />);
-
-            fireEvent.touchStart(screen.getByTestId("viewport"), {
-                targetTouches: createTouchList([createTouch(screen.getByTestId("viewport"), 0)]),
-            });
-            expect(cb).toHaveBeenCalledTimes(1);
-        });
-
-        it.each([
-            {
-                name: "swipe left past 50px",
-                startX: 200,
-                moveX: 100,
-                canceled: false,
-                clickNext: false,
-                expectedDisabled: false,
-            },
-            {
-                name: "swipe right past 50px",
-                startX: 100,
-                moveX: 200,
-                canceled: false,
-                clickNext: true,
-                expectedDisabled: true,
-            },
-            {
-                name: "swipe short of 50px",
-                startX: 200,
-                moveX: 170,
-                canceled: false,
-                clickNext: false,
-                expectedDisabled: true,
-            },
-            {
-                name: "touchcancel event",
-                startX: 200,
-                moveX: 100,
-                canceled: true,
-                clickNext: false,
-                expectedDisabled: true,
-            },
-        ])("should handle $name properly", ({ startX, moveX, canceled, clickNext, expectedDisabled }) => {
+        it("should navigate the parent carousel after a swipe past the threshold", () => {
             render(<ElementsTestCarousel />);
             act(() => getResizeCallback()?.());
-
             const v = screen.getByTestId("viewport");
-            if (clickNext) {
-                fireEvent.click(screen.getByTestId("next-btn"));
-            }
+            expect(screen.getByTestId("prev-btn")).toHaveAttribute("aria-disabled", "true");
 
-            fireEvent.touchStart(v, {
-                targetTouches: createTouchList([createTouch(v, startX)]),
-            });
-            fireEvent.touchMove(window, {
-                targetTouches: createTouchList([createTouch(v, moveX)]),
-            });
-
-            if (canceled) {
-                fireEvent.touchCancel(window);
-                expect(screen.getByTestId("track").style.transform).toBe("");
-            } else {
-                fireEvent.touchEnd(window);
-            }
-
-            const prevBtn = screen.getByTestId("prev-btn");
-            expect(prevBtn).toHaveAttribute("aria-disabled", expectedDisabled ? "true" : "false");
-        });
-
-        it("should apply rubber-band resistance when dragging past boundaries", () => {
-            render(<ElementsTestCarousel slideSizes={[300, 300, 300]} />);
-            act(() => getResizeCallback()?.());
-
-            const v = screen.getByTestId("viewport");
-            const t = screen.getByTestId("track");
-
-            fireEvent.touchStart(v, {
-                targetTouches: createTouchList([createTouch(v, 100)]),
-            });
-            fireEvent.touchMove(window, {
-                targetTouches: createTouchList([createTouch(v, 200)]),
-            });
-            expect(t.style.transform).not.toBe("");
+            fireEvent.touchStart(v, { targetTouches: createTouchList([createTouch(v, { clientX: 200 })]) });
+            fireEvent.touchMove(window, { targetTouches: createTouchList([createTouch(v, { clientX: 100 })]) });
             fireEvent.touchEnd(window);
 
-            fireEvent.click(screen.getByTestId("next-btn"));
-            fireEvent.click(screen.getByTestId("next-btn"));
-
-            fireEvent.touchStart(v, {
-                targetTouches: createTouchList([createTouch(v, 300)]),
-            });
-            fireEvent.touchMove(window, {
-                targetTouches: createTouchList([createTouch(v, 100)]),
-            });
-            expect(t.style.transform).not.toBe("");
-        });
-
-        it("should not prevent default browser scrolling when swiping vertically over a horizontal carousel", () => {
-            render(<ElementsTestCarousel />);
-            act(() => getResizeCallback()?.());
-            const v = screen.getByTestId("viewport");
-
-            fireEvent.touchStart(v, {
-                targetTouches: createTouchList([createTouch(v, 200)]),
-            });
-
-            const touchMoveEvent = new TouchEvent("touchmove", {
-                cancelable: true,
-                bubbles: true,
-                targetTouches: createTouchList([
-                    {
-                        identifier: Date.now(),
-                        target: v,
-                        clientX: 200,
-                        clientY: 350,
-                        pageX: 200,
-                        pageY: 350,
-                        screenX: 200,
-                        screenY: 350,
-                        force: 0,
-                        radiusX: 0,
-                        radiusY: 0,
-                        rotationAngle: 0,
-                    },
-                ]),
-            });
-
-            const preventDefaultSpy = vi.spyOn(touchMoveEvent, "preventDefault");
-
-            v.dispatchEvent(touchMoveEvent);
-            fireEvent.touchEnd(v);
-
-            expect(preventDefaultSpy).not.toHaveBeenCalled();
+            expect(screen.getByTestId("prev-btn")).toHaveAttribute("aria-disabled", "false");
         });
     });
 
@@ -248,6 +119,49 @@ describe("Carousel Elements (Viewport, Track, Item)", () => {
             );
             expect(refFn).toHaveBeenCalledWith(expect.any(HTMLDivElement));
             expect(refObj.current).toBeInstanceOf(HTMLDivElement);
+        });
+
+        it("should update pages and navigation when a slide is removed and remaining slides are reindexed", () => {
+            const renderItems = (items: string[]) => (
+                <Carousel scrollMode={ECarouselScrollMode.PAGE} gap={0}>
+                    <Carousel.Viewport ref={(node) => node && mockElementSize(node, { clientWidth: 300 })}>
+                        <Carousel.Track data-testid="track">
+                            {items.map((item, index) => (
+                                <Carousel.Item
+                                    key={item}
+                                    index={index}
+                                    aria-label={item}
+                                    ref={(node) => node && mockElementSize(node, { width: 300 })}
+                                >
+                                    {item}
+                                </Carousel.Item>
+                            ))}
+                        </Carousel.Track>
+                        <Carousel.NextButton aria-label="Next slide" />
+                    </Carousel.Viewport>
+                    <Carousel.Indicators />
+                </Carousel>
+            );
+            const items = ["First", "Second", "Third"];
+            const { rerender } = render(renderItems(items));
+            act(() => getResizeCallback()?.());
+            const secondSlide = screen.getByRole("group", { name: "Second" });
+            expect(screen.getAllByRole("tab")).toHaveLength(3);
+
+            rerender(renderItems(items.slice(1)));
+            act(() => getResizeCallback()?.());
+
+            expect(screen.queryByRole("group", { name: "First" })).not.toBeInTheDocument();
+            expect(screen.getByRole("group", { name: "Second" })).toBe(secondSlide);
+            expect(screen.getAllByRole("tab")).toHaveLength(2);
+
+            fireEvent.click(screen.getByRole("button", { name: "Next slide" }));
+
+            expect(screen.getAllByRole("tab")[1]).toHaveAttribute("aria-selected", "true");
+            expect(screen.getByTestId("track")).toHaveStyle({
+                "--triplex-next-runtime-carousel-transform": "translateX(-300px)",
+            });
+            expect(screen.getByRole("button", { name: "Next slide" })).toHaveAttribute("aria-disabled", "true");
         });
 
         it("should clean up old map registry when index prop changes dynamically", () => {

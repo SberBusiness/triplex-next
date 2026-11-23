@@ -42,7 +42,7 @@ const meta = {
 
 - Состояние открытости календаря хранится внутри компонента. Целевой элемент, отрисованный через **renderTarget**, получает его из контекста **DatePickerExtendedContext** — так устроены **DateField**, **MonthYearField** и **ChipDatePicker**. Контекст экспортируется из библиотеки, поэтому собственный целевой элемент пишется так же.
 - Календарь закрывается по Escape, по клику вне компонента и после выбора даты.
-- На мобильной ширине экрана вместо десктопного меню открывается полноэкранная версия, в заголовок которой попадает **renderDropdownHeaderTarget**.
+- На мобильной ширине экрана вместо десктопного меню открывается нижняя шторка **Puller**, в заголовок которой попадает **renderDropdownHeaderTarget**.
 - Все props календаря (**pickType**, **format**, **limitRange**, **markedDays**, **disabledDays**, кнопки футера и т.д.) пробрасываются во вложенный **Calendar**, остальные — на корневой элемент.
 - Исключение — **adaptiveMode**: он исключён из props компонента, потому что режим определяет версия дропдауна (десктопное меню — false, мобильное — true).
                 `,
@@ -220,7 +220,7 @@ export const WithFooterButtons: StoryObj<typeof DatePickerExtended> = {
 };
 
 export const VisualTests: StoryObj<typeof DatePickerExtended> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },
@@ -233,7 +233,7 @@ export const VisualTests: StoryObj<typeof DatePickerExtended> = {
 };
 
 export const VisualTestsMonthYear: StoryObj<typeof DatePickerExtended> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsMonthYearRender,
     parameters: {
         controls: { disable: true },
@@ -246,7 +246,7 @@ export const VisualTestsMonthYear: StoryObj<typeof DatePickerExtended> = {
 };
 
 export const VisualTestsAlignmentRight: StoryObj<typeof DatePickerExtended> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsAlignmentRightRender,
     parameters: {
         controls: { disable: true },

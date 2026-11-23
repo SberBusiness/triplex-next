@@ -4,7 +4,7 @@ import {
     Button,
     DatePickerExtended,
     DatePickerExtendedContext,
-    DropdownMobileInput,
+    PullerInput,
     ECalendarPickType,
     EButtonTheme,
     EComponentSize,
@@ -59,7 +59,7 @@ const PickTypeItem = ({ pickType }: IPickTypeItemProps) => {
                 format={DATE_FORMAT}
                 onDateChange={(date) => setValue(date.format(DATE_FORMAT))}
                 renderTarget={() => <Target>{displayedValue}</Target>}
-                renderDropdownHeaderTarget={() => <DropdownMobileInput value={displayedValue} readOnly />}
+                renderDropdownHeaderTarget={() => <PullerInput value={displayedValue} readOnly />}
             />
         </div>
     );

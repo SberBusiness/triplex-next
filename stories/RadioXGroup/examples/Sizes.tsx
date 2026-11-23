@@ -3,9 +3,7 @@ import { Radio, RadioXGroup, EComponentSize } from "@sberbusiness/triplex-next";
 
 const SIZES = [EComponentSize.SM, EComponentSize.MD, EComponentSize.LG];
 
-export const Sizes = () => {
-    const name = React.useId();
-
+export const Sizes = ({ name }: { name: string }) => {
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: 24, width: 480, maxWidth: "100%" }}>
             {SIZES.map((size) => (

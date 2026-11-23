@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { EComponentSize } from "../../../enums/EComponentSize";
 import { FocusTrap } from "focus-trap-react";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 import { ISuggestOption } from "../../Suggest/types";
@@ -60,7 +61,7 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
                 <ChipSuggestDesktopDropdownField size={size}>{children}</ChipSuggestDesktopDropdownField>
                 <DropdownList
                     id={dropdownListId}
-                    size={size}
+                    size={size === EComponentSize.LG ? EComponentSize.MD : size}
                     dropdownOpened={dropdownOpen}
                     loading={dropdownListLoading}
                     style={options.length === 0 ? { display: "none" } : undefined}
@@ -84,11 +85,11 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
 
     return (
         <Dropdown
-            size={size}
+            size={size === EComponentSize.LG ? EComponentSize.MD : size}
             targetRef={targetRef}
             opened={dropdownOpen}
             setOpened={handleDropdownOpen}
-            mobileViewProps={{
+            pullerProps={{
                 children: <SuggestMobileDropdownContent />,
             }}
             {...restProps}
@@ -101,7 +102,7 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
 
 /**
  * Выпадающий список ChipSuggest: поле фильтрации и список опций из SuggestContext.
- * На десктопе содержимое обёрнуто в FocusTrap, на мобильных — заменяется полноэкранным наполнением Suggest.
+ * На десктопе содержимое обёрнуто в FocusTrap, на мобильных — заменяется наполнением шторки Puller из Suggest.
  */
 export const ChipSuggestDropdown = React.forwardRef(ChipSuggestDropdownBase) as <T extends ISuggestOption>(
     props: IChipSuggestDropdownProps<T> & React.RefAttributes<HTMLDivElement>,

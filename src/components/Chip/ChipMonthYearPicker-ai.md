@@ -1,7 +1,7 @@
 ---
 component: ChipMonthYearPicker
 category: Chips
-related: [Chip, ChipDatePicker, MonthYearField, DatePickerExtended]
+related: [ChipMonthYearPickerTarget, Chip, ChipDatePicker, MonthYearField, DatePickerExtended]
 tokens: []
 stories: stories/Chips/ChipMonthYearPicker.stories.tsx
 version: "1.0"
@@ -169,8 +169,8 @@ selected = getPickerValues(value, format, limitRange).calendarDate !== null
   `IMonthYearFieldProps` и утилит `MonthYearPickerUtils`
 - `DatePickerExtended` — база: владеет состоянием открытости, дропдауном, календарём
   и корневым `<div>`; получает `renderTarget` и `renderDropdownHeaderTarget`
-- `ChipMonthYearPickerTarget` — чипс-таргет этого компонента (экспортируется, но
-  собственного AI.md не имеет): читает открытость из `DatePickerExtendedContext`,
+- `ChipMonthYearPickerTarget` — публичный чипс-таргет этого компонента; см.
+  [ChipMonthYearPickerTarget-ai.md](./ChipMonthYearPickerTarget-ai.md). Читает открытость из `DatePickerExtendedContext`,
   переключает её по клику и Enter/Space, рендерит `ChipClearButton` либо
   `ChipDropdownArrow` в `postfix`
 
@@ -198,3 +198,4 @@ selected = getPickerValues(value, format, limitRange).calendarDate !== null
 |---|---|
 | 2026-09-07 | Создан компонент и документ (AI-Ready Phase 1) |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`ChipGroup`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-10-21 | Добавлена связь с самостоятельной AI-документацией `ChipMonthYearPickerTarget`. |

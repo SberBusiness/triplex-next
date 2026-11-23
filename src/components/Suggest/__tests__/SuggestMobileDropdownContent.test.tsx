@@ -26,12 +26,12 @@ const renderContent = (props: Partial<ISuggestProps> = {}) =>
         </Suggest>,
     );
 
-/** Прокручиваемый контейнер списка — DropdownMobileBody, непосредственный родитель listbox. */
+/** Прокручиваемый контейнер списка — PullerBody, непосредственный родитель listbox. */
 const getScrollableBody = () => {
     const body = screen.getByRole("listbox").parentElement;
 
     if (body === null) {
-        throw new Error("DropdownMobileBody не найден: у listbox нет родительского элемента");
+        throw new Error("PullerBody не найден: у listbox нет родительского элемента");
     }
 
     return body;

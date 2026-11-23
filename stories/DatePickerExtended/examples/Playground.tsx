@@ -5,7 +5,7 @@ import {
     Button,
     DatePickerExtended,
     DatePickerExtendedContext,
-    DropdownMobileInput,
+    PullerInput,
     ECalendarPickType,
     EButtonTheme,
     EComponentSize,
@@ -65,7 +65,7 @@ export const Playground = ({ alignment, pickType, reversedPick, withFooterButton
             onDropdownOpen={action("onDropdownOpen")}
             onDropdownClose={action("onDropdownClose")}
             renderTarget={() => <Target>{displayedValue}</Target>}
-            renderDropdownHeaderTarget={() => <DropdownMobileInput value={displayedValue} readOnly />}
+            renderDropdownHeaderTarget={() => <PullerInput value={displayedValue} readOnly />}
         />
     );
 };

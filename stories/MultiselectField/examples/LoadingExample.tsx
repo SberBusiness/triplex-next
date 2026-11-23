@@ -15,12 +15,12 @@ import {
     ETextSize,
     Tag,
     TagGroup,
-    DropdownMobileHeader,
-    DropdownMobileClose,
-    DropdownMobileInput,
-    DropdownMobileBody,
-    DropdownMobileFooter,
-    DropdownMobileLoader,
+    PullerHeader,
+    PullerClose,
+    PullerInput,
+    PullerBody,
+    PullerFooter,
+    PullerLoader,
 } from "@sberbusiness/triplex-next";
 import "../MultiselectField.less";
 
@@ -122,11 +122,6 @@ const LoadingMultiselect = ({
         const handleTagFocus = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagBlur = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagClick = (event: React.MouseEvent<HTMLSpanElement>) => event.stopPropagation();
-        const handleTagKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
-            if (event.code === "Enter" || event.code === "Space") {
-                event.stopPropagation();
-            }
-        };
 
         if (!selectedOptions.length) return null;
 
@@ -140,7 +135,6 @@ const LoadingMultiselect = ({
                         onFocus={handleTagFocus}
                         onBlur={handleTagBlur}
                         onClick={handleTagClick}
-                        onKeyDown={handleTagKeyDown}
                         onRemove={() => handleToggle(opt, false)}
                     >
                         {opt.label}
@@ -171,33 +165,33 @@ const LoadingMultiselect = ({
                     targetRef={dropdownTargetRef}
                     ref={dropdownRef}
                     focusTrapProps={{ focusTrapOptions: { initialFocus: false } }}
-                    mobileViewProps={{
+                    pullerProps={{
                         children: (
                             <>
-                                <DropdownMobileHeader
+                                <PullerHeader
                                     controlButtons={
                                         <>
-                                            <DropdownMobileLoader />
-                                            <DropdownMobileClose onClick={() => setOpened(false)} />
+                                            <PullerLoader />
+                                            <PullerClose onClick={() => setOpened(false)} />
                                         </>
                                     }
                                 >
-                                    <DropdownMobileInput
+                                    <PullerInput
                                         autoFocus={true}
                                         placeholder="Type to proceed"
                                         value={filter}
                                         onChange={(event) => setFilter(event.target.value)}
                                     />
-                                </DropdownMobileHeader>
-                                <DropdownMobileBody>
+                                </PullerHeader>
+                                <PullerBody>
                                     {renderCheckboxList()}
                                     {!!filter.trim().length && !visibleOptions.length && (
                                         <Text size={ETextSize.B3} className="not-found">
                                             Nothing was found.
                                         </Text>
                                     )}
-                                </DropdownMobileBody>
-                                <DropdownMobileFooter>
+                                </PullerBody>
+                                <PullerFooter>
                                     <Button
                                         theme={EButtonTheme.SECONDARY}
                                         size={EComponentSize.MD}
@@ -208,7 +202,7 @@ const LoadingMultiselect = ({
                                     <Button theme={EButtonTheme.LINK} size={EComponentSize.MD} onClick={handleClearAll}>
                                         Button link text
                                     </Button>
-                                </DropdownMobileFooter>
+                                </PullerFooter>
                             </>
                         ),
                     }}

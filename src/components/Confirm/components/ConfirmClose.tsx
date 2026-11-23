@@ -1,19 +1,18 @@
 import React, { useCallback, useRef } from "react";
 import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDownEvent";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
+import { setForwardedRef } from "../../../helpers/setForwardedRef";
 import { ConfirmCloseButton, IConfirmCloseButtonProps } from "./ConfirmCloseButton";
 
 /** Свойства компонента ConfirmClose. */
 export interface IConfirmCloseProps extends IConfirmCloseButtonProps {
-    /**
-     * Триггер click по нажатию Esc.
-     */
+    /** Глобальный Esc вызывает click по кнопке, если её offsetParent не null. */
     clickByEsc: boolean;
 }
 
 /**
- * Компонент закрытия.
- * При clickByEsc нажатие Esc в любом месте страницы вызывает click по кнопке закрытия.
+ * Кнопка закрытия Confirm с опциональным глобальным Esc→click для видимой кнопки.
+ * Сам Confirm не закрывает: действие и доступное имя кнопки задаёт потребитель.
  */
 export const ConfirmClose = React.forwardRef<HTMLButtonElement, IConfirmCloseProps>(
     ({ clickByEsc, ...buttonProps }, ref) => {
@@ -24,11 +23,7 @@ export const ConfirmClose = React.forwardRef<HTMLButtonElement, IConfirmClosePro
             (instance: HTMLButtonElement | null) => {
                 buttonRef.current = instance;
 
-                if (typeof ref === "function") {
-                    ref(instance);
-                } else if (ref) {
-                    ref.current = instance;
-                }
+                setForwardedRef(ref, instance);
             },
             [ref],
         );

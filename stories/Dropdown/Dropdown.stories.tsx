@@ -53,7 +53,9 @@ const meta = {
 - Положение пересчитывается при скролле, ресайзе окна и изменении размеров меню или управляющего элемента.
 - Пока меню открыто, скролл страницы вне меню заблокирован.
 - Содержимое произвольное. Для списка опций с навигацией с клавиатуры используется **DropdownList** и **DropdownList.Item**.
-- При заданном **mobileViewProps** на мобильной ширине экрана вместо десктопного меню открывается полноэкранная мобильная версия.
+  Фокус остаётся на управляющем элементе: связку с ним даёт хук **useDropdownListKeyboard** — его **context** передаётся
+  в **DropdownListContext.Provider** вокруг списка, а **handleKeyDown** — в **onKeyDown** управляющего элемента.
+- При заданном **pullerProps** на мобильной ширине экрана вместо десктопного меню открывается нижняя шторка **Puller**.
 - Закрытие по Escape, по Tab и по клику вне меню компонент не реализует — используйте **ButtonDropdownExtended** или собственные обработчики.
                 `,
             },
@@ -282,7 +284,7 @@ export const MobileView: StoryObj<typeof Dropdown> = {
         controls: { disable: true },
         docs: {
             description: {
-                story: "С mobileViewProps на ширине экрана до 768px вместо десктопного меню открывается полноэкранная мобильная версия.",
+                story: "С pullerProps на ширине экрана до 768px вместо десктопного меню открывается нижняя шторка Puller.",
             },
             source: {
                 code: MobileViewSource,
@@ -294,7 +296,7 @@ export const MobileView: StoryObj<typeof Dropdown> = {
 };
 
 export const VisualTests: StoryObj<typeof Dropdown> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

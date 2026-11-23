@@ -19,6 +19,7 @@ const renderDesktopTooltip = ({
     body = "Tooltip text",
     link,
     withClose,
+    renderContainer,
 }: {
     toggleType?: "hover" | "click";
     preferPlace?: ETooltipPreferPlace;
@@ -30,6 +31,7 @@ const renderDesktopTooltip = ({
     body?: string;
     link?: { text: string; href: string };
     withClose?: boolean;
+    renderContainer?: Element;
 } = {}) => {
     const targetRef: { current: HTMLElement | null } = {
         current: null,
@@ -44,6 +46,7 @@ const renderDesktopTooltip = ({
             isOpen={isOpen}
             onShow={onShow}
             toggle={toggle}
+            renderContainer={renderContainer}
             targetRef={targetRef}
         >
             <Tooltip.Target>
@@ -257,5 +260,14 @@ describe("Tooltip (desktop)", () => {
 
         expect(screen.queryByText("Tooltip text")).not.toBeInTheDocument();
         expect(getTargetButton()).toBeInTheDocument();
+    });
+
+    it("should render the tooltip into renderContainer instead of document.body", () => {
+        const renderContainer = document.createElement("div");
+
+        renderDesktopTooltip({ isOpen: true, renderContainer });
+
+        expect(renderContainer).toHaveTextContent("Tooltip text");
+        expect(screen.queryByText("Tooltip text")).toBeNull();
     });
 });

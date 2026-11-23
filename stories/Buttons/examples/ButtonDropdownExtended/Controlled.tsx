@@ -24,12 +24,13 @@ export const Controlled = () => {
 
     // В контролируемом режиме render-функции получают то же значение opened и тот же обработчик,
     // что и в неконтролируемом, — контракт render-props одинаков в обоих режимах.
-    const renderButton = ({ opened, setOpened }: IButtonDropdownExtendedButtonProvideProps) => (
+    const renderButton = ({ opened, setOpened, activeDescendant }: IButtonDropdownExtendedButtonProvideProps) => (
         <Button
             theme={EButtonTheme.GENERAL}
             size={EComponentSize.MD}
             aria-haspopup="menu"
             aria-expanded={opened}
+            aria-activedescendant={activeDescendant}
             onClick={() => setOpened(!opened)}
             ref={buttonRef}
         >

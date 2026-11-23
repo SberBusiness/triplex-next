@@ -24,6 +24,7 @@ export interface PlaygroundArgs extends Pick<
     | "size"
     | "status"
     | "inputProps"
+    | "dropdownProps"
     | "placeholder"
     | "label"
     | "tooltipHint"
@@ -146,7 +147,7 @@ export const PlaygroundExample = ({
     );
 
     const handleClear = useCallback(() => {
-        // На мобильном фокус открыл бы полноэкранный дропдаун сразу после очистки.
+        // На мобильном фокус открыл бы мобильный дропдаун сразу после очистки.
         if (!adaptive) {
             inputRef.current?.focus();
         }

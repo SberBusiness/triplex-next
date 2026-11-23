@@ -3,11 +3,11 @@ import clsx from "clsx";
 import {
     EComponentSize,
     MultiselectField,
-    DropdownMobileHeader,
-    DropdownMobileInput,
-    DropdownMobileClose,
-    DropdownMobileBody,
-    DropdownMobileFooter,
+    PullerHeader,
+    PullerInput,
+    PullerClose,
+    PullerBody,
+    PullerFooter,
     EDropdownAlignment,
     Button,
     EButtonTheme,
@@ -118,21 +118,19 @@ const SizeItem = ({ size, label }: SizeItemProps) => {
                         ref={dropdownRef}
                         alignment={EDropdownAlignment.LEFT}
                         focusTrapProps={{ focusTrapOptions: { initialFocus: false } }}
-                        mobileViewProps={{
+                        pullerProps={{
                             children: (
                                 <>
-                                    <DropdownMobileHeader
-                                        controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
-                                    >
-                                        <DropdownMobileInput
+                                    <PullerHeader controlButtons={<PullerClose onClick={() => setOpened(false)} />}>
+                                        <PullerInput
                                             autoFocus={true}
                                             placeholder="Type to proceed"
                                             value={filter}
                                             onChange={handleFilterChange}
                                         />
-                                    </DropdownMobileHeader>
-                                    <DropdownMobileBody>{renderDropdownContent()}</DropdownMobileBody>
-                                    <DropdownMobileFooter>
+                                    </PullerHeader>
+                                    <PullerBody>{renderDropdownContent()}</PullerBody>
+                                    <PullerFooter>
                                         <Button
                                             theme={EButtonTheme.GENERAL}
                                             size={EComponentSize.SM}
@@ -147,7 +145,7 @@ const SizeItem = ({ size, label }: SizeItemProps) => {
                                         >
                                             Button link text
                                         </Button>
-                                    </DropdownMobileFooter>
+                                    </PullerFooter>
                                 </>
                             ),
                         }}

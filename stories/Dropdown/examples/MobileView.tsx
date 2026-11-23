@@ -3,17 +3,19 @@ import {
     Button,
     Dropdown,
     DropdownList,
-    DropdownMobileBody,
-    DropdownMobileClose,
-    DropdownMobileFooter,
-    DropdownMobileHeader,
-    DropdownMobileList,
-    DropdownMobileListItem,
+    DropdownListContext,
     EButtonTheme,
     EComponentSize,
     EDropdownWidth,
     ETextSize,
+    PullerBody,
+    PullerClose,
+    PullerFooter,
+    PullerHeader,
+    PullerList,
+    PullerListItem,
     Text,
+    useDropdownListKeyboard,
 } from "@sberbusiness/triplex-next";
 
 const OPTIONS = [
@@ -25,6 +27,7 @@ const OPTIONS = [
 export const MobileView = () => {
     const targetRef = useRef<HTMLButtonElement>(null);
     const [opened, setOpened] = useState(false);
+    const { context, activeDescendant, handleKeyDown } = useDropdownListKeyboard();
     const [selectedId, setSelectedId] = useState<string>();
 
     const handleSelect = (id: string) => {
@@ -40,6 +43,8 @@ export const MobileView = () => {
                 aria-haspopup="listbox"
                 aria-expanded={opened}
                 onClick={() => setOpened(!opened)}
+                onKeyDown={handleKeyDown}
+                aria-activedescendant={activeDescendant}
                 ref={targetRef}
             >
                 Button text
@@ -50,31 +55,29 @@ export const MobileView = () => {
                 targetRef={targetRef}
                 size={EComponentSize.MD}
                 width={EDropdownWidth.MIN_TARGET}
-                mobileViewProps={{
+                pullerProps={{
                     children: (
                         <>
-                            <DropdownMobileHeader
-                                controlButtons={
-                                    <DropdownMobileClose aria-label="Закрыть" onClick={() => setOpened(false)} />
-                                }
+                            <PullerHeader
+                                controlButtons={<PullerClose aria-label="Закрыть" onClick={() => setOpened(false)} />}
                             >
                                 <Text size={ETextSize.B1}>Заголовок</Text>
-                            </DropdownMobileHeader>
-                            <DropdownMobileBody>
-                                <DropdownMobileList>
+                            </PullerHeader>
+                            <PullerBody>
+                                <PullerList>
                                     {OPTIONS.map((option) => (
-                                        <DropdownMobileListItem
+                                        <PullerListItem
                                             key={option.id}
                                             id={`mobile-${option.id}`}
                                             selected={option.id === selectedId}
                                             onSelect={() => handleSelect(option.id)}
                                         >
                                             {option.label}
-                                        </DropdownMobileListItem>
+                                        </PullerListItem>
                                     ))}
-                                </DropdownMobileList>
-                            </DropdownMobileBody>
-                            <DropdownMobileFooter>
+                                </PullerList>
+                            </PullerBody>
+                            <PullerFooter>
                                 <Button
                                     theme={EButtonTheme.SECONDARY}
                                     size={EComponentSize.MD}
@@ -82,23 +85,25 @@ export const MobileView = () => {
                                 >
                                     Button text
                                 </Button>
-                            </DropdownMobileFooter>
+                            </PullerFooter>
                         </>
                     ),
                 }}
             >
-                <DropdownList dropdownOpened={opened} size={EComponentSize.MD}>
-                    {OPTIONS.map((option) => (
-                        <DropdownList.Item
-                            key={option.id}
-                            id={option.id}
-                            selected={option.id === selectedId}
-                            onSelect={() => handleSelect(option.id)}
-                        >
-                            {option.label}
-                        </DropdownList.Item>
-                    ))}
-                </DropdownList>
+                <DropdownListContext.Provider value={context}>
+                    <DropdownList dropdownOpened={opened} size={EComponentSize.MD}>
+                        {OPTIONS.map((option) => (
+                            <DropdownList.Item
+                                key={option.id}
+                                id={option.id}
+                                selected={option.id === selectedId}
+                                onSelect={() => handleSelect(option.id)}
+                            >
+                                {option.label}
+                            </DropdownList.Item>
+                        ))}
+                    </DropdownList>
+                </DropdownListContext.Provider>
             </Dropdown>
         </div>
     );

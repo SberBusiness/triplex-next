@@ -3,11 +3,11 @@ import {
     Button,
     Checkbox,
     CheckboxYGroup,
-    DropdownMobileBody,
-    DropdownMobileFooter,
     EButtonTheme,
     EComponentSize,
     MultiselectField,
+    PullerBody,
+    PullerFooter,
     Tag,
     TagGroup,
 } from "@sberbusiness/triplex-next";
@@ -73,11 +73,6 @@ export const DropdownWithoutInputExample = () => {
         const handleTagFocus = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagBlur = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagClick = (event: React.MouseEvent<HTMLSpanElement>) => event.stopPropagation();
-        const handleTagKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
-            if (event.code === "Enter" || event.code === "Space") {
-                event.stopPropagation();
-            }
-        };
 
         if (!selectedOptions.length) return null;
 
@@ -91,7 +86,6 @@ export const DropdownWithoutInputExample = () => {
                         onFocus={handleTagFocus}
                         onBlur={handleTagBlur}
                         onClick={handleTagClick}
-                        onKeyDown={handleTagKeyDown}
                         onRemove={() => handleToggle(opt, false)}
                     >
                         {opt.label}
@@ -122,11 +116,11 @@ export const DropdownWithoutInputExample = () => {
                         targetRef={dropdownTargetRef}
                         ref={dropdownRef}
                         focusTrapProps={{ focusTrapOptions: { initialFocus: false } }}
-                        mobileViewProps={{
+                        pullerProps={{
                             children: (
                                 <>
-                                    <DropdownMobileBody>{renderCheckboxList()}</DropdownMobileBody>
-                                    <DropdownMobileFooter>
+                                    <PullerBody>{renderCheckboxList()}</PullerBody>
+                                    <PullerFooter>
                                         <Button
                                             theme={EButtonTheme.SECONDARY}
                                             size={EComponentSize.MD}
@@ -141,7 +135,7 @@ export const DropdownWithoutInputExample = () => {
                                         >
                                             Button link text
                                         </Button>
-                                    </DropdownMobileFooter>
+                                    </PullerFooter>
                                 </>
                             ),
                         }}

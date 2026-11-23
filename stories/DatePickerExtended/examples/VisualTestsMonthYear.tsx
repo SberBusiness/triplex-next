@@ -3,7 +3,7 @@ import {
     Button,
     DatePickerExtended,
     DatePickerExtendedContext,
-    DropdownMobileInput,
+    PullerInput,
     ECalendarPickType,
     EButtonTheme,
     EComponentSize,
@@ -38,7 +38,7 @@ export const VisualTestsMonthYear = () => (
             format={DATE_FORMAT}
             onDateChange={() => {}}
             renderTarget={() => <Target />}
-            renderDropdownHeaderTarget={() => <DropdownMobileInput value="январь 1970" readOnly />}
+            renderDropdownHeaderTarget={() => <PullerInput value="январь 1970" readOnly />}
         />
     </div>
 );

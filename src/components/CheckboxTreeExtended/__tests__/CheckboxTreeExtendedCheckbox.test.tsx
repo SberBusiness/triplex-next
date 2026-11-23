@@ -34,6 +34,15 @@ describe("CheckboxTreeExtendedCheckbox", () => {
         expect(screen.getByRole("checkbox").closest("label")).toHaveClass(expectedClass);
     });
 
+    it("lets an explicit size override the context size", () => {
+        renderCheckbox({ size: EComponentSize.SM }, EComponentSize.LG);
+
+        const label = screen.getByRole("checkbox").closest("label");
+
+        expect(label).toHaveClass("sm");
+        expect(label).not.toHaveClass("lg");
+    });
+
     it("merges className and own classes into label", () => {
         renderCheckbox({ className: "custom-class" });
 
@@ -71,6 +80,38 @@ describe("CheckboxTreeExtendedCheckbox", () => {
         expect(screen.getByRole("checkbox").closest("label")).toHaveClass("label-class");
     });
 
+    it("calls label onFocus before bubbling focus to the parent in static mode", () => {
+        const callOrder: string[] = [];
+        const onLabelFocus = vi.fn();
+        const onParentFocus = vi.fn();
+        render(
+            <div
+                onFocus={(event) => {
+                    callOrder.push("parent");
+                    onParentFocus(event.target);
+                }}
+            >
+                <CheckboxTreeExtendedCheckbox
+                    labelAttributes={{
+                        onFocus: (event) => {
+                            callOrder.push("label");
+                            onLabelFocus(event.target, event.currentTarget, event.isPropagationStopped());
+                        },
+                    }}
+                >
+                    Значение
+                </CheckboxTreeExtendedCheckbox>
+            </div>,
+        );
+
+        const checkbox = screen.getByRole("checkbox");
+        fireEvent.focus(checkbox);
+
+        expect(onLabelFocus).toHaveBeenCalledWith(checkbox, checkbox.closest("label"), false);
+        expect(onParentFocus).toHaveBeenCalledWith(checkbox);
+        expect(callOrder).toEqual(["label", "parent"]);
+    });
+
     it("does not take focus when the current activeElement already contains the checkbox", () => {
         // На маунте activeElement — <body>, а body.contains(input) === true, поэтому фокуса не происходит.
         renderCheckbox({ active: true });
@@ -88,6 +129,28 @@ describe("CheckboxTreeExtendedCheckbox", () => {
         renderCheckbox({ active: true });
 
         expect(screen.getByRole("checkbox")).toHaveFocus();
+    });
+
+    it("does not retake focus on a rerender when active stays true", () => {
+        const { rerender } = render(
+            <>
+                <button type="button">outside</button>
+                <CheckboxTreeExtendedCheckbox active>Значение</CheckboxTreeExtendedCheckbox>
+            </>,
+        );
+        screen.getByRole("button").focus();
+
+        rerender(
+            <>
+                <button type="button">outside</button>
+                <CheckboxTreeExtendedCheckbox active className="updated">
+                    Значение
+                </CheckboxTreeExtendedCheckbox>
+            </>,
+        );
+
+        expect(screen.getByRole("button")).toHaveFocus();
+        expect(screen.getByRole("checkbox")).not.toHaveFocus();
     });
 
     it("takes focus when node becomes active and focus is outside", () => {

@@ -1,9 +1,10 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { act, render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { DropdownDesktop } from "../desktop/DropdownDesktop";
 import { EDropdownAlignment, EDropdownDirection, EDropdownWidth } from "../desktop/enums";
 import { EComponentSize } from "../../../enums/EComponentSize";
+import { resetResizeObservers, resizeElement } from "../../../../test-utils/resizeObserver";
 
 const VIEWPORT_WIDTH = 1000;
 const VIEWPORT_HEIGHT = 800;
@@ -50,6 +51,8 @@ describe("DropdownDesktop", () => {
     });
 
     afterEach(() => {
+        resetResizeObservers();
+        vi.useRealTimers();
         vi.restoreAllMocks();
     });
 
@@ -105,19 +108,24 @@ describe("DropdownDesktop", () => {
     it("toggles the body overflow class while opened", () => {
         const { rerender } = render(<DropdownWithTarget />);
 
-        expect(document.body).toHaveClass("dropdownDesktopOverflowHidden");
+        expect(document.body).toHaveClass("dropdownDesktopScrollLock");
 
         rerender(<DropdownWithTarget opened={false} />);
 
-        expect(document.body).not.toHaveClass("dropdownDesktopOverflowHidden");
+        expect(document.body).not.toHaveClass("dropdownDesktopScrollLock");
     });
 
-    it("removes the body overflow class on unmount", () => {
-        const { unmount } = render(<DropdownWithTarget />);
+    it("keeps the body overflow class until the last opened dropdown closes", () => {
+        const first = render(<DropdownWithTarget />);
+        const second = render(<DropdownWithTarget />);
 
-        unmount();
+        first.rerender(<DropdownWithTarget opened={false} />);
 
-        expect(document.body).not.toHaveClass("dropdownDesktopOverflowHidden");
+        expect(document.body).toHaveClass("dropdownDesktopScrollLock");
+
+        second.unmount();
+
+        expect(document.body).not.toHaveClass("dropdownDesktopScrollLock");
     });
 
     describe("vertical position", () => {
@@ -157,6 +165,22 @@ describe("DropdownDesktop", () => {
             render(<DropdownWithTarget />);
 
             expect(getDropdown()).toHaveStyle("left: 200px");
+        });
+
+        it("uses the final target position after sibling fields resize in the same frame", () => {
+            vi.useFakeTimers();
+            render(<DropdownWithTarget data-testid="menu" />);
+            act(() => {
+                vi.runOnlyPendingTimers();
+            });
+
+            act(() => {
+                resizeElement(screen.getByTestId("menu"), DROPDOWN_RECT.width);
+                targetRect = { ...TARGET_RECT, left: 184, right: 284 };
+                vi.advanceTimersToNextFrame();
+            });
+
+            expect(getDropdown()).toHaveStyle("left: 184px");
         });
 
         it("aligns to the right edge of the target with alignment RIGHT", () => {

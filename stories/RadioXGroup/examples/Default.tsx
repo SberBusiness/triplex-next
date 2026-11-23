@@ -1,9 +1,7 @@
 import React from "react";
 import { Radio, RadioXGroup } from "@sberbusiness/triplex-next";
 
-export const Default = () => {
-    const name = React.useId();
-
+export const Default = ({ name }: { name: string }) => {
     return (
         <RadioXGroup aria-label="Способ доставки">
             <Radio name={name} value="courier" defaultChecked>

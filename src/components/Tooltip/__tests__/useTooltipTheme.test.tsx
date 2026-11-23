@@ -1,13 +1,10 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { ThemeProviderContext } from "../../ThemeProvider/ThemeProviderContext";
-import { ETriplexNextTheme } from "../../ThemeProvider/ETriplexNextTheme";
-import { DesignTokensCore, DesignTokensComponents } from "../../DesignTokens";
 import { useTooltipTheme } from "../utils/useTooltipTheme";
+import { TEST_SCOPE_CLASS_NAME, ThemeContextWrapper } from "../../../../test-utils/theme";
 
-const SCOPE_CLASS_NAME = "triplex-next-theme-test";
-const COUNTER_ATTR = `data-tooltip-theme-${SCOPE_CLASS_NAME}-counter`;
+const COUNTER_ATTR = `data-tooltip-theme-${TEST_SCOPE_CLASS_NAME}-counter`;
 
 /** Компонент-обёртка, вызывающая тестируемый хук. */
 const ThemeConsumer: React.FC<{ open: boolean; container: Element }> = ({ open, container }) => {
@@ -16,19 +13,13 @@ const ThemeConsumer: React.FC<{ open: boolean; container: Element }> = ({ open, 
     return null;
 };
 
-const renderTree = (open: boolean, container: Element, scopeClassName = SCOPE_CLASS_NAME) => (
-    <ThemeProviderContext.Provider
-        value={{
-            scopeClassName,
-            theme: ETriplexNextTheme.LIGHT,
-            tokens: { ...DesignTokensCore, ...DesignTokensComponents },
-        }}
-    >
+const renderTree = (open: boolean, container: Element, scopeClassName?: string) => (
+    <ThemeContextWrapper scopeClassName={scopeClassName}>
         <ThemeConsumer open={open} container={container} />
-    </ThemeProviderContext.Provider>
+    </ThemeContextWrapper>
 );
 
-const renderHookComponent = (open: boolean, container: Element, scopeClassName = SCOPE_CLASS_NAME) =>
+const renderHookComponent = (open: boolean, container: Element, scopeClassName?: string) =>
     render(renderTree(open, container, scopeClassName));
 
 describe("useTooltipTheme", () => {
@@ -55,14 +46,14 @@ describe("useTooltipTheme", () => {
     it("should add the theme class and start the usage counter when opened", () => {
         renderHookComponent(true, container);
 
-        expect(container).toHaveClass(SCOPE_CLASS_NAME);
+        expect(container).toHaveClass(TEST_SCOPE_CLASS_NAME);
         expect(container.getAttribute(COUNTER_ATTR)).toBe("1");
     });
 
     it("should not add the theme class while closed", () => {
         renderHookComponent(false, container);
 
-        expect(container).not.toHaveClass(SCOPE_CLASS_NAME);
+        expect(container).not.toHaveClass(TEST_SCOPE_CLASS_NAME);
         expect(container.hasAttribute(COUNTER_ATTR)).toBe(false);
     });
 
@@ -72,12 +63,12 @@ describe("useTooltipTheme", () => {
         rerender(renderTree(false, container));
 
         // Класс держится, пока проигрывается анимация закрытия.
-        expect(container).toHaveClass(SCOPE_CLASS_NAME);
+        expect(container).toHaveClass(TEST_SCOPE_CLASS_NAME);
         expect(container.hasAttribute(COUNTER_ATTR)).toBe(false);
 
         vi.advanceTimersByTime(500);
 
-        expect(container).not.toHaveClass(SCOPE_CLASS_NAME);
+        expect(container).not.toHaveClass(TEST_SCOPE_CLASS_NAME);
     });
 
     it("should keep the theme class while another tooltip still uses the container", () => {
@@ -89,12 +80,12 @@ describe("useTooltipTheme", () => {
         first.unmount();
 
         // Второй тултип ещё открыт — класс остаётся сразу же.
-        expect(container).toHaveClass(SCOPE_CLASS_NAME);
+        expect(container).toHaveClass(TEST_SCOPE_CLASS_NAME);
         expect(container.getAttribute(COUNTER_ATTR)).toBe("1");
 
         second.unmount();
 
-        expect(container).not.toHaveClass(SCOPE_CLASS_NAME);
+        expect(container).not.toHaveClass(TEST_SCOPE_CLASS_NAME);
         expect(container.hasAttribute(COUNTER_ATTR)).toBe(false);
     });
 
@@ -103,7 +94,7 @@ describe("useTooltipTheme", () => {
 
         unmount();
 
-        expect(container).not.toHaveClass(SCOPE_CLASS_NAME);
+        expect(container).not.toHaveClass(TEST_SCOPE_CLASS_NAME);
         expect(container.hasAttribute(COUNTER_ATTR)).toBe(false);
     });
 
@@ -115,7 +106,7 @@ describe("useTooltipTheme", () => {
         rerender(renderTree(true, container));
         vi.advanceTimersByTime(500);
 
-        expect(container).toHaveClass(SCOPE_CLASS_NAME);
+        expect(container).toHaveClass(TEST_SCOPE_CLASS_NAME);
         expect(container.getAttribute(COUNTER_ATTR)).toBe("1");
     });
 
@@ -129,12 +120,12 @@ describe("useTooltipTheme", () => {
 
         vi.advanceTimersByTime(500);
 
-        expect(container).toHaveClass(SCOPE_CLASS_NAME);
+        expect(container).toHaveClass(TEST_SCOPE_CLASS_NAME);
         expect(container.getAttribute(COUNTER_ATTR)).toBe("1");
 
         second.unmount();
 
-        expect(container).not.toHaveClass(SCOPE_CLASS_NAME);
+        expect(container).not.toHaveClass(TEST_SCOPE_CLASS_NAME);
     });
 
     it("should remove the theme class on unmount during the pending cleanup", () => {
@@ -143,7 +134,7 @@ describe("useTooltipTheme", () => {
         rerender(renderTree(false, container));
         unmount();
 
-        expect(container).not.toHaveClass(SCOPE_CLASS_NAME);
+        expect(container).not.toHaveClass(TEST_SCOPE_CLASS_NAME);
         expect(container.hasAttribute(COUNTER_ATTR)).toBe(false);
     });
 });

@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import clsx from "clsx";
 import { isKey, EVENT_KEY_CODES } from "../../utils/keyboard";
 import { KeyDownListener } from "../KeyDownListener";
-import { IDropdownListItemProps } from "../Dropdown";
+import { DropdownListContext, IDropdownListItemProps, useDropdownListKeyboard } from "../Dropdown";
+import { useDropdownOpenCallbacks } from "../Dropdown/useDropdownOpenCallbacks";
 import { SelectExtendedFieldTarget } from "./components/SelectExtendedFieldTarget";
 import { SelectExtendedFieldDropdown } from "./components/SelectExtendedFieldDropdown";
 import styles from "./styles/SelectExtendedField.module.less";
@@ -10,7 +11,7 @@ import styles from "./styles/SelectExtendedField.module.less";
 /** Свойства опции списка. */
 export interface ISelectExtendedFieldDefaultOption extends Omit<
     IDropdownListItemProps,
-    "active" | "onSelect" | "selected" | "keyCodesForSelection" | "className" | "key"
+    "onSelect" | "selected" | "keyCodesForSelection" | "className" | "key"
 > {
     /** Значение опции. */
     value: string;
@@ -24,6 +25,8 @@ export interface ISelectExtendedFieldTargetProvideProps {
     opened: boolean;
     /** Функция открытия/закрытия выпадающего блока. */
     setOpened: (opened: boolean) => void;
+    /** Идентификатор активного элемента DropdownList. Для aria-activedescendant поля выбора. */
+    activeDescendant?: string;
 }
 
 /** Свойства, передаваемые из SelectExtendedField в функцию рендера dropdown - children. */
@@ -58,6 +61,8 @@ export interface ISelectExtendedFieldProps extends Omit<React.HTMLAttributes<HTM
  * Владеет только состоянием открытости: разметку поля выбора отдаёт в renderTarget,
  * разметку выпадающего блока — в children. Закрывает список по Escape, по клику вне
  * поля и выпадающего блока, а при closeOnTab — ещё и по Tab.
+ * Связывает поле с DropdownList внутри блока: клавиши, нажатые в поле, передаются открытому списку,
+ * а renderTarget получает activeDescendant для aria-activedescendant.
  */
 export const SelectExtendedField = Object.assign(
     React.forwardRef<HTMLDivElement, ISelectExtendedFieldProps>((props, ref) => {
@@ -67,12 +72,8 @@ export const SelectExtendedField = Object.assign(
         const [opened, setOpened] = useState(false);
         const targetRef = useRef<HTMLDivElement | null>(null);
         const dropdownRef = useRef<HTMLDivElement>(null);
-        // Предыдущее состояние открытости. Сравнение со значением, а не флаг "смонтирован",
-        // делает эффект идемпотентным: повторный маунт в StrictMode не вызывает колбэки.
-        const prevOpenedRef = useRef(opened);
-        // Актуальные колбэки хранятся в ref, чтобы эффект зависел только от opened
-        // и не вызывал onOpen/onClose при смене идентичности колбэков между рендерами.
-        const callbacksRef = useRef({ onOpen, onClose });
+
+        useDropdownOpenCallbacks(opened, onOpen, onClose);
 
         const setTargetRef = useCallback(
             (instance: HTMLDivElement | null) => {
@@ -91,15 +92,27 @@ export const SelectExtendedField = Object.assign(
             setOpened(false);
         }, []);
 
+        const {
+            context: dropdownListContext,
+            activeDescendant,
+            handleKeyDown: handleDropdownListKeyDown,
+        } = useDropdownListKeyboard();
+
         const handleKeyDown = useCallback(
             (event: React.KeyboardEvent<HTMLDivElement>) => {
+                // Клавиши, всплывшие от поля, передаются открытому списку — в фазе bubble, не capture
+                // (почему — Dropdown-ai.md → «Инварианты»).
+                if (!dropdownRef.current?.contains(event.target as Node)) {
+                    handleDropdownListKeyDown(event);
+                }
+
                 if (closeOnTab && isKey(event.code || event.keyCode, "TAB")) {
                     closeDropdown();
                 }
 
                 onKeyDown?.(event);
             },
-            [closeOnTab, closeDropdown, onKeyDown],
+            [handleDropdownListKeyDown, closeOnTab, closeDropdown, onKeyDown],
         );
 
         // Пока список открыт, клик вне поля и вне выпадающего блока закрывает его.
@@ -123,41 +136,24 @@ export const SelectExtendedField = Object.assign(
             };
         }, [opened]);
 
-        useEffect(() => {
-            callbacksRef.current = { onOpen, onClose };
-        });
-
-        useEffect(() => {
-            // Колбэки вызываются только на смену состояния, но не на первом рендере.
-            if (prevOpenedRef.current === opened) {
-                return;
-            }
-
-            prevOpenedRef.current = opened;
-
-            if (opened) {
-                callbacksRef.current.onOpen?.();
-            } else {
-                callbacksRef.current.onClose?.();
-            }
-        }, [opened]);
-
         return (
             <KeyDownListener onMatch={closeDropdown} eventKeyCode={EVENT_KEY_CODES.ESCAPE}>
-                <div
-                    className={clsx(styles.selectExtendedField, className)}
-                    onKeyDown={handleKeyDown}
-                    ref={setTargetRef}
-                    {...htmlDivAttributes}
-                >
-                    {renderTarget({ opened, setOpened })}
-                    {children({
-                        dropdownRef,
-                        opened,
-                        setOpened,
-                        targetRef,
-                    })}
-                </div>
+                <DropdownListContext.Provider value={dropdownListContext}>
+                    <div
+                        className={clsx(styles.selectExtendedField, className)}
+                        onKeyDown={handleKeyDown}
+                        ref={setTargetRef}
+                        {...htmlDivAttributes}
+                    >
+                        {renderTarget({ opened, setOpened, activeDescendant })}
+                        {children({
+                            dropdownRef,
+                            opened,
+                            setOpened,
+                            targetRef,
+                        })}
+                    </div>
+                </DropdownListContext.Provider>
             </KeyDownListener>
         );
     }),

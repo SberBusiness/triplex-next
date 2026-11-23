@@ -3,11 +3,6 @@ import {
     Button,
     Checkbox,
     CheckboxYGroup,
-    DropdownMobileBody,
-    DropdownMobileClose,
-    DropdownMobileFooter,
-    DropdownMobileHeader,
-    DropdownMobileInput,
     EButtonTheme,
     EComponentSize,
     EFormFieldStatus,
@@ -19,6 +14,11 @@ import {
     FormFieldPostfix,
     ISelectExtendedFieldTargetProvideProps,
     MultiselectField,
+    PullerBody,
+    PullerClose,
+    PullerFooter,
+    PullerHeader,
+    PullerInput,
     Tag,
     TagGroup,
     Text,
@@ -127,11 +127,6 @@ export const PlaygroundExample = ({
         const handleTagFocus = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagBlur = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagClick = (event: React.MouseEvent<HTMLSpanElement>) => event.stopPropagation();
-        const handleTagKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
-            if (event.code === "Enter" || event.code === "Space") {
-                event.stopPropagation();
-            }
-        };
 
         if (!selectedOptions.length) {
             return null;
@@ -145,7 +140,6 @@ export const PlaygroundExample = ({
                     onFocus={handleTagFocus}
                     onBlur={handleTagBlur}
                     onClick={handleTagClick}
-                    onKeyDown={handleTagKeyDown}
                     onRemove={handleClearAll}
                 >
                     {`Выбрано ${selectedOptions.length} значения`}
@@ -163,7 +157,6 @@ export const PlaygroundExample = ({
                         onFocus={handleTagFocus}
                         onBlur={handleTagBlur}
                         onClick={handleTagClick}
-                        onKeyDown={handleTagKeyDown}
                         onRemove={() => handleToggle(opt, false)}
                     >
                         {opt.label}
@@ -199,30 +192,28 @@ export const PlaygroundExample = ({
                         targetRef={dropdownTargetRef}
                         ref={dropdownRef}
                         focusTrapProps={{ focusTrapOptions: { initialFocus: false } }}
-                        mobileViewProps={{
+                        pullerProps={{
                             children: (
                                 <>
-                                    <DropdownMobileHeader
-                                        controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
-                                    >
+                                    <PullerHeader controlButtons={<PullerClose onClick={() => setOpened(false)} />}>
                                         {withInput && (
-                                            <DropdownMobileInput
+                                            <PullerInput
                                                 autoFocus={true}
                                                 placeholder="Type to proceed"
                                                 value={filter}
                                                 onChange={(event) => setFilter(event.target.value)}
                                             />
                                         )}
-                                    </DropdownMobileHeader>
-                                    <DropdownMobileBody>
+                                    </PullerHeader>
+                                    <PullerBody>
                                         {renderCheckboxList()}
                                         {!!filter.length && !visibleOptions.length && (
                                             <div className="not-found">
                                                 <Text size={ETextSize.B3}>Nothing was found.</Text>
                                             </div>
                                         )}
-                                    </DropdownMobileBody>
-                                    <DropdownMobileFooter>
+                                    </PullerBody>
+                                    <PullerFooter>
                                         <Button
                                             theme={EButtonTheme.SECONDARY}
                                             size={EComponentSize.MD}
@@ -237,7 +228,7 @@ export const PlaygroundExample = ({
                                         >
                                             Button link text
                                         </Button>
-                                    </DropdownMobileFooter>
+                                    </PullerFooter>
                                 </>
                             ),
                         }}

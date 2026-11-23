@@ -4,7 +4,7 @@ import {
     Button,
     DatePickerExtended,
     DatePickerExtendedContext,
-    DropdownMobileInput,
+    PullerInput,
     ECalendarDateMarkType,
     EButtonTheme,
     EComponentSize,
@@ -63,7 +63,7 @@ export const WithMarkedAndDisabledDays = () => {
             disabledDays={DISABLED_DAYS}
             onDateChange={(date) => setValue(date.format(DATE_FORMAT))}
             renderTarget={() => <Target>{displayedValue}</Target>}
-            renderDropdownHeaderTarget={() => <DropdownMobileInput value={displayedValue} readOnly />}
+            renderDropdownHeaderTarget={() => <PullerInput value={displayedValue} readOnly />}
         />
     );
 };

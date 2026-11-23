@@ -51,17 +51,25 @@ export function mockElementSize(
     }
 }
 
+/** Координаты фейкового Touch-объекта. */
+export interface ITouchCoords {
+    /** Координата X в окне браузера. По умолчанию 0. */
+    clientX?: number;
+    /** Координата Y в окне браузера. По умолчанию 0. */
+    clientY?: number;
+}
+
 /** Хелпер для создания фейкового Touch-объекта. */
-export function createTouch(target: HTMLElement, clientX: number): Touch {
+export function createTouch(target: HTMLElement, { clientX = 0, clientY = 0 }: ITouchCoords = {}): Touch {
     return {
         identifier: Date.now(),
         target,
         clientX,
-        clientY: 0,
+        clientY,
         pageX: clientX,
-        pageY: 0,
+        pageY: clientY,
         screenX: clientX,
-        screenY: 0,
+        screenY: clientY,
         force: 0,
         radiusX: 0,
         radiusY: 0,

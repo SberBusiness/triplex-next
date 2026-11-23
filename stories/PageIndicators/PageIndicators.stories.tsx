@@ -144,7 +144,7 @@ export const CustomIndicatorProps: StoryObj<typeof PageIndicators> = {
  * середине и конце, disabled-индикаторы и вертикальная ориентация.
  */
 export const VisualTests: StoryObj<typeof PageIndicators> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

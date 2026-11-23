@@ -15,11 +15,11 @@ import {
     TagGroup,
     Text,
     ETextSize,
-    DropdownMobileFooter,
-    DropdownMobileBody,
-    DropdownMobileHeader,
-    DropdownMobileInput,
-    DropdownMobileClose,
+    PullerFooter,
+    PullerBody,
+    PullerHeader,
+    PullerInput,
+    PullerClose,
 } from "@sberbusiness/triplex-next";
 import "../MultiselectField.less";
 
@@ -104,11 +104,6 @@ export const DefaultExample = () => {
         const handleTagFocus = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagBlur = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagClick = (event: React.MouseEvent<HTMLSpanElement>) => event.stopPropagation();
-        const handleTagKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
-            if (event.code === "Enter" || event.code === "Space") {
-                event.stopPropagation();
-            }
-        };
 
         if (!selectedOptions.length) return null;
         if (selectedOptions.length > 3) {
@@ -119,7 +114,6 @@ export const DefaultExample = () => {
                     onFocus={handleTagFocus}
                     onBlur={handleTagBlur}
                     onClick={handleTagClick}
-                    onKeyDown={handleTagKeyDown}
                     onRemove={handleClearAll}
                 >
                     {`Выбрано ${selectedOptions.length} значения`}
@@ -137,7 +131,6 @@ export const DefaultExample = () => {
                         onFocus={handleTagFocus}
                         onBlur={handleTagBlur}
                         onClick={handleTagClick}
-                        onKeyDown={handleTagKeyDown}
                         onRemove={() => handleToggle(opt, false)}
                     >
                         {opt.label}
@@ -168,28 +161,26 @@ export const DefaultExample = () => {
                         targetRef={dropdownTargetRef}
                         ref={dropdownRef}
                         focusTrapProps={{ focusTrapOptions: { initialFocus: false } }}
-                        mobileViewProps={{
+                        pullerProps={{
                             children: (
                                 <>
-                                    <DropdownMobileHeader
-                                        controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
-                                    >
-                                        <DropdownMobileInput
+                                    <PullerHeader controlButtons={<PullerClose onClick={() => setOpened(false)} />}>
+                                        <PullerInput
                                             autoFocus={true}
                                             placeholder="Type to proceed"
                                             value={filter}
                                             onChange={(event) => setFilter(event.target.value)}
                                         />
-                                    </DropdownMobileHeader>
-                                    <DropdownMobileBody>
+                                    </PullerHeader>
+                                    <PullerBody>
                                         {renderCheckboxList()}
                                         {!!filter.trim().length && !visibleOptions.length && (
                                             <Text size={ETextSize.B3} className="not-found">
                                                 Nothing was found.
                                             </Text>
                                         )}
-                                    </DropdownMobileBody>
-                                    <DropdownMobileFooter>
+                                    </PullerBody>
+                                    <PullerFooter>
                                         <Button
                                             theme={EButtonTheme.SECONDARY}
                                             size={EComponentSize.MD}
@@ -204,7 +195,7 @@ export const DefaultExample = () => {
                                         >
                                             Button link text
                                         </Button>
-                                    </DropdownMobileFooter>
+                                    </PullerFooter>
                                 </>
                             ),
                         }}

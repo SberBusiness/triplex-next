@@ -13,11 +13,11 @@ export interface IMultiselectFieldDropdownProps extends IDropdownProps {
 }
 
 /**
- * Заглушка на случай, когда потребитель не передал mobileViewProps: Dropdown включает
+ * Заглушка на случай, когда потребитель не передал pullerProps: Dropdown включает
  * мобильную версию по truthiness этого prop'а, поэтому непустой объект нужен всегда —
  * без него на мобильной ширине отрендерился бы десктопный выпадающий блок.
  */
-const ALWAYS_MOBILE_VIEW_PROPS: NonNullable<IDropdownProps["mobileViewProps"]> = {};
+const ALWAYS_PULLER_PROPS: NonNullable<IDropdownProps["pullerProps"]> = {};
 
 /**
  * Компонент выпадающего блока мульти-списка.
@@ -27,7 +27,7 @@ const ALWAYS_MOBILE_VIEW_PROPS: NonNullable<IDropdownProps["mobileViewProps"]> =
  */
 export const MultiselectFieldDropdown = Object.assign(
     React.forwardRef<HTMLDivElement, IMultiselectFieldDropdownProps>(
-        ({ children, focusTrapProps, opened, targetRef, mobileViewProps, ...rest }, ref) => {
+        ({ children, focusTrapProps, opened, targetRef, pullerProps, ...rest }, ref) => {
             const { size, mouseUsedRef } = useContext(MultiselectFieldContext);
 
             useEffect(() => {
@@ -39,7 +39,7 @@ export const MultiselectFieldDropdown = Object.assign(
             return (
                 <Dropdown
                     width={EDropdownWidth.MIN_TARGET}
-                    mobileViewProps={mobileViewProps ?? ALWAYS_MOBILE_VIEW_PROPS}
+                    pullerProps={pullerProps ?? ALWAYS_PULLER_PROPS}
                     targetRef={targetRef}
                     opened={opened}
                     size={size}

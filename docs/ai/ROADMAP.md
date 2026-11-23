@@ -82,7 +82,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 
 ##### Основная таблица
 
-Основная таблица содержит 140 компонентов. Статус каждой колонки подтверждается
+Основная таблица содержит 141 компонент. Статус каждой колонки подтверждается
 по её definition of done; незавершённые пункты отмечены ⬜.
 
 | Компонент | AI.md | Storybook examples | AI refactoring |
@@ -185,6 +185,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | Pagination | ✅ | ✅ | ✅ |
 | PaginationExtended | ✅ | ✅ | ✅ |
 | Portal | ✅ | ✅ | ✅ |
+| Puller | ✅ | ✅ | ✅ |
 | Radio | ✅ | ✅ | ✅ |
 | RadioXGroup | ✅ | ✅ | ✅ |
 | RadioYGroup | ✅ | ✅ | ✅ |
@@ -197,6 +198,7 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | SliderExtended | ✅ | ✅ | ✅ |
 | SliderRange | ✅ | ✅ | ✅ |
 | SmallInput | ✅ | ✅ | ✅ |
+| SmartSpot | ✅ | ✅ | ✅ |
 | SMSField | ✅ | ✅ | ✅ |
 | Spoiler | ✅ | ✅ | ✅ |
 | StatusTracker | ✅ | ✅ | ✅ |
@@ -237,34 +239,32 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 родителя. Отдельные stories для каждой части не являются условием завершения.
 В разделе Stories AI.md атома можно ссылаться на соответствующие примеры родителя.
 
+Задачи для списка опций — DropdownList (TRI-187) и DropdownListItem (TRI-186).
+
 | Компонент | AI.md | AI refactoring |
 |---|---|---|
 | AlertProcessSpoiler | ✅ | ✅ |
 | Carousel | ✅ | ✅ |
 | CarouselIndicators | ✅ | ✅ |
-| CarouselItem | ⬜ | ◐ |
-| CarouselNextButton | ⬜ | ◐ |
-| CarouselPrevButton | ⬜ | ◐ |
-| CarouselViewport | ⬜ | ◐ |
-| CheckboxTreeExtendedCheckbox | ⬜ | ◐ |
-| CheckboxTreeExtendedNode | ⬜ | ◐ |
-| ChipDatePickerTarget | ⬜ | ◐ |
-| ChipMonthYearPickerTarget | ⬜ | ◐ |
-| ChipSelectTarget | ⬜ | ◐ |
-| ChipSuggestTarget | ⬜ | ◐ |
-| CollapsibleTreeExtendedNode | ⬜ | ◐ |
-| CollapsibleTreeNodeHeader | ⬜ | ◐ |
-| ColumnSettings | ⬜ | ◐ |
-| ColumnSettingsSortableList | ⬜ | ◐ |
-| ColumnSettingsSortableListItem | ⬜ | ◐ |
-| ConfirmClose | ⬜ | ◐ |
+| CarouselItem | ✅ | ✅ |
+| CarouselNextButton | ✅ | ✅ |
+| CarouselPrevButton | ✅ | ✅ |
+| CarouselViewport | ✅ | ✅ |
+| CheckboxTreeExtendedCheckbox | ✅ | ✅ |
+| CheckboxTreeExtendedNode | ✅ | ✅ |
+| ChipDatePickerTarget | ✅ | ✅ |
+| ChipMonthYearPickerTarget | ✅ | ✅ |
+| ChipSelectTarget | ✅ | ✅ |
+| ChipSuggestTarget | ✅ | ✅ |
+| CollapsibleTreeExtendedNode | ✅ | ✅ |
+| CollapsibleTreeNodeHeader | ✅ | ✅ |
+| ColumnSettings | ✅ | ✅ |
+| ColumnSettingsSortableList | ✅ | ✅ |
+| ColumnSettingsSortableListItem | ✅ | ✅ |
+| ConfirmClose | ✅ | ✅ |
 | DropdownDesktop | ⬜ | ◐ |
-| DropdownList | ⬜ | ◐ |
-| DropdownListItem | ⬜ | ◐ |
-| DropdownMobile | ⬜ | ◐ |
-| DropdownMobileInner | ⬜ | ◐ |
-| DropdownMobileList | ⬜ | ◐ |
-| DropdownMobileListItem | ⬜ | ◐ |
+| DropdownList | ✅ | ✅ |
+| DropdownListItem | ✅ | ✅ |
 | FormFieldClear | ⬜ | ◐ |
 | FormFieldCounter | ⬜ | ◐ |
 | FormFieldDescription | ⬜ | ◐ |
@@ -303,6 +303,9 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | PaginationNavigationButton | ⬜ | ◐ |
 | PaginationPageButton | ⬜ | ◐ |
 | PaginationSelect | ⬜ | ◐ |
+| PullerInner | ⬜ | ◐ |
+| PullerList | ⬜ | ◐ |
+| PullerListItem | ⬜ | ◐ |
 | SegmentedControlSegment | ⬜ | ◐ |
 | SelectExtendedFieldTarget | ⬜ | ◐ |
 | SliderExtendedDot | ⬜ | ◐ |

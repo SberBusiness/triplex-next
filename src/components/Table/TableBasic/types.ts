@@ -150,7 +150,7 @@ export interface ITableBasicSettingsFooterProps extends React.HTMLAttributes<HTM
 
 /** Свойства компонента ColumnSettings. */
 export interface IColumnSettingsProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "children"> {
-    /** Дочерние элементы. */
+    /** Статическое содержимое или render-функция, получающая текущие колонки из MasterTableContext. */
     children?: React.ReactNode | (({ columns }: { columns: ITableBasicColumn[] }) => React.ReactNode);
 }
 
@@ -165,13 +165,15 @@ export interface IColumnSettingsStaticListItemProps extends IListItemProps {}
 
 /** Свойства компонента ColumnSettingsSortableList. */
 export interface IColumnSettingsSortableListProps extends Omit<IListSortableProps<never>, "items" | "onItemsChange"> {
+    /** Текущий порядок колонок с уникальными fieldKey. Для обновления передавай новый массив. */
     columns: ITableBasicColumn[];
+    /** Новый порядок колонок после перетаскивания, без служебного id. Для применения обнови columns. */
     onColumnsChange: (columns: ITableBasicColumn[]) => void;
 }
 
 /** Расширенный интерфейс ITableBasicColumn для компонента ListSortable. */
 export interface ITableBasicExtendedColumn extends ITableBasicColumn {
-    /** Уникальный идентификатор. */
+    /** Уникальный идентификатор ListSortable, формируемый из fieldKey колонки. */
     id: string;
 }
 

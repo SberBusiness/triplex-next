@@ -71,7 +71,7 @@ html-атрибуты корневого `<div>` — приходит из `Sele
 | `width` | `EDropdownWidth` | `EDropdownWidth.MIN_TARGET` | Умолчание задаёт компонент; потребитель может переопределить |
 | `size` | `EComponentSize` | из контекста | Умолчание — `size` мульти-списка; явный prop имеет приоритет |
 | `opened`, `setOpened`, `targetRef` | — | — | Обязательные, приходят из рендер-функции `children` |
-| `mobileViewProps` | `Omit<IDropdownMobileProps, "opened" \| "setOpened">` | — | Содержимое мобильной версии. Мобильная версия включена **всегда** — см. «Инварианты» |
+| `pullerProps` | `Omit<IPullerProps, "opened" \| "setOpened">` | — | Содержимое мобильной версии. Мобильная версия включена **всегда** — см. «Инварианты» |
 
 Умолчания `focusTrapOptions`: `clickOutsideDeactivates: true`,
 `preventScroll: true`, `returnFocusOnDeactivate` — по признаку «блок открыт мышью».
@@ -118,7 +118,7 @@ MultiselectField.Divider_Color
 - Barrel `src/components/MultiselectField/index.ts` экспортирует только `MultiselectField` и `IMultiselectFieldProps`. Части выпадающего блока публичны **через статические свойства** (`MultiselectField.Dropdown.Header` и т.д.), а не через barrel. Их типы (`IMultiselectFieldDropdownProps`, `IMultiselectFieldDropdownContentProps`, ...) в публичный API не входят — выносить их туда без отдельного решения не нужно.
 - Статические свойства `MultiselectField.Target`, `MultiselectField.Dropdown` и `MultiselectFieldDropdown.Header` / `.Content` / `.Footer` — часть публичного API.
 - `MultiselectField.Target` — это `SelectExtendedFieldTarget` по ссылке (`MultiselectField.Target === SelectExtendedFieldTarget`). Правки в нём затрагивают также `SelectField` и `ChipSelect`.
-- **Мобильная версия выпадающего блока включена всегда.** `MultiselectFieldDropdown` передаёт в `Dropdown` объект `mobileViewProps` даже когда потребитель ничего не передал — для этого есть константа-заглушка `ALWAYS_MOBILE_VIEW_PROPS`: `Dropdown` выбирает мобильную версию по truthiness этого prop'а. Убрать объект — значит на мобильной ширине отрендерить десктопный блок вместо полноэкранного. Наблюдаемое поведение, покрыто unit-тестом «Should render the mobile version on mobile width even without mobileViewProps». Visual-стори этот инвариант не держат: `PlaygroundExample` передаёт `mobileViewProps` сам, поэтому скриншоты не упадут, даже если убрать объект из компонента.
+- **Мобильная версия выпадающего блока включена всегда.** `MultiselectFieldDropdown` передаёт в `Dropdown` объект `pullerProps` даже когда потребитель ничего не передал — для этого есть константа-заглушка `ALWAYS_PULLER_PROPS`: `Dropdown` выбирает мобильную версию по truthiness этого prop'а. Убрать объект — значит на мобильной ширине отрендерить десктопный блок вместо шторки `Puller`. Наблюдаемое поведение, покрыто unit-тестом «Should render the mobile version on mobile width even without pullerProps». Visual-стори этот инвариант не держат: `PlaygroundExample` передаёт `pullerProps` сам, поэтому скриншоты не упадут, даже если убрать объект из компонента.
 - Признак «открыт мышью» живёт в `mouseUsedRef` в контексте: `MultiselectField` ставит его в `true` на `mousedown`, `MultiselectFieldDropdown` сбрасывает в `false`, когда блок закрылся. Он не state — переключение не должно вызывать перерисовку.
 - `size` из props раздаётся **только через контекст** и до поля выбора не доходит. Потребитель передаёт размер в `MultiselectField.Target` сам. Не «чинить» это без согласования: у поля и у выпадающего блока размеры могут различаться намеренно (в примерах фильтр внутри `Header` — размера SM при MD-поле).
 - `Header` / `Content` / `Footer` объявлены как `React.FC` и `ref` **не пробрасывают** — в отличие от `MultiselectField` и `MultiselectField.Dropdown`. Перевод их на `forwardRef` обратно совместим по props, но меняет тип компонента, поэтому делается отдельной задачей, а не попутно.
@@ -133,9 +133,9 @@ MultiselectField.Divider_Color
 - Пока выпадающий блок открыт, фокус заперт внутри него (`FocusTrap` из `focus-trap-react`). Содержимое обёрнуто в `<div role="presentation">` — обёртка нужна `FocusTrap` как единственный контейнер и не должна попадать в дерево доступности.
 - `clickOutsideDeactivates: true` — нажатие вне блока снимает перехват фокуса, после чего блок закрывает уже `SelectExtendedField` по своему `mousedown`-слушателю.
 - Возврат фокуса на поле при закрытии зависит от того, как блок открыли: после клавиатуры фокус возвращается, после мыши — нет (иначе клик вне блока повторно подсвечивал бы поле). Признак сбрасывается на каждое закрытие, поэтому следующее открытие оценивается заново.
-- `aria-haspopup="listbox"` и `aria-expanded` выставляет `MultiselectField.Target` (то есть `SelectExtendedFieldTarget`). Клавиши открытия поля — `Space`, `Enter`, `ArrowDown`, `ArrowUp`.
+- `aria-haspopup="listbox"` и `aria-expanded` выставляет `MultiselectField.Target` (то есть `SelectExtendedFieldTarget`). Клавиши открытия поля — `Space`, `Enter`, `ArrowDown`, `ArrowUp`, только когда фокус на самом поле, а не на кнопке тега.
 - `Escape` закрывает блок из любого места страницы — слушатель `SelectExtendedField` висит на `window`.
-- Роли и клавиатурную навигацию **внутри** блока компонент не задаёт: содержимое произвольное (чекбоксы, дерево, кнопки), связь поля со списком (`aria-controls`, `aria-activedescendant`) и `aria-label` на элементах — забота потребителя.
+- Роли и клавиатурную навигацию **внутри** блока компонент не задаёт: содержимое произвольное (чекбоксы, дерево, кнопки), `aria-controls` и `aria-label` на элементах — забота потребителя. Если в блоке есть `DropdownList`, клавиши поля передаются ему, а `aria-activedescendant` на `MultiselectField.Target` выставляет `SelectExtendedField.Target` из контекста `SelectExtendedField`.
 - Компонент не хардкодит текстовые строки: `fieldLabel`, `placeholder`, подписи кнопок и заголовок мобильной версии передаёт потребитель — библиотека мультиязычная.
 - В состоянии `loading` у `Content` `LoaderScreen` перекрывает содержимое подложкой, но элементы под ней остаются в DOM и в порядке обхода — если содержимое нужно отключить, потребитель делает это сам.
 
@@ -164,7 +164,7 @@ MultiselectField.Divider_Color
 
 **Инфраструктура:**
 
-- `Dropdown` — выпадающее меню через `Portal`, позиционирование и полноэкранная мобильная версия.
+- `Dropdown` — выпадающее меню через `Portal`, позиционирование и мобильная версия в нижней шторке `Puller`.
 - `LoaderScreen` — лоадер поверх содержимого при `Content loading`.
 - `FormField` — визуальный контейнер поля выбора и поля фильтра в `Header`.
 - `Tag` / `TagGroup`, `Checkbox`, `CheckboxTree` — типовое наполнение поля и выпадающего блока в примерах; частью компонента не являются.
@@ -189,7 +189,7 @@ MultiselectField.Divider_Color
 | `Example` | `ProductionExample.tsx` | Приближенный к продуктовому сценарий (в Storybook — «Example: production») |
 | `WithCheckboxTree` | `WithCheckboxTreeExample.tsx` | Дерево категорий вместо плоского списка чекбоксов (в Storybook — «Example: with CheckboxTree») |
 | `VisualTests` | `PlaygroundExample.tsx` | Скриншот-регрессия: поле с выбранным значением и раскрытый блок |
-| `VisualTestsNotFound` | `PlaygroundExample.tsx` | Скриншот-регрессия: пустой результат фильтра во всех размерах; на мобильной ширине — полноэкранная версия |
+| `VisualTestsNotFound` | `PlaygroundExample.tsx` | Скриншот-регрессия: пустой результат фильтра во всех размерах; на мобильной ширине — шторка `Puller` |
 
 ---
 
@@ -199,3 +199,6 @@ MultiselectField.Divider_Color
 |---|---|
 | 2026-09-03 | Создан документ AI-ready для `MultiselectField` (TRI-61). |
 | 2026-09-03 | AI-рефакторинг (TRI-61): JSDoc на props, контексте и всех частях выпадающего блока; значение контекста обёрнуто в `useMemo`, обработчик `onMouseDown` — в `useCallback` (выигрыша в текущей связке нет: части приходят из рендер-функции `children` и пересоздаются каждый рендер независимо от контекста, — это страховка на случай `React.memo` у потребителя); объект-заглушка `mobileViewProps` вынесен в константу, чтобы инвариант «мобильная версия включена всегда» читался из самого выражения; unit-тесты разбиты по субкомпонентам и расширены с 1 до 45 кейсов. Публичный API и наблюдаемое поведение не изменены. |
+| 2026-10-21 | **Breaking** (TRIPLEX-961): prop `mobileViewProps`, унаследованный от `Dropdown`, переименован в `pullerProps`. |
+| 2026-10-29 | TRIPLEX-1028: клик и Enter / Space на кнопках тегов и других фокусируемых элементах внутри `MultiselectField.Target` больше не переключают выпадающий блок, `stopPropagation` в `onKeyDown` тегов для этого не нужен. Клавиши открытия — см. «Accessibility». `onClear` у `MultiselectField.Target` получает событие клика. |
+| 2026-11-05 | TRIPLEX-1039: `MultiselectField.Target` выставляет `aria-activedescendant` из `DropdownListContext`, а клавиши поля передаются `DropdownList` в блоке, если он там есть (через `SelectExtendedField`). |

@@ -42,7 +42,7 @@ const meta = {
 - Значение — целиком объект опции (**ISelectFieldOption**), а не её id. С опциями списка оно сопоставляется по полю **id**.
 - Заголовок поля задаётся через **targetProps.fieldLabel**: собственного prop'а **fieldLabel** у компонента нет, **targetProps** уходит целиком в **SelectExtendedField.Target**.
 - Ширина выпадающего блока всегда равна ширине поля (**EDropdownWidth.TARGET**). Остальные настройки блока — через **dropdownProps**.
-- В мобильном режиме выпадающий блок раскрывается на весь экран, его заголовок задаёт **mobileTitle**.
+- В мобильном режиме выпадающий блок открывается в нижней шторке **Puller**, её заголовок задаёт **mobileTitle**.
 - Список закрывается по Escape, по нажатию мышью вне поля и по Tab.
 - Компонент связывает поле со списком сам: **role="combobox"**, **aria-controls** и **aria-activedescendant** выставляются автоматически. Доступное имя задаёт потребитель — через **targetProps.fieldLabel** либо **aria-labelledby**.
                 `,
@@ -157,7 +157,7 @@ export const Sizes: StoryObj<typeof SelectField> = {
         controls: { disable: true },
         docs: {
             description: {
-                story: "Размеры SM / MD / LG. Размер задаётся один раз и применяется и к полю, и к выпадающему блоку.",
+                story: "Размеры SM / MD / LG. Для поля LG выпадающий блок использует MD; для SM и MD размеры поля и списка совпадают.",
             },
             source: {
                 code: SizesSource,
@@ -236,7 +236,7 @@ export const Example: StoryObj<typeof SelectField> = {
 };
 
 export const VisualTests: StoryObj<typeof SelectField> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

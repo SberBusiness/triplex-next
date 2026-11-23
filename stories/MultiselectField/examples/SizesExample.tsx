@@ -113,11 +113,6 @@ const SizeItem = ({ size }: ISizeItemProps) => {
         const handleTagFocus = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagBlur = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagClick = (event: React.MouseEvent<HTMLSpanElement>) => event.stopPropagation();
-        const handleTagKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
-            if (event.code === "Enter" || event.code === "Space") {
-                event.stopPropagation();
-            }
-        };
 
         if (!selectedOptions.length) return null;
 
@@ -131,7 +126,6 @@ const SizeItem = ({ size }: ISizeItemProps) => {
                         onFocus={handleTagFocus}
                         onBlur={handleTagBlur}
                         onClick={handleTagClick}
-                        onKeyDown={handleTagKeyDown}
                         onRemove={() => handleToggle(opt, false)}
                     >
                         {opt.label}

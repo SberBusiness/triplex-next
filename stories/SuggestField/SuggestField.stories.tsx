@@ -106,6 +106,10 @@ const PLAYGROUND_ARG_TYPES: ArgTypesType<PlaygroundArgs> = {
         control: "object",
         table: { category: "Props" },
     },
+    dropdownProps: {
+        control: "object",
+        table: { category: "Props" },
+    },
     // Settings
     withPrefix: {
         description: "С префиксом.",
@@ -254,7 +258,7 @@ export const Async: StoryObj<typeof SuggestField> = {
 };
 
 export const VisualTests: StoryObj<typeof SuggestField> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

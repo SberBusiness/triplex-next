@@ -3,11 +3,6 @@ import {
     Button,
     Checkbox,
     CheckboxYGroup,
-    DropdownMobileBody,
-    DropdownMobileClose,
-    DropdownMobileFooter,
-    DropdownMobileHeader,
-    DropdownMobileInput,
     EButtonTheme,
     EComponentSize,
     EFontType,
@@ -22,6 +17,11 @@ import {
     HelpBox,
     Link,
     MultiselectField,
+    PullerBody,
+    PullerClose,
+    PullerFooter,
+    PullerHeader,
+    PullerInput,
     Tag,
     TagGroup,
     Text,
@@ -116,11 +116,6 @@ const ProductionMultiselect = () => {
         const handleTagFocus = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagBlur = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagClick = (event: React.MouseEvent<HTMLSpanElement>) => event.stopPropagation();
-        const handleTagKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
-            if (event.code === "Enter" || event.code === "Space") {
-                event.stopPropagation();
-            }
-        };
 
         if (!selectedOptions.length) return null;
 
@@ -134,7 +129,6 @@ const ProductionMultiselect = () => {
                         onFocus={handleTagFocus}
                         onBlur={handleTagBlur}
                         onClick={handleTagClick}
-                        onKeyDown={handleTagKeyDown}
                         onRemove={() => handleToggle(opt, false)}
                     >
                         {opt.label}
@@ -167,28 +161,26 @@ const ProductionMultiselect = () => {
                     targetRef={dropdownTargetRef}
                     ref={dropdownRef}
                     focusTrapProps={{ focusTrapOptions: { initialFocus: false } }}
-                    mobileViewProps={{
+                    pullerProps={{
                         children: (
                             <>
-                                <DropdownMobileHeader
-                                    controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}
-                                >
-                                    <DropdownMobileInput
+                                <PullerHeader controlButtons={<PullerClose onClick={() => setOpened(false)} />}>
+                                    <PullerInput
                                         autoFocus={true}
                                         placeholder="Type to proceed"
                                         value={filter}
                                         onChange={(event) => setFilter(event.target.value)}
                                     />
-                                </DropdownMobileHeader>
-                                <DropdownMobileBody>
+                                </PullerHeader>
+                                <PullerBody>
                                     {renderCheckboxList()}
                                     {!!filter.trim().length && !visibleOptions.length && (
                                         <Text size={ETextSize.B3} className="not-found">
                                             Nothing was found.
                                         </Text>
                                     )}
-                                </DropdownMobileBody>
-                                <DropdownMobileFooter>
+                                </PullerBody>
+                                <PullerFooter>
                                     <Button
                                         theme={EButtonTheme.SECONDARY}
                                         size={EComponentSize.MD}
@@ -199,7 +191,7 @@ const ProductionMultiselect = () => {
                                     <Button theme={EButtonTheme.LINK} size={EComponentSize.MD} onClick={handleClearAll}>
                                         Button link text
                                     </Button>
-                                </DropdownMobileFooter>
+                                </PullerFooter>
                             </>
                         ),
                     }}

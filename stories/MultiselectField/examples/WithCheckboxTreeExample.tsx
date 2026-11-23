@@ -124,11 +124,6 @@ export const WithCheckboxTreeExample = () => {
         const handleTagFocus = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagBlur = (event: React.FocusEvent<HTMLSpanElement>) => event.stopPropagation();
         const handleTagClick = (event: React.MouseEvent<HTMLSpanElement>) => event.stopPropagation();
-        const handleTagKeyDown = (event: React.KeyboardEvent<HTMLSpanElement>) => {
-            if (event.code === "Enter" || event.code === "Space") {
-                event.stopPropagation();
-            }
-        };
 
         if (!selectedLeafNodes.length) return null;
         if (selectedLeafNodes.length > 3) {
@@ -139,7 +134,6 @@ export const WithCheckboxTreeExample = () => {
                     onFocus={handleTagFocus}
                     onBlur={handleTagBlur}
                     onClick={handleTagClick}
-                    onKeyDown={handleTagKeyDown}
                     onRemove={() => setSelectedIds([])}
                 >
                     {`Выбрано ${selectedLeafNodes.length} значения`}
@@ -156,7 +150,6 @@ export const WithCheckboxTreeExample = () => {
                         onFocus={handleTagFocus}
                         onBlur={handleTagBlur}
                         onClick={handleTagClick}
-                        onKeyDown={handleTagKeyDown}
                         onRemove={() => setSelectedIds((prev) => prev.filter((id) => id !== node.id))}
                     >
                         {node.label}

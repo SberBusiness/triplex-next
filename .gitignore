@@ -69,3 +69,9 @@ __screenshots__/__diff__/
 !.claude/README.md
 !.claude/settings.json
 .claude/settings.local.json
+
+# Python deployment receiver tests
+scripts/deploy/__pycache__/
+
+# Release workflow tests
+scripts/release/__pycache__/

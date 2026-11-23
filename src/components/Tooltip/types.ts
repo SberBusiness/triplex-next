@@ -9,7 +9,8 @@ import {
     ETooltipSizeParameter,
     ETooltipStartCoordinates,
     ETooltipTypeName,
-} from "@sberbusiness/triplex-next/components/Tooltip/enums";
+} from "./enums";
+import { IPullerHeaderProps } from "../Puller/PullerHeader";
 
 /** Интерфейс координат X. */
 export interface ITooltipXCoordinates {
@@ -122,13 +123,7 @@ export interface ITooltipXButtonProps extends React.ButtonHTMLAttributes<HTMLBut
 }
 
 /** Свойства компонента TooltipMobileHeader. Кнопку закрытия шапка подставляет сама, из TooltipXButton. */
-export interface ITooltipMobileHeaderProps extends IDropdownMobileHeaderProps {}
-
-/** Свойства компонента DropdownMobileHeader. */
-export interface IDropdownMobileHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-    /** Кнопки действия мобильной версии Dropdown. */
-    controlButtons?: React.ReactNode;
-}
+export interface ITooltipMobileHeaderProps extends IPullerHeaderProps {}
 
 /** Свойства компонента TooltipLink. */
 export interface ITooltipLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {}

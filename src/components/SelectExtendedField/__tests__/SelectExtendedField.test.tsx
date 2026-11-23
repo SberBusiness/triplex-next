@@ -2,7 +2,12 @@ import React from "react";
 import { createPortal } from "react-dom";
 import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { SelectExtendedField, SelectExtendedFieldTarget, SelectExtendedFieldDropdown } from "../index";
+import {
+    ISelectExtendedFieldTargetProvideProps,
+    SelectExtendedField,
+    SelectExtendedFieldTarget,
+    SelectExtendedFieldDropdown,
+} from "../index";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 
 describe("SelectExtendedField", () => {
@@ -406,5 +411,123 @@ describe("SelectExtendedField", () => {
     it("Should expose Target and Dropdown static properties", () => {
         expect(SelectExtendedField.Target).toBe(SelectExtendedFieldTarget);
         expect(SelectExtendedField.Dropdown).toBe(SelectExtendedFieldDropdown);
+    });
+
+    describe("DropdownList keyboard", () => {
+        /** Реальные Target и Dropdown.List; над списком — поле ввода внутри выпадающего блока. */
+        const renderTargetWithSpread = (props: ISelectExtendedFieldTargetProvideProps) => (
+            <SelectExtendedField.Target {...props} fieldLabel="Заголовок поля" data-testid="target" />
+        );
+
+        const renderWithList = (
+            onSelect: (id: string) => void,
+            renderTarget: (props: ISelectExtendedFieldTargetProvideProps) => React.ReactNode = renderTargetWithSpread,
+        ) =>
+            render(
+                <SelectExtendedField renderTarget={renderTarget}>
+                    {({ opened, setOpened, targetRef, dropdownRef }) => (
+                        <SelectExtendedField.Dropdown
+                            opened={opened}
+                            setOpened={setOpened}
+                            targetRef={targetRef}
+                            forwardedRef={dropdownRef}
+                        >
+                            <input aria-label="search" />
+                            <SelectExtendedField.Dropdown.List dropdownOpened={opened}>
+                                {["opt-1", "opt-2"].map((id) => (
+                                    <SelectExtendedField.Dropdown.List.Item
+                                        key={id}
+                                        id={id}
+                                        onSelect={() => {
+                                            onSelect(id);
+                                            setOpened(false);
+                                        }}
+                                    >
+                                        {id}
+                                    </SelectExtendedField.Dropdown.List.Item>
+                                ))}
+                            </SelectExtendedField.Dropdown.List>
+                        </SelectExtendedField.Dropdown>
+                    )}
+                </SelectExtendedField>,
+            );
+
+        // keydown приходит от элемента в фокусе — элемента со значением.
+        const getValueElement = () => screen.getByLabelText("Заголовок поля");
+
+        it.each([
+            ["Space", EVENT_KEY_CODES.SPACE],
+            ["Enter", EVENT_KEY_CODES.ENTER],
+        ])("Should open on %s without selecting an option", (_name, keyCode) => {
+            const onSelect = vi.fn();
+            renderWithList(onSelect);
+
+            fireEvent.keyDown(getValueElement(), { keyCode });
+
+            expect(screen.getByRole("listbox")).toBeInTheDocument();
+            expect(screen.getByTestId("target")).toHaveAttribute("aria-activedescendant", "opt-1");
+            expect(onSelect).not.toHaveBeenCalled();
+        });
+
+        it("Should navigate and select an option with keys pressed in the field", () => {
+            const onSelect = vi.fn();
+            renderWithList(onSelect);
+
+            fireEvent.keyDown(getValueElement(), { keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+            fireEvent.keyDown(getValueElement(), { keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+            expect(screen.getByTestId("target")).toHaveAttribute("aria-activedescendant", "opt-2");
+
+            const prevented = !fireEvent.keyDown(getValueElement(), { keyCode: EVENT_KEY_CODES.ENTER });
+
+            expect(prevented).toBe(true);
+            expect(onSelect).toHaveBeenCalledWith("opt-2");
+            expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+            expect(screen.getByTestId("target")).not.toHaveAttribute("aria-activedescendant");
+        });
+
+        it("Should pass activeDescendant to renderTarget", () => {
+            const renderTarget = vi.fn(renderTargetWithSpread);
+            renderWithList(vi.fn(), renderTarget);
+
+            const getLastActiveDescendant = () =>
+                renderTarget.mock.calls[renderTarget.mock.calls.length - 1][0].activeDescendant;
+
+            expect(getLastActiveDescendant()).toBeUndefined();
+
+            fireEvent.keyDown(getValueElement(), { keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+            expect(getLastActiveDescendant()).toBe("opt-1");
+
+            fireEvent.keyDown(getValueElement(), { keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+            expect(getLastActiveDescendant()).toBe("opt-2");
+        });
+
+        it("Should set aria-activedescendant on Target rendered without props spread", () => {
+            renderWithList(vi.fn(), ({ opened, setOpened }) => (
+                <SelectExtendedField.Target
+                    opened={opened}
+                    setOpened={setOpened}
+                    fieldLabel="Заголовок поля"
+                    data-testid="target"
+                />
+            ));
+
+            fireEvent.keyDown(getValueElement(), { keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+
+            expect(screen.getByTestId("target")).toHaveAttribute("aria-activedescendant", "opt-1");
+        });
+
+        it("Should not pass keys from inside the dropdown to the list", () => {
+            const onSelect = vi.fn();
+            renderWithList(onSelect);
+
+            fireEvent.keyDown(getValueElement(), { keyCode: EVENT_KEY_CODES.SPACE });
+            const input = screen.getByRole("textbox", { name: "search" });
+
+            fireEvent.keyDown(input, { keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+            fireEvent.keyDown(input, { keyCode: EVENT_KEY_CODES.SPACE });
+
+            expect(screen.getByTestId("target")).toHaveAttribute("aria-activedescendant", "opt-1");
+            expect(onSelect).not.toHaveBeenCalled();
+        });
     });
 });

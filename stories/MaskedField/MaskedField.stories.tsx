@@ -229,7 +229,7 @@ export const Production: StoryObj<typeof MaskedField> = {
 };
 
 export const VisualTests: StoryObj<typeof MaskedField> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

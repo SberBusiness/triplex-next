@@ -2,14 +2,14 @@ import React, { useContext, useRef } from "react";
 import { FocusTrap, FocusTrapProps } from "focus-trap-react";
 import { Dropdown, IDropdownProps } from "../Dropdown/Dropdown";
 import { DatePickerExtendedContext } from "./DatePickerExtendedContext";
-import { DropdownMobileHeader, DropdownMobileClose, DropdownMobileBody } from "../Dropdown/mobile";
+import { PullerHeader, PullerClose, PullerBody } from "../Puller";
 import styles from "./styles/DatePickerExtended.module.less";
 
 /** Свойства компонента DatePickerExtendedDropdown. */
 export interface IDatePickerExtendedDropdownProps extends IDropdownProps {
     /** Рендер-функция календаря. */
     renderCalendar: (adaptiveMode: boolean) => React.ReactNode;
-    /** Рендер-функция целевого элемента в заголовке DropdownMobile. */
+    /** Рендер-функция целевого элемента в заголовке Puller. */
     renderHeaderTarget: () => React.ReactNode;
     /** Свойства компонента FocusTrap. Используется npm-пакет focus-trap-react. */
     focusTrapProps?: FocusTrapProps;
@@ -28,10 +28,10 @@ export const DatePickerExtendedDropdown = React.forwardRef<HTMLDivElement, IDate
         /** Отрисовка содержимого в мобильном режиме. */
         const renderMobileContent = () => (
             <>
-                <DropdownMobileHeader controlButtons={<DropdownMobileClose onClick={() => setDropdownOpen(false)} />}>
+                <PullerHeader controlButtons={<PullerClose onClick={() => setDropdownOpen(false)} />}>
                     {renderHeaderTarget()}
-                </DropdownMobileHeader>
-                <DropdownMobileBody>{renderCalendar(true)}</DropdownMobileBody>
+                </PullerHeader>
+                <PullerBody>{renderCalendar(true)}</PullerBody>
             </>
         );
 
@@ -40,7 +40,7 @@ export const DatePickerExtendedDropdown = React.forwardRef<HTMLDivElement, IDate
                 role="dialog"
                 aria-modal="true"
                 targetRef={targetRef}
-                mobileViewProps={{
+                pullerProps={{
                     children: renderMobileContent(),
                     className: styles.datePickerExtendedMobileDropdown,
                 }}

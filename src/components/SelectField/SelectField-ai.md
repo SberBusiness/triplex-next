@@ -45,7 +45,7 @@ version: "1.0"
 
 | Prop | Тип | Описание |
 |---|---|---|
-| `size` | `EComponentSize` | Размер. Задаётся один раз и применяется и к полю выбора, и к выпадающему блоку со списком |
+| `size` | `EComponentSize` | Размер поля выбора; выпадающий блок и список для LG используют MD, для SM и MD — размер поля |
 | `options` | `ISelectFieldOption[]` | Список опций. `ISelectFieldOption` — это `ISelectExtendedFieldDefaultOption`: `id`, `value`, `label` плюс props `DropdownListItem` |
 | `onChange` | `(option: ISelectFieldOption) => void` | Вызывается с **объектом опции** (не с `id` и не с `value`). Список после выбора закрывается сам |
 
@@ -59,8 +59,8 @@ version: "1.0"
 | `loading` | `boolean` | `false` | Вместо каретки — лоадер; список не раскрывается ни мышью, ни с клавиатуры |
 | `targetProps` | `Omit<ISelectExtendedFieldTargetProps, "opened" \| "setOpened" \| "size">` | — | Уходит целиком в `SelectExtendedField.Target`. Здесь задаётся **обязательный** заголовок поля `fieldLabel`, а также `prefix`, `postfix`, `onClear` |
 | `dropdownProps` | `ISelectExtendedFieldDropdownDefaultProps["dropdownProps"]` | — | Настройки `Dropdown` (`direction`, `alignment`, `className`, ...). `width`, `size`, `opened` и `targetRef` компонент задаёт сам |
-| `dropdownListItemClassName` | `string` | — | Класс каждого элемента списка — и десктопного `DropdownListItem`, и мобильного `DropdownMobileListItem` |
-| `mobileTitle` | `React.ReactNode` | — | Заголовок выпадающего блока в мобильном режиме. Отдельный prop: на мобильном список раскрывается на весь экран и `fieldLabel` в нём не виден |
+| `dropdownListItemClassName` | `string` | — | Класс каждого элемента списка — и десктопного `DropdownListItem`, и мобильного `PullerListItem` |
+| `mobileTitle` | `React.ReactNode` | — | Заголовок выпадающего блока в мобильном режиме. Отдельный prop: на мобильном список открывается в нижней шторке `Puller`, и `fieldLabel` в ней не виден |
 | `closeOnTab` | `boolean` | `true` | Компонент передаёт `closeOnTab={true}`, но `{...rest}` идёт после, поэтому переданное потребителем значение выигрывает |
 | `children` | `never` | — | Не принимаются: выпадающий блок компонент рендерит сам |
 
@@ -144,11 +144,13 @@ version: "1.0"
   а `aria-expanded` при этом корректно сообщает, что список свёрнут.
 - `aria-activedescendant` отражает опцию, подсвеченную с клавиатуры. Значение поднимается снизу:
   `DropdownList` кладёт `id` активного элемента в `DropdownListContext`, провайдер которого
-  `SelectField` рендерит вокруг выпадающего блока. Без этого провайдера связка не работает.
+  рендерит `SelectExtendedField`, а `SelectExtendedField.Target` выставляет атрибут сам.
+  Клавиши, нажатые в поле, `SelectExtendedField` передаёт открытому списку.
 - `aria-expanded` и `aria-haspopup="listbox"` выставляет `SelectExtendedFieldTarget`;
   роли `listbox` / `option` и навигацию `ArrowUp` / `ArrowDown` — `DropdownList`.
-- Клавиши открытия списка: `Space`, `Enter`, `ArrowDown`, `ArrowUp`. Закрытие — `Escape`
-  (из любого места страницы), `Tab` (`closeOnTab`) и нажатие мышью вне поля и списка.
+- Клавиши открытия списка: `Space`, `Enter`, `ArrowDown`, `ArrowUp` (только когда фокус на самом
+  поле). Закрытие — `Escape` (из любого места страницы), `Tab` (`closeOnTab`) и нажатие мышью
+  вне поля и списка.
 - В состояниях `loading` и `status={EFormFieldStatus.DISABLED}` поле не реагирует ни на клик,
   ни на клавиатуру.
 - **Доступное имя задаёт потребитель.** Компонент не хардкодит текст (библиотека мультиязычная):
@@ -170,7 +172,7 @@ version: "1.0"
 - `Chip` — `Chip.Select` и `Chip.Sort` решают ту же задачу в виде фильтр-чипа;
   `IChipSelectProps` собирается из `ISelectFieldProps`.
 - `Dropdown` — выпадающий блок, `DropdownList` / `DropdownListItem` и `DropdownListContext`,
-  через который поднимается активная опция для `aria-activedescendant`.
+  через который поднимается активная опция для `aria-activedescendant` (провайдер — в `SelectExtendedField`).
 - `FormField` — семейство строительных блоков поля: `SelectExtendedField.Target` собран на `FormFieldTarget`,
   поэтому лейбл, статусы и слоты приходят в публичный API `SelectField` оттуда.
 - `Pagination` — потребитель внутри библиотеки: `PaginationSelect` оборачивает `SelectField`
@@ -193,6 +195,7 @@ version: "1.0"
 | `Loading` | `Loading.tsx` | Состояние загрузки: лоадер вместо каретки, список не раскрывается |
 | `WithDescription` | `WithDescription.tsx` | Композиция с `FormGroup` и `FormFieldDescription`: описание и текст ошибки под полем |
 | `Example` | `Example.tsx` | Production-like композиция: зависимые списки «Организация» → «Счёт списания» |
+| `VisualTestsOpenedLG` | `VisualTests.tsx` | Открытый список MD у поля LG; раскрывается через `play` |
 | `VisualTests` | `VisualTests.tsx` | Скриншот-регрессия: раскрытый список с подсвеченной опцией (через `play`), длинное значение, загрузка в размере SM, пустое заблокированное поле |
 
 `Playground` исключён из скриншот-тестов, `WithDescription` — тоже: поле в нём повторяет
@@ -206,3 +209,8 @@ version: "1.0"
 |---|---|
 | 2026-09-03 | Создан документ (TRI-75). AI-рефакторинг: удалён мёртвый внутренний `targetRef`, внешний `ref` пробрасывается напрямую и больше не пересоздаётся на каждый рендер; идентификатор списка переведён с `useRef(uniqueId())` на `useState(() => uniqueId())`, чтобы счётчик не крутился на каждом рендере; параметры рендер-функций перестали затенять `props` компонента; импорты приведены к алиасу пакета; JSDoc на всех props и на компоненте. Unit-тесты расширены с 15 до 24 кейсов (`onChange` с аргументом, опции и выбранное значение, `aria-activedescendant` через `DropdownListContext`, стабильность `listId`, ref-target). Stories переведены на modern pattern, `States` разделена на `Statuses` и `Loading`. Публичный API не изменён |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны несимметричные имена (`Chip`); добавлены обратные ссылки (`FormField`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-10-21 | Переход на `Puller` (TRIPLEX-961): мобильный элемент списка — `PullerListItem` (бывший `DropdownMobileListItem`). |
+| 2026-10-29 | TRIPLEX-1028: Enter / Space на кнопке очистки и других фокусируемых элементах внутри поля больше не открывают список, клик по таким элементам, кроме очистки, — не переключает. Клавиши открытия — см. «Accessibility». `targetProps.onClear` получает событие клика. |
+| 2026-11-05 | TRIPLEX-1039: связку поля со списком (`DropdownListContext`, `aria-activedescendant`) ведёт `SelectExtendedField`. |
+| 2026-11-19 | Для размера LG выпадающий блок и список используют MD; размер управляющего элемента остаётся LG. |
+| 2026-11-19 | Добавлен visual-сценарий `VisualTestsOpenedLG`: открытый список MD у поля LG. |

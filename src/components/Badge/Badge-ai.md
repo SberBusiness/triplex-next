@@ -114,7 +114,7 @@ Badge.Background
 - **`BadgeDot` доступен только как `Badge.Dot`.** Barrel (`src/components/Badge/index.ts`)
   экспортирует `Badge` и типы; отдельного именованного экспорта `BadgeDot` нет — так его
   и импортируют внутренние потребители: `Marker`, `Chip`, `DropdownListItem`,
-  `DropdownMobileListItem`, `TabsLineItem`, `TabsExtendedTabButton`.
+  `PullerListItem`, `TabsLineItem`, `TabsExtendedTabButton`.
   Добавление именованного экспорта — расширение публичного API.
 - **`IBadgeDotProps` — не только props точки.** `Marker` строит из него свой публичный
   интерфейс: `IMarkerProps extends IBadgeDotProps` (`src/components/Marker/Marker.tsx:9`).
@@ -150,7 +150,7 @@ Badge.Background
   — либо продублировать смысл текстом рядом. Если точка декоративна и дублирует
   видимый текст — передай `aria-hidden`.
   **Внутри библиотеки этого пока нет:** `Chip`, `DropdownListItem`,
-  `DropdownMobileListItem`, `TabsLineItem` и `TabsExtendedTabButton` рендерят
+  `PullerListItem`, `TabsLineItem` и `TabsExtendedTabButton` рендерят
   `<Badge.Dot size={...} className={styles.notificationIcon} />` — без `aria-hidden`
   и без роли с именем. Точка там означает «есть новые уведомления», и подписью
   рядом этот смысл не дублируется, то есть для скринридера информация теряется.
@@ -166,7 +166,7 @@ Badge.Background
   цветами; наследует `IBadgeDotProps`.
 - `Chip` (`src/components/Chip/Chip.tsx:108`) — рендерит `Badge.Dot` как значок
   уведомления при `showNotificationIcon`.
-- `DropdownListItem`, `DropdownMobileListItem` — то же самое для пунктов выпадающего
+- `DropdownListItem`, `PullerListItem` — то же самое для пунктов выпадающего
   списка.
 - `TabsLineItem` (`src/components/TabsLine/components/TabsLineItem.tsx:78`),
   `TabsExtendedTabButton` (`src/components/TabsExtended/components/TabsExtendedTabButton.tsx:51`)
@@ -215,3 +215,4 @@ Badge.Background
 |---|---|
 | 2026-08-12 | Создан документ. AI-рефакторинг: JSDoc на всех props `IBadgeProps` / `IBadgeDotProps` / `IBadgeContentProps` с указанием размеров в px, в `IBadgeProps` добавлен явный `children` (тип совпадает с унаследованным из `React.HTMLAttributes`), расширены JSDoc компонентов и внутренних обёрток. Unit-тесты расширены с 12 до 45 кейсов: `Badge.test.tsx` вырос с 12 до 23 кейсов, рядом добавлены `BadgeDot.test.tsx` (7), `BadgeContent.test.tsx` (9) и `BadgeAffixes.test.tsx` (6) — покрыты логика снятия отступов контента, нерендеринг частей с falsy-значением, порядок частей разметки, проброс `...rest` и `ref`. Публичный API, DOM-разметка и визуальное поведение не изменены. |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`DropdownListItem`, `DropdownMobileListItem`, `TabsLineItem`, `TabsExtendedTabButton`); из `related` убраны несимметричные имена (`Text`, `Caption`) и потребитель `Chip` — он рендерит `Badge.Dot`, ссылка стоит с его стороны. Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-10-21 | Переход на `Puller` (TRIPLEX-961): `DropdownMobileListItem` переименован в `PullerListItem`. |

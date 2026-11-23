@@ -6,6 +6,7 @@ import { IChipSuggestProps } from "@sberbusiness/triplex-next/components/Chip/Ch
 import { EChipType } from "@sberbusiness/triplex-next/components/Chip/enums";
 import { ISuggestOption } from "@sberbusiness/triplex-next/components/Suggest/types";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 
 const TARGET_TEST_ID = "chip-suggest";
 
@@ -151,6 +152,26 @@ describe("ChipSuggest", () => {
             options.forEach(({ label }) => expect(screen.getByText(label)).toBeInTheDocument());
             // label используется и на target-элементе, и лейблом поля фильтрации в дропдауне.
             expect(screen.getAllByText("Выберите опцию")).toHaveLength(2);
+        });
+
+        test("navigates options and selects with Enter from the filter input", () => {
+            const onSelect = vi.fn();
+            renderChipSuggest({ onSelect, dropdownProps: { focusTrapProps } });
+
+            fireEvent.click(getTarget());
+            const input = screen.getByRole("textbox");
+            const listOptions = screen.getAllByRole("option");
+
+            expect(input).toHaveAttribute("aria-activedescendant", listOptions[0].id);
+
+            fireEvent.keyDown(input, { keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+            expect(input).toHaveAttribute("aria-activedescendant", listOptions[1].id);
+
+            fireEvent.keyDown(input, { keyCode: EVENT_KEY_CODES.SPACE });
+            expect(onSelect).not.toHaveBeenCalled();
+
+            fireEvent.keyDown(input, { keyCode: EVENT_KEY_CODES.ENTER });
+            expect(onSelect).toHaveBeenCalledWith(options[1]);
         });
     });
 });

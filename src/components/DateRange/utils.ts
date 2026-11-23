@@ -1,19 +1,31 @@
 import moment from "moment";
-import { dateFormatYYYYMMDD } from "../../consts/DateConst";
-import { EDateRangeShiftUnit } from "./enums";
 import { TDateRangeValue } from "./types";
-
-/** Сдвигает дату в формате YYYYMMDD на указанную величину. */
-const shiftDate = (date: string, amount: number, unit: EDateRangeShiftUnit): string =>
-    moment(date, dateFormatYYYYMMDD).add(amount, unit).format(dateFormatYYYYMMDD);
 
 /**
  * Сдвигает обе границы диапазона дат на указанную величину.
  * Положительная величина сдвигает диапазон вперёд, отрицательная — назад.
- * Обе даты ожидаются непустыми, в формате YYYYMMDD.
+ * Обе даты строго парсятся в формате format. Если хотя бы одна невалидна, возвращает null.
  */
 export const shiftDateRange = (
     [start, end]: TDateRangeValue,
     amount: number,
-    unit: EDateRangeShiftUnit,
-): TDateRangeValue => [shiftDate(start, amount, unit), shiftDate(end, amount, unit)];
+    unit: moment.unitOfTime.DurationConstructor,
+    format: string,
+): TDateRangeValue | null => {
+    const momentStart = moment(start, format, true);
+    const momentEnd = moment(end, format, true);
+
+    if (!momentStart.isValid() || !momentEnd.isValid()) {
+        return null;
+    }
+
+    return [momentStart.add(amount, unit).format(format), momentEnd.add(amount, unit).format(format)];
+};
+
+/**
+ * Проверяет, что дата date позже даты other. Обе даты строго парсятся в формате format,
+ * поэтому порядок не зависит от расположения дня, месяца и года в строке.
+ * Если хотя бы одна дата невалидна, возвращает false.
+ */
+export const isDateAfter = (date: string, other: string, format: string): boolean =>
+    moment(date, format, true).isAfter(moment(other, format, true));

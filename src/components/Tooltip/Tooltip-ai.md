@@ -1,7 +1,7 @@
 ---
 component: Tooltip
 category: Tooltip
-related: [HelpBox, Dropdown, Portal, MobileView, ThemeProvider, ButtonIcon]
+related: [HelpBox, Puller, Portal, MobileView, ThemeProvider, ButtonIcon]
 tokens:
   - Tooltip.Background
   - Tooltip.Color
@@ -21,7 +21,7 @@ version: "1.0"
 
 ## Назначение
 
-Всплывающая подсказка, привязанная к целевому элементу. Рендерится через `Portal` — по умолчанию в `document.body`, либо в контейнер из `renderContainer` — и позиционируется относительно `targetRef`. На мобильной ширине экрана (<768px) вместо всплывающей подсказки открывается полноэкранный оверлей снизу на базе `DropdownMobile`.
+Всплывающая подсказка, привязанная к целевому элементу. Рендерится через `Portal` — по умолчанию в `document.body`, либо в контейнер из `renderContainer` — и позиционируется относительно `targetRef`. На мобильной ширине экрана (<768px) вместо всплывающей подсказки открывается нижняя шторка `Puller`.
 
 Используй когда: нужно пояснить элемент интерфейса коротким текстом, при необходимости со ссылкой на подробное описание.
 Не используй когда:
@@ -101,14 +101,14 @@ Tooltip.Link_Mobile_Color_Active
 Tooltip.Link_Mobile_Shadow_Focus
 ```
 
-Мобильная версия дополнительно наследует токены группы `DropdownMobile`, так как построена на его субкомпонентах.
+Мобильная версия дополнительно наследует токены группы `Puller`, так как построена на его субкомпонентах.
 
 ---
 
 ## Инварианты
 
-- Публичный barrel `src/components/Tooltip/index.ts` реэкспортирует `Tooltip`, `enums` и `types` целиком. Компонент используется внутри `HelpBox`, `SMSField.Tooltip` и косвенно (через типы) в `Dropdown`, поэтому удаление любого экспорта ломает библиотеку изнутри.
-- `IDropdownMobileHeaderProps` объявлен **в `src/components/Tooltip/types.ts`**, но используется `DropdownMobileHeader` из семейства `Dropdown`. Переносить тип нельзя без синхронной правки `Dropdown` (и это breaking change для deep-импортов).
+- Публичный barrel `src/components/Tooltip/index.ts` реэкспортирует `Tooltip`, `enums` и `types` целиком. Компонент используется внутри `HelpBox` и `SMSField.Tooltip`, поэтому удаление любого экспорта ломает библиотеку изнутри.
+- `ITooltipMobileHeaderProps` расширяет `IPullerHeaderProps` из `src/components/Puller/PullerHeader.tsx`: props шапки мобильной версии — это props `PullerHeader`.
 - Файл контекста называется `TootlipContext.ts` — опечатка в имени зафиксирована в публикуемых путях подпакета; переименование ломает deep-импорты потребителей.
 - `Tooltip` — `React.FC` со статическими субкомпонентами (`Tooltip.Target` и т.д.). Набор статических свойств — часть публичного API.
 - Разбор `children` по типу элемента (`child.type === TooltipTarget`) означает, что обёртка субкомпонента в собственный компонент-прокси **не сработает** — узел просто не попадёт ни в один слот. Это осознанное ограничение, на нём построен весь состав.
@@ -128,7 +128,7 @@ Tooltip.Link_Mobile_Shadow_Focus
 - Закрытие также срабатывает по `mousedown` вне подсказки и вне целевого элемента.
 - Открытие по наведению: подсказка закрывается не сразу после ухода курсора, а через 500мс — за это время курсор можно довести до самой подсказки (её нода тоже слушает `mouseenter`/`mouseleave`).
 - Фокус компонент не перехватывает и не возвращает: при открытии фокус остаётся на целевом элементе. Поэтому интерактивное содержимое сложнее `Tooltip.Link` в подсказку класть не стоит.
-- Мобильная версия — оверлей `DropdownMobile`; кнопке закрытия `aria-label` задаёт потребитель через props `Tooltip.XButton`. Кнопка там рендерится всегда, поэтому без `Tooltip.XButton` она остаётся без доступного имени — в адаптивном сценарии `Tooltip.XButton` с `aria-label` стоит передавать, даже если на десктопе крестик не нужен.
+- Мобильная версия — оверлей `Puller`; кнопке закрытия `aria-label` задаёт потребитель через props `Tooltip.XButton`. Кнопка там рендерится всегда, поэтому без `Tooltip.XButton` она остаётся без доступного имени — в адаптивном сценарии `Tooltip.XButton` с `aria-label` стоит передавать, даже если на десктопе крестик не нужен.
 
 ---
 
@@ -147,7 +147,7 @@ Tooltip.Link_Mobile_Shadow_Focus
 - `TooltipLink` — ссылка; защита от reverse tabnabbing через `getSafeRel`.
 - `TooltipXButton` — кнопка закрытия десктопной версии (обёртка над `ButtonIcon`).
 - `TooltipMobileHeader` — шапка мобильной версии; кнопку закрытия подставляет сам, наследуя props у `Tooltip.XButton`.
-- `TooltipMobileCloseButton` — кнопка закрытия мобильной версии (обёртка над `DropdownMobileClose`).
+- `TooltipMobileCloseButton` — кнопка закрытия мобильной версии (обёртка над `PullerClose`).
 
 **Десктопная версия (`components/desktop/`):**
 
@@ -161,7 +161,7 @@ Tooltip.Link_Mobile_Shadow_Focus
 - `utils/Positioning.ts` — чистые функции выбора зоны и расчёта координат.
 - `utils/useTooltipTheme.ts` — класс темы на контейнере портала со счётчиком использования.
 - `Portal`, `MobileView` — инфраструктура рендера.
-- `Dropdown` — мобильная версия подсказки построена на его оверлее (`DropdownMobile`, `DropdownMobileClose`).
+- `Puller` — мобильная версия подсказки построена на нём (`Puller`, `PullerBody`, `PullerHeader`, `PullerClose`).
 - `ThemeProvider` — источник темы: `useTooltipTheme` берёт `scopeClassName` через `useToken` и ставит класс на контейнере портала.
 
 **Потребители внутри библиотеки:**
@@ -200,3 +200,4 @@ Tooltip.Link_Mobile_Shadow_Focus
 | 2026-08-03 | Правки по второму ревью PR #496 (документация и stories, кода не касаются): в «Ограничения» добавлено, что `onKeyDown` на десктопе не доходит до корневого элемента подсказки, а в адаптивном режиме доходит; уточнено, что в адаптивном режиме кнопка закрытия рендерится всегда и без `Tooltip.XButton` остаётся без `aria-label`; в `VisualTests` добавлен блок с `alignTip: end` — раньше это значение enum не было покрыто ни примером, ни тестом. |
 | 2026-08-03 | Правки по третьему ревью PR #496. Исправлено: при смене `toggleType` на лету hover-обработчики синхронизируются и на самой подсказке, а не только на целевом элементе (`setTooltipRef` повторно не вызывается, поэтому раньше на ноде подсказки оставались устаревшие слушатели). Тесты: `Tooltip.Link` в десктопном хелпере вынесен в прямые дети `Tooltip` — раньше слот `elements.link` не исполнялся ни в одном десктопном кейсе; добавлены кейсы на ветку `disableAdaptiveMode`. Публичный API не изменён. |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`DropdownMobile`) и потребитель `SMSField` — `SMSField.Tooltip` рендерит `Tooltip`, ссылка стоит с его стороны. Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-10-21 | **Breaking** (TRIPLEX-961): мобильная версия построена на `Puller` (бывший `DropdownMobile*`). `IDropdownMobileHeaderProps` перенесён из `types.ts` в `Puller/PullerHeader.tsx` как `IPullerHeaderProps` и больше не реэкспортируется из barrel `Tooltip`. |

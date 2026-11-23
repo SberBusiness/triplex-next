@@ -7,12 +7,6 @@ import { ISwipeableAreaProps, ISwipeableAreaRef, SwipeableArea } from "../Swipea
 const LEFT_AREA_WIDTH = 80;
 const RIGHT_AREA_WIDTH = 100;
 
-/** Touch с произвольными координатами. */
-const createTouchAt = (target: HTMLElement, clientX: number, clientY: number): Touch => ({
-    ...createTouch(target, clientX),
-    clientY,
-});
-
 /** Элемент, внутри которого отрисован переданный контент. */
 const getParent = (element: HTMLElement): HTMLElement => {
     const { parentElement } = element;
@@ -55,14 +49,14 @@ describe("SwipeableArea", () => {
     const touchStart = (clientX: number, clientY = 0) => {
         const content = getContent();
 
-        fireEvent.touchStart(content, { touches: createTouchList([createTouchAt(content, clientX, clientY)]) });
+        fireEvent.touchStart(content, { touches: createTouchList([createTouch(content, { clientX, clientY })]) });
     };
 
     /** Перемещение пальца. Первое перемещение определяет направление, последующие двигают контент. */
     const touchMove = (clientX: number, clientY = 0) => {
         const content = getContent();
 
-        fireEvent.touchMove(content, { touches: createTouchList([createTouchAt(content, clientX, clientY)]) });
+        fireEvent.touchMove(content, { touches: createTouchList([createTouch(content, { clientX, clientY })]) });
     };
 
     /** Отпускание пальца. Компонент слушает touchend на документе. */
@@ -180,9 +174,9 @@ describe("SwipeableArea", () => {
 
         const content = getContent();
 
-        fireEvent.touchStart(content, { touches: createTouchList([createTouchAt(content, 200, 0)]) });
+        fireEvent.touchStart(content, { touches: createTouchList([createTouch(content, { clientX: 200 })]) });
         fireEvent.touchMove(content, {
-            touches: createTouchList([createTouchAt(content, 150, 0), createTouchAt(content, 100, 0)]),
+            touches: createTouchList([createTouch(content, { clientX: 150 }), createTouch(content, { clientX: 100 })]),
         });
 
         expect(getContent().style.transform).toBe("translateX(0px)");
@@ -219,7 +213,7 @@ describe("SwipeableArea", () => {
         swipe(200, 150);
 
         fireEvent.touchStart(document.body, {
-            touches: createTouchList([createTouchAt(document.body, 0, 0)]),
+            touches: createTouchList([createTouch(document.body)]),
         });
 
         expect(getContent().style.transform).toBe("translateX(0px)");

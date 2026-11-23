@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from "react";
 import {
     MultiselectField,
-    DropdownMobileHeader,
-    DropdownMobileInput,
-    DropdownMobileClose,
-    DropdownMobileBody,
-    DropdownMobileFooter,
+    PullerHeader,
+    PullerInput,
+    PullerClose,
+    PullerBody,
+    PullerFooter,
     Button,
     EButtonTheme,
     EComponentSize,
@@ -109,19 +109,19 @@ function createMultiselectFieldStoriesLogic(args: IChipMultiselectProps) {
             focusTrapProps={{
                 focusTrapOptions: { initialFocus: false },
             }}
-            mobileViewProps={{
+            pullerProps={{
                 children: (
                     <>
-                        <DropdownMobileHeader controlButtons={<DropdownMobileClose onClick={() => setOpened(false)} />}>
-                            <DropdownMobileInput
+                        <PullerHeader controlButtons={<PullerClose onClick={() => setOpened(false)} />}>
+                            <PullerInput
                                 autoFocus={true}
                                 placeholder="Type to proceed"
                                 value={filter}
                                 onChange={handleFilterChange}
                             />
-                        </DropdownMobileHeader>
-                        <DropdownMobileBody>{renderDropdownContent()}</DropdownMobileBody>
-                        <DropdownMobileFooter>
+                        </PullerHeader>
+                        <PullerBody>{renderDropdownContent()}</PullerBody>
+                        <PullerFooter>
                             <Button
                                 theme={EButtonTheme.GENERAL}
                                 size={EComponentSize.SM}
@@ -132,7 +132,7 @@ function createMultiselectFieldStoriesLogic(args: IChipMultiselectProps) {
                             <Button theme={EButtonTheme.LINK} size={EComponentSize.SM} onClick={handleClickClearFilter}>
                                 Button link text
                             </Button>
-                        </DropdownMobileFooter>
+                        </PullerFooter>
                     </>
                 ),
             }}

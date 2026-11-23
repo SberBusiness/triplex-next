@@ -89,7 +89,7 @@ same set.
 
 ## Tech stack
 
-React 18 + TypeScript strict + LESS Modules + Vite + Storybook 9
+React 18 + TypeScript strict + LESS Modules + Vite + Storybook 10
 
 ## Key constraints
 

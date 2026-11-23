@@ -262,10 +262,10 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ColumnSettingsSortableList | ✅ | ✅ |
 | ColumnSettingsSortableListItem | ✅ | ✅ |
 | ConfirmClose | ✅ | ✅ |
-| DropdownDesktop | ⬜ | ◐ |
+| DropdownDesktop | ✅ | ✅ |
 | DropdownList | ✅ | ✅ |
 | DropdownListItem | ✅ | ✅ |
-| FormFieldClear | ⬜ | ◐ |
+| FormFieldClear | ✅ | ✅ |
 | FormFieldCounter | ⬜ | ◐ |
 | FormFieldDescription | ⬜ | ◐ |
 | FormFieldInput | ⬜ | ◐ |
@@ -336,6 +336,9 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | TooltipTarget | ⬜ | ◐ |
 | TooltipXButton | ⬜ | ◐ |
 | UploadZoneInput | ⬜ | ◐ |
+
+Задачи по атомам: DropdownDesktop (TRI-189),
+FormFieldClear (TRI-196).
 
 ### Фаза 2: MCP-сервер для потребителей (в разработке)
 Цель: AI-агенты, использующие дизайн-систему в своих проектах, смогут получать

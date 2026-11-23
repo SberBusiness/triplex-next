@@ -1,7 +1,7 @@
 ---
 component: Dropdown
 category: Dropdown
-related: [DropdownList, ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, Puller, LoaderSmall]
+related: [DropdownDesktop, DropdownList, ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, Puller, LoaderSmall]
 tokens:
   - Dropdown.Background
   - Dropdown.Shadow
@@ -160,7 +160,7 @@ DropdownList.Background_Selected
 
 **Десктоп (`src/components/Dropdown/desktop/`):**
 
-- `DropdownDesktop` — десктопное меню: позиционирование, блокировка скролла страницы. `Dropdown` рендерит его напрямую или как fallback `MobileView`.
+- [DropdownDesktop](DropdownDesktop-ai.md) — десктопный контейнер с позиционированием и блокировкой прокрутки страницы. `Dropdown` рендерит его напрямую или как fallback `MobileView`.
 - [DropdownList](DropdownList-ai.md) — контейнер списка с клавиатурной навигацией и `role="listbox"`.
 - [DropdownListItem](DropdownListItem-ai.md) — элемент списка с `role="option"` и выбором мышью или клавиатурой. Доступен как `DropdownList.Item`.
 

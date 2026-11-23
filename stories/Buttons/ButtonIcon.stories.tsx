@@ -151,7 +151,7 @@ export const States: Story = {
 };
 
 export const VisualTestsSquircle: Story = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsExample,
     parameters: {
         controls: { disable: true },
@@ -171,7 +171,7 @@ export const VisualTestsSquircle: Story = {
 };
 
 export const VisualTestsCircle: Story = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsExample,
     parameters: {
         controls: { disable: true },

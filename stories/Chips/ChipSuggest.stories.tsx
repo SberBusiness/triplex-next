@@ -185,7 +185,7 @@ export const WithNotificationIcon: Story = {
 };
 
 export const VisualTests: Story = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

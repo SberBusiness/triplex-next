@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { EComponentSize } from "../../enums/EComponentSize";
 import clsx from "clsx";
 import { isEqual, uniqueId } from "lodash-es";
 import { SortStrokeSrvIcon24 } from "@sberbusiness/icons-next";
@@ -76,7 +77,7 @@ export const ChipSort = React.forwardRef<HTMLDivElement, IChipSortProps>(
         const renderDropdown = (props: ISelectExtendedFieldDropdownProvideProps) => (
             <SelectExtendedFieldDropdownDefault
                 {...props}
-                size={size}
+                size={size === EComponentSize.LG ? EComponentSize.MD : size}
                 mobileTitle={label}
                 onChange={onChange}
                 options={options}

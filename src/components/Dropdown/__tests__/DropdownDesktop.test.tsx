@@ -1,9 +1,10 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { act, render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { DropdownDesktop } from "../desktop/DropdownDesktop";
 import { EDropdownAlignment, EDropdownDirection, EDropdownWidth } from "../desktop/enums";
 import { EComponentSize } from "../../../enums/EComponentSize";
+import { resetResizeObservers, resizeElement } from "../../../../test-utils/resizeObserver";
 
 const VIEWPORT_WIDTH = 1000;
 const VIEWPORT_HEIGHT = 800;
@@ -50,6 +51,8 @@ describe("DropdownDesktop", () => {
     });
 
     afterEach(() => {
+        resetResizeObservers();
+        vi.useRealTimers();
         vi.restoreAllMocks();
     });
 
@@ -86,6 +89,18 @@ describe("DropdownDesktop", () => {
 
         expect(ref.current).toBeInstanceOf(HTMLDivElement);
         expect(ref.current).toBe(getDropdown());
+    });
+
+    it("passes the root element to a callback ref and clears it on close", () => {
+        const dropdownRef = vi.fn<(element: HTMLDivElement | null) => void>();
+        const { rerender } = render(<DropdownWithTarget dropdownRef={dropdownRef} />);
+
+        expect(dropdownRef).toHaveBeenLastCalledWith(getDropdown());
+        expect(dropdownRef.mock.lastCall?.[0]).toBeInstanceOf(HTMLDivElement);
+
+        rerender(<DropdownWithTarget opened={false} dropdownRef={dropdownRef} />);
+
+        expect(dropdownRef).toHaveBeenLastCalledWith(null);
     });
 
     it("passes html attributes to the root element", () => {
@@ -164,6 +179,22 @@ describe("DropdownDesktop", () => {
             expect(getDropdown()).toHaveStyle("left: 200px");
         });
 
+        it("uses the final target position after sibling fields resize in the same frame", () => {
+            vi.useFakeTimers();
+            render(<DropdownWithTarget data-testid="menu" />);
+            act(() => {
+                vi.runOnlyPendingTimers();
+            });
+
+            act(() => {
+                resizeElement(screen.getByTestId("menu"), DROPDOWN_RECT.width);
+                targetRect = { ...TARGET_RECT, left: 184, right: 284 };
+                vi.advanceTimersToNextFrame();
+            });
+
+            expect(getDropdown()).toHaveStyle("left: 184px");
+        });
+
         it("aligns to the right edge of the target with alignment RIGHT", () => {
             render(<DropdownWithTarget alignment={EDropdownAlignment.RIGHT} />);
 
@@ -240,6 +271,26 @@ describe("DropdownDesktop", () => {
             const prevented = !fireEvent.keyDown(screen.getByText("Dropdown content"), { code: "ArrowDown" });
 
             expect(prevented).toBe(false);
+        });
+
+        it("keeps preventing scrolling keys while another dropdown stays opened", () => {
+            const { rerender } = render(
+                <>
+                    <DropdownWithTarget />
+                    <DropdownWithTarget />
+                </>,
+            );
+
+            rerender(
+                <>
+                    <DropdownWithTarget opened={false} />
+                    <DropdownWithTarget />
+                </>,
+            );
+
+            const prevented = !fireEvent.keyDown(document.body, { code: "PageDown" });
+
+            expect(prevented).toBe(true);
         });
 
         it("stops preventing wheel events after closing", () => {

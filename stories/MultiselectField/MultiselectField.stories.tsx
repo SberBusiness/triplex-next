@@ -306,7 +306,7 @@ export const WithCheckboxTree: StoryObj<typeof WithCheckboxTreeExample> = {
 
 export const VisualTests: StoryObj<typeof PlaygroundExample> = {
     name: "Visual tests",
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {
@@ -324,7 +324,7 @@ export const VisualTests: StoryObj<typeof PlaygroundExample> = {
 
 export const VisualTestsNotFound: StoryObj<typeof PlaygroundExample> = {
     name: "Visual tests: Not Found",
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         controls: { disable: true },
         docs: {

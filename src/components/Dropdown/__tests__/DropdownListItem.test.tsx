@@ -69,7 +69,7 @@ describe("DropdownListItem", () => {
         expect(ref.current).toBe(screen.getByRole("option"));
     });
 
-    it("calls onSelect and onClick on click", () => {
+    it("calls onSelect without arguments before onClick", () => {
         const onSelect = vi.fn();
         const onClick = vi.fn();
 
@@ -82,8 +82,10 @@ describe("DropdownListItem", () => {
         fireEvent.click(screen.getByRole("option"));
 
         expect(onSelect).toHaveBeenCalledTimes(1);
+        expect(onSelect).toHaveBeenCalledWith();
         expect(onClick).toHaveBeenCalledTimes(1);
         expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click" }));
+        expect(onSelect.mock.invocationCallOrder[0]).toBeLessThan(onClick.mock.invocationCallOrder[0]);
     });
 
     it("does not handle keyboard on its own", () => {

@@ -156,7 +156,7 @@ export const DynamicIndicators: StoryObj<typeof Carousel> = {
 };
 
 export const VisualTests: StoryObj<typeof Carousel> = {
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     render: VisualTestsRender,
     parameters: {
         controls: { disable: true },

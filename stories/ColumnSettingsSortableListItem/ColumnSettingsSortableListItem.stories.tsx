@@ -6,7 +6,7 @@ import { VisualTestsRender } from "./examples";
 const meta = {
     title: "Components/ColumnSettingsSortableListItem",
     component: ColumnSettings.SortableList.Item,
-    tags: ["!autodocs", "!dev"],
+    tags: ["!autodocs", "visual-test"],
     parameters: {
         layout: "padded",
         controls: { disable: true },

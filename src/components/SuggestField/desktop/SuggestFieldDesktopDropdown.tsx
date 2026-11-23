@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { EComponentSize } from "../../../enums/EComponentSize";
 import { ISuggestFieldOption } from "../types";
 import { ISuggestFieldDesktopDropdownProps } from "./types";
 import { Portal } from "../../Portal/Portal";
@@ -61,7 +62,7 @@ export const SuggestFieldDesktopDropdown = <T extends ISuggestFieldOption = ISug
     return (
         <Portal container={document.body}>
             <DropdownDesktop
-                size={size}
+                size={size === EComponentSize.LG ? EComponentSize.MD : size}
                 targetRef={targetRef}
                 data-test-id={dataTestId && `${dataTestId}${DataTestId.Suggest.dropdown}`}
                 opened={opened}
@@ -69,7 +70,13 @@ export const SuggestFieldDesktopDropdown = <T extends ISuggestFieldOption = ISug
                 {...restProps}
                 onMouseDown={handleMouseDown}
             >
-                <List id={listId} size={size} dropdownOpened={opened} loading={listLoading} onScroll={handleListScroll}>
+                <List
+                    id={listId}
+                    size={size === EComponentSize.LG ? EComponentSize.MD : size}
+                    dropdownOpened={opened}
+                    loading={listLoading}
+                    onScroll={handleListScroll}
+                >
                     {options.map((option) => (
                         <ListItem
                             key={option.id}

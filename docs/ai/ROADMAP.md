@@ -242,6 +242,8 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 родителя. Отдельные stories для каждой части не являются условием завершения.
 В разделе Stories AI.md атома можно ссылаться на соответствующие примеры родителя.
 
+Задачи для списка опций — DropdownList (TRI-187) и DropdownListItem (TRI-186).
+
 | Компонент | AI.md | AI refactoring |
 |---|---|---|
 | AlertProcessSpoiler | ✅ | ✅ |
@@ -263,10 +265,10 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | ColumnSettingsSortableList | ✅ | ✅ |
 | ColumnSettingsSortableListItem | ✅ | ✅ |
 | ConfirmClose | ✅ | ✅ |
-| DropdownDesktop | ⬜ | ◐ |
-| DropdownList | ⬜ | ◐ |
-| DropdownListItem | ⬜ | ◐ |
-| FormFieldClear | ⬜ | ◐ |
+| DropdownDesktop | ✅ | ✅ |
+| DropdownList | ✅ | ✅ |
+| DropdownListItem | ✅ | ✅ |
+| FormFieldClear | ✅ | ✅ |
 | FormFieldCounter | ✅ | ✅ |
 | FormFieldDescription | ✅ | ✅ |
 | FormFieldInput | ⬜ | ◐ |
@@ -337,6 +339,9 @@ Agent-native требует AI-Ready как предусловие: MCP-серв
 | TooltipTarget | ⬜ | ◐ |
 | TooltipXButton | ⬜ | ◐ |
 | UploadZoneInput | ⬜ | ◐ |
+
+Задачи по атомам: DropdownDesktop (TRI-189),
+FormFieldClear (TRI-196).
 
 ### Фаза 2: MCP-сервер для потребителей (в разработке)
 Цель: AI-агенты, использующие дизайн-систему в своих проектах, смогут получать

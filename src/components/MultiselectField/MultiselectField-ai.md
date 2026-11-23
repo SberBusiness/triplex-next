@@ -195,8 +195,6 @@ MultiselectField.Divider_Color
 
 ## История изменений
 
-- 2026-11-20: в Storybook-примерах чекбоксы в dropdown поля LG используют MD; в примерах с CheckboxTreeExtended явно задан MD.
-
 | Дата | Изменение |
 |---|---|
 | 2026-09-03 | Создан документ AI-ready для `MultiselectField` (TRI-61). |
@@ -204,3 +202,4 @@ MultiselectField.Divider_Color
 | 2026-10-21 | **Breaking** (TRIPLEX-961): prop `mobileViewProps`, унаследованный от `Dropdown`, переименован в `pullerProps`. |
 | 2026-10-29 | TRIPLEX-1028: клик и Enter / Space на кнопках тегов и других фокусируемых элементах внутри `MultiselectField.Target` больше не переключают выпадающий блок, `stopPropagation` в `onKeyDown` тегов для этого не нужен. Клавиши открытия — см. «Accessibility». `onClear` у `MultiselectField.Target` получает событие клика. |
 | 2026-11-05 | TRIPLEX-1039: `MultiselectField.Target` выставляет `aria-activedescendant` из `DropdownListContext`, а клавиши поля передаются `DropdownList` в блоке, если он там есть (через `SelectExtendedField`). |
+| 2026-11-20 | TRIPLEX-1023: в Storybook-примерах чекбоксы в dropdown поля LG используют MD; в примерах с CheckboxTreeExtended явно задан MD. |

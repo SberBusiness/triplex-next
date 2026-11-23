@@ -144,6 +144,37 @@ describe("Button", () => {
         expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click" }));
     });
 
+    it("blocks activation of a focused button while loading", async () => {
+        const user = userEvent.setup();
+        const onClick = vi.fn();
+        const onSubmit = vi.fn((event: React.FormEvent) => event.preventDefault());
+        const renderButton = (loading: boolean) => (
+            <form onSubmit={onSubmit}>
+                <Button theme={EButtonTheme.GENERAL} type="submit" loading={loading} onClick={onClick}>
+                    Submit
+                </Button>
+            </form>
+        );
+        const { rerender } = render(renderButton(false));
+        const button = getButton();
+        await user.click(button);
+        expect(button).toHaveFocus();
+        expect(onClick).toHaveBeenCalledTimes(1);
+        expect(onSubmit).toHaveBeenCalledTimes(1);
+
+        rerender(renderButton(true));
+        expect(button).toHaveFocus();
+        await user.keyboard("{Enter}[Space]");
+        button.click();
+        expect(onClick).toHaveBeenCalledTimes(1);
+        expect(onSubmit).toHaveBeenCalledTimes(1);
+
+        rerender(renderButton(false));
+        await user.keyboard("{Enter}");
+        expect(onClick).toHaveBeenCalledTimes(2);
+        expect(onSubmit).toHaveBeenCalledTimes(2);
+    });
+
     it("is disabled and does not call onClick when disabled prop is set", async () => {
         const user = userEvent.setup();
         const onClick = vi.fn();

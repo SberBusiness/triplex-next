@@ -123,6 +123,11 @@ const renderLoadingIcon = (theme: EButtonTheme, size: EComponentSize) => {
     return <LoaderSmall theme={loaderTheme} size={size} />;
 };
 
+const preventLoadingClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+};
+
 /**
  * Кнопка — основной интерактивный элемент для запуска действий.
  * Поддерживает пять тем (EButtonTheme), три размера, состояние загрузки, иконку и блочный режим.
@@ -153,7 +158,14 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
     );
 
     return (
-        <ButtonBase className={classNames} tabIndex={loading ? -1 : undefined} disabled={disabled} {...rest} ref={ref}>
+        <ButtonBase
+            className={classNames}
+            tabIndex={loading ? -1 : undefined}
+            disabled={disabled}
+            {...rest}
+            onClickCapture={loading ? preventLoadingClick : rest.onClickCapture}
+            ref={ref}
+        >
             <span className={styles.content}>
                 {icon}
                 {children}

@@ -6,6 +6,10 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 
 <Heading>Изменения</Heading>
 
+**Button**
+
+- В режиме `loading` заблокирована повторная активация кнопки по Enter и пробелу.
+
 **DropdownDesktop**
 
 - Проведён AI-рефакторинг.
@@ -16,6 +20,14 @@ import { Meta, Title, Heading } from "@storybook/addon-docs/blocks";
 **FormFieldClear**
 
 - Проведён AI-рефакторинг.
+
+**FormFieldCounter / FormFieldDescription**
+
+- Рефакторинг без изменений API. Раскладка описания со счётчиком включается до первой отрисовки, без кратковременного мигания.
+
+**ModalWindow**
+
+- Вертикальная полоса прокрутки в `ModalWindow` теперь отображается только при переполнении содержимого.
 
 **Typography**
 

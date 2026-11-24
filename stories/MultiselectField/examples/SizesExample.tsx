@@ -98,7 +98,7 @@ const SizeItem = ({ size }: ISizeItemProps) => {
                 <Checkbox
                     key={opt.id}
                     id={opt.id}
-                    size={size}
+                    size={size === EComponentSize.LG ? EComponentSize.MD : size}
                     checked={selectedSet.has(opt.id)}
                     onChange={(event) => handleToggle(opt, event.target.checked)}
                 >

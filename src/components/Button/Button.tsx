@@ -130,6 +130,16 @@ const renderLoadingIcon = (theme: EButtonTheme, size: EComponentSize) => {
 export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, ref) => {
     const { children, className, disabled, theme, size = EComponentSize.MD, block, loading, icon, ...rest } = props;
 
+    const handleLoadingClickCapture: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+        // Программный click() нужен, в частности, для закрытия Confirm по Escape.
+        if (event.isTrusted) {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+        rest.onClickCapture?.(event);
+    };
+
     // aria-expanded остаётся в rest и попадает на DOM-элемент, здесь читается для визуального состояния «раскрыто».
     // Тип атрибута — Booleanish: строковое "false" — валидное «закрытое» состояние, поэтому truthy-проверки недостаточно.
     const ariaExpanded = props["aria-expanded"];
@@ -153,7 +163,14 @@ export const Button = React.forwardRef<HTMLButtonElement, TButtonProps>((props, 
     );
 
     return (
-        <ButtonBase className={classNames} tabIndex={loading ? -1 : undefined} disabled={disabled} {...rest} ref={ref}>
+        <ButtonBase
+            className={classNames}
+            tabIndex={loading ? -1 : undefined}
+            disabled={disabled}
+            {...rest}
+            onClickCapture={loading ? handleLoadingClickCapture : rest.onClickCapture}
+            ref={ref}
+        >
             <span className={styles.content}>
                 {icon}
                 {children}

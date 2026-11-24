@@ -1,7 +1,7 @@
 ---
 component: FormField
 category: FormField
-related: [FormFieldClear, FormGroup, TextField, TextareaField, MaskedField, SelectField, SuggestField, DateField]
+related: [FormFieldClear, FormFieldCounter, FormFieldDescription, FormGroup, TextField, TextareaField, MaskedField, SelectField, SuggestField, DateField]
 tokens:
   - FormField.Background_Default
   - FormField.Background_Hover
@@ -134,8 +134,8 @@ FormField.Target_PlaceholderColor_Default
 - `FormFieldTarget` — нередактируемое значение с `placeholder`, используется select-подобными полями.
 - `FormFieldPrefix` / `FormFieldPostfix` — контейнеры слева/справа; их измеренная ширина становится внутренним отступом поля. Общая логика измерения и проброса ref вынесена во внутренний хук `components/useFormFieldAffixWidth.ts` (в barrel не экспортируется).
 - [`FormFieldClear`](FormFieldClear-ai.md) — кнопка очистки в постфиксе. При нажатии мышью сохраняет текущий фокус, очистку выполняет переданный `onClick`.
-- `FormFieldDescription` — описание под полем; провайдер `FormFieldDescriptionContext`.
-- `FormFieldCounter` — счётчик символов внутри описания; сообщает `FormFieldDescription` о своём наличии.
+- [`FormFieldDescription`](FormFieldDescription-ai.md) размещает подсказку под полем и переключает раскладку при регистрации счётчика.
+- [`FormFieldCounter`](FormFieldCounter-ai.md) размещает переданное значение счётчика справа от подсказки.
 - `TextField`, `TextareaField`, `MaskedField`, `SelectField`, `SuggestField`, `DateField` — компоненты уровнем выше, построенные на этом семействе.
 - `FormGroup` — контейнер формы (`div` без собственной логики), объединяющий поле с `HelpBox` / `Alert` / описанием. О `FormField` ничего не знает и на семействе не построен: поле кладут внутрь него.
 
@@ -177,3 +177,4 @@ FormField.Target_PlaceholderColor_Default
 | 2026-09-23 | Исправлено: при смене `status` на `EFormFieldStatus.DISABLED`, пока вложенный элемент ввода в фокусе, `FormField` теперь явно сбрасывает состояние `focused` в `useLayoutEffect`. |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`FormFieldLabel`, `FormFieldInput`, `FormFieldTextarea`, `FormFieldTarget`, `FormFieldMaskedInput`, `FormFieldPrefix`, `FormFieldPostfix`, `FormFieldClear`, `FormFieldDescription`, `FormFieldCounter`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
 | 2026-11-10 | Добавлена ссылка на контракт `FormFieldClear` (TRI-196). |
+| 2026-11-10 | Добавлены ссылки на контракты `FormFieldCounter` и `FormFieldDescription` (TRI-194, TRI-195). |

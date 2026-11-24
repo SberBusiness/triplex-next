@@ -24,9 +24,23 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          # Для pull_request HEAD — тестовый merge, первый родитель — целевая ветка.
+          fetch-depth: 2
           # Иначе токен оседает в .git/config, а ниже выполняется npm ci —
           # lifecycle-скрипты зависимостей смогли бы его прочитать.
           persist-credentials: false
+      - name: Test npm dependency report
+        run: python3 -B -m unittest discover -s scripts/security
+      - name: Report npm dependency changes
+        if: github.event_name == 'pull_request'
+        run: python3 scripts/security/dependency_report.py HEAD^1 HEAD >> "$GITHUB_STEP_SUMMARY"
+      - name: Review vulnerable dependencies
+        if: github.event_name == 'pull_request'
+        uses: actions/dependency-review-action@bbc44d14a204704ccc493733616cd1e93a0321ec # v5.0.1
+        with:
+          fail-on-severity: high
+          fail-on-scopes: runtime, development, unknown
+          license-check: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22

@@ -139,3 +139,4 @@ Typography.{Type}Invert_Color
 | Дата | Изменение |
 |---|---|
 | 2026-07-20 | Создан документ. AI-рефакторинг: decoration-логика вынесена во внутренний хелпер `getTextDecorationClassName` (`utils.ts`), комментарии map-констант и членов enum переведены в JSDoc, unit-тесты расширены (все значения `ETextSize`/`EFontWeightText`/`ELineType`, дефолты). Stories переведены на modern pattern (`examples/Text/`). |
+| 2026-10-07 | TRI-159: обновлены WOFF2 шрифта SB Sans Text (Regular, Semibold). |

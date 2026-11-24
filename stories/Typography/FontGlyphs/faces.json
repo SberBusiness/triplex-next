@@ -1,0 +1,116 @@
+[
+  {
+    "id": "SBSansDisplay-Thin",
+    "family": "SB Sans Display",
+    "style": "Thin",
+    "inLibrary": false
+  },
+  {
+    "id": "SBSansDisplay-Light",
+    "family": "SB Sans Display",
+    "style": "Light",
+    "inLibrary": false
+  },
+  {
+    "id": "SBSansDisplay-Regular",
+    "family": "SB Sans Display",
+    "style": "Regular",
+    "inLibrary": true
+  },
+  {
+    "id": "SBSansDisplay-Medium",
+    "family": "SB Sans Display",
+    "style": "Medium",
+    "inLibrary": true
+  },
+  {
+    "id": "SBSansDisplay-SemiBold",
+    "family": "SB Sans Display",
+    "style": "Semibold",
+    "inLibrary": true
+  },
+  {
+    "id": "SBSansDisplay-Bold",
+    "family": "SB Sans Display",
+    "style": "Bold",
+    "inLibrary": true
+  },
+  {
+    "id": "SBSansDisplay-ExtendedSemiBold",
+    "family": "SB Sans Display",
+    "style": "Extended Semibold",
+    "inLibrary": false
+  },
+  {
+    "id": "SBSansText-Thin",
+    "family": "SB Sans Text",
+    "style": "Thin",
+    "inLibrary": false
+  },
+  {
+    "id": "SBSansText-Light",
+    "family": "SB Sans Text",
+    "style": "Light",
+    "inLibrary": false
+  },
+  {
+    "id": "SBSansText-LightItalic",
+    "family": "SB Sans Text",
+    "style": "Light Italic",
+    "inLibrary": false
+  },
+  {
+    "id": "SBSansText-Regular",
+    "family": "SB Sans Text",
+    "style": "Regular",
+    "inLibrary": true
+  },
+  {
+    "id": "SBSansText-Italic",
+    "family": "SB Sans Text",
+    "style": "Italic",
+    "inLibrary": false
+  },
+  {
+    "id": "SBSansText-Medium",
+    "family": "SB Sans Text",
+    "style": "Medium",
+    "inLibrary": false
+  },
+  {
+    "id": "SBSansText-Semibold",
+    "family": "SB Sans Text",
+    "style": "Semibold",
+    "inLibrary": true
+  },
+  {
+    "id": "SBSansText-SemiBoldItalic",
+    "family": "SB Sans Text",
+    "style": "Semibold Italic",
+    "inLibrary": false
+  },
+  {
+    "id": "SBSansText-Bold",
+    "family": "SB Sans Text",
+    "style": "Bold",
+    "inLibrary": false
+  },
+  {
+    "id": "SBSansText-BoldItalic",
+    "family": "SB Sans Text",
+    "style": "Bold Italic",
+    "inLibrary": false
+  },
+  {
+    "id": "SBSansText-Heavy",
+    "family": "SB Sans Text",
+    "style": "Heavy",
+    "inLibrary": false
+  },
+  {
+    "id": "SBSansTextMono-Regular",
+    "family": "SB Sans Text Mono",
+    "style": "Regular",
+    "inLibrary": true
+  }
+]

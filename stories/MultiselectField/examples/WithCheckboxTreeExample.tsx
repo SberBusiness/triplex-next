@@ -190,7 +190,9 @@ export const WithCheckboxTreeExample = () => {
                             </FormField>
                         </MultiselectField.Dropdown.Header>
                         <MultiselectField.Dropdown.Content>
-                            <CheckboxTreeExtended>{nodes.map(renderNode)}</CheckboxTreeExtended>
+                            <CheckboxTreeExtended size={EComponentSize.MD}>
+                                {nodes.map(renderNode)}
+                            </CheckboxTreeExtended>
                             {!!filter.length && !nodes.some(doesNodeMatchFilter) && (
                                 <Text size={ETextSize.B3}>Nothing was found.</Text>
                             )}

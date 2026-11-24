@@ -1,7 +1,7 @@
 ---
 component: Dropdown
 category: Dropdown
-related: [DropdownList, ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, Puller, LoaderSmall]
+related: [DropdownDesktop, DropdownList, ButtonDropdown, ButtonDropdownExtended, Portal, MobileView, Puller, LoaderSmall]
 tokens:
   - Dropdown.Background
   - Dropdown.Shadow
@@ -160,7 +160,7 @@ DropdownList.Background_Selected
 
 **Десктоп (`src/components/Dropdown/desktop/`):**
 
-- `DropdownDesktop` — десктопное меню: позиционирование, блокировка скролла страницы. `Dropdown` рендерит его напрямую или как fallback `MobileView`.
+- [DropdownDesktop](DropdownDesktop-ai.md) — десктопный контейнер с позиционированием и блокировкой прокрутки страницы. `Dropdown` рендерит его напрямую или как fallback `MobileView`.
 - [DropdownList](DropdownList-ai.md) — контейнер списка с клавиатурной навигацией и `role="listbox"`.
 - [DropdownListItem](DropdownListItem-ai.md) — элемент списка с `role="option"` и выбором мышью или клавиатурой. Доступен как `DropdownList.Item`.
 
@@ -221,3 +221,4 @@ DropdownList.Background_Selected
 | 2026-11-17 | Добавлены ссылки на документацию `DropdownList` (TRI-187) и `DropdownListItem` (TRI-186). |
 | 2026-11-19 | **Breaking:** `DropdownList` переведён на `forwardRef`, prop `listRef` удалён. Ссылка на контейнер передаётся через `ref`. |
 | 2026-11-20 | Объектные ссылки на элементы принимают результат `useRef(null)` с типами React 18 и 19. |
+| 2026-11-21 | Десктопное меню пересчитывает координаты после измерения соседних полей в одном кадре. Исправлено смещение меню в строке с несколькими MultiselectField. |

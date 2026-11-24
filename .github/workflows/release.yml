@@ -188,12 +188,13 @@ jobs:
           # Только HTTP 404 подтверждает отсутствие тега. Ошибка API или
           # неожиданный ответ останавливают дальнейшие этапы выпуска.
           TAG_SHA=""
-          if TAG_RESPONSE=$(gh api --include "repos/${GITHUB_REPOSITORY}/commits/refs/tags/${RELEASE_TAG}" 2>/dev/null); then
-            TAG_SHA=$(printf '%s\n' "$TAG_RESPONSE" | awk 'body {print} /^\r?$/ {body=1}' |
-              jq -er '.sha | select(type == "string" and test("^[0-9a-f]{40}$"))') || {
+          if TAG_RESPONSE=$(gh api --include "repos/${GITHUB_REPOSITORY}/git/ref/tags/${RELEASE_TAG}"); then
+            # Для annotated tag SHA объекта ref отличается от SHA коммита.
+            if ! TAG_SHA=$(gh api "repos/${GITHUB_REPOSITORY}/commits/refs/tags/${RELEASE_TAG}" --jq .sha) ||
+               [[ ! "$TAG_SHA" =~ ^[0-9a-f]{40}$ ]]; then
               echo '❌ Не удалось прочитать SHA существующего тега; дальнейшие этапы остановлены.'; exit 1;
-            }
-          elif [ "$(printf '%s\n' "$TAG_RESPONSE" | awk 'NR==1 && /^HTTP\// {print $2}')" != 404 ]; then
+            fi
+          elif [ "$(printf '%s\n' "$TAG_RESPONSE" | awk 'NR==1 && /^HTTP\// {sub(/\r$/, ""); print $2}')" != 404 ]; then
             echo '❌ Статус тега неизвестен из-за ошибки API; повторите запрос перед продолжением.'; exit 1
           fi
           if [ -z "$TAG_SHA" ] && [ "$REQUIRE_TAG" = true ]; then
@@ -235,7 +236,7 @@ jobs:
             exit 1
           fi
 
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           registry-url: 'https://registry.npmjs.org/'
@@ -525,7 +526,7 @@ jobs:
         run: |
           tar -czf "$RUNNER_TEMP/storybook.tar.gz" -C storybook-static .
           echo "revision=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: storybook--releases__${{ env.RELEASE_TAG }}--${{ steps.storybook.outputs.revision }}
           path: ${{ runner.temp }}/storybook.tar.gz

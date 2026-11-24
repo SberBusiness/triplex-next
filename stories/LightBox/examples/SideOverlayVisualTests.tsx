@@ -7,6 +7,7 @@ import {
     ETitleSize,
     FocusTrapUtils,
     LightBox,
+    MobileView,
     Page,
     Title,
 } from "@sberbusiness/triplex-next";
@@ -31,14 +32,22 @@ export const SideOverlayVisualTests = ({ size }: ISideOverlayVisualTestsProps) =
                     <Page.Header type={EHeaderPageType.FIRST}>
                         <Page.Header.Title>
                             <Page.Header.Title.Content>
-                                <Title
-                                    tag="h1"
-                                    size={ETitleSize.H2}
-                                    tabIndex={-1}
-                                    {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                <MobileView
+                                    fallback={
+                                        <Title
+                                            tag="h1"
+                                            size={ETitleSize.H1}
+                                            tabIndex={-1}
+                                            {...{ [FocusTrapUtils.firstInteractionElementDataAttr]: true }}
+                                        >
+                                            SideOverlay {size.toUpperCase()}
+                                        </Title>
+                                    }
                                 >
-                                    SideOverlay {size.toUpperCase()}
-                                </Title>
+                                    <Title tag="h2" size={ETitleSize.H2}>
+                                        SideOverlay
+                                    </Title>
+                                </MobileView>
                             </Page.Header.Title.Content>
                             <Page.Header.Title.Controls>
                                 <LightBox.SideOverlay.CloseMobile aria-label="Закрыть" onClick={handleClose} />

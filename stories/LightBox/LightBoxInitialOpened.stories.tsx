@@ -219,11 +219,6 @@ export const Default: Story = {
     render: () => <LightBoxInitialOpenedStory />,
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "Базовая конфигурация LightBox с активными контролами и липкими шапкой и футером.",
-            },
-        },
     },
 };
 
@@ -235,25 +230,21 @@ const SIDE_OVERLAY_VISUAL_PARAMETERS = {
 };
 
 export const SideOverlaySMVisualTests: Story = {
-    tags: ["visual-test", "!autodocs"],
     render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.SM} />,
     parameters: SIDE_OVERLAY_VISUAL_PARAMETERS,
 };
 
 export const SideOverlayMDVisualTests: Story = {
-    tags: ["visual-test", "!autodocs"],
     render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.MD} />,
     parameters: SIDE_OVERLAY_VISUAL_PARAMETERS,
 };
 
 export const SideOverlayLGVisualTests: Story = {
-    tags: ["visual-test", "!autodocs"],
     render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.LG} />,
     parameters: SIDE_OVERLAY_VISUAL_PARAMETERS,
 };
 
 export const SideOverlayXLVisualTests: Story = {
-    tags: ["visual-test", "!autodocs"],
     render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.XL} />,
     parameters: SIDE_OVERLAY_VISUAL_PARAMETERS,
 };

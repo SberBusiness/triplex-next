@@ -76,7 +76,7 @@ same set.
 4. Read the component source code, stories, and tests
 5. Make changes: TSX → LESS → story → tests
 6. Update release notes (`stories/release-notes/v1/<version>.mdx`): a public API or observable behaviour change gets a substantive entry, a refactoring with nothing new for the consumer gets a single line
-7. If `{ComponentName}-ai.md` exists, update the "История изменений" section
+7. If `{ComponentName}-ai.md` exists, update the "История изменений" section. Always append new entries to the end of the table, never prepend them. Preserve the order of existing entries.
 
 ## Verification before finishing
 

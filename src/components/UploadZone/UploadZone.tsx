@@ -21,7 +21,7 @@ export interface IUploadZoneProps extends Omit<React.HTMLAttributes<HTMLDivEleme
     /** Контейнер для дроп-зоны. */
     dropZoneContainer?: HTMLElement | null;
     /** Рендер-функция контента над контейнером. */
-    renderContainerContent?: () => React.JSX.Element;
+    renderContainerContent?: () => React.ReactElement;
 }
 
 /**

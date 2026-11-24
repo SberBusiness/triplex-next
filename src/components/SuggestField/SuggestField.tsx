@@ -8,7 +8,7 @@ import { FormFieldInput } from "../FormField";
 // TODO: Переписать через useSuggest.
 const SuggestFieldBase = <T extends ISuggestFieldOption = ISuggestFieldOption>(
     props: ISuggestFieldProps<T>,
-): React.JSX.Element => (
+): React.ReactElement => (
     <MobileView fallback={<SuggestFieldDesktop<T> {...props} />}>
         <SuggestFieldMobile<T> {...props} />
     </MobileView>

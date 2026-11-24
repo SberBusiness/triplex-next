@@ -47,7 +47,7 @@ render-функцией в `children`, а результат выбора при
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
 | `dropZoneContainer` | `HTMLElement \| null` | `undefined` | Контейнер, на площади которого перехватывается перетаскивание. Без него drag-and-drop не работает вовсе |
-| `renderContainerContent` | `() => React.JSX.Element` | `undefined` | Контент внутри дроп-зоны (иконка + подпись «Положите файлы сюда») |
+| `renderContainerContent` | `() => React.ReactElement` | `undefined` | Контент внутри дроп-зоны (иконка + подпись «Положите файлы сюда») |
 
 Остальные props — `Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "children">`.
 

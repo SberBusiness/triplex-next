@@ -7,11 +7,11 @@ export interface ISuggestFieldDesktopProps<
     T extends ISuggestFieldOption = ISuggestFieldOption,
 > extends ISuggestFieldProps<T> {
     /** Рендер-функция компонента Dropdown. */
-    renderDropdown?: (props: ISuggestFieldDesktopDropdownProps<T>) => React.JSX.Element;
+    renderDropdown?: (props: ISuggestFieldDesktopDropdownProps<T>) => React.ReactElement;
     /** Рендер-функция компонента DropdownList. */
-    renderDropdownList?: (props: ISuggestFieldDesktopDropdownListProvideProps) => React.JSX.Element;
+    renderDropdownList?: (props: ISuggestFieldDesktopDropdownListProvideProps) => React.ReactElement;
     /** Рендер-функция компонента DropdownListItem. */
-    renderDropdownListItem?: (props: ISuggestFieldDesktopDropdownListItemProvideProps) => React.JSX.Element;
+    renderDropdownListItem?: (props: ISuggestFieldDesktopDropdownListItemProvideProps) => React.ReactElement;
 }
 
 /** Свойства компонента SuggestFieldDesktopDropdown. */
@@ -26,9 +26,9 @@ export interface ISuggestFieldDesktopDropdownProps<T extends ISuggestFieldOption
     /** Состояние загрузки DropdownList. */
     listLoading?: boolean;
     /** Рендер-функция компонента DropdownList. */
-    renderList?: (props: ISuggestFieldDesktopDropdownListProvideProps) => React.JSX.Element;
+    renderList?: (props: ISuggestFieldDesktopDropdownListProvideProps) => React.ReactElement;
     /** Рендер-функция компонента DropdownListItem. */
-    renderListItem?: (props: ISuggestFieldDesktopDropdownListItemProvideProps) => React.JSX.Element;
+    renderListItem?: (props: ISuggestFieldDesktopDropdownListItemProvideProps) => React.ReactElement;
 }
 
 /** Свойства, передаваемые в рендер-функцию DropdownList. */

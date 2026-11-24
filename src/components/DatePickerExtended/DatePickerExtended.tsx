@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import type { TElementRef } from "../../types/ElementRef";
 import moment from "moment";
 import { FocusTrapProps } from "focus-trap-react";
@@ -158,15 +159,7 @@ export const DatePickerExtended = React.forwardRef<HTMLDivElement, IDatePickerEx
         />
     );
 
-    const setRef = (node: HTMLDivElement | null) => {
-        containerRef.current = node;
-
-        if (typeof ref === "function") {
-            ref(node);
-        } else if (ref) {
-            ref.current = node;
-        }
-    };
+    const setRef = useMergedElementRef(containerRef, ref);
 
     return (
         <div

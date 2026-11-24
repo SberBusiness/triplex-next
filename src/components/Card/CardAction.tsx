@@ -54,7 +54,7 @@ export class CardAction extends React.Component<ICardActionProps, ICardActionSta
         }
     }
 
-    public render(): React.JSX.Element {
+    public render(): React.ReactElement {
         const {
             children,
             className,

@@ -54,4 +54,4 @@ const ChipSuggestBase = <T extends ISuggestOption = ISuggestOption>(
  */
 export const ChipSuggest = React.forwardRef(ChipSuggestBase) as <T extends ISuggestOption = ISuggestOption>(
     props: IChipSuggestProps<T> & React.RefAttributes<HTMLDivElement>,
-) => React.JSX.Element;
+) => React.ReactElement;

@@ -58,7 +58,7 @@ export interface ICollapsibleTreeExtendedNodeProps
 export class CollapsibleTreeExtendedNode extends React.Component<ICollapsibleTreeExtendedNodeProps> {
     public static displayName = "CollapsibleTreeExtendedNode";
 
-    public render(): React.JSX.Element {
+    public render(): React.ReactElement {
         const { opened: openedProp, onToggle, renderBody, renderHeader, toggle, ...treeNodeProps } = this.props;
 
         return (

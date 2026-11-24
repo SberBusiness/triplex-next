@@ -65,7 +65,7 @@ class TreeViewBase extends React.Component<ITreeViewBaseProps, ITreeViewState> {
         this.detachKeyDownListener();
     }
 
-    public render(): React.JSX.Element {
+    public render(): React.ReactElement {
         const { children, className, forwardedRef, ...props } = this.props;
         const { updateCount } = this.state;
 

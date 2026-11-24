@@ -22,7 +22,7 @@ export interface ITreeViewNodeProvideProps {
 /** Свойства компонента TreeViewNode. */
 export interface ITreeViewNodeProps extends Omit<React.HTMLAttributes<HTMLElement>, "children"> {
     /** Render-функция дочерних элементов. */
-    children: (props: ITreeViewNodeProvideProps) => React.JSX.Element;
+    children: (props: ITreeViewNodeProvideProps) => React.ReactElement;
     /** Идентификатор ноды. Должен быть уникальным в пределах дерева. */
     id: string;
     /** Состояние ноды - свернута/раскрыта. По умолчанию false. */
@@ -92,7 +92,7 @@ export class TreeViewNodeWithContext extends React.Component<ITreeViewNodePropsW
         treeViewContext.removeNode(this.abstractNode);
     }
 
-    public render(): React.JSX.Element {
+    public render(): React.ReactElement {
         const { children, className, nextNodeId, opened, prevNodeId, treeViewContext, ...props } = this.props;
 
         return (

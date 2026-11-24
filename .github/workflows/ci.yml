@@ -42,8 +42,11 @@ jobs:
       - name: Check React 18 and 19 consumers
         if: github.ref == 'refs/heads/main' || github.base_ref == 'main'
         run: |
+          npx playwright install --with-deps chromium
           archive=$(npm pack ./dist --pack-destination "$RUNNER_TEMP" --silent)
           for major in 18 19; do
+            types="$major"
+            if [ "$major" = 18 ]; then types=18.3.4; fi
             consumer="$RUNNER_TEMP/triplex-react-$major"
             mkdir "$consumer"
             cp scripts/fixtures/react-consumer.tsx "$consumer/"
@@ -51,9 +54,10 @@ jobs:
               cd "$consumer"
               npm init -y >/dev/null
               npm install --ignore-scripts --strict-peer-deps "$RUNNER_TEMP/$archive" \
-                "react@$major" "react-dom@$major" "@types/react@$major" "@types/react-dom@$major"
+                "react@$major" "react-dom@$major" "@types/react@$types" "@types/react-dom@$types"
               "$GITHUB_WORKSPACE/node_modules/.bin/tsc" --noEmit --strict --target ES2022 \
                 --module ESNext --moduleResolution bundler --jsx react-jsx react-consumer.tsx
+              node "$GITHUB_WORKSPACE/scripts/checkReactConsumer.mjs" "$consumer" "$major"
             )
           done
   

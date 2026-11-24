@@ -49,7 +49,7 @@ render-функцию `children`.
 | Prop | Тип | Описание |
 |---|---|---|
 | `id` | `string` | Идентификатор ноды, уникальный в пределах дерева. По нему абстрактное дерево ищет и связывает ноды, на него ссылаются `prevNodeId` / `nextNodeId` соседей |
-| `children` | `(props: ITreeViewNodeProvideProps) => React.JSX.Element` | Render-функция разметки узла. Не ReactNode: нода отдаёт своё состояние только через аргумент |
+| `children` | `(props: ITreeViewNodeProvideProps) => React.ReactElement` | Render-функция разметки узла. Не ReactNode: нода отдаёт своё состояние только через аргумент |
 
 ### Опциональные props
 

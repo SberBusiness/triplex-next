@@ -35,7 +35,7 @@ export interface ISuggestFieldProps<T extends ISuggestFieldOption = ISuggestFiel
     /** Обработчик очистки поля. Кнопка очистки отображается, только если обработчик передан. */
     onClear?: React.MouseEventHandler<HTMLButtonElement>;
     /** Рендер-функция поля ввода. */
-    renderInput?: (props: IFormFieldInputProps) => React.JSX.Element;
+    renderInput?: (props: IFormFieldInputProps) => React.ReactElement;
     /**
      * Свойства выпадающего списка.
      * `children`, `opened`, `setOpened`, `targetRef`, `size` и `onSelect` компонент задаёт сам.

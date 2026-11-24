@@ -17,7 +17,7 @@ export interface ITableBasicColumn {
     /** Ключ поля в rowData, значение которого выводится в ячейках этого столбца. */
     fieldKey: string;
     /** Контент заголовка столбца. */
-    label?: string | React.JSX.Element;
+    label?: string | React.ReactElement;
     /** Заголовок столбца при наведении указателя. */
     title?: string;
     /** Текущее направление сортировки. Наличие значения включает кнопку сортировки, если передан onOrderBy. */
@@ -83,7 +83,7 @@ export interface ITableBasicProps extends React.HTMLAttributes<HTMLTableElement>
     /** Массив значений для вывода в таблице, если пустой - выводится сообщение. */
     data: ITableBasicRow[];
     /** Функция рендера при отсутствии данных в таблице. */
-    renderNoData: () => React.JSX.Element;
+    renderNoData: () => React.ReactElement;
     /**
      * Функция рендера при скрытии пользователем всех колонок в таблице.
      * Вызывается вместо таблицы, когда каждый элемент columns имеет свойство hidden.

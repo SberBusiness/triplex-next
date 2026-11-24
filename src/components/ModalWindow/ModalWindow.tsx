@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import clsx from "clsx";
 import { CSSTransition } from "react-transition-group";
 import { Portal } from "../Portal";
@@ -127,15 +128,7 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
     };
 
     /** Установка ref. */
-    const setRef = (instance: HTMLDivElement | null) => {
-        dialogRef.current = instance;
-
-        if (typeof ref === "function") {
-            ref(instance);
-        } else if (ref) {
-            ref.current = instance;
-        }
-    };
+    const setRef = useMergedElementRef(dialogRef, ref);
 
     useEffect(() => {
         // В React 18 StrictMode (dev) компонент проходит цикл mount → unmount → mount.

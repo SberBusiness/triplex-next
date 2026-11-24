@@ -96,4 +96,4 @@ const SuggestBase = <T extends ISuggestOption = ISuggestOption>(
  */
 export const Suggest = React.forwardRef(SuggestBase) as <T extends ISuggestOption = ISuggestOption>(
     props: ISuggestProps<T> & React.RefAttributes<HTMLDivElement>,
-) => React.JSX.Element;
+) => React.ReactElement;

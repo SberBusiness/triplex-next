@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import type { TElementRef } from "../../types/ElementRef";
 import clsx from "clsx";
 import { Dropdown, DropdownList, DropdownListContext, useDropdownListKeyboard } from "../Dropdown";
@@ -81,18 +82,7 @@ export const ButtonDropdownExtended: IButtonDropdownExtendedComponent = Object.a
         // Корневой элемент нужен самому компоненту (клик снаружи) и потребителю через forwarded ref.
         const containerRef = useRef<HTMLDivElement | null>(null);
 
-        const setContainerRef = useCallback(
-            (instance: HTMLDivElement | null) => {
-                containerRef.current = instance;
-
-                if (typeof ref === "function") {
-                    ref(instance);
-                } else if (ref) {
-                    ref.current = instance;
-                }
-            },
-            [ref],
-        );
+        const setContainerRef = useMergedElementRef(containerRef, ref);
 
         // Режим управления фиксируется на монтировании и дальше не меняется.
         const [isControlled] = useState<boolean>(() => opened !== undefined);

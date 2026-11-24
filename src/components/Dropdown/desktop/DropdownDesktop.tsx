@@ -3,7 +3,7 @@ import type { TElementRef } from "../../../types/ElementRef";
 import clsx from "clsx";
 import { EDropdownAlignment, EDropdownDirection, EDropdownWidth } from "./enums";
 import { EComponentSize } from "../../../enums/EComponentSize";
-import { setForwardedRef } from "../../../helpers/setForwardedRef";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import { useToken } from "../../ThemeProvider/useToken";
 import { isKey } from "../../../utils/keyboard";
@@ -233,13 +233,7 @@ export const DropdownDesktop = React.forwardRef<HTMLDivElement, IDropdownDesktop
     }, [opened, wheelHandler]);
 
     /** Стабильный callback ref: внешний ref не вызывается с null/элементом на каждом рендере. */
-    const setRef = useCallback(
-        (instance: HTMLDivElement | null) => {
-            dropdownRef.current = instance;
-            setForwardedRef(ref, instance);
-        },
-        [ref],
-    );
+    const setRef = useMergedElementRef(dropdownRef, ref);
 
     if (!opened) {
         return null;

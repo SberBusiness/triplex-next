@@ -58,7 +58,7 @@ barrel семейства и корень пакета. Тип props нужен,
 
 | Prop | Назначение и ограничения |
 |---|---|
-| `checkbox` | Обязательная render-функция, возвращающая `React.JSX.Element`. Полученные `active` / `opened` передавай в `CheckboxTreeExtended.Checkbox`, чтобы сохранить передачу фокуса при навигации |
+| `checkbox` | Обязательная render-функция, возвращающая `React.ReactElement`. Полученные `active` / `opened` передавай в `CheckboxTreeExtended.Checkbox`, чтобы сохранить передачу фокуса при навигации |
 | `children` | Вложенные узлы `CheckboxTreeExtended.Node`, обычный `React.ReactNode`. Заголовок и тело формируются самим компонентом; `renderHeader` / `renderBody` исключены из публичного типа |
 | `opened` | Унаследован от нижнего слоя, но при текущем `isStaticCheckboxTreeExtended = true` игнорируется: узел всегда раскрыт, включая `opened={false}` |
 | `toggle` / `onToggle` | Унаследованы от `CollapsibleTreeExtended.Node` и передаются ему. В статичном дереве UI раскрытия отсутствует, `checkbox` не получает `toggle`; изменение выбора чекбокса не вызывает эти callback'и. В нижнем слое `toggle` запрашивает состояние раскрытия, `onToggle` сообщает его после анимации |

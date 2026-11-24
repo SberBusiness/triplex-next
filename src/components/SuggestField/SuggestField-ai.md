@@ -62,7 +62,7 @@ version: "1.0"
 | `clearInputOnFocus` | `boolean` | `false` | Очищать поле ввода при получении фокуса (на мобильном — поле ввода шторки) и вызывать `onFilter("")`, если поле было непустым |
 | `onScrollEnd` | `() => void` | — | Список прокручен до конца — грузи следующую страницу опций |
 | `onClear` | `React.MouseEventHandler<HTMLButtonElement>` | — | Обработчик очистки. **Кнопка очистки рендерится, только если он передан** |
-| `renderInput` | `(props: IFormFieldInputProps) => React.JSX.Element` | `FormFieldInput` | Замена поля ввода |
+| `renderInput` | `(props: IFormFieldInputProps) => React.ReactElement` | `FormFieldInput` | Замена поля ввода |
 | `dropdownProps` | `ISuggestFieldDropdownProps` | — | Props `Dropdown`, кроме задаваемых компонентом (`children`, `opened`, `setOpened`, `targetRef`, `size`, `onSelect`), плюс `pullerProps` — props мобильной шторки `Puller`. На мобильной ширине применяются только `pullerProps`, `onOpen` и `onClose` (подробнее — в разделе «Инварианты») |
 
 Только десктопный `SuggestFieldDesktop` дополнительно принимает `renderDropdown`,

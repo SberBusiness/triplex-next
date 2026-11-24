@@ -85,4 +85,4 @@ ChipSuggestTargetWithRef.displayName = "ChipSuggestTarget";
  */
 export const ChipSuggestTarget = ChipSuggestTargetWithRef as <T extends ISuggestOption>(
     props: IChipSuggestTargetProps<T> & React.RefAttributes<HTMLSpanElement>,
-) => React.JSX.Element;
+) => React.ReactElement;

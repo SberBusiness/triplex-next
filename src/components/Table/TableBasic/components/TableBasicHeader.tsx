@@ -39,7 +39,7 @@ const getNextOrderDirection = (currentDirection: EOrderDirection): EOrderDirecti
 };
 
 /** Иконка, соответствующая текущему направлению сортировки. */
-const getOrderIcon = (orderDirection: EOrderDirection): React.ReactElement => {
+const getOrderIcon = (orderDirection: EOrderDirection): React.JSX.Element => {
     switch (orderDirection) {
         case EOrderDirection.NONE:
             return <SortStrokeSrvIcon16 paletteIndex={5} />;

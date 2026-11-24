@@ -44,7 +44,7 @@ version: "1.0"
 |---|---|---|
 | `columns` | `ITableBasicColumn[]` | Описание столбцов: ключ поля, заголовок, выравнивание, ширина, сортировка |
 | `data` | `ITableBasicRow[]` | Строки таблицы. Пустой массив — рендерится `renderNoData` |
-| `renderNoData` | `() => React.ReactElement` | Заглушка для пустой таблицы. Обязателен даже там, где данные всегда есть |
+| `renderNoData` | `() => React.JSX.Element` | Заглушка для пустой таблицы. Обязателен даже там, где данные всегда есть |
 
 ### Опциональные props
 
@@ -62,7 +62,7 @@ version: "1.0"
 | Поле | Тип | По умолчанию | Описание |
 |---|---|---|---|
 | `fieldKey` | `string` | — | Ключ в `rowData`, значение которого выводится в ячейке |
-| `label` | `string \| React.ReactElement` | — | Содержимое заголовка |
+| `label` | `string \| React.JSX.Element` | — | Содержимое заголовка |
 | `title` | `string` | — | Нативный `title` у `<th>` |
 | `orderDirection` | `EOrderDirection` | — | Текущее направление. Наличие значения + `onOrderBy` включают сортировку |
 | `horizontalAlign` | `EHorizontalAlign` | `LEFT` | Горизонтальное выравнивание |

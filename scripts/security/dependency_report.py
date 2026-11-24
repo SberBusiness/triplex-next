@@ -85,12 +85,12 @@ def report(base, head, npmrc_changed=False):
                 review.append(f'{path}: проверьте install-скрипт версии {new.get("version", "—")}')
         if previous != current:
             lines.append(f'{path}: {previous} → {current}')
-        else:
+        if old is not None and new is not None:
             for key, before, after in changes(old, new):
                 if key in SCOPES:
                     for name, old_spec, new_spec in changes(before or {}, after or {}):
                         lines.append(f'{path} {key}.{name}: {old_spec or "—"} → {new_spec or "—"}')
-                else:
+                elif previous == current:
                     lines.append(f'{path}: изменилось поле {key}')
     if not lines and not review:
         return '### npm-зависимости\n\nИзменений для ревью нет.'

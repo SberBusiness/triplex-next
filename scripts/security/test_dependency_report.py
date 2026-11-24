@@ -27,11 +27,14 @@ class DependencyReportTests(unittest.TestCase):
     def test_npmrc_only_change_requires_review(self):
         self.assertIn('.npmrc: проверьте реестр', report(({}, {}), ({}, {}), npmrc_changed=True))
 
-    def test_existing_package_changes_dependency_edge_only(self):
+    def test_existing_package_changes_dependency_edge(self):
         path = 'node_modules/helper'
         old = {'version': '1', 'dependencies': {'leaf': '^1'}}
-        new = dict(old, dependencies={'leaf': '^2'})
-        self.assertIn(f'{path} dependencies.leaf: ^1 → ^2', report(({}, {path: old}), ({}, {path: new})))
+        for version in ('1', '2'):
+            with self.subTest(version=version):
+                new = dict(old, version=version, dependencies={'leaf': '^2'})
+                text = report(({}, {path: old}), ({}, {path: new}))
+                self.assertIn(f'{path} dependencies.leaf: ^1 → ^2', text)
 
     def test_integrity_change_and_removal(self):
         path = 'node_modules/helper'

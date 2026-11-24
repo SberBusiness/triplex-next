@@ -144,6 +144,21 @@ describe("Button", () => {
         expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ type: "click" }));
     });
 
+    it("passes a programmatic click to both click handlers while loading", () => {
+        const onClickCapture = vi.fn();
+        const onClick = vi.fn();
+        render(
+            <Button theme={EButtonTheme.GENERAL} loading onClickCapture={onClickCapture} onClick={onClick}>
+                Loading
+            </Button>,
+        );
+
+        getButton().click();
+
+        expect(onClickCapture).toHaveBeenCalledTimes(1);
+        expect(onClick).toHaveBeenCalledTimes(1);
+    });
+
     it("is disabled and does not call onClick when disabled prop is set", async () => {
         const user = userEvent.setup();
         const onClick = vi.fn();

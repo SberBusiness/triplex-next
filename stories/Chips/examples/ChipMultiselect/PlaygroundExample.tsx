@@ -57,7 +57,7 @@ function createMultiselectFieldStoriesLogic(args: IChipMultiselectProps) {
                 <Checkbox
                     key={opt.id}
                     id={opt.id}
-                    size={args.size}
+                    size={args.size === EComponentSize.LG ? EComponentSize.MD : args.size}
                     checked={selectedSet.has(opt.id)}
                     onChange={(event) => handleToggle(opt.id, event.target.checked)}
                 >

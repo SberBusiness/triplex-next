@@ -17,6 +17,11 @@ const meta = {
                 <>
                     <Title />
                     <Description />
+                    <p>
+                        <a href="./?path=/docs/components-typography-font-glyphs--docs" target="_top">
+                            Посмотреть глифы всех начертаний SB Sans
+                        </a>
+                    </p>
                     <Stories />
                 </>
             ),

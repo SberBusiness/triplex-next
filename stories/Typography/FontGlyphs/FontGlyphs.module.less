@@ -1,0 +1,70 @@
+.fontGlyphs {
+    font-family: SBSansText, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+
+    .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+        gap: 12px;
+
+        label {
+            display: grid;
+            align-content: end;
+            gap: 4px;
+            font-weight: 600;
+        }
+
+        select,
+        input {
+            box-sizing: border-box;
+            width: 100%;
+            height: 40px;
+            padding: 0 8px;
+            border: 1px solid currentColor;
+            border-radius: 4px;
+            font: inherit;
+            font-weight: 400;
+        }
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(128px, 100%), 1fr));
+        gap: 8px;
+        margin: 12px 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .grid .card {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+        margin: 0;
+        padding: 8px;
+        overflow-wrap: anywhere;
+        border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+        border-radius: 6px;
+        font:
+            12px/1.4 SBSansTextMono,
+            monospace;
+
+        small {
+            font-size: inherit;
+        }
+    }
+
+    .sample {
+        display: grid;
+        place-items: center;
+        height: 64px;
+        margin-bottom: 6px;
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}

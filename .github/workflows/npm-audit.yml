@@ -17,13 +17,22 @@ jobs:
       matrix:
         branch: [main, release-0]
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ matrix.branch }}
-          persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 22
           package-manager-cache: false
+      - name: Read npm manifests from one branch revision
+        env:
+          GH_TOKEN: ${{ github.token }}
+          AUDIT_BRANCH: ${{ matrix.branch }}
+        run: |
+          tree="$RUNNER_TEMP/npm-tree.json"
+          gh api "repos/$GITHUB_REPOSITORY/git/trees/$AUDIT_BRANCH" > "$tree"
+          lock=$(jq -er 'if any(.tree[]; .path == "npm-shrinkwrap.json")
+                         then "npm-shrinkwrap.json" else "package-lock.json" end' "$tree")
+          for file in package.json "$lock"; do
+            blob=$(jq -er --arg file "$file" '.tree[] | select(.type == "blob" and .path == $file) | .sha' "$tree")
+            gh api -H 'Accept: application/vnd.github.raw+json' "repos/$GITHUB_REPOSITORY/git/blobs/$blob" > "$file"
+          done
       - name: Audit locked packages including development dependencies
         run: npm audit --package-lock-only --include=dev --ignore-scripts --audit-level=high

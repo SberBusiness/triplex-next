@@ -123,13 +123,11 @@ css-переменную `--lightBox-scroll-width`, которую вычита�
   `lightBoxViewManagerNodeIdDefault` (`LightBox-next-view-manager-node`) — часть публичного API.
 - **`data-lightbox-component="controls"`** на контейнере `LightBox.Controls` — по нему
   `LightBox.Content` вычисляет `padding-top`. Не удалять.
-- На экранах до 767px у `LightBox.Controls` есть нижний внутренний отступ 8px.
-  Минимальная высота панели — 64px (16px сверху + кнопка 40px + 8px снизу),
-  чтобы отступ сохранялся и без стрелок: кнопка закрытия позиционируется абсолютно.
-  `LightBox.Content` учитывает полную высоту панели через `offsetHeight`;
-  после горячего обновления только CSS для проверки отступа переоткрой LightBox.
-  Порог 767px относится к ширине viewport; адаптивное расположение кнопок до 1024px
-  определяется отдельно через `LightBoxViewManager`.
+- При ширине окна до 767px включительно (`@screen-sm-max`) у `LightBox.Controls` нижний отступ 8px.
+  Минимальная высота панели 64px (16px сверху + кнопка 40px + 8px снизу) сохраняет отступ
+  без стрелок, когда кнопка закрытия позиционируется абсолютно. `LightBox.Content` учитывает
+  полную высоту панели через `offsetHeight`. `LightBoxViewManager` отдельно определяет
+  раскладку кнопок по ширине контейнера с базовым порогом 1024px.
 - **`data-test-id`** `lightBox-prev` / `lightBox-next` на кнопках стрелок — используются
   автотестами потребителей.
 - **Глобальные классы** `global-LB-less-or-equal-media-point-0` / `global-LB-more-media-point-0`

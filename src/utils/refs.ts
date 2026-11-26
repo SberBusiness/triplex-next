@@ -1,16 +1,24 @@
 import React, { useRef, useLayoutEffect } from "react";
 
-/** Объединяет несколько рефов в один чистый колбэк-реф. */
-export function mergeRefs<T>(...refs: React.ForwardedRef<T>[]) {
+import { setForwardedRef } from "../helpers/setForwardedRef";
+
+/** Доставляет узел всем ref и соблюдает способ отсоединения каждого получателя. */
+export function mergeRefs<T>(...refs: (React.Ref<T> | undefined)[]) {
     return (node: T | null) => {
-        refs.forEach((ref) => {
-            if (ref === null) return;
-            if (typeof ref === "function") {
-                ref(node);
-            } else {
-                ref.current = node;
-            }
-        });
+        const cleanups = refs.map((ref) => setForwardedRef(ref, node));
+
+        // Если React получит cleanup, он уже не вызовет объединённый callback с null.
+        if (cleanups.some(Boolean)) {
+            return () => {
+                cleanups.forEach((cleanup, index) => {
+                    if (cleanup) {
+                        cleanup();
+                    } else {
+                        setForwardedRef(refs[index], null);
+                    }
+                });
+            };
+        }
     };
 }
 

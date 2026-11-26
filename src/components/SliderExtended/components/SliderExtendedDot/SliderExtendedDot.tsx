@@ -1,12 +1,12 @@
-import React, { useCallback, useContext, useLayoutEffect, useRef, useState } from "react";
+import React, { useContext, useLayoutEffect, useRef, useState } from "react";
 import { uniqueId } from "lodash-es";
 import clsx from "clsx";
 import { KeyDownListener } from "@sberbusiness/triplex-next/components/KeyDownListener";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import { useMergedElementRef } from "../../../../helpers/useMergedElementRef";
 import { SliderExtendedContext } from "../../SliderExtendedContext";
 import { SliderExtendedUtils } from "../../SliderExtendedUtils";
-import { setForwardedRef } from "../../../../helpers/setForwardedRef";
 import { SliderExtendedMoveHandler, TOnTargetMouseDown, TOnTargetTouchStart } from "../SliderExtendedMoveHandler";
 import { SliderExtendedDotActions } from "./SliderExtendedDotActions";
 import styles from "./styles/SliderExtendedDot.module.less";
@@ -75,13 +75,7 @@ export const SliderExtendedDot = React.forwardRef<HTMLSpanElement, ISliderExtend
         const leftPosition = reverse ? 100 - normalizedValue : normalizedValue;
 
         /** Сохраняет узел ползунка локально (для слушателей перемещения) и пробрасывает во внешний ref. */
-        const setRef = useCallback(
-            (instance: HTMLSpanElement | null) => {
-                dotRef.current = instance;
-                setForwardedRef(ref, instance);
-            },
-            [ref],
-        );
+        const setRef = useMergedElementRef(dotRef, ref);
 
         // Регистрация ползунка в контексте слайдера на время его жизни.
         // Зависимости пусты намеренно: addDot/removeDot пересоздаются на каждом рендере,

@@ -1,10 +1,10 @@
-import React, { useCallback, useRef } from "react";
+import React, { useRef } from "react";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { ISuggestOption, Suggest } from "../../Suggest";
 import { IChipSuggestProps } from "./types";
 import { ChipSuggestTarget } from "./ChipSuggestTarget";
 import { ChipSuggestDropdown } from "./ChipSuggestDropdown";
-import { setForwardedRef } from "../../../helpers/setForwardedRef";
 import styles from "../styles/Chip.module.less";
 
 const ChipSuggestBase = <T extends ISuggestOption = ISuggestOption>(
@@ -28,13 +28,7 @@ const ChipSuggestBase = <T extends ISuggestOption = ISuggestOption>(
     const suggestRef = useRef<HTMLDivElement | null>(null);
     const targetRef = useRef<HTMLSpanElement>(null);
 
-    const setRef = useCallback(
-        (instance: HTMLDivElement | null) => {
-            suggestRef.current = instance;
-            setForwardedRef(ref, instance);
-        },
-        [ref],
-    );
+    const setRef = useMergedElementRef(suggestRef, ref);
 
     return (
         <Suggest className={clsx(styles.chipGroupItem, className)} {...restProps} ref={setRef}>

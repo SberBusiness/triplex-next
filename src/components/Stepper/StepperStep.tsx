@@ -1,5 +1,6 @@
 import React, { useState, useContext, useRef } from "react";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import { StepperStepIcon } from "./StepperStepIcon";
 import { createSizeToClassNameMap, isKey } from "../../utils";
 import { StepperExtendedContext } from "./StepperExtendedContext";
@@ -104,16 +105,7 @@ export const StepperStep: React.FC<IStepperStepProps> & IStepperStepComposition 
     };
 
     /** Функция для хранения ссылки. */
-    const setRef = (instance: HTMLLIElement | null) => {
-        ref.current = instance;
-
-        if (typeof forwardedRef === "function") {
-            forwardedRef(instance);
-        } else if (forwardedRef) {
-            // eslint-disable-next-line react-hooks/immutability
-            (forwardedRef as React.MutableRefObject<HTMLLIElement | null>).current = instance;
-        }
-    };
+    const setRef = useMergedElementRef(ref, forwardedRef);
 
     const renderIcon = () => (
         <IconWrapper className={styles.icon} disabled={!!disabled}>

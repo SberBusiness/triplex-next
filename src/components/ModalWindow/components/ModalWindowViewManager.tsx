@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 import { useResizeDetector } from "react-resize-detector";
 import isEqual from "lodash-es/isEqual";
 import pick from "lodash-es/pick";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { Portal } from "../../Portal/Portal";
 import styles from "../styles/ModalWindow.module.less";
 
@@ -29,14 +30,7 @@ export const ModalWindowViewManager = React.forwardRef<HTMLDivElement>((_, ref) 
     const viewNodeRef = useRef<HTMLDivElement | null>(null);
 
     /** Объединённый ref на внутренний div: внутренний viewNodeRef + forwarded ref. */
-    const setViewNodeRef = (instance: HTMLDivElement | null) => {
-        viewNodeRef.current = instance;
-        if (typeof ref === "function") {
-            ref(instance);
-        } else if (ref) {
-            ref.current = instance;
-        }
-    };
+    const setViewNodeRef = useMergedElementRef(viewNodeRef, ref);
 
     /** Обновление координат. */
     const updateRect = () => {

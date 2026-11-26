@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { uniqueId } from "lodash-es";
 import { FocusTrap, FocusTrapProps } from "focus-trap-react";
 import { ISingleColorIconProps, QuestioncircleFilledSrvIcon16 } from "@sberbusiness/icons-next";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import { ButtonIcon } from "../Button/ButtonIcon";
 import { EButtonIconShape } from "../Button/enums";
 import { Tooltip } from "../Tooltip/Tooltip";
@@ -77,18 +78,7 @@ export const HelpBox = React.forwardRef<HTMLButtonElement, IHelpBoxProps>(
         const open = openProp ?? openState;
 
         /** Установка ссылки на кнопку-триггер: во внутренний ref (для позиционирования) и во внешний forwarded ref. */
-        const setButtonRef = useCallback(
-            (instance: HTMLButtonElement | null) => {
-                buttonRef.current = instance;
-
-                if (typeof ref === "function") {
-                    ref(instance);
-                } else if (ref) {
-                    ref.current = instance;
-                }
-            },
-            [ref],
-        );
+        const setButtonRef = useMergedElementRef(buttonRef, ref);
 
         useEffect(() => {
             if (!open) {

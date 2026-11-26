@@ -1,23 +1,7 @@
-import { useCallback, type ForwardedRef, type MutableRefObject } from "react";
-import { setForwardedRef } from "./setForwardedRef";
+import { useMemo, type Ref } from "react";
+import { mergeRefs } from "../utils/refs";
 
-/** Связывает внутренний и внешний ref, в том числе cleanup callback-ref в React 19. */
-export function useMergedElementRef<T>(localRef: MutableRefObject<T | null>, forwardedRef: ForwardedRef<T>) {
-    return useCallback(
-        (node: T | null) => {
-            localRef.current = node;
-            if (typeof forwardedRef === "function") {
-                const cleanup: unknown = forwardedRef(node);
-                if (node !== null && typeof cleanup === "function") {
-                    return () => {
-                        localRef.current = null;
-                        cleanup();
-                    };
-                }
-            } else if (forwardedRef) {
-                setForwardedRef(forwardedRef, node);
-            }
-        },
-        [localRef, forwardedRef],
-    );
+/** Сохраняет callback объединённого ref, пока не сменится один из получателей. */
+export function useMergedElementRef<T>(first: Ref<T> | undefined, second: Ref<T> | undefined) {
+    return useMemo(() => mergeRefs(first, second), [first, second]);
 }

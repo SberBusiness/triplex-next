@@ -32,6 +32,21 @@ try {
             major === "19" ? "attach cleanup " : "attach null ",
         );
     }
+    await page.getByRole("button", { name: "Choose an option" }).click();
+    await expect(page.getByText("First option")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(page.getByText("First option")).toHaveCount(0);
+    await page.getByRole("button", { name: "Replace chip ref" }).click();
+    await page.getByRole("button", { name: "Unmount suggestions" }).click();
+    await expect(page.getByRole("button", { name: "Choose an option" })).toHaveCount(0);
+    const lifecycle = major === "19" ? "attach cleanup " : "attach null ";
+    const events = await page.locator("body").evaluate((body) => ({ ...body.dataset }));
+    expect(events).toMatchObject({
+        suggestRef: lifecycle,
+        chipRef: lifecycle,
+        replacementRef: lifecycle,
+        dropdownRef: lifecycle,
+    });
     expect(errors).toEqual([]);
 } finally {
     await browser.close();

@@ -9,6 +9,7 @@ import {
     DotshorizontalStrokeSrvIcon24,
     DotshorizontalStrokeSrvIcon20,
 } from "@sberbusiness/icons-next";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import {
     ButtonDropdownExtended,
     IButtonDropdownExtendedButtonProvideProps,
@@ -143,14 +144,7 @@ export const ButtonDropdown = React.forwardRef<HTMLButtonElement, IButtonDropdow
         const isDots = isDotsTheme(theme);
         const buttonTheme = isDots ? DOTS_THEME_TO_BUTTON_THEME_MAP[theme] : theme;
 
-        const setRef = (instance: HTMLButtonElement | null) => {
-            buttonRef.current = instance;
-            if (typeof ref === "function") {
-                ref(instance);
-            } else if (ref) {
-                ref.current = instance;
-            }
-        };
+        const setRef = useMergedElementRef(buttonRef, ref);
 
         const renderCaret = () => SIZE_TO_CARET_ICON_MAP[size](THEME_TO_CARET_PALETTE_INDEX_MAP[buttonTheme]);
 

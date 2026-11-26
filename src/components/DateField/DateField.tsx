@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import moment from "moment";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import { IDateFieldProps } from "./types";
 import { DatePickerExtended } from "../DatePickerExtended/DatePickerExtended";
 import { dateFormatYYYYMMDD, globalLimitRange } from "../../consts/DateConst";
@@ -57,14 +58,7 @@ export const DateField = React.forwardRef<HTMLDivElement, IDateFieldProps>((prop
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [value, format, limitRange, disabledDays]);
 
-    const setRef = (instance: HTMLDivElement | null) => {
-        tooltipTargetRef.current = instance;
-        if (typeof ref === "function") {
-            ref(instance);
-        } else if (ref) {
-            ref.current = instance;
-        }
-    };
+    const setRef = useMergedElementRef(tooltipTargetRef, ref);
 
     /** Обработчик изменения значения поля ввода с маской. */
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

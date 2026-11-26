@@ -1,9 +1,10 @@
 import React, { useEffect, useContext, useRef, useState, useCallback } from "react";
 import MaskedInputTextMask, { conformToMask, MaskedInputProps, PipeConfig } from "react-text-mask";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { DataAttributes } from "../../../types/CoreTypes";
 import { presets } from "./FormFieldMaskedInputPresets";
-import { FormFieldInput } from "./FormFieldInput";
+import { FormFieldInput, type IFormFieldInputProps } from "./FormFieldInput";
 import { FormFieldContext } from "../FormFieldContext";
 import { TFormFieldMaskedInputMask } from "../types";
 import { EFormFieldStatus } from "../enums";
@@ -51,6 +52,28 @@ const normalizePhoneText = (text: string): { indexesOfPipedChars: number[]; text
 
 /** Соответствие размера имени класса. */
 const SIZE_TO_CLASS_NAME_MAP = createSizeToClassNameMap(styles);
+
+interface IMaskedInputElementProps extends IFormFieldInputProps {
+    maskRef: (element: HTMLElement) => void;
+}
+
+/** Связывает поле с react-text-mask и внешним ref независимо от изменений значения. */
+const MaskedInputElement = React.forwardRef<HTMLInputElement, IMaskedInputElementProps>(
+    ({ maskRef, ...props }, ref) => {
+        // По контракту react-text-mask получает только смонтированный input.
+        const registerMaskInput = useCallback(
+            (node: HTMLInputElement | null) => {
+                if (node) maskRef(node);
+            },
+            [maskRef],
+        );
+        const setRef = useMergedElementRef(registerMaskInput, ref);
+
+        return <FormFieldInput {...props} ref={setRef} />;
+    },
+);
+
+MaskedInputElement.displayName = "MaskedInputElement";
 
 const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMaskedInputProps>(
     (
@@ -194,18 +217,6 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
             [inputValue, onChange],
         );
 
-        /** Функция для хранения ссылки. */
-        const setRef = (ref: (inputElement: HTMLElement) => void) => (instance: HTMLInputElement | null) => {
-            if (instance) {
-                ref(instance);
-            }
-            if (typeof forwardedRef === "function") {
-                forwardedRef(instance);
-            } else if (forwardedRef) {
-                (forwardedRef as React.MutableRefObject<HTMLInputElement | null>).current = instance;
-            }
-        };
-
         const getPlaceholderValue = () => {
             if ((!filled && !focused) || (!value && placeholder)) {
                 return "";
@@ -233,15 +244,16 @@ const FormFieldMaskedInputBase = React.forwardRef<HTMLDivElement, IFormFieldMask
                     disabled={status === EFormFieldStatus.DISABLED}
                     /* Input отображает только введенное значение без маски, маска рисуется в inputPlaceholder. */
                     guide={false}
-                    render={(ref, props) => (
-                        <FormFieldInput
+                    render={(maskRef, props) => (
+                        <MaskedInputElement
                             {...props}
                             // react-text-mask подставляет в props defaultValue, равное value (https://github.com/text-mask/text-mask/pull/993).
                             // На контролируемом input это даёт предупреждение React «both value and defaultValue props».
                             defaultValue={undefined}
                             value={inputValue}
                             placeholder={placeholder || ""}
-                            ref={setRef(ref)}
+                            maskRef={maskRef}
+                            ref={forwardedRef}
                         />
                     )}
                     mask={mask}

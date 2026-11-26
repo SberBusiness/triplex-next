@@ -1,9 +1,9 @@
-import React, { useContext, useMemo, useRef } from "react";
+import React, { useContext, useRef } from "react";
 import clsx from "clsx";
 import { CaretdownStrokeSrvIcon16, CaretdownStrokeSrvIcon20, CaretdownStrokeSrvIcon24 } from "@sberbusiness/icons-next";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
-import { mergeRefs } from "../../../utils/refs";
 import {
     EFormFieldStatus,
     FormField,
@@ -106,7 +106,7 @@ export const SelectExtendedFieldTarget = React.forwardRef<HTMLDivElement, ISelec
         const interactionBlocked = Boolean(loading) || disabled;
         const fieldTargetRef = useRef<HTMLDivElement>(null);
         // Стабильный колбэк-реф: иначе React на каждом рендере отвязывал бы и заново привязывал внешний ref.
-        const setFieldTargetRef = useMemo(() => mergeRefs(ref, fieldTargetRef), [ref]);
+        const setFieldTargetRef = useMergedElementRef(ref, fieldTargetRef);
         const dropdownListContext = useContext(DropdownListContext);
 
         const handleClick: React.MouseEventHandler<HTMLDivElement> = (event) => {

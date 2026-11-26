@@ -3,16 +3,17 @@ import React from "react";
 /**
  * Записать значение в forwarded ref (callback-ref или объектный ref).
  *
- * Внутренний хелпер библиотеки: лежит в `src/helpers`, из корневого barrel не экспортируется
- * и в публичный API не входит. Используется компонентами, которые совмещают внешний ref
- * с собственным — AmountField, ChipSuggest, FormField, List, SliderExtended.
+ * Возвращает очистку callback-ref, если потребитель задал её при присоединении узла.
  *
  * @param ref Внешняя ссылка, переданная потребителем.
  * @param instance Экземпляр элемента или null при размонтировании.
  */
-export function setForwardedRef<T>(ref: React.Ref<T> | undefined, instance: T | null): void {
+export function setForwardedRef<T>(ref: React.Ref<T> | undefined, instance: T | null): (() => void) | undefined {
     if (typeof ref === "function") {
-        ref(instance);
+        const cleanup: unknown = ref(instance);
+        if (instance !== null && typeof cleanup === "function") {
+            return () => cleanup();
+        }
     } else if (ref != null) {
         // React.RefObject помечен readonly, но запись в current — единственный способ заполнить объектный ref.
         (ref as React.MutableRefObject<T | null>).current = instance;

@@ -1,9 +1,9 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useMemo } from "react";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import { StepperStep } from "./StepperStep";
 import { StepperExtendedContext } from "./StepperExtendedContext";
 import { IStepperExtendedProps } from "./types";
-import { setForwardedRef } from "../../helpers/setForwardedRef";
 import { EComponentSize } from "../../enums";
 import styles from "./styles/StepperExtended.module.less";
 
@@ -31,13 +31,7 @@ const StepperExtendedRoot = React.forwardRef<HTMLOListElement, IStepperExtendedP
         );
 
         // Компонент поддерживает и ref, и исторический prop forwardedRef — оба указывают на один и тот же <ol>.
-        const setRef = useCallback(
-            (instance: HTMLOListElement | null) => {
-                setForwardedRef(ref, instance);
-                setForwardedRef(forwardedRef, instance);
-            },
-            [ref, forwardedRef],
-        );
+        const setRef = useMergedElementRef(ref, forwardedRef);
 
         return (
             <StepperExtendedContext.Provider value={contextValue}>

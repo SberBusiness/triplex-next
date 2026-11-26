@@ -1,8 +1,9 @@
 import React, { useRef, useCallback, useEffect } from "react";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import { IPageIndicatorsProps, TPageIndicatorProps } from "./types";
 import { EOrientation } from "../../enums";
-import { mergeRefs, useLatestRef } from "../../utils/refs";
+import { useLatestRef } from "../../utils/refs";
 import { ButtonBase } from "../Button/ButtonBase";
 import styles from "./styles/PageIndicators.module.less";
 
@@ -84,7 +85,7 @@ export const PageIndicators = React.forwardRef<HTMLDivElement, IPageIndicatorsPr
                 : prevEnabledIndex;
 
         const containerRef = useRef<HTMLDivElement | null>(null);
-        const combinedRef = mergeRefs(ref, containerRef);
+        const combinedRef = useMergedElementRef(ref, containerRef);
 
         const buttonRefs = useRef<Map<number, HTMLButtonElement>>(new Map());
         const indicatorRefsCache = useRef<Map<number, React.RefCallback<HTMLButtonElement>>>(new Map());

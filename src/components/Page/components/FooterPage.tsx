@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import clsx from "clsx";
 import { Footer, IFooterProps } from "@sberbusiness/triplex-next/components/Footer/Footer";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { EFooterPageType } from "./enums";
 import { useStickyCornerRadius } from "./useStickyCornerRadius";
 import { EIslandType, Island } from "../../Island";
@@ -37,14 +38,7 @@ export const FooterPage = Object.assign(
             // Плавное обнуление нижних углов и добавление тени при прилипании к низу.
             useStickyCornerRadius(footerRef, "bottom", type === EFooterPageType.FIRST && sticky);
 
-            const setFooterRef = (instance: HTMLDivElement | null) => {
-                footerRef.current = instance;
-                if (typeof ref === "function") {
-                    ref(instance);
-                } else if (ref) {
-                    ref.current = instance;
-                }
-            };
+            const setFooterRef = useMergedElementRef(footerRef, ref);
 
             return type === EFooterPageType.FIRST ? (
                 <Island

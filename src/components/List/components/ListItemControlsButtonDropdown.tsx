@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import clsx from "clsx";
 import { uniqueId } from "lodash-es";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { ETextSize } from "../../Typography/enums";
 import { Text } from "../../Typography/Text";
 import {
@@ -13,7 +14,6 @@ import { IButtonDropdownProps } from "../../Button/ButtonDropdown";
 import { createButtonDropdownKeyDownHandler } from "../../Button/utils";
 import { IListItemControlsButtonProps, ListItemControlsButton } from "./ListItemControlsButton";
 import { PullerBody, PullerClose, PullerHeader, PullerList, PullerListItem } from "../../Puller";
-import { setForwardedRef } from "../../../helpers/setForwardedRef";
 import styles from "../styles/ListItemControlsButton.module.less";
 
 export interface IListItemControlsButtonDropdownProps
@@ -103,10 +103,7 @@ export const ListItemControlsButtonDropdown = React.forwardRef<HTMLButtonElement
             );
         };
 
-        const setRef = (instance: HTMLButtonElement | null) => {
-            buttonRef.current = instance;
-            setForwardedRef(ref, instance);
-        };
+        const setRef = useMergedElementRef(buttonRef, ref);
 
         return (
             <ButtonDropdownExtended

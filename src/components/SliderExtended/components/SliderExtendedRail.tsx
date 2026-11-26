@@ -1,8 +1,8 @@
-import React, { useCallback, useContext } from "react";
+import React, { useContext } from "react";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { SliderExtendedContext } from "../SliderExtendedContext";
 import { SliderExtendedUtils } from "../SliderExtendedUtils";
-import { setForwardedRef } from "../../../helpers/setForwardedRef";
 import styles from "../styles/SliderExtended.module.less";
 
 /** Свойства компонента SliderExtendedRail. */
@@ -20,13 +20,7 @@ export const SliderExtendedRail = React.forwardRef<HTMLDivElement, ISliderExtend
         const { dots, railNode, reverse, setRailNode, steps } = useContext(SliderExtendedContext);
 
         /** Сохраняет узел полосы в контексте слайдера и пробрасывает его во внешний ref. */
-        const setRef = useCallback(
-            (instance: HTMLDivElement | null) => {
-                setRailNode(instance);
-                setForwardedRef(ref, instance);
-            },
-            [ref, setRailNode],
-        );
+        const setRef = useMergedElementRef(setRailNode, ref);
 
         const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
             if (railNode) {

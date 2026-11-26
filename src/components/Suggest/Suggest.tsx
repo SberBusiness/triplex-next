@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useCallback } from "react";
+import React, { useRef, useEffect } from "react";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import { ISuggestOption, ISuggestProps } from "./types";
 import { DropdownListContext } from "../Dropdown/DropdownListContext";
 import { SuggestContext } from "./SuggestContext";
@@ -49,18 +50,7 @@ const SuggestBase = <T extends ISuggestOption = ISuggestOption>(
         return () => document.removeEventListener("mousedown", handleOutsideMouseDown);
     }, [dropdownOpen, closeDropdown]);
 
-    const setRef = useCallback(
-        (instance: HTMLDivElement | null) => {
-            suggestRef.current = instance;
-
-            if (typeof ref === "function") {
-                ref(instance);
-            } else if (ref) {
-                ref.current = instance;
-            }
-        },
-        [ref],
-    );
+    const setRef = useMergedElementRef(suggestRef, ref);
 
     return (
         // Клавиши из выпадающего блока не отсекаются: в нём рендерится поле фильтрации ChipSuggest.

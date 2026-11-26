@@ -1,11 +1,11 @@
-import React, { useCallback, useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import clsx from "clsx";
 import { KeyDownListener } from "@sberbusiness/triplex-next/components/KeyDownListener";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import { useMergedElementRef } from "../../../../helpers/useMergedElementRef";
 import { SliderExtendedContext } from "../../SliderExtendedContext";
 import { SliderExtendedUtils } from "../../SliderExtendedUtils";
-import { setForwardedRef } from "../../../../helpers/setForwardedRef";
 import { SliderExtendedMoveHandler, TOnTargetMouseDown, TOnTargetTouchStart } from "../SliderExtendedMoveHandler";
 import { SliderExtendedTrackActions } from "./SliderExtendedTrackActions";
 import styles from "./styles/SliderExtendedTrack.module.less";
@@ -76,13 +76,7 @@ export const SliderExtendedTrack = React.forwardRef<HTMLSpanElement, ISliderExte
         const tabIndex = !disabled && innerDraggable && focusedSlider ? FOCUSED_TAB_INDEX : -1;
 
         /** Сохраняет узел трека локально (для слушателей перемещения) и пробрасывает во внешний ref. */
-        const setRef = useCallback(
-            (instance: HTMLSpanElement | null) => {
-                trackRef.current = instance;
-                setForwardedRef(ref, instance);
-            },
-            [ref],
-        );
+        const setRef = useMergedElementRef(trackRef, ref);
 
         const handleDocumentMouseUp = (event: MouseEvent) => {
             setIsDragged(false);

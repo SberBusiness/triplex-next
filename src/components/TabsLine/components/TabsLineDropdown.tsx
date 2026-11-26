@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { uniqueId } from "lodash-es";
 import { CaretdownStrokeSrvIcon16 } from "@sberbusiness/icons-next";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { TestProps } from "../../../types/CoreTypes";
 import { isKey } from "../../../utils/keyboard";
 import { Dropdown, DropdownList, DropdownListContext, EDropdownWidth, useDropdownListKeyboard } from "../../Dropdown";
@@ -60,18 +61,7 @@ export const TabsLineDropdown = React.forwardRef<HTMLDivElement, ITabsLineDropdo
     const instanceId = useRef(uniqueId());
 
     /** Корневой элемент нужен и снаружи (forwarded ref), и внутри — по нему позиционируется Dropdown. */
-    const setRootRef = useCallback(
-        (node: HTMLDivElement | null) => {
-            targetRef.current = node;
-
-            if (typeof ref === "function") {
-                ref(node);
-            } else if (ref) {
-                ref.current = node;
-            }
-        },
-        [ref],
-    );
+    const setRootRef = useMergedElementRef(targetRef, ref);
 
     useEffect(() => {
         if (!opened) {

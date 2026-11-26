@@ -1,8 +1,8 @@
-import React, { useCallback, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import clsx from "clsx";
 import { createSizeToClassNameMap } from "@sberbusiness/triplex-next/utils/classNameMaps";
+import { useMergedElementRef } from "../../../../helpers/useMergedElementRef";
 import { SliderExtendedContext } from "../../SliderExtendedContext";
-import { setForwardedRef } from "../../../../helpers/setForwardedRef";
 import styles from "./styles/SliderExtendedTooltip.module.less";
 
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
@@ -53,13 +53,7 @@ export const SliderExtendedTooltip = React.forwardRef<HTMLDivElement, ISliderExt
         const [contentNode, setContentNode] = useState<HTMLDivElement | null>(null);
         const { min, max, size } = useContext(SliderExtendedContext);
 
-        const setRef = useCallback(
-            (instance: HTMLDivElement | null) => {
-                setContentNode(instance);
-                setForwardedRef(ref, instance);
-            },
-            [ref],
-        );
+        const setRef = useMergedElementRef(setContentNode, ref);
 
         const offset = getTooltipBodyOffset({ contentWidth: contentNode?.clientWidth ?? 0, max, min, value });
 

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import type { TElementRef } from "../../types/ElementRef";
 import clsx from "clsx";
 import { isKey, EVENT_KEY_CODES } from "../../utils/keyboard";
@@ -76,18 +77,7 @@ export const SelectExtendedField = Object.assign(
 
         useDropdownOpenCallbacks(opened, onOpen, onClose);
 
-        const setTargetRef = useCallback(
-            (instance: HTMLDivElement | null) => {
-                targetRef.current = instance;
-
-                if (typeof ref === "function") {
-                    ref(instance);
-                } else if (ref) {
-                    ref.current = instance;
-                }
-            },
-            [ref],
-        );
+        const setTargetRef = useMergedElementRef(targetRef, ref);
 
         const closeDropdown = useCallback(() => {
             setOpened(false);

@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { Transition, TransitionStatus } from "react-transition-group";
 import { clsx } from "clsx";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import styles from "./styles/ExpandAnimation.module.less";
 
 /** Свойства компонента ExpandAnimation. */
@@ -96,15 +97,7 @@ export const ExpandAnimation = React.forwardRef<HTMLDivElement, IExpandAnimation
             transitionProps?.onExited?.();
         };
 
-        const setRef = (instance: HTMLDivElement | null) => {
-            nodeRef.current = instance;
-
-            if (typeof ref === "function") {
-                ref(instance);
-            } else if (ref) {
-                ref.current = instance;
-            }
-        };
+        const setRef = useMergedElementRef(nodeRef, ref);
 
         return (
             <Transition

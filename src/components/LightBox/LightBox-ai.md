@@ -123,6 +123,11 @@ css-переменную `--lightBox-scroll-width`, которую вычита�
   `lightBoxViewManagerNodeIdDefault` (`LightBox-next-view-manager-node`) — часть публичного API.
 - **`data-lightbox-component="controls"`** на контейнере `LightBox.Controls` — по нему
   `LightBox.Content` вычисляет `padding-top`. Не удалять.
+- При ширине окна до 767px включительно (`@screen-sm-max`) у `LightBox.Controls` нижний отступ 8px.
+  Минимальная высота панели 64px (16px сверху + кнопка 40px + 8px снизу) сохраняет отступ
+  без стрелок, когда кнопка закрытия позиционируется абсолютно. `LightBox.Content` учитывает
+  полную высоту панели через `offsetHeight`. `LightBoxViewManager` отдельно определяет
+  раскладку кнопок по ширине контейнера с базовым порогом 1024px.
 - **`data-test-id`** `lightBox-prev` / `lightBox-next` на кнопках стрелок — используются
   автотестами потребителей.
 - **Глобальные классы** `global-LB-less-or-equal-media-point-0` / `global-LB-more-media-point-0`
@@ -214,10 +219,11 @@ css-переменную `--lightBox-scroll-width`, которую вычита�
 
 | Дата | Изменение |
 |---|---|
-| 2026-09-21 | Боковые отступы `.lightBoxContent` вынесены в css-переменную `--lightBox-content-padding-x` (константа `@lightBoxContentPaddingX`). Нужна, чтобы `TopOverlay` выравнивался по колонке контента |
 | 2026-07-22 | Создан документ (Phase 1 AI-Ready). В том же изменении — AI-рефакторинг: JSDoc на props, общий `LightBoxArrow` для Prev/Next, хук `useLightBoxSidebarVisibility` для сайдбаров, устранение eslint-подавлений; публичный API не менялся |
 | 2026-07-22 | Добавлен `export` к props-интерфейсам `ILightBoxControlsProps`, `ILightBoxCloseProps`, `ILightBoxPrevProps`, `ILightBoxNextProps`, `ILightBoxSideOverlayLoaderProps` (аддитивно, для консистентности с остальными интерфейсами компонента) |
 | 2026-07-22 | Багфиксы по ревью PR #474: клавиатурные триггеры контролов целятся в видимую кнопку (стрелки не работали на desktop, Esc — на mobile); таймер-хак блокировки скролла заменён счётчиком смонтированных лайтбоксов; `LightBoxViewManager` снимает классы mount-ноды при размонтировании последнего менеджера |
 | 2026-08-17 | Исправлено: `LightBox.TopOverlay` перекрывался лоадером `LightBox.Content`. У `.loadingContentOverlay` теперь локальный z-index (201) — выше sticky-шапки и футера `Page`, но ниже `TopOverlay` (500); раньше `LoaderScreen` шёл с глобальным `@z-index-loader-screen` (10100) |
 | 2026-08-25 | Исправлено: в состоянии загрузки кнопка закрытия была недоступна для клика — её перекрывал лоадер `LightBox.Content`. Восстановлен модификатор `isLoading` на корневом элементе (терялся при переходе на CSS Modules): контролы поднимаются над лоадером, кнопки вперёд/назад скрываются. Esc в состоянии загрузки сохранён рабочим |
+| 2026-09-21 | Боковые отступы `.lightBoxContent` вынесены в css-переменную `--lightBox-content-padding-x` (константа `@lightBoxContentPaddingX`). Нужна, чтобы `TopOverlay` выравнивался по колонке контента |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`FocusTrapExtended`); добавлены обратные ссылки (`Overlay`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
+| 2026-11-25 | На экранах до 767px добавлен нижний отступ 8px у `LightBox.Controls`; минимальная высота 64px сохраняет отступ при наличии только кнопки закрытия. Описаны расчёт отступа контента и различие порогов адаптива |

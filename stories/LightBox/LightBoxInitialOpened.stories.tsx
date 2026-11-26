@@ -222,29 +222,30 @@ export const Default: Story = {
     },
 };
 
-// Полноэкранные оверлеи снимаются отдельно, чтобы размеры не перекрывали друг друга.
-const SIDE_OVERLAY_VISUAL_PARAMETERS = {
-    testRunner: { skip: false },
+// На XS все размеры выглядят одинаково, поэтому мобильный снимок остаётся у MD.
+const DESKTOP_SIDE_OVERLAY_VISUAL_PARAMETERS = {
+    testRunner: { skipViewports: ["xs"] },
     controls: { disable: true },
-    docs: { canvas: { sourceState: "none" }, codePanel: false },
 };
 
 export const SideOverlaySMVisualTests: Story = {
     render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.SM} />,
-    parameters: SIDE_OVERLAY_VISUAL_PARAMETERS,
+    parameters: DESKTOP_SIDE_OVERLAY_VISUAL_PARAMETERS,
 };
 
 export const SideOverlayMDVisualTests: Story = {
     render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.MD} />,
-    parameters: SIDE_OVERLAY_VISUAL_PARAMETERS,
+    parameters: {
+        controls: { disable: true },
+    },
 };
 
 export const SideOverlayLGVisualTests: Story = {
     render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.LG} />,
-    parameters: SIDE_OVERLAY_VISUAL_PARAMETERS,
+    parameters: DESKTOP_SIDE_OVERLAY_VISUAL_PARAMETERS,
 };
 
 export const SideOverlayXLVisualTests: Story = {
     render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.XL} />,
-    parameters: SIDE_OVERLAY_VISUAL_PARAMETERS,
+    parameters: DESKTOP_SIDE_OVERLAY_VISUAL_PARAMETERS,
 };

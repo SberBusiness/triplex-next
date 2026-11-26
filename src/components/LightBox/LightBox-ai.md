@@ -229,7 +229,7 @@ css-переменную `--lightBox-scroll-width`, которую вычита�
 | `WithTopOverlay` | `WithTopOverlayExample.tsx` | Верхняя панель |
 | `WithTopOverlayInSideOverlay` | `WithTopOverlayInSideOverlayExample.tsx` | TopOverlay внутри SideOverlay |
 | `LightBoxInitialOpened/Default` | — | Visual regression: лайтбокс, открытый сразу при рендере (`LightBoxInitialOpened.stories.tsx`, baseline в `__screenshots__/`) |
-| `LightBoxInitialOpened/SideOverlaySMVisualTests`, `SideOverlayMDVisualTests`, `SideOverlayLGVisualTests`, `SideOverlayXLVisualTests` | `SideOverlayVisualTests.tsx` | Visual regression: открытый SideOverlay каждого размера, отдельный снимок на xs/xl; полноэкранные панели снимаются отдельно, чтобы не перекрывать друг друга |
+| `LightBoxInitialOpened/SideOverlaySMVisualTests`, `SideOverlayMDVisualTests`, `SideOverlayLGVisualTests`, `SideOverlayXLVisualTests` | `SideOverlayVisualTests.tsx` | Visual regression: отдельный снимок на XL для каждого размера SideOverlay и один общий снимок на XS для MD |
 
 ---
 
@@ -246,6 +246,6 @@ css-переменную `--lightBox-scroll-width`, которую вычита�
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`FocusTrapExtended`); добавлены обратные ссылки (`Overlay`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
 | 2026-11-23 | Весь набор LightBoxInitialOpened скрыт из сайдбара production Storybook и autodocs тегами visual-test и !autodocs; скриншотные сценарии сохранены. |
 | 2026-11-23 | Ширина SideOverlay увеличена с 1100 до 1200px; добавлен XL с шириной Page.Body 992px. Тип size изменён с EComponentSize на ELightBoxSize (SM/MD/LG/XL); размер по умолчанию MD сохранён. |
-| 2026-11-23 | Добавлены скриншотные истории открытого SideOverlay для SM/MD/LG/XL на мобильной и десктопной ширине. |
+| 2026-11-23 | Добавлены скриншотные истории открытого SideOverlay на XL для SM/MD/LG/XL и на XS для MD. |
 | 2026-11-24 | В мобильном SideOverlay сброшен верхний отступ HeaderTitleControls; верхний padding Page — 16px, кнопка закрытия располагается на 12px ниже верха острова заголовка (28px от верха панели). |
 | 2026-11-25 | На экранах до 767px добавлен нижний отступ 8px у `LightBox.Controls`; минимальная высота 64px сохраняет отступ при наличии только кнопки закрытия. Описаны расчёт отступа контента и различие порогов адаптива |

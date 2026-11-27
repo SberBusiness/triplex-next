@@ -27,7 +27,7 @@ describe("FormFieldCounter", () => {
         const setWithCounter = vi.fn();
 
         render(
-            <FormFieldDescriptionContext.Provider value={{ withCounter: false, setWithCounter }}>
+            <FormFieldDescriptionContext.Provider value={{ setWithCounter }}>
                 <FormFieldCounter>3/10</FormFieldCounter>
             </FormFieldDescriptionContext.Provider>,
         );
@@ -40,7 +40,7 @@ describe("FormFieldCounter", () => {
         const setWithCounter = vi.fn();
 
         const { unmount } = render(
-            <FormFieldDescriptionContext.Provider value={{ withCounter: false, setWithCounter }}>
+            <FormFieldDescriptionContext.Provider value={{ setWithCounter }}>
                 <FormFieldCounter>3/10</FormFieldCounter>
             </FormFieldDescriptionContext.Provider>,
         );

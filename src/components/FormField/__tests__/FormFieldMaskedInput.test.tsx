@@ -150,6 +150,24 @@ describe("FormFieldMaskedInput", () => {
         expect(getInput()).toHaveValue("12.12.2024");
     });
 
+    it("keeps the forwarded input ref attached when the controlled value changes", () => {
+        const forwardedRef = vi.fn<(node: HTMLInputElement | null) => void>();
+        const { rerender, unmount } = renderMaskedInput({ forwardedRef, value: "" });
+        const input = getInput();
+
+        rerender(
+            <FormField>
+                <FormFieldMaskedInput mask={masks.date} value="12122024" forwardedRef={forwardedRef} />
+            </FormField>,
+        );
+
+        expect(getInput()).toBe(input);
+        expect(forwardedRef.mock.calls).toEqual([[input]]);
+
+        unmount();
+        expect(forwardedRef.mock.calls).toEqual([[input], [null]]);
+    });
+
     it("keeps the conformed value stable across re-renders with the same props", () => {
         const { rerender } = renderMaskedInput({ mask: masks.phone, value: "9001234567" });
 

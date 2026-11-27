@@ -1,5 +1,6 @@
-import React, { useCallback, useContext } from "react";
+import React, { useContext } from "react";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { TabsExtendedContext } from "../TabsExtendedContext";
 import { TTabsExtendedOnSelectTab } from "../types";
 import styles from "../styles/TabsExtended.module.less";
@@ -25,18 +26,7 @@ export const TabsExtendedDropdownWrapper = React.forwardRef<HTMLDivElement, ITab
 
         // Ширина этого контейнера участвует в расчёте помещающихся табов, поэтому ref из контекста
         // обязателен. Ref потребителя устанавливается на тот же элемент.
-        const setRef = useCallback(
-            (node: HTMLDivElement | null) => {
-                dropdownRef.current = node;
-
-                if (typeof ref === "function") {
-                    ref(node);
-                } else if (ref) {
-                    ref.current = node;
-                }
-            },
-            [dropdownRef, ref],
-        );
+        const setRef = useMergedElementRef(dropdownRef, ref);
 
         return (
             <div

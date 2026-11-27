@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { isEqual } from "lodash-es";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import { scrollSmoothHorizontally } from "../../utils/scroll";
 import styles from "./styles/CarouselExtended.module.less";
 
@@ -108,18 +109,7 @@ export const CarouselExtended = React.forwardRef<HTMLDivElement, ICarouselExtend
          * Идентичность колбэка сохраняется ровно настолько, насколько стабилен `ref` потребителя:
          * при инлайновом колбэк-ref React по-прежнему отцепляет и заново прицепляет узел на каждом рендере.
          */
-        const setRef = useCallback(
-            (instance: HTMLDivElement | null): void => {
-                carouselRef.current = instance;
-
-                if (typeof ref === "function") {
-                    ref(instance);
-                } else if (ref) {
-                    ref.current = instance;
-                }
-            },
-            [ref],
-        );
+        const setRef = useMergedElementRef(carouselRef, ref);
 
         return (
             <div {...htmlDivAttributes}>

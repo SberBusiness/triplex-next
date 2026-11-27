@@ -47,7 +47,7 @@ render-функцией в `children`, а результат выбора при
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
 | `dropZoneContainer` | `HTMLElement \| null` | `undefined` | Контейнер, на площади которого перехватывается перетаскивание. Без него drag-and-drop не работает вовсе |
-| `renderContainerContent` | `() => JSX.Element` | `undefined` | Контент внутри дроп-зоны (иконка + подпись «Положите файлы сюда») |
+| `renderContainerContent` | `() => React.ReactElement` | `undefined` | Контент внутри дроп-зоны (иконка + подпись «Положите файлы сюда») |
 
 Остальные props — `Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "children">`.
 
@@ -221,3 +221,4 @@ UploadZone.DragArea_BorderColor
 | 2026-09-16 | Создан документ. AI-рефакторинг: `UploadZone.Input` получил `forwardRef` и корректный `displayName`, stories переписаны на modern pattern |
 | 2026-09-18 | Правки по ревью: в примерах точка входа в диалог вернулась на `Link`, уточнён раздел Accessibility |
 | 2026-09-21 | Правки по ревью: в `Example: production` список загруженных файлов на узком экране переведён на `ListTableItem` |
+| 2026-11-20 | Обновлены типы для совместимости с React 19. |

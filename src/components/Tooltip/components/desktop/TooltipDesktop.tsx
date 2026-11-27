@@ -21,7 +21,7 @@ export class TooltipDesktop extends React.Component<ITooltipDesktopProps> {
     private tooltip: Element | null = null;
     private timeout?: number;
 
-    public render(): JSX.Element {
+    public render(): React.ReactElement {
         // children и toggleType не должны попадать в DOM — исключаются из rest.
         const { children, toggleType, ...rest } = this.props;
 

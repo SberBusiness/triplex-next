@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
+import type { TElementRef } from "../../types/ElementRef";
 import moment from "moment";
 import { FocusTrapProps } from "focus-trap-react";
 import { isKey } from "../../utils/keyboard";
@@ -18,7 +20,7 @@ export interface IDatePickerExtendedProps
         Pick<IDropdownProps, "alignment">,
         Omit<ICalendarProps, "adaptiveMode"> {
     /** Ссылка на целевой элемент для Dropdown. По умолчанию — корневой элемент компонента. */
-    dropdownTargetRef?: React.RefObject<HTMLElement>;
+    dropdownTargetRef?: TElementRef<HTMLElement>;
     /** Рендер-функция целевого элемента. */
     renderTarget: () => React.ReactNode;
     /** Рендер-функция целевого элемента в заголовке Puller. */
@@ -157,15 +159,7 @@ export const DatePickerExtended = React.forwardRef<HTMLDivElement, IDatePickerEx
         />
     );
 
-    const setRef = (node: HTMLDivElement | null) => {
-        containerRef.current = node;
-
-        if (typeof ref === "function") {
-            ref(node);
-        } else if (ref) {
-            ref.current = node;
-        }
-    };
+    const setRef = useMergedElementRef(containerRef, ref);
 
     return (
         <div

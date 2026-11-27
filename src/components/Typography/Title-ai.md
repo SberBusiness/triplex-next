@@ -61,11 +61,11 @@ version: "1.0"
 | `strikethrough` | `boolean` | — | Зачёркивание. |
 | `tag` | `string` | значение `size` | HTML-тег корневого элемента. По умолчанию равен значению `size` (`"h1"`/`"h2"`/`"h3"`) — визуальный размер и уровень heading связаны. Передай `tag` явно, чтобы развязать их (например, `size={ETitleSize.H1} tag="h2"`). |
 
-Компонент типизирован как `TTitleProps<T extends keyof JSX.IntrinsicElements>` и принимает все атрибуты соответствующего HTML-элемента через spread.
+Компонент типизирован как `TTitleProps<T extends keyof React.JSX.IntrinsicElements>` и принимает все атрибуты соответствующего HTML-элемента через spread.
 
 ### Ограничения
 
-- Внешний тип `forwardRef<HTMLElement, TTitleProps<keyof JSX.IntrinsicElements>>` «растворяет» дженерик: TypeScript не сужает атрибуты под конкретный `tag`. Известное ограничение публичного API, не исправлять без обсуждения (breaking).
+- Внешний тип `forwardRef<HTMLElement, TTitleProps<keyof React.JSX.IntrinsicElements>>` «растворяет» дженерик: TypeScript не сужает атрибуты под конкретный `tag`. Известное ограничение публичного API, не исправлять без обсуждения (breaking).
 - Дефолт `` tag = `${size}` `` — намеренный трюк (значения `ETitleSize` совпадают с именами тегов); при изменении значений enum сломается и дефолтный тег — ещё одна причина не трогать значения.
 - `EFontType.BRAND` дополнительно задаёт `user-select: none` (особенность стилей `Typography.module.less`).
 
@@ -130,3 +130,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-07-20 | Создан документ. AI-рефакторинг: decoration-логика вынесена во внутренний хелпер `getTextDecorationClassName` (`utils.ts`), комментарии переведены в JSDoc, unit-тесты расширены (все значения `ETitleSize`/`EFontWeightTitle`, дефолтные heading-теги). Stories переведены на modern pattern (`examples/Title/`). |
+| 2026-11-20 | Обновлены типы для совместимости с React 19. |

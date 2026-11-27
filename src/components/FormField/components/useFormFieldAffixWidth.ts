@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { TARGET_PADDING_X_DEFAULT } from "../consts";
-import { setForwardedRef } from "../../../helpers/setForwardedRef";
 
 /**
  * Синхронизирует измеренную ширину контейнера-аффикса (FormFieldPrefix / FormFieldPostfix)
@@ -19,13 +19,7 @@ export const useFormFieldAffixWidth = (
 ): React.RefCallback<HTMLSpanElement> => {
     const elementRef = useRef<HTMLSpanElement | null>(null);
 
-    const setRef = useCallback(
-        (instance: HTMLSpanElement | null) => {
-            elementRef.current = instance;
-            setForwardedRef(forwardedRef, instance);
-        },
-        [forwardedRef],
-    );
+    const setRef = useMergedElementRef(elementRef, forwardedRef);
 
     useEffect(() => {
         const element = elementRef.current;

@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { EComponentSize } from "../../../enums/EComponentSize";
 import { FocusTrap } from "focus-trap-react";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
@@ -8,7 +9,6 @@ import { useSuggestContext } from "../../Suggest/SuggestContext";
 import { Dropdown, DropdownList, DropdownListItem } from "../../Dropdown";
 import { ChipSuggestDesktopDropdownField } from "./desktop/ChipSuggestDesktopDropdownField";
 import { SuggestMobileDropdownContent } from "../../Suggest/SuggestMobileDropdownContent";
-import { setForwardedRef } from "../../../helpers/setForwardedRef";
 
 const KEY_CODES_SELECTABLE = [EVENT_KEY_CODES.ENTER];
 
@@ -28,14 +28,7 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
         setDropdownOpen,
     } = useSuggestContext<T>();
 
-    const setRef = useCallback(
-        (instance: HTMLDivElement | null) => {
-            // Suggest отличает клик внутри списка от клика вне компонента по dropdownRef из контекста.
-            dropdownRef.current = instance;
-            setForwardedRef(ref, instance);
-        },
-        [dropdownRef, ref],
-    );
+    const setRef = useMergedElementRef(dropdownRef, ref);
 
     const handleDropdownOpen = useCallback(
         (open: boolean) => {
@@ -106,4 +99,4 @@ const ChipSuggestDropdownBase = <T extends ISuggestOption>(
  */
 export const ChipSuggestDropdown = React.forwardRef(ChipSuggestDropdownBase) as <T extends ISuggestOption>(
     props: IChipSuggestDropdownProps<T> & React.RefAttributes<HTMLDivElement>,
-) => JSX.Element;
+) => React.ReactElement;

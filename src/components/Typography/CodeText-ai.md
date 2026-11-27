@@ -56,12 +56,12 @@ version: "1.0"
 | `strikethrough` | `boolean` | — | Зачёркивание. |
 | `tag` | `string` | `"span"` | HTML-тег корневого элемента (например, `code` для семантики фрагмента кода). |
 
-Компонент типизирован как `TCodeTextProps<T extends keyof JSX.IntrinsicElements>` и принимает все атрибуты соответствующего HTML-элемента через spread.
+Компонент типизирован как `TCodeTextProps<T extends keyof React.JSX.IntrinsicElements>` и принимает все атрибуты соответствующего HTML-элемента через spread.
 
 ### Ограничения
 
 - Props `size`, `weight`, `line` отсутствуют намеренно: типографика фиксирована (SBSansTextMono, 14/20px, 400).
-- Внешний тип `forwardRef<HTMLElement, TCodeTextProps<keyof JSX.IntrinsicElements>>` «растворяет» дженерик: TypeScript не сужает атрибуты под конкретный `tag`. Известное ограничение публичного API, не исправлять без обсуждения (breaking).
+- Внешний тип `forwardRef<HTMLElement, TCodeTextProps<keyof React.JSX.IntrinsicElements>>` «растворяет» дженерик: TypeScript не сужает атрибуты под конкретный `tag`. Известное ограничение публичного API, не исправлять без обсуждения (breaking).
 - `EFontType.BRAND` дополнительно задаёт `user-select: none` (особенность стилей `Typography.module.less`).
 
 ---
@@ -122,3 +122,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-07-20 | Создан документ. AI-рефакторинг: decoration-логика вынесена во внутренний хелпер `getTextDecorationClassName` (`utils.ts`), unit-тесты дополнены (дефолтный `type`, класс `brand`). Stories переведены на modern pattern (`examples/CodeText/`). |
+| 2026-11-20 | Обновлены типы для совместимости с React 19. |

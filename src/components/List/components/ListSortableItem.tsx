@@ -4,8 +4,8 @@ import { CSS } from "@dnd-kit/utilities";
 import { SyntheticListenerMap } from "@dnd-kit/core/dist/hooks/utilities";
 import { ListItem } from "@sberbusiness/triplex-next/components/List/components/ListItem";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import styles from "../styles/ListSortableItem.module.less";
-import { setForwardedRef } from "../../../helpers/setForwardedRef";
 import { ListSortableItemTarget } from "./ListSortableItemTarget";
 
 export interface IListSortableItemChildrenProvideProps {
@@ -47,10 +47,7 @@ export const ListSortableItem = Object.assign(
             },
         });
 
-        const setRef = (instance: HTMLLIElement | null) => {
-            setNodeRef(instance);
-            setForwardedRef(ref, instance);
-        };
+        const setRef = useMergedElementRef(setNodeRef, ref);
 
         return (
             <ListItem

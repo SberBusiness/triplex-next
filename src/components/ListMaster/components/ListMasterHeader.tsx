@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import styles from "../styles/ListMasterHeader.module.less";
 
 /** Свойства компонента ListMasterHeader. */
@@ -34,14 +35,7 @@ export const ListMasterHeader = React.forwardRef<HTMLDivElement, IListMasterHead
             };
         }, []);
 
-        const setRef = (instance: HTMLDivElement | null) => {
-            containerRef.current = instance;
-            if (typeof ref === "function") {
-                ref(instance);
-            } else if (ref) {
-                ref.current = instance;
-            }
-        };
+        const setRef = useMergedElementRef(containerRef, ref);
 
         return (
             <div

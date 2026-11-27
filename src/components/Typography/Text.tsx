@@ -28,7 +28,7 @@ const LINE_TYPE_TO_CLASS_NAME_MAP: Record<ELineType, string> = {
 };
 
 /** Свойства компонента Text. */
-export type TTextProps<T extends keyof JSX.IntrinsicElements> = {
+export type TTextProps<T extends keyof React.JSX.IntrinsicElements> = {
     /** Размер текста. */
     size: ETextSize;
     /** Высота блока строки. */
@@ -36,11 +36,11 @@ export type TTextProps<T extends keyof JSX.IntrinsicElements> = {
     /** Толщина шрифта. */
     weight?: EFontWeightText;
 } & ITypographyProps &
-    JSX.IntrinsicElements[T];
+    React.JSX.IntrinsicElements[T];
 
 /** Текст (типографика). */
-export const Text = forwardRef<HTMLElement, TTextProps<keyof JSX.IntrinsicElements>>(
-    <T extends keyof JSX.IntrinsicElements = "span">(
+export const Text = forwardRef<HTMLElement, TTextProps<keyof React.JSX.IntrinsicElements>>(
+    <T extends keyof React.JSX.IntrinsicElements = "span">(
         {
             children,
             className,

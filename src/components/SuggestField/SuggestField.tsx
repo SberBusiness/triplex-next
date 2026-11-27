@@ -1,3 +1,4 @@
+import type React from "react";
 import { ISuggestFieldOption, ISuggestFieldProps } from "./types";
 import { MobileView } from "../MobileView/MobileView";
 import { SuggestFieldDesktop } from "./desktop/SuggestFieldDesktop";
@@ -7,7 +8,7 @@ import { FormFieldInput } from "../FormField";
 // TODO: Переписать через useSuggest.
 const SuggestFieldBase = <T extends ISuggestFieldOption = ISuggestFieldOption>(
     props: ISuggestFieldProps<T>,
-): JSX.Element => (
+): React.ReactElement => (
     <MobileView fallback={<SuggestFieldDesktop<T> {...props} />}>
         <SuggestFieldMobile<T> {...props} />
     </MobileView>

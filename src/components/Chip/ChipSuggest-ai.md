@@ -125,13 +125,10 @@ version: "1.0"
   переименование файла в папке `Suggest` ломает мобильный режим `ChipSuggest`.
 - Корневой `<div>` всегда получает класс `chipGroupItem` — на нём держатся отступы внутри
   `ChipGroup`.
-- `setForwardedRef` живёт в `src/helpers/setForwardedRef.ts` — внутренний хелпер,
-  общий для `AmountField`, `ChipSuggest`, `FormField`, `List` и `SliderExtended`.
-  Из barrel не экспортируется и в публичные `src/utils` не переносится. Импортируется
-  относительным путём (`../../../helpers/setForwardedRef`), не через алиас
-  `@sberbusiness/triplex-next/...` — см. `docs/ai/codestyle.md`. Не плоди локальные копии:
-  та же пятистрочка ещё инлайнится в ряде компонентов (включая `Suggest.tsx`) — при
-  случае сошлись на общий модуль.
+- `ChipSuggest`, `ChipSuggestDropdown` и `Suggest` объединяют внутренний и внешний ref через
+  `useMergedElementRef` из `src/helpers/useMergedElementRef.ts`. Каждая обёртка передаёт
+  полученный callback дальше целиком, чтобы React 19 мог вызвать очистку потребителя при
+  смене ref или размонтировании.
 
 ---
 
@@ -238,3 +235,4 @@ version: "1.0"
 | 2026-11-05 | Исправлено (TRIPLEX-1039): поле фильтрации получает `aria-activedescendant` активной опции. Клавиши списку передаёт `Suggest`. |
 | 2026-11-06 | Исправлено (TRI-0): `targetProps.onKeyDown` вызывается для всех клавиш, а не только для `Enter`/`Space`; `targetProps.disabled` отключает встроенную кнопку очистки. |
 | 2026-11-19 | Для размера LG выпадающий блок и список используют MD; размер управляющего элемента остаётся LG. |
+| 2026-11-26 | Исправлена очистка callback-ref корневого элемента и выпадающего блока в React 19. |

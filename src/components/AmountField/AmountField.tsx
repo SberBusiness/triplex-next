@@ -1,11 +1,11 @@
-import React, { useRef, useLayoutEffect, useCallback } from "react";
+import React, { useRef, useLayoutEffect } from "react";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import { TextFieldBase, ITextFieldBaseProps } from "../TextField/TextFieldBase";
 import { FormFieldInput, IFormFieldInputProps, EFormFieldStatus } from "../FormField";
 import { FormFieldClear, IFormFieldClearProps } from "../FormField/components/FormFieldClear";
 import { AmountBaseInputCore } from "./AmountBaseInputCore";
 import { setCaretPosition, createSizeToClassNameMap } from "../../utils";
-import { setForwardedRef } from "../../helpers/setForwardedRef";
 import { createPlaceholder, syncCoreAndGetFormattedValue, setFallbackCaret } from "./utils";
 import { EComponentSize } from "../../enums";
 import styles from "./styles/AmountField.module.less";
@@ -109,13 +109,7 @@ export const AmountField = React.forwardRef<HTMLDivElement, IAmountFieldProps>(
             inputProps.onSelect?.(event);
         };
 
-        const setInputRef = useCallback(
-            (instance: HTMLInputElement | null) => {
-                inputRef.current = instance;
-                setForwardedRef(inputProps.ref, instance);
-            },
-            [inputProps.ref],
-        );
+        const setInputRef = useMergedElementRef(inputRef, inputProps.ref);
 
         const renderPostfix = () => {
             if (onClear !== undefined) {

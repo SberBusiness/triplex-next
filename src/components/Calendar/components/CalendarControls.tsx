@@ -34,7 +34,7 @@ export const CalendarControls: React.FC<ICalendarControlsProps> = ({
     prevButtonProps = {},
     nextButtonProps = {},
     viewButtonProps = {},
-}): JSX.Element => {
+}): React.ReactElement => {
     const { viewDate, viewMode, limitRange, periodId, onPageChange, onViewChange } = useContext(CalendarContext);
 
     /** Рендер кнопки "назад". */

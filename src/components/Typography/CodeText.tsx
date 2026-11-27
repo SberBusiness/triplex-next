@@ -8,11 +8,12 @@ import styles from "./styles/CodeText.module.less";
 import typographyStyles from "./styles/Typography.module.less";
 
 /** Свойства компонента CodeText. */
-export type TCodeTextProps<T extends keyof JSX.IntrinsicElements> = ITypographyProps & JSX.IntrinsicElements[T];
+export type TCodeTextProps<T extends keyof React.JSX.IntrinsicElements> = ITypographyProps &
+    React.JSX.IntrinsicElements[T];
 
 /** Моноширинный текст (типографика). */
-export const CodeText = forwardRef<HTMLElement, TCodeTextProps<keyof JSX.IntrinsicElements>>(
-    <T extends keyof JSX.IntrinsicElements = "span">(
+export const CodeText = forwardRef<HTMLElement, TCodeTextProps<keyof React.JSX.IntrinsicElements>>(
+    <T extends keyof React.JSX.IntrinsicElements = "span">(
         {
             children,
             className,

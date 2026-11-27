@@ -62,7 +62,7 @@ version: "1.0"
 | `clearInputOnFocus` | `boolean` | `false` | Очищать поле ввода при получении фокуса (на мобильном — поле ввода шторки) и вызывать `onFilter("")`, если поле было непустым |
 | `onScrollEnd` | `() => void` | — | Список прокручен до конца — грузи следующую страницу опций |
 | `onClear` | `React.MouseEventHandler<HTMLButtonElement>` | — | Обработчик очистки. **Кнопка очистки рендерится, только если он передан** |
-| `renderInput` | `(props: IFormFieldInputProps) => JSX.Element` | `FormFieldInput` | Замена поля ввода |
+| `renderInput` | `(props: IFormFieldInputProps) => React.ReactElement` | `FormFieldInput` | Замена поля ввода |
 | `dropdownProps` | `ISuggestFieldDropdownProps` | — | Props `Dropdown`, кроме задаваемых компонентом (`children`, `opened`, `setOpened`, `targetRef`, `size`, `onSelect`), плюс `pullerProps` — props мобильной шторки `Puller`. На мобильной ширине применяются только `pullerProps`, `onOpen` и `onClose` (подробнее — в разделе «Инварианты») |
 
 Только десктопный `SuggestFieldDesktop` дополнительно принимает `renderDropdown`,
@@ -227,7 +227,7 @@ version: "1.0"
 - `Dropdown` — выпадающий список: `DropdownDesktop` + `DropdownList` + `DropdownListItem` на
   десктопе. `ISuggestFieldDesktopDropdownProps` наследует `IDropdownDesktopProps`.
 - `Puller` — нижняя шторка мобильного варианта (`PullerHeader`, `PullerInput`, `PullerList`, …).
-  `ISuggestFieldMobileDropdownProps` наследует `Omit<IPullerProps, "onSelect">`.
+  `ISuggestFieldMobileDropdownProps` наследует `Omit<IPullerProps, "onSelect" | "onScrollEnd">`.
 - `LoaderSmall` — индикатор подгрузки подсказок: `SuggestFieldDesktop` и `SuggestFieldMobile`
   показывают его с темой `BRAND`, пока `loading`.
 - `Tooltip` — подсказка `tooltipHint` у десктопного поля. В `related` не вынесен: связь узкая,
@@ -273,3 +273,4 @@ version: "1.0"
 | 2026-11-05 | TRIPLEX-1039: клавиши списку передаёт поле ввода через `useDropdownListKeyboard`: нажатия вне поля не двигают и не выбирают опции. `aria-activedescendant` больше не сбрасывается при вводе — указывает на опцию, которую выберет `Enter`; при фильтрации остаётся на той же опции. Кастомному `renderDropdownListItem` больше не нужен ref. |
 | 2026-11-13 | TRIPLEX-1048: добавлен `dropdownProps` (с `pullerProps` для мобильной шторки), ширина списка по умолчанию `EDropdownWidth.TARGET`. Мобильная шторка — `Puller` без `Dropdown`; фокус не затирает запрос, `clearInputOnFocus` вызывает `onFilter("")`. |
 | 2026-11-19 | Для размера LG выпадающий блок и список используют MD; размер управляющего элемента остаётся LG. |
+| 2026-11-20 | Обновлены типы для совместимости с React 19. |

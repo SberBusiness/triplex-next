@@ -36,7 +36,7 @@ version: "1.0"
 
 | Prop | Тип | По умолчанию | Описание |
 |---|---|---|---|
-| `dropdownTargetRef` | `RefObject<HTMLElement>` | корневой элемент | Элемент, относительно которого позиционируется дропдаун. Нужен, когда целевой элемент занимает не всю ширину корневого `div` (так делает `DateField`). |
+| `dropdownTargetRef` | `{ readonly current: HTMLElement \| null }` | корневой элемент | Элемент, относительно которого позиционируется дропдаун. Нужен, когда целевой элемент занимает не всю ширину корневого `div` (так делает `DateField`). |
 | `alignment` | `EDropdownAlignment` | `LEFT` | Выравнивание дропдауна относительно целевого элемента. |
 | `onDropdownOpen` | `() => void` | — | Дропдаун открылся (проброшен в `Dropdown.onOpen`). |
 | `onDropdownClose` | `() => void` | — | Дропдаун закрылся (проброшен в `Dropdown.onClose`). |
@@ -132,6 +132,7 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
+| 2026-11-20 | Объектные ссылки на элементы принимают результат `useRef(null)` с типами React 18 и 19. |
 | 2026-10-21 | Переход на `Puller` (TRIPLEX-961): мобильная версия собрана из частей `Puller` (бывший `DropdownMobile*`). |
 | 2026-09-07 | В потребители базы добавлен `ChipMonthYearPicker` (чип-фильтр с `pickType` `MONTH_YEAR`) |
 | 2026-08-24 | `DatePickerExtendedContext` и `IDatePickerExtendedContext` экспортируются из barrel — целевой элемент можно написать снаружи библиотеки. `adaptiveMode` исключён из `IDatePickerExtendedProps` (ломающее изменение, затрагивает также `DateField`, `MonthYearField`, `ChipDatePicker`) |

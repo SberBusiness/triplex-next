@@ -4,6 +4,7 @@ import { findLast } from "lodash-es";
 import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import { LoaderSmall, ELoaderSmallTheme } from "@sberbusiness/triplex-next/components/Loader";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { DropdownListItem } from "./DropdownListItem";
 import { DropdownListItemsContext, IDropdownListItemsContext } from "./DropdownListItemsContext";
 import {
@@ -17,7 +18,6 @@ import {
 } from "./utils";
 import { DropdownListContext } from "../DropdownListContext";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
-import { mergeRefs } from "../../../utils/refs";
 import styles from "../styles/DropdownDesktopList.module.less";
 
 /** Свойства компонента DropdownList. */
@@ -66,7 +66,7 @@ export const DropdownList: IDropdownListComponent = Object.assign(
 
         // Внутренний ref нужен для прокрутки независимо от формы внешнего ref.
         const containerRef = useRef<HTMLDivElement>(null);
-        const combinedRef = useMemo(() => mergeRefs(ref, containerRef), [ref, containerRef]);
+        const combinedRef = useMergedElementRef(ref, containerRef);
 
         const listItemsProps = getListItemsProps(children);
         const listItemIds = listItemsProps.map(({ id }) => id);

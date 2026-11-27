@@ -1,4 +1,5 @@
 import React from "react";
+import type { TElementRef } from "../../types/ElementRef";
 import { FormFieldMaskedInput, IFormFieldMaskedInputProps } from "../FormField/components/FormFieldMaskedInput";
 import { ITextFieldBaseProps, TextFieldBase } from "../TextField/TextFieldBase";
 
@@ -13,7 +14,7 @@ export interface IMaskedFieldProps extends Omit<ITextFieldBaseProps, "children">
          * Ссылка на корневой div-обёртку FormFieldMaskedInput.
          * Для ссылки на элемент input используйте `forwardedRef`.
          */
-        ref?: React.RefObject<HTMLDivElement>;
+        ref?: TElementRef<HTMLDivElement>;
     };
 }
 

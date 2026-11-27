@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import { FocusTrapExtended, IFocusTrapExtendedProps } from "../FocusTrapExtended";
 import { Overlay, IOverlayProps } from "../Overlay/Overlay";
 import { EOverlayDirection, IOverlayChildrenProvideProps } from "../Overlay/OverlayBase";
@@ -98,15 +99,7 @@ export const TopOverlay = React.forwardRef<HTMLDivElement, ITopOverlayProps>(
 
         const handleClosing = () => setActiveFocusTrap(false);
 
-        const setOverlayWrapperRef = (instance: HTMLDivElement | null) => {
-            overlayWrapperRef.current = instance;
-
-            if (typeof ref === "function") {
-                ref(instance);
-            } else if (ref) {
-                ref.current = instance;
-            }
-        };
+        const setOverlayWrapperRef = useMergedElementRef(overlayWrapperRef, ref);
 
         const renderOverlay = (overlayProps: IOverlayChildrenProvideProps) => (
             <>

@@ -1,17 +1,18 @@
 import React from "react";
+import type { TElementRef } from "../../../types/ElementRef";
 import { Dropdown, IDropdownProps } from "../../Dropdown";
 import { DropdownList } from "../../Dropdown/desktop/DropdownList";
 
 /** Свойства компонента SelectExtendedFieldDropdown. */
 export interface ISelectExtendedFieldDropdownProps extends Omit<IDropdownProps, "forwardedRef"> {
     /** Ссылка на контейнер выпадающего блока. Компонент не forwardRef — ссылка передаётся этим свойством. */
-    forwardedRef: React.RefObject<HTMLDivElement>;
+    forwardedRef: TElementRef<HTMLDivElement>;
     /** Содержимое выпадающего блока. */
     children?: React.ReactNode;
     /** Состояние открытости выпадающего блока. */
     opened: boolean;
     /** Ссылка на поле выбора. По ней выпадающий блок считает своё положение. */
-    targetRef: React.RefObject<HTMLElement>;
+    targetRef: TElementRef<HTMLElement>;
 }
 
 /** Тип компонента SelectExtendedFieldDropdown со статическим свойством List. */

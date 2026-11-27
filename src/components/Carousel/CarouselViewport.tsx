@@ -1,8 +1,9 @@
 import React, { useContext, useRef, useCallback, useEffect } from "react";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import { ICarouselViewportProps } from "./types";
 import { CarouselContext } from "./CarouselContext";
-import { mergeRefs, useLatestRef } from "../../utils/refs";
+import { useLatestRef } from "../../utils/refs";
 import { ORIENTATION_TRANSFORM } from "./constants";
 import { EOrientation } from "../../enums";
 import styles from "./styles/Carousel.module.less";
@@ -32,7 +33,7 @@ export const CarouselViewport = React.forwardRef<HTMLDivElement, ICarouselViewpo
             viewportRef,
             trackRef,
         } = useContext(CarouselContext);
-        const combinedRef = mergeRefs(ref, viewportRef);
+        const combinedRef = useMergedElementRef(ref, viewportRef);
         // Обработчики на window живут весь жест, поэтому навигация берётся актуальной на момент touchend.
         const nextSlideRef = useLatestRef(nextSlide);
         const prevSlideRef = useLatestRef(prevSlide);

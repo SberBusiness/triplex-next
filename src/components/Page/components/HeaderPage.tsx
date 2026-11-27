@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import clsx from "clsx";
 import { Header, IHeaderProps } from "@sberbusiness/triplex-next/components/Header/Header";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { EHeaderPageType } from "./enums";
 import { useStickyCornerRadius } from "./useStickyCornerRadius";
 import { EIslandType, Island } from "../../Island";
@@ -37,14 +38,7 @@ export const HeaderPage = Object.assign(
             // Плавное обнуление верхних углов и добавление тени при прилипании к верху.
             useStickyCornerRadius(islandRef, "top", type === EHeaderPageType.FIRST && sticky);
 
-            const setIslandRef = (instance: HTMLDivElement | null) => {
-                islandRef.current = instance;
-                if (typeof ref === "function") {
-                    ref(instance);
-                } else if (ref) {
-                    ref.current = instance;
-                }
-            };
+            const setIslandRef = useMergedElementRef(islandRef, ref);
 
             const headerPageFirstClassNames = clsx(
                 styles.headerPageTypeFirst,

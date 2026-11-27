@@ -243,7 +243,7 @@ describe("ChipSuggestTarget", () => {
             expect(ref).toHaveBeenCalledExactlyOnceWith(target);
 
             unmount();
-            expect(ref).toHaveBeenLastCalledWith(null);
+            expect(ref.mock.lastCall?.[0]).toBeNull();
         });
 
         test("exposes a component displayName for React DevTools", () => {

@@ -1,10 +1,10 @@
-import React, { useCallback, useRef } from "react";
+import React, { useRef } from "react";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import { EStepPosition, EStepStatus } from "./enums";
 import { Tooltip } from "../Tooltip/Tooltip";
 import { ETooltipAlign, ETooltipSize } from "../Tooltip/enums";
 import { Text, ETextSize, EFontWeightText } from "../Typography";
-import { setForwardedRef } from "../../helpers/setForwardedRef";
 import { EComponentSize } from "../../enums/EComponentSize";
 import { createSizeToClassNameMap } from "../../utils/classNameMaps";
 import styles from "./styles/Step.module.less";
@@ -67,13 +67,7 @@ export const Step = React.forwardRef<HTMLDivElement, IStepProps>(
         const targetRef = useRef<HTMLDivElement | null>(null);
 
         /** Сохраняет узел шага локально (Tooltip позиционируется относительно него) и пробрасывает во внешний ref. */
-        const setRef = useCallback(
-            (instance: HTMLDivElement | null) => {
-                targetRef.current = instance;
-                setForwardedRef(ref, instance);
-            },
-            [ref],
-        );
+        const setRef = useMergedElementRef(targetRef, ref);
 
         const classNames = clsx(styles.step, STATUS_TO_CLASS_NAME_MAP[status], SIZE_TO_CLASS_NAME_MAP[size], className);
 

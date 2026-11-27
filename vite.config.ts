@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import dts from "vite-plugin-dts";
+import { appendFile, readFile } from "node:fs/promises";
 import { resolve, relative, extname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { globSync } from "glob";
@@ -24,6 +25,11 @@ export default defineConfig({
             entryRoot: "src",
             outDir: "dist",
             rollupTypes: true,
+            // API Extractor пропускает module augmentation при объединении деклараций.
+            async afterBuild() {
+                const dndKitTypes = await readFile(resolve(__dirname, "types/dnd-kit-jsx.d.ts"), "utf8");
+                await appendFile(resolve(__dirname, "dist/index.d.ts"), "\n" + dndKitTypes);
+            },
             exclude: ["**/*.test.{ts,tsx}"],
             tsconfigPath: "tsconfig.build.json",
         }),

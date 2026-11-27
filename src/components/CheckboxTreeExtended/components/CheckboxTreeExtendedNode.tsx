@@ -27,7 +27,7 @@ export interface ICheckboxTreeExtendedNodeProps extends Omit<
     "children" | "renderBody" | "renderHeader"
 > {
     /** Render-функция компонента чекбокс. */
-    checkbox: (props: ICheckboxTreeExtendedCheckboxProvideProps) => JSX.Element;
+    checkbox: (props: ICheckboxTreeExtendedCheckboxProvideProps) => React.ReactElement;
     /** Массив нод CheckboxTreeExtendedNode, если имеются вложенные ноды. */
     children?: React.ReactNode;
     /** Id ноды. */

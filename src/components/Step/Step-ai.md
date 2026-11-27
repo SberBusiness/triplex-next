@@ -114,7 +114,7 @@ Step.Color_Disabled
 
 - `forwardRef<HTMLDivElement>` — не убирать. Ref всегда указывает на корневой `<div class="step">`,
   и в варианте с подсказкой тоже: внешний ref мерджится с внутренним через
-  `setForwardedRef` (`src/helpers/setForwardedRef.ts`).
+  `useMergedElementRef` (`src/helpers/useMergedElementRef.ts`).
 - Внутренний ref на корневой `<div>` обязателен: он уходит в `Tooltip` как `targetRef` —
   относительно этого узла считается позиция подсказки. Убрать внутренний ref или перевесить
   его на другой элемент нельзя.
@@ -208,3 +208,4 @@ Story ID участвуют в именах baseline-скриншотов (`step
 |---|---|
 | 2026-09-24 | Создан документ. AI-рефакторинг: `Step` переведён с `React.FC` на `forwardRef` (внешний ref мерджится с внутренним, который уходит в `Tooltip` как `targetRef`), JSDoc на компоненте и дефолтах props, `renderContent()` заменён на вычисляемый один раз элемент, приведён к порядку LESS. Добавлены unit-тесты (`__tests__/Step.test.tsx`), stories созданы по modern pattern (`stories/Step/`). |
 | 2026-10-21 | Переход на `Puller` (TRIPLEX-961): адаптивный режим `Tooltip` — нижняя шторка `Puller`. |
+| 2026-11-26 | При отсоединении корневого элемента React 19 вызывает очистку, которую вернул внешний callback-ref. |

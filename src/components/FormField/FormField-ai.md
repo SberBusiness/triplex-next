@@ -107,7 +107,7 @@ FormField.Target_PlaceholderColor_Default
 - `disabled` исключён из props элементов ввода (`IFormFieldInputProps`, `IFormFieldTextareaProps`, `IFormFieldMaskedInputProps` — через `Omit`): блокировка задаётся только `status={EFormFieldStatus.DISABLED}`, иначе переданное значение молча перетиралось бы внутренним.
 - Генерация id — через `uniqueId` (`lodash-es`), без `React.useId`: ветка `release-0` собирается на React 17.
 - `FormFieldDescription` и `FormFieldCounter` объявлены как `React.FC` без `forwardRef` — осознанное историческое отличие от остальных субкомпонентов. Добавление ref расширяет публичный API; решение владельца — оставить как есть.
-- Внутренние утилиты семейства (`components/utils.ts` — `isFilled`; `components/useFormFieldAffixWidth.ts`) намеренно не попадают в barrel `components/index.ts`. Общий `setForwardedRef` вынесен в `src/helpers/setForwardedRef.ts` и импортируется относительным путём.
+- Внутренние утилиты семейства (`components/utils.ts` — `isFilled`; `components/useFormFieldAffixWidth.ts`) намеренно не попадают в barrel `components/index.ts`. Аффиксы и поле с маской объединяют внутренний и внешний ref через `useMergedElementRef` из `src/helpers/useMergedElementRef.ts`.
 - Компонент не рендерит собственных подписей и текстов — библиотека мультиязычная.
 
 ---
@@ -178,3 +178,4 @@ FormField.Target_PlaceholderColor_Default
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`FormFieldLabel`, `FormFieldInput`, `FormFieldTextarea`, `FormFieldTarget`, `FormFieldMaskedInput`, `FormFieldPrefix`, `FormFieldPostfix`, `FormFieldClear`, `FormFieldDescription`, `FormFieldCounter`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
 | 2026-11-10 | Добавлена ссылка на контракт `FormFieldClear` (TRI-196). |
 | 2026-11-10 | Добавлены ссылки на контракты `FormFieldCounter` и `FormFieldDescription` (TRI-194, TRI-195). |
+| 2026-11-26 | Аффиксы и поле с маской передают React 19 очистку callback-ref. Обновление значения маски сохраняет подключение к тому же input. |

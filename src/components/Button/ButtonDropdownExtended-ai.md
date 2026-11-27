@@ -26,7 +26,7 @@ version: "1.0"
 |---|---|---|
 | `renderButton` | `(props: IButtonDropdownExtendedButtonProvideProps) => React.ReactNode` | Отрисовка кнопки-триггера. Получает `opened`, `setOpened` и `activeDescendant` — `id` активного элемента `DropdownList` для `aria-activedescendant` |
 | `renderDropdown` | `(props: IButtonDropdownExtendedDropdownProvideProps) => React.ReactNode` | Отрисовка выпадающего блока. Дополнительно получает `className` внутреннего позиционирующего класса |
-| `dropdownRef` | `React.RefObject<HTMLElement>` | Ссылка на DOM-элемент выпадающего блока. Нужна для click-outside: клик внутри этого элемента не закрывает блок |
+| `dropdownRef` | `{ readonly current: HTMLElement \| null }` | Ссылка на DOM-элемент выпадающего блока. Нужна для click-outside: клик внутри этого элемента не закрывает блок |
 
 ### Опциональные props
 
@@ -122,3 +122,4 @@ version: "1.0"
 | 2026-07-29 | Создан документ AI-ready для `ButtonDropdownExtended`. AI-рефакторинг без изменения публичного API: режим управления переведён с ref на `useState` (устранены ошибки `react-hooks/refs`), убраны вырожденный тернарник в `useState` и мёртвые проверки `opened` внутри обработчиков, `setOpened && setOpened(...)` заменён на опциональный вызов, добавлены JSDoc. Добавлены unit-тесты и stories по modern pattern. |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`DropdownList`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |
 | 2026-11-05 | TRIPLEX-1039: компонент связывает кнопку с `DropdownList` в блоке — клавиши, нажатые на кнопке, передаются открытому списку через `useDropdownListKeyboard`. В `IButtonDropdownExtendedButtonProvideProps` добавлено поле `activeDescendant`. |
+| 2026-11-20 | Объектные ссылки на элементы принимают результат `useRef(null)` с типами React 18 и 19. |

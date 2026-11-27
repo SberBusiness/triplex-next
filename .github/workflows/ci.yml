@@ -38,6 +38,36 @@ jobs:
 
       - name: Build library
         run: npm run build
+
+      - name: Check React 18 and 19 consumers
+        if: github.ref == 'refs/heads/main' || github.base_ref == 'main'
+        run: |
+          npx playwright install --with-deps chromium
+          archive=$(npm pack ./dist --pack-destination "$RUNNER_TEMP" --silent)
+          for react in 18.3.1 19.3.1; do
+            case "$react" in
+              18.3.1) types=18.3.4 ;; # Нижняя поддерживаемая версия типов React 18.
+              19.3.1) types=19.3.0 ;;
+            esac
+            for manager in npm pnpm; do
+              consumer="$RUNNER_TEMP/triplex-$manager-$react"
+              mkdir "$consumer"
+              cp scripts/fixtures/react-consumer.tsx "$consumer/"
+              (
+                cd "$consumer"
+                npm init -y >/dev/null
+                packages=("$RUNNER_TEMP/$archive" "react@$react" "react-dom@$react" "@types/react@$types" "@types/react-dom@$types")
+                if [ "$manager" = pnpm ]; then
+                  npx --yes pnpm@10.34.5 add --ignore-scripts --strict-peer-dependencies "${packages[@]}"
+                else
+                  npm install --ignore-scripts --strict-peer-deps "${packages[@]}"
+                fi
+                "$GITHUB_WORKSPACE/node_modules/.bin/tsc" --noEmit --strict --target ES2022 \
+                  --module ESNext --moduleResolution bundler --jsx react-jsx react-consumer.tsx
+                node "$GITHUB_WORKSPACE/scripts/checkReactConsumer.mjs" "$consumer" "${react%%.*}"
+              )
+            done
+          done
   
   unit:
     name: Unit tests

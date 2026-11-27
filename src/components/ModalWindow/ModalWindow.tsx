@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import clsx from "clsx";
 import { CSSTransition } from "react-transition-group";
 import { Portal } from "../Portal";
@@ -90,6 +91,8 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
     // Сама модалка скрывается/показывается через CSSTransition (mountOnEnter / unmountOnExit).
     const [mountNode] = useState<HTMLDivElement>(getOrCreateMountNode);
 
+    const containerRef = useRef<HTMLDivElement>(null);
+
     // Узел role="dialog". Используется как fallbackFocus для FocusTrap: ловушка активируется
     // синхронно при открытии, и если внутри ещё нет tabbable-узлов (контент грузится асинхронно,
     // показан лоадер и т.п.), focus-trap без fallback падает с
@@ -125,15 +128,7 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
     };
 
     /** Установка ref. */
-    const setRef = (instance: HTMLDivElement | null) => {
-        dialogRef.current = instance;
-
-        if (typeof ref === "function") {
-            ref(instance);
-        } else if (ref) {
-            ref.current = instance;
-        }
-    };
+    const setRef = useMergedElementRef(dialogRef, ref);
 
     useEffect(() => {
         // В React 18 StrictMode (dev) компонент проходит цикл mount → unmount → mount.
@@ -160,6 +155,7 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
             <Portal container={mountNode}>
                 <CSSTransition
                     in={isOpen}
+                    nodeRef={containerRef}
                     timeout={animationExitTime}
                     classNames="global-modalWindowTransition"
                     appear // Нужен для срабатывания onEnter.
@@ -179,7 +175,7 @@ export const ModalWindow = React.forwardRef<HTMLDivElement, IModalWindowProps>((
                             ...focusTrapProps?.focusTrapOptions,
                         }}
                     >
-                        <div className={classNameContainer} style={topPositionStyle}>
+                        <div ref={containerRef} className={classNameContainer} style={topPositionStyle}>
                             <div className={styles.modalWindowBackdrop} />
                             <div
                                 role="dialog"

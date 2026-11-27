@@ -1,5 +1,6 @@
-import React, { forwardRef, useCallback, useContext } from "react";
+import React, { forwardRef, useContext } from "react";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { UploadZoneContext } from "../UploadZoneContext";
 import styles from "../styles/UploadZone.module.less";
 
@@ -14,18 +15,7 @@ export const UploadZoneInput = forwardRef<HTMLInputElement, IUploadZoneInputProp
     ({ className, ...restHtmlAttributes }, ref) => {
         const { onChange, setInputNode } = useContext(UploadZoneContext);
 
-        const setRef = useCallback(
-            (instance: HTMLInputElement | null) => {
-                setInputNode(instance);
-
-                if (typeof ref === "function") {
-                    ref(instance);
-                } else if (ref) {
-                    ref.current = instance;
-                }
-            },
-            [ref, setInputNode],
-        );
+        const setRef = useMergedElementRef(setInputNode, ref);
 
         const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             onChange(e.target.files, e);

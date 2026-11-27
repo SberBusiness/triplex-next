@@ -1,8 +1,8 @@
 import React, { useContext, useRef, useCallback } from "react";
 import clsx from "clsx";
+import { useMergedElementRef } from "../../helpers/useMergedElementRef";
 import { ICarouselItemProps } from "./types";
 import { CarouselContext } from "./CarouselContext";
-import { mergeRefs } from "../../utils/refs";
 import styles from "./styles/Carousel.module.less";
 
 /** Слайд карусели: регистрирует свой DOM-узел по индексу для измерения и навигации. */
@@ -28,7 +28,7 @@ export const CarouselItem = React.forwardRef<HTMLDivElement, ICarouselItemProps>
             [index, slideRefs],
         );
 
-        const combinedRef = mergeRefs(ref, registerItemRef);
+        const combinedRef = useMergedElementRef(ref, registerItemRef);
 
         return (
             <div className={clsx(styles.slide, className)} role="group" {...restProps} ref={combinedRef}>

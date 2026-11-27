@@ -1,7 +1,7 @@
-import React, { useCallback, useRef } from "react";
+import React, { useRef } from "react";
+import { useMergedElementRef } from "../../../helpers/useMergedElementRef";
 import { TriggerClickOnKeyDownEvent } from "../../Triggers/TriggerClickOnKeyDownEvent";
 import { EVENT_KEY_CODES } from "../../../utils/keyboard";
-import { setForwardedRef } from "../../../helpers/setForwardedRef";
 import { ConfirmCloseButton, IConfirmCloseButtonProps } from "./ConfirmCloseButton";
 
 /** Свойства компонента ConfirmClose. */
@@ -19,14 +19,7 @@ export const ConfirmClose = React.forwardRef<HTMLButtonElement, IConfirmClosePro
         // Кнопка нужна самому компоненту (клик по Esc) и потребителю через forwarded ref.
         const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-        const setButtonRef = useCallback(
-            (instance: HTMLButtonElement | null) => {
-                buttonRef.current = instance;
-
-                setForwardedRef(ref, instance);
-            },
-            [ref],
-        );
+        const setButtonRef = useMergedElementRef(buttonRef, ref);
 
         if (clickByEsc) {
             return (

@@ -70,6 +70,7 @@ function stripDevFields(pkg) {
         repository,
         author,
         keywords,
+        peerDependenciesMeta,
         peerDependencies, // External
         dependencies, // Vendor chunk
     } = rootPkg;
@@ -89,6 +90,7 @@ function stripDevFields(pkg) {
         exports: exportsField,
         sideEffects: ["*.css", "*.less"],
         files: ["**/*.js", "**/*.js.map", "**/*.d.ts", "**/*.css", "**/*.less", "**/*.woff2", "README.md"],
+        peerDependenciesMeta,
         peerDependencies,
         dependencies,
     });

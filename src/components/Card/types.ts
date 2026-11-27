@@ -10,7 +10,7 @@ export interface ICardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /** Свойства интерактивной карточки. */
-export interface ICardActionProps extends ICardProps {
+export interface ICardActionProps extends Omit<ICardProps, "onToggle"> {
     /** Обработчик изменения состояния выбора. Вызывается с новым значением selected. */
     onToggle?: (selected: boolean) => void;
     /** Состояние выбора в контролируемом режиме. Режим определяется при монтировании по условию selected !== undefined: при selected === undefined (в том числе явном) карточка работает в неконтролируемом режиме. */

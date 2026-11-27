@@ -82,7 +82,7 @@ version: "1.0"
 - Десктопный календарь обёрнут в `FocusTrap` (`focus-trap-react`):
   - при открытии с клавиатуры фокус уходит внутрь календаря, при закрытии возвращается на целевой элемент;
   - при открытии мышью (`mouseUsedRef`) фокус не перехватывается и не возвращается — иначе после клика мышью фокус «прыгал» бы в календарь;
-  - то же правило про мышь передаётся ловушке мобильной шторки `Puller` через `pullerProps.focusTrapProps`: после тапа фокус не уходит в шторку и при закрытии не возвращается на поле;
+  - то же правило про мышь передаётся ловушке мобильной шторки `Puller` через `pullerProps.focusTrapProps`: после тапа фокус не уходит в шторку и при закрытии не возвращается на поле. Без мыши опции не передаются вовсе: явный `initialFocus: undefined` перетёр бы фокус на контейнер шторки из `PullerInner`;
   - `clickOutsideDeactivates: true`; `fallbackFocus` — контейнер календаря внутри ловушки (`tabIndex={-1}`), поэтому при отсутствии tabbable-элементов фокус остаётся внутри диалога. Задаётся ленивой функцией, т.к. на момент рендера ref ещё не заполнен; целевой элемент и `document.body` оставлены запасными вариантами, потому что focus-trap бросает исключение на пустом fallback.
 - `Escape` на корневом элементе закрывает календарь (только когда он открыт), после чего вызывается пользовательский `onKeyDown`.
 - `mousedown` вне корневого элемента и вне дропдауна закрывает календарь; клик внутри календаря — нет.
@@ -137,4 +137,4 @@ version: "1.0"
 | 2026-08-24 | `DatePickerExtendedContext` и `IDatePickerExtendedContext` экспортируются из barrel — целевой элемент можно написать снаружи библиотеки. `adaptiveMode` исключён из `IDatePickerExtendedProps` (ломающее изменение, затрагивает также `DateField`, `MonthYearField`, `ChipDatePicker`). |
 | 2026-09-07 | В потребители базы добавлен `ChipMonthYearPicker` (чип-фильтр с `pickType` `MONTH_YEAR`). |
 | 2026-10-21 | Переход на `Puller`: мобильная версия собрана из частей `Puller` — бывшего `DropdownMobile*` (TRIPLEX-961). |
-| 2026-11-25 | Шторка `Puller` получила ловушку фокуса; ей передаются те же `initialFocus` / `returnFocusOnDeactivate` по `mouseUsedRef`, что и `FocusTrap` календаря, — после открытия тапом фокус не уходит в шторку и не возвращается на поле. Затрагивает `DateField`, `MonthYearField`, `ChipDatePicker`, `ChipMonthYearPicker` (TRIPLEX-1054). |
+| 2026-11-25 | Шторка `Puller` получила ловушку фокуса; при открытии мышью (`mouseUsedRef`) ей, как и `FocusTrap` календаря, передаются `initialFocus: false` и `returnFocusOnDeactivate: false` — после открытия тапом фокус не уходит в шторку и не возвращается на поле. Затрагивает `DateField`, `MonthYearField`, `ChipDatePicker`, `ChipMonthYearPicker` (TRIPLEX-1054). |

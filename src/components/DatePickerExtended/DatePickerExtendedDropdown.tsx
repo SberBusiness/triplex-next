@@ -24,13 +24,12 @@ export const DatePickerExtendedDropdown = React.forwardRef<HTMLDivElement, IDate
         const { children, targetRef, setOpened, renderHeaderTarget, renderCalendar, focusTrapProps, ...rest } = props;
         const { mouseUsedRef, setDropdownOpen } = useContext(DatePickerExtendedContext);
         const calendarRef = useRef<HTMLDivElement>(null);
-        // После открытия мышью фокус не переводится внутрь ловушки и не возвращается на поле — и в FocusTrap
-        // календаря, и в ловушке шторки Puller. Ловушки читают опции при монтировании, то есть при открытии.
-        const mouseFocusTrapOptions = {
-            // false — не переводить фокус внутрь ловушки при открытии мышью.
-            initialFocus: mouseUsedRef.current ? (false as const) : undefined,
-            returnFocusOnDeactivate: !mouseUsedRef.current,
-        };
+        // При открытии мышью фокус не уходит в ловушку и не возвращается на поле — и в FocusTrap календаря,
+        // и в ловушке шторки Puller (опции читаются при монтировании, то есть при открытии). Без мыши опции
+        // не задаются: явный initialFocus: undefined перетёр бы initialFocus из PullerInner.
+        const mouseFocusTrapOptions = mouseUsedRef.current
+            ? { initialFocus: false as const, returnFocusOnDeactivate: false }
+            : undefined;
 
         /** Отрисовка содержимого в мобильном режиме. */
         const renderMobileContent = () => (

@@ -310,15 +310,16 @@ describe("DatePickerExtended", () => {
         /** Прогоняет фейковые таймеры focus-trap: активацию ловушки или возврат фокуса. */
         const flushFocusTrap = () => act(() => vi.runAllTimersAsync());
 
-        it("moves focus into the Puller and returns it to the target when opened without the mouse", async () => {
+        it("focuses the Puller container and returns focus to the target when opened without the mouse", async () => {
+            // В jsdom нет layout: без мока tabbable-элементов нет, и контейнер получил бы фокус через fallbackFocus
+            // при любом initialFocus. Мок делает кнопку закрытия tabbable — тест ловит перетирание initialFocus.
+            vi.spyOn(Element.prototype, "getClientRects").mockReturnValue([{}] as unknown as DOMRectList);
             setMobileView(true);
             renderDatePicker();
             act(() => getTarget().focus());
 
             openDropdown();
-            await waitFor(() =>
-                expect(document.querySelector(".puller")).toContainElement(document.activeElement as HTMLElement),
-            );
+            await waitFor(() => expect(document.querySelector(".puller")).toHaveFocus());
 
             fireEvent.click(getPullerClose());
 

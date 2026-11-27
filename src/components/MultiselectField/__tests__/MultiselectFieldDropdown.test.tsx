@@ -210,6 +210,73 @@ describe("MultiselectFieldDropdown", () => {
             expect(screen.getByTestId("mobile-content")).toBeInTheDocument();
             expect(screen.queryByTestId("dropdown-content")).not.toBeInTheDocument();
         });
+
+        // У Puller по умолчанию tabindex="-1" ставится только при активной ловушке фокуса.
+        it("Should disable the Puller focus trap when the dropdown children are rendered", () => {
+            mockMobileWidth();
+
+            renderDropdown();
+
+            expect(document.querySelector(".puller")).not.toHaveAttribute("tabindex");
+        });
+
+        it("Should keep the Puller focus trap disabled when pullerProps.focusTrapProps has no active", () => {
+            mockMobileWidth();
+
+            renderDropdown({ pullerProps: { focusTrapProps: { focusTrapOptions: { preventScroll: false } } } });
+
+            expect(document.querySelector(".puller")).not.toHaveAttribute("tabindex");
+        });
+
+        it("Should keep the Puller focus trap disabled when pullerProps.focusTrapProps.active is undefined", () => {
+            mockMobileWidth();
+
+            renderDropdown({ pullerProps: { focusTrapProps: { active: undefined } } });
+
+            expect(document.querySelector(".puller")).not.toHaveAttribute("tabindex");
+        });
+
+        it("Should keep the Puller focus trap for custom pullerProps children", () => {
+            mockMobileWidth();
+
+            renderDropdown({ pullerProps: { children: <div>Mobile content</div> } });
+
+            expect(document.querySelector(".puller")).toHaveAttribute("tabindex", "-1");
+        });
+
+        // С pullerProps.children в DOM только ловушка Puller: getFocusTrapOptions читает её опции.
+        it.each([
+            [true, false],
+            [false, true],
+        ])(
+            "Should apply returnFocusOnDeactivate to the Puller focus trap when mouseUsed is %s",
+            (mouseUsed, expected) => {
+                mockMobileWidth();
+
+                renderDropdown(
+                    { pullerProps: { children: <div>Mobile content</div> } },
+                    { size: EComponentSize.MD, mouseUsedRef: { current: mouseUsed } },
+                );
+
+                expect(getFocusTrapOptions()).toMatchObject({ returnFocusOnDeactivate: expected });
+            },
+        );
+
+        it("Should let pullerProps.focusTrapProps override returnFocusOnDeactivate of the Puller focus trap", () => {
+            mockMobileWidth();
+
+            renderDropdown(
+                {
+                    pullerProps: {
+                        children: <div>Mobile content</div>,
+                        focusTrapProps: { focusTrapOptions: { returnFocusOnDeactivate: true } },
+                    },
+                },
+                { size: EComponentSize.MD, mouseUsedRef: { current: true } },
+            );
+
+            expect(getFocusTrapOptions()).toMatchObject({ returnFocusOnDeactivate: true });
+        });
     });
 
     it("Should expose Header, Content and Footer as static properties", () => {

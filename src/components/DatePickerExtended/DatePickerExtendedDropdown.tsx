@@ -24,6 +24,13 @@ export const DatePickerExtendedDropdown = React.forwardRef<HTMLDivElement, IDate
         const { children, targetRef, setOpened, renderHeaderTarget, renderCalendar, focusTrapProps, ...rest } = props;
         const { mouseUsedRef, setDropdownOpen } = useContext(DatePickerExtendedContext);
         const calendarRef = useRef<HTMLDivElement>(null);
+        // После открытия мышью фокус не переводится внутрь ловушки и не возвращается на поле — и в FocusTrap
+        // календаря, и в ловушке шторки Puller. Ловушки читают опции при монтировании, то есть при открытии.
+        const mouseFocusTrapOptions = {
+            // false — не переводить фокус внутрь ловушки при открытии мышью.
+            initialFocus: mouseUsedRef.current ? (false as const) : undefined,
+            returnFocusOnDeactivate: !mouseUsedRef.current,
+        };
 
         /** Отрисовка содержимого в мобильном режиме. */
         const renderMobileContent = () => (
@@ -43,6 +50,7 @@ export const DatePickerExtendedDropdown = React.forwardRef<HTMLDivElement, IDate
                 pullerProps={{
                     children: renderMobileContent(),
                     className: styles.datePickerExtendedMobileDropdown,
+                    focusTrapProps: { focusTrapOptions: mouseFocusTrapOptions },
                 }}
                 setOpened={setOpened}
                 {...rest}
@@ -58,9 +66,7 @@ export const DatePickerExtendedDropdown = React.forwardRef<HTMLDivElement, IDate
                         // Функция, а не элемент: ref на момент рендера может быть ещё не заполнен.
                         // targetRef и document.body — страховка: focus-trap бросает исключение на пустом fallback.
                         fallbackFocus: () => calendarRef.current ?? targetRef.current ?? document.body,
-                        // false — не переводить фокус внутрь ловушки при открытии мышью.
-                        initialFocus: mouseUsedRef.current ? false : undefined,
-                        returnFocusOnDeactivate: !mouseUsedRef.current,
+                        ...mouseFocusTrapOptions,
                         ...focusTrapProps?.focusTrapOptions,
                     }}
                 >

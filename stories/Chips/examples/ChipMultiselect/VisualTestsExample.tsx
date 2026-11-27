@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, { useLayoutEffect, useMemo, useState } from "react";
 import {
     MultiselectField,
     PullerHeader,
@@ -24,10 +24,19 @@ import {
 } from "@sberbusiness/triplex-next";
 import { CHIP_MULTISELECT_VISUAL_TEST_OPTIONS } from "./storyConstants";
 
-function useMultiselectFieldStoriesLogic(
-    args: { size: EComponentSize },
-    chipRef: React.RefObject<HTMLDivElement | null>,
-) {
+/**
+ * Открывает или закрывает чип так, как нужно visual-тесту. Открытость задаётся через setOpened, а не кликом по чипу:
+ * клик вне шторки перехватывает её ловушка фокуса, и стрелка чипа осталась бы в закрытом положении.
+ */
+const OpenedSync = ({ opened, setOpened }: Pick<ISelectExtendedFieldDropdownProvideProps, "opened" | "setOpened">) => {
+    useLayoutEffect(() => {
+        setOpened(opened);
+    }, [opened, setOpened]);
+
+    return null;
+};
+
+function useMultiselectFieldStoriesLogic(args: { size: EComponentSize }) {
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [filter, setFilter] = useState("");
     const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
@@ -101,22 +110,6 @@ function useMultiselectFieldStoriesLogic(
     const mobileView = useMobileView();
     const shouldBeOpened = args.size === EComponentSize.SM || !mobileView;
 
-    useLayoutEffect(() => {
-        const el = chipRef.current;
-        if (!el) {
-            return;
-        }
-
-        const isExpanded = el.getAttribute("aria-expanded") === "true";
-        if (shouldBeOpened && !isExpanded) {
-            el.click();
-        }
-
-        if (!shouldBeOpened && isExpanded) {
-            el.click();
-        }
-    }, [shouldBeOpened, chipRef]);
-
     const renderDropdown = ({ targetRef, dropdownRef }: ISelectExtendedFieldDropdownProvideProps) => (
         <MultiselectField.Dropdown
             opened={shouldBeOpened}
@@ -166,26 +159,28 @@ function useMultiselectFieldStoriesLogic(
         </MultiselectField.Dropdown>
     );
 
+    const renderSyncedDropdown = (dropdownProps: ISelectExtendedFieldDropdownProvideProps) => (
+        <>
+            <OpenedSync opened={shouldBeOpened} setOpened={dropdownProps.setOpened} />
+            {renderDropdown(dropdownProps)}
+        </>
+    );
+
     return {
         unselectAll,
-        renderDropdown,
+        renderDropdown: renderSyncedDropdown,
         selectedIds,
     };
 }
 
 export const VisualTestsExample = () => {
-    const smChipRef = useRef<HTMLDivElement | null>(null);
-    const mdChipRef = useRef<HTMLDivElement | null>(null);
-    const lgChipRef = useRef<HTMLDivElement | null>(null);
-
-    const sm = useMultiselectFieldStoriesLogic({ size: EComponentSize.SM }, smChipRef);
-    const md = useMultiselectFieldStoriesLogic({ size: EComponentSize.MD }, mdChipRef);
-    const lg = useMultiselectFieldStoriesLogic({ size: EComponentSize.LG }, lgChipRef);
+    const sm = useMultiselectFieldStoriesLogic({ size: EComponentSize.SM });
+    const md = useMultiselectFieldStoriesLogic({ size: EComponentSize.MD });
+    const lg = useMultiselectFieldStoriesLogic({ size: EComponentSize.LG });
 
     return (
         <div style={{ display: "flex", maxWidth: 600, alignItems: "flex-start", justifyContent: "space-between" }}>
             <ChipMultiselect
-                ref={smChipRef}
                 size={EComponentSize.SM}
                 clearSelected={sm.unselectAll}
                 selected={sm.selectedIds.length > 0}
@@ -194,7 +189,6 @@ export const VisualTestsExample = () => {
                 {(dropdownProps) => sm.renderDropdown(dropdownProps)}
             </ChipMultiselect>
             <ChipMultiselect
-                ref={mdChipRef}
                 size={EComponentSize.MD}
                 clearSelected={md.unselectAll}
                 selected={md.selectedIds.length > 0}
@@ -203,7 +197,6 @@ export const VisualTestsExample = () => {
                 {(dropdownProps) => md.renderDropdown(dropdownProps)}
             </ChipMultiselect>
             <ChipMultiselect
-                ref={lgChipRef}
                 size={EComponentSize.LG}
                 clearSelected={lg.unselectAll}
                 selected={lg.selectedIds.length > 0}

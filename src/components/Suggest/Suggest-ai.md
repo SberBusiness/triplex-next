@@ -128,11 +128,11 @@ Headless-основа выпадающего списка с фильтраци�
 
 Клавиатура: `Escape` при открытом списке закрывает список, возвращает в поле ввода `label`
 текущего `value` и останавливает всплытие события. Остальные клавиши, всплывшие до корневого
-`<div>`, Suggest передаёт открытому `DropdownList` (провайдер `DropdownListContext` из
+`<div>`, Suggest передаёт открытому `DropdownList` или `PullerList` (провайдер `DropdownListContext` из
 `useDropdownListKeyboard` рендерится вокруг `children`): стрелки перемещают активную опцию,
 клавиши `keyCodesForSelection` выбирают её. По умолчанию это `Space` и `Enter`, поэтому с полем ввода
 `keyCodesForSelection` сужают до `Enter` — иначе пробел выберет опцию вместо ввода (так сделано в
-`ChipSuggest`). Возврат фокуса на управляющий элемент после закрытия Suggest не делает —
+`ChipSuggest` и `SuggestMobileDropdownContent`). Возврат фокуса на управляющий элемент после закрытия Suggest не делает —
 в `ChipSuggest` это решается `FocusTrap` вокруг содержимого дропдауна.
 
 Мобильное наполнение (`SuggestMobileDropdownContent`) рендерит список с `role="listbox"`
@@ -189,3 +189,4 @@ Suggest headless: собственной разметки он не рендер
 | 2026-09-02 | Создан документ |
 | 2026-10-21 | **Breaking** (TRIPLEX-961): prop `mobileViewProps`, унаследованный `ISuggestDropdownProps` от `Dropdown`, переименован в `pullerProps`. Мобильное наполнение собрано из частей нижней шторки `Puller` (бывший `DropdownMobile*`). |
 | 2026-11-05 | Исправлено (TRIPLEX-1039): `activeDescendant` в `SuggestContext` заполняется — Suggest рендерит `DropdownListContext.Provider` и передаёт клавиши корневого `<div>` открытому `DropdownList` через `useDropdownListKeyboard`. Из значения контекста убран нетипизированный `setActiveDescendant`. |
+| 2026-11-25 | Исправлено (TRIPLEX-1054): `PullerList` получил клавиатурную навигацию, поэтому в `SuggestMobileDropdownContent` опция выбирается только по `Enter` — пробел остаётся вводом. |

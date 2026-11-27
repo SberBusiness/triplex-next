@@ -8,10 +8,12 @@ import { DataTestId } from "../../../consts/DataTestId";
 import { FormFieldInput, FormFieldClear } from "../../FormField";
 import { LoaderSmall, ELoaderSmallTheme } from "../../Loader";
 import { useDropdownOpenCallbacks } from "../../Dropdown/useDropdownOpenCallbacks";
+import { isKey } from "../../../utils/keyboard";
 
 /**
  * Мобильный SuggestField.
- * Отображает поле ввода (target). При получении полем ввода фокуса - отображает мобильный Dropdown.
+ * Отображает поле ввода (target). При фокусе, тапе или ArrowDown / ArrowUp на поле ввода
+ * отображает мобильный Dropdown.
  */
 export const SuggestFieldMobile = <T extends ISuggestFieldOption = ISuggestFieldOption>({
     value,
@@ -49,10 +51,41 @@ export const SuggestFieldMobile = <T extends ISuggestFieldOption = ISuggestField
 
     useDropdownOpenCallbacks(dropdownOpen, onDropdownOpen, handleDropdownClose);
 
+    // Ловушка шторки при закрытии возвращает фокус в поле: этот фокус шторку снова не открывает.
+    // Флаг поднят между onDeactivate и onPostDeactivate: focus-trap-react возвращает фокус между ними,
+    // на следующем тике после закрытия.
+    const returningFocusRef = useRef(false);
+    const pullerFocusTrapOptions = pullerProps?.focusTrapProps?.focusTrapOptions;
+
     const handleInputFocus = useCallback<React.FocusEventHandler<HTMLInputElement>>(
         (event) => {
-            setDropdownOpen(true);
+            if (!returningFocusRef.current) {
+                setDropdownOpen(true);
+            }
+
             inputProps.onFocus?.(event);
+        },
+        [inputProps],
+    );
+
+    // После закрытия фокус остаётся в поле, и повторный тап не вызывает focus — шторку открывает click.
+    const handleInputClick = useCallback<React.MouseEventHandler<HTMLInputElement>>(
+        (event) => {
+            setDropdownOpen(true);
+            inputProps.onClick?.(event);
+        },
+        [inputProps],
+    );
+
+    // Клавиатурный аналог handleInputClick. preventDefault — чтобы стрелки не прокручивали страницу.
+    const handleInputKeyDown = useCallback<React.KeyboardEventHandler<HTMLInputElement>>(
+        (event) => {
+            if (isKey(event.key, "ARROW_DOWN") || isKey(event.key, "ARROW_UP")) {
+                event.preventDefault();
+                setDropdownOpen(true);
+            }
+
+            inputProps.onKeyDown?.(event);
         },
         [inputProps],
     );
@@ -97,9 +130,25 @@ export const SuggestFieldMobile = <T extends ISuggestFieldOption = ISuggestField
                 {...inputProps}
                 readOnly={true}
                 onFocus={handleInputFocus}
+                onClick={handleInputClick}
+                onKeyDown={handleInputKeyDown}
             />
             <SuggestFieldMobileDropdown
                 {...pullerProps}
+                focusTrapProps={{
+                    ...pullerProps?.focusTrapProps,
+                    focusTrapOptions: {
+                        ...pullerFocusTrapOptions,
+                        onDeactivate: () => {
+                            returningFocusRef.current = true;
+                            pullerFocusTrapOptions?.onDeactivate?.();
+                        },
+                        onPostDeactivate: () => {
+                            returningFocusRef.current = false;
+                            pullerFocusTrapOptions?.onPostDeactivate?.();
+                        },
+                    },
+                }}
                 value={value}
                 options={options}
                 placeholder={placeholder}

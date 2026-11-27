@@ -1,6 +1,6 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { act, render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { describe, it, expect, onTestFinished, vi } from "vitest";
 import { Puller, IPullerProps } from "../Puller";
 import { PullerBody } from "../PullerBody";
 import { PullerFooter } from "../PullerFooter";
@@ -27,15 +27,19 @@ const renderPuller = ({
     };
 };
 
-const getBackdrop = () => {
-    const backdrop = document.querySelector(".pullerBackdrop");
+const getElement = (selector: string) => {
+    const element = document.querySelector(selector);
 
-    if (backdrop === null) {
-        throw new Error("Puller backdrop not found");
+    if (element === null) {
+        throw new Error(`Element "${selector}" not found`);
     }
 
-    return backdrop;
+    return element;
 };
+
+const getBackdrop = () => getElement(".pullerBackdrop");
+
+const getWrapper = () => getElement(".pullerWrapper");
 
 describe("Puller", () => {
     it("renders children when opened", () => {
@@ -134,6 +138,28 @@ describe("Puller", () => {
         expect(setOpened).not.toHaveBeenCalled();
     });
 
+    it("keeps the content mounted when closing starts", () => {
+        const { close } = renderPuller();
+        const content = screen.getByText("Puller content");
+
+        close();
+
+        expect(screen.getByText("Puller content")).toBe(content);
+    });
+
+    it("lets pointer events through the wrapper only while closing", () => {
+        const { close, open } = renderPuller();
+        const wrapper = getWrapper();
+
+        expect(wrapper).not.toHaveClass("closing");
+
+        close();
+        expect(wrapper).toHaveClass("closing");
+
+        open();
+        expect(wrapper).not.toHaveClass("closing");
+    });
+
     it("marks the content as opening on the next tick until the opening transition on the backdrop ends", async () => {
         const ref = React.createRef<HTMLDivElement>();
         const { open } = renderPuller({ ref, opened: false });
@@ -162,6 +188,170 @@ describe("Puller", () => {
         fireEvent.transitionEnd(getBackdrop());
 
         expect(screen.queryByText("Puller content")).toBeNull();
+    });
+
+    it("does not call a callback ref again on re-render", () => {
+        const ref = vi.fn();
+        const { rerender } = render(
+            <Puller opened setOpened={() => {}} ref={ref}>
+                Content
+            </Puller>,
+        );
+        const callsAfterMount = ref.mock.calls.length;
+
+        rerender(
+            <Puller opened setOpened={() => {}} ref={ref}>
+                Other content
+            </Puller>,
+        );
+
+        expect(ref).toHaveBeenCalledTimes(callsAfterMount);
+    });
+});
+
+describe("Puller focusTrapProps", () => {
+    it("does not make the content focusable when the trap is disabled", () => {
+        renderPuller({ focusTrapProps: { active: false } });
+
+        expect(document.querySelector(".puller")).not.toHaveAttribute("tabindex");
+    });
+
+    it("does not move focus into the puller when the trap is disabled", async () => {
+        // focus-trap переносит фокус по таймеру: прогоняем таймеры, чтобы проверять уже после возможного переноса.
+        vi.useFakeTimers();
+        onTestFinished(() => {
+            vi.useRealTimers();
+        });
+
+        const ref = React.createRef<HTMLDivElement>();
+
+        renderPuller({ ref, focusTrapProps: { active: false } });
+        await act(() => vi.runAllTimersAsync());
+
+        expect(ref.current).not.toHaveFocus();
+    });
+
+    it("closes on Escape when the trap is disabled", () => {
+        const setOpened = vi.fn();
+
+        renderPuller({ setOpened, focusTrapProps: { active: false } });
+        fireEvent.keyDown(screen.getByText("Puller content"), { key: "Escape" });
+
+        expect(setOpened).toHaveBeenCalledWith(false);
+    });
+
+    it("moves focus to the content element on open, not to the first tabbable node", async () => {
+        const ref = React.createRef<HTMLDivElement>();
+
+        render(
+            // В jsdom нет layout: со стандартным displayCheck tabbable считает все узлы скрытыми.
+            <Puller
+                ref={ref}
+                opened
+                setOpened={() => {}}
+                focusTrapProps={{ focusTrapOptions: { tabbableOptions: { displayCheck: "none" } } }}
+            >
+                <button type="button">Inside</button>
+            </Puller>,
+        );
+
+        await waitFor(() => expect(ref.current).toHaveFocus());
+        expect(screen.getByRole("button", { name: "Inside" })).not.toHaveFocus();
+    });
+
+    it("keeps focus on an element that is already focused inside the puller", async () => {
+        // focus-trap переносит фокус по таймеру: прогоняем таймеры, чтобы проверять уже после возможного переноса.
+        vi.useFakeTimers();
+        onTestFinished(() => {
+            vi.useRealTimers();
+        });
+
+        render(
+            <Puller
+                opened
+                setOpened={() => {}}
+                focusTrapProps={{ focusTrapOptions: { tabbableOptions: { displayCheck: "none" } } }}
+            >
+                <button type="button">Before</button>
+                <input aria-label="Search" autoFocus />
+            </Puller>,
+        );
+
+        await act(() => vi.runAllTimersAsync());
+
+        expect(screen.getByRole("textbox", { name: "Search" })).toHaveFocus();
+    });
+
+    it("focuses the content element when there are no tabbable nodes", async () => {
+        const ref = React.createRef<HTMLDivElement>();
+
+        // Без tabbable-узлов focus-trap бросает исключение, если не задан fallbackFocus.
+        renderPuller({ ref });
+
+        await waitFor(() => expect(ref.current).toHaveFocus());
+        expect(ref.current).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("closes on Escape", () => {
+        const setOpened = vi.fn();
+
+        renderPuller({ setOpened });
+        fireEvent.keyDown(screen.getByText("Puller content"), { key: "Escape" });
+
+        expect(setOpened).toHaveBeenCalledWith(false);
+    });
+
+    it("does not propagate Escape to listeners on window, such as a surrounding modal window", () => {
+        const handleWindowKeyDown = vi.fn();
+        window.addEventListener("keydown", handleWindowKeyDown);
+        onTestFinished(() => window.removeEventListener("keydown", handleWindowKeyDown));
+
+        renderPuller();
+        fireEvent.keyDown(screen.getByText("Puller content"), { key: "Escape" });
+
+        expect(handleWindowKeyDown).not.toHaveBeenCalled();
+    });
+
+    it("does not close when a child stops the Escape propagation", () => {
+        const setOpened = vi.fn();
+
+        render(
+            <Puller opened setOpened={setOpened} focusTrapProps={{ active: false }}>
+                <span onKeyDown={(event) => event.stopPropagation()}>Puller content</span>
+            </Puller>,
+        );
+        fireEvent.keyDown(screen.getByText("Puller content"), { key: "Escape" });
+
+        expect(setOpened).not.toHaveBeenCalled();
+    });
+
+    it("closes only the inner puller on Escape inside a nested puller", () => {
+        const setOuterOpened = vi.fn();
+        const setInnerOpened = vi.fn();
+
+        render(
+            <Puller opened setOpened={setOuterOpened} focusTrapProps={{ active: false }}>
+                <Puller opened setOpened={setInnerOpened} focusTrapProps={{ active: false }}>
+                    <span>Inner content</span>
+                </Puller>
+            </Puller>,
+        );
+        fireEvent.keyDown(screen.getByText("Inner content"), { key: "Escape" });
+
+        expect(setInnerOpened).toHaveBeenCalledWith(false);
+        expect(setOuterOpened).not.toHaveBeenCalled();
+    });
+
+    it("keeps the content focusable for the trap when tabIndex is passed as undefined", () => {
+        renderPuller({ tabIndex: undefined });
+
+        expect(document.querySelector(".puller")).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("keeps the consumer tabIndex on the content", () => {
+        renderPuller({ tabIndex: 0 });
+
+        expect(document.querySelector(".puller")).toHaveAttribute("tabindex", "0");
     });
 });
 

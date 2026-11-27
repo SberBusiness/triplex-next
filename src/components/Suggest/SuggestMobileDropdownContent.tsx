@@ -11,7 +11,11 @@ import {
     PullerListItem,
 } from "../Puller";
 import { Text, EFontType, ETextSize } from "../Typography";
+import { EVENT_KEY_CODES } from "../../utils/keyboard";
 import styles from "./styles/SuggestDropdown.module.less";
+
+// Клавиши из поля ввода шторки доходят до PullerList: пробел — часть текста, поэтому выбор только по Enter.
+const KEY_CODES_FOR_SELECTION = [EVENT_KEY_CODES.ENTER];
 
 /**
  * Наполнение мобильного Dropdown (шторки Puller) внутри Suggest.
@@ -100,6 +104,7 @@ export const SuggestMobileDropdownContent = <T extends ISuggestOption>() => {
                                 id={option.id}
                                 selected={option.id === value?.id}
                                 showNotificationIcon={option.showNotificationIcon}
+                                keyCodesForSelection={KEY_CODES_FOR_SELECTION}
                                 onSelect={() => {
                                     onSelect(option);
                                 }}

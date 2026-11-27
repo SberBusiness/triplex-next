@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { lockBodyScroll } from "../../utils/scroll/bodyScrollLock";
+import { IFocusTrapExtendedProps } from "../FocusTrapExtended";
 import { EOverlayDirection, IOverlayChildrenProvideProps, OverlayBase } from "../Overlay/OverlayBase";
 import { IPortalProps, Portal } from "../Portal/Portal";
 import { PullerInner } from "./PullerInner";
@@ -13,6 +14,11 @@ export interface IPullerProps extends React.HTMLAttributes<HTMLDivElement> {
     setOpened: (opened: boolean) => void;
     /** DOM-узел, в который рендерится шторка. По умолчанию document.body. */
     renderContainer?: IPortalProps["container"];
+    /**
+     * Свойства ловушки фокуса (`FocusTrapExtended`). По умолчанию фокус удерживается внутри шторки.
+     * Отключается через `{ active: false }` — например, когда внутри шторки своя ловушка.
+     */
+    focusTrapProps?: IFocusTrapExtendedProps;
 }
 
 /**

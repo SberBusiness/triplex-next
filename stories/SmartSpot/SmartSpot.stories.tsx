@@ -1,18 +1,18 @@
 import React from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import { Title, Description, ArgTypes, Heading, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
-import { SmartSpot, ESmartSpotAnimation, ESmartSpotShape, ESmartSpotType } from "@sberbusiness/triplex-next";
+import { Title, Description, ArgTypes, Heading, Canvas, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { SmartSpot, ESmartSpotAnimation, ESmartSpotShape } from "@sberbusiness/triplex-next";
 import {
     PlaygroundRender,
+    PLAYGROUND_COLORS,
     DefaultRender,
     DefaultSource,
-    TypesRender,
-    TypesSource,
     ShapesRender,
     ShapesSource,
     AnimationsRender,
     AnimationsSource,
-    VisualTestsRender,
+    ExampleRender,
+    ExampleSource,
     type PlaygroundArgs,
 } from "./examples";
 
@@ -24,12 +24,9 @@ const meta = {
         docs: {
             description: {
                 component:
-                    "Анимированная подложка статуса на прозрачном фоне: четыре пятна, слой пятен размыт гауссом " +
-                    "и медленно двигается. Заполняет родителя (`width/height: 100%`), размер и скругление " +
-                    "задаёт обёртка. Размытие задаётся в CSS px и передаётся в `filter: blur()` как есть " +
-                    "(по умолчанию 60). Пресеты анимации: Drift (по умолчанию), Breathing, None. " +
-                    "Форма пятен (`shape`): круг (по умолчанию), овал, квадрат, треугольник. " +
-                    "`children` отображаются поверх подложки.",
+                    "Отдельная декоративная фигура с настраиваемым цветом, размытием и анимацией. " +
+                    "Размер и положение можно задать через CSS. Несколько фигур можно объединить в композицию. " +
+                    "В стори Example размытие задано на общем слое через CSS `filter: blur()`.",
             },
             page: () => (
                 <>
@@ -38,7 +35,7 @@ const meta = {
                     <Heading>Props</Heading>
                     <ArgTypes of={SmartSpot} />
                     <Heading>Playground</Heading>
-                    <Primary />
+                    <Canvas of={Playground} />
                     <Controls of={Playground} />
                     <Stories />
                 </>
@@ -50,7 +47,7 @@ const meta = {
 export default meta;
 
 const PLAYGROUND_ARGS: PlaygroundArgs = {
-    type: ESmartSpotType.SUCCESS,
+    color: "ColorSuccess.50",
     animation: ESmartSpotAnimation.DRIFT,
     blur: 60,
     distance: 50,
@@ -60,20 +57,17 @@ const PLAYGROUND_ARGS: PlaygroundArgs = {
 
 // Документационные стори используют анимацию по умолчанию (Drift): кадры пишутся в style
 // на каждом requestAnimationFrame, DOM не стабилизируется и скриншоты нестабильны — поэтому
-// они исключены из test-runner'а. Скриншот-покрытие — в VisualTests с Animation None.
+// они исключены из test-runner'а.
 
 export const Playground: StoryObj<PlaygroundArgs> = {
     tags: ["!autodocs"],
     args: PLAYGROUND_ARGS,
     argTypes: {
-        type: {
+        color: {
             control: "select",
-            options: Object.values(ESmartSpotType),
-            description: "Тип: задаёт цвета и набор пятен.",
-            table: {
-                category: "Props",
-                type: { summary: "ESmartSpotType" },
-            },
+            options: Object.keys(PLAYGROUND_COLORS),
+            description: "Цвет фигуры задаётся через style.backgroundColor.",
+            table: { category: "Settings" },
         },
         animation: {
             control: "select",
@@ -87,7 +81,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
         },
         blur: {
             control: { type: "range", min: 0, max: 300, step: 1 },
-            description: "Размытие слоя пятен, px.",
+            description: "Размытие фигуры, px.",
             table: {
                 category: "Props",
                 type: { summary: "number" },
@@ -96,7 +90,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
         },
         distance: {
             control: { type: "range", min: 0, max: 150, step: 1 },
-            description: "Дистанция движения слоя пятен (радиус эллипса по горизонтали), px. Влияет только на Drift.",
+            description: "Дистанция движения фигуры (радиус эллипса по горизонтали), px. Влияет только на Drift.",
             table: {
                 category: "Props",
                 type: { summary: "number" },
@@ -115,7 +109,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
         shape: {
             control: "select",
             options: Object.values(ESmartSpotShape),
-            description: "Форма пятен.",
+            description: "Форма фигуры.",
             table: {
                 category: "Props",
                 type: { summary: "ESmartSpotShape" },
@@ -149,21 +143,6 @@ export const Default: StoryObj<typeof SmartSpot> = {
     render: DefaultRender,
 };
 
-export const Types: StoryObj<typeof SmartSpot> = {
-    parameters: {
-        controls: { disable: true },
-        docs: {
-            source: {
-                code: TypesSource,
-                language: "tsx",
-            },
-        },
-        // Бесконечная анимация — см. комментарий выше.
-        testRunner: { skip: true },
-    },
-    render: TypesRender,
-};
-
 export const Shapes: StoryObj<typeof SmartSpot> = {
     parameters: {
         controls: { disable: true },
@@ -194,14 +173,17 @@ export const Animations: StoryObj<typeof SmartSpot> = {
     render: AnimationsRender,
 };
 
-export const VisualTests: StoryObj<typeof SmartSpot> = {
-    tags: ["!autodocs", "visual-test"],
-    render: VisualTestsRender,
+export const Example: StoryObj<typeof SmartSpot> = {
     parameters: {
         controls: { disable: true },
         docs: {
-            canvas: { sourceState: "none" },
-            codePanel: false,
+            description: { story: "Композиция из четырёх фигур с анимацией Drift и общим размытием." },
+            source: {
+                code: ExampleSource,
+                language: "tsx",
+            },
         },
+        testRunner: { skip: true },
     },
+    render: ExampleRender,
 };

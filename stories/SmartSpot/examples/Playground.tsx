@@ -1,11 +1,29 @@
 import React from "react";
-import { SmartSpot, type ISmartSpotProps } from "@sberbusiness/triplex-next";
+import { DesignTokensCore, SmartSpot, type ISmartSpotProps } from "@sberbusiness/triplex-next";
 
-export type PlaygroundArgs = Pick<ISmartSpotProps, "type" | "animation" | "blur" | "distance" | "duration" | "shape">;
+export const PLAYGROUND_COLORS = {
+    "ColorSuccess.50": DesignTokensCore.ColorSuccess[50].value,
+    "ColorWarning.50": DesignTokensCore.ColorWarning[50].value,
+    "ColorError.70": DesignTokensCore.ColorError[70].value,
+    "ColorSystem.90": DesignTokensCore.ColorSystem[90].value,
+};
 
-export const Playground = (args: PlaygroundArgs) => (
-    // SmartSpot заполняет родителя: размер и скругление задаёт обёртка.
-    <div style={{ width: 520, height: 300, borderRadius: 16, overflow: "hidden" }}>
-        <SmartSpot {...args} />
+export type PlaygroundArgs = Pick<ISmartSpotProps, "animation" | "blur" | "distance" | "duration" | "shape"> & {
+    color: keyof typeof PLAYGROUND_COLORS;
+};
+
+export const Playground = ({ color, ...args }: PlaygroundArgs) => (
+    <div
+        style={{
+            display: "grid",
+            placeItems: "center",
+            width: 520,
+            maxWidth: "100%",
+            height: 300,
+            borderRadius: 16,
+            overflow: "hidden",
+        }}
+    >
+        <SmartSpot {...args} style={{ backgroundColor: PLAYGROUND_COLORS[color] }} />
     </div>
 );

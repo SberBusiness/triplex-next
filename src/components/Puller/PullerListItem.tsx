@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import clsx from "clsx";
 import { Text } from "../Typography/Text";
 import { ETextSize } from "../Typography/enums";
 import { EComponentSize } from "../../enums";
 import { Badge } from "../Badge/Badge";
+import { PullerListItemsContext } from "./PullerListItemsContext";
 import styles from "./styles/Puller.module.less";
 
 /** Свойства компонента PullerListItem. */
@@ -16,11 +17,32 @@ export interface IPullerListItemProps extends React.HTMLAttributes<HTMLDivElemen
     selected?: boolean;
     /** Флаг отображения значка новых уведомлений. */
     showNotificationIcon?: boolean;
+    /**
+     * Коды клавиш для выбора элемента с клавиатуры. По умолчанию [SPACE, ENTER]. Обрабатывает PullerList.
+     * Если клавиши приходят из поля ввода, задайте [ENTER], иначе пробел выберет элемент вместо ввода.
+     */
+    keyCodesForSelection?: number[];
 }
 
 /** Элемент списка Puller. */
 export const PullerListItem = React.forwardRef<HTMLDivElement, IPullerListItemProps>(
-    ({ children, className, id, onClick, onSelect, selected, showNotificationIcon, ...restProps }, ref) => {
+    (
+        {
+            // Клавиши выбора читает PullerList, в DOM они не передаются.
+            keyCodesForSelection,
+            children,
+            className,
+            id,
+            onClick,
+            onSelect,
+            selected,
+            showNotificationIcon,
+            ...restProps
+        },
+        ref,
+    ) => {
+        const active = useContext(PullerListItemsContext)?.activeId === id;
+
         const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
             onSelect?.();
             onClick?.(event);
@@ -30,7 +52,11 @@ export const PullerListItem = React.forwardRef<HTMLDivElement, IPullerListItemPr
             <Text
                 tag="div"
                 size={ETextSize.B3}
-                className={clsx(styles.pullerListItem, { [styles.selected]: selected }, className)}
+                className={clsx(
+                    styles.pullerListItem,
+                    { [styles.selected]: selected, [styles.active]: active },
+                    className,
+                )}
                 id={id}
                 aria-selected={Boolean(selected)}
                 role="option"

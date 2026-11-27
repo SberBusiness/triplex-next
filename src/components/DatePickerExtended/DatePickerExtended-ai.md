@@ -68,7 +68,7 @@ version: "1.0"
 - Публичный API (`DatePickerExtended`, `IDatePickerExtendedProps`, `DatePickerExtendedContext`, `IDatePickerExtendedContext`) экспортируется через `src/components/DatePickerExtended/index.ts` — переименования props и смена их типов недопустимы.
 - **Открыть календарь снаружи можно только через `DatePickerExtendedContext`** — управляемого prop открытости у компонента нет. Контекст экспортируется из barrel, поэтому целевой элемент пишется и внутри библиотеки (`DateField`, `MonthYearField`, `ChipDatePicker`), и в коде потребителя.
 - Форма контекста (`dropdownOpen`, `mouseUsedRef`, `setDropdownOpen`) — часть публичного API и одновременно контракт трёх внутренних потребителей. Её изменение ломает `DateFieldTarget`, `MonthYearFieldTarget` и `ChipDatePickerTarget` — править только вместе с ними.
-- `mouseUsedRef` — флаг «взаимодействие было мышью». Он выставляется на `mousedown` по корневому элементу и сбрасывается при закрытии дропдауна; от него зависят `initialFocus` и `returnFocusOnDeactivate` у `FocusTrap`. Не заменять на state: значение читается во время рендера дропдауна и не должно вызывать перерисовку.
+- `mouseUsedRef` — флаг «взаимодействие было мышью». Он выставляется на `mousedown` по корневому элементу и сбрасывается при закрытии дропдауна; от него зависят `initialFocus` и `returnFocusOnDeactivate` у `FocusTrap` календаря и у ловушки шторки `Puller` (одни и те же опции, `mouseFocusTrapOptions` в `DatePickerExtendedDropdown`). Не заменять на state: значение читается во время рендера дропдауна и не должно вызывать перерисовку.
 - `DatePickerExtendedDropdown` в barrel не экспортируется.
 - Размер дропдауна зафиксирован (`EComponentSize.MD`) и наружу не выведен.
 - Компонент не хардкодит текст: подписи кнопок календаря и `aria-label` целевого элемента задаёт потребитель. Библиотека мультиязычная.
@@ -82,6 +82,7 @@ version: "1.0"
 - Десктопный календарь обёрнут в `FocusTrap` (`focus-trap-react`):
   - при открытии с клавиатуры фокус уходит внутрь календаря, при закрытии возвращается на целевой элемент;
   - при открытии мышью (`mouseUsedRef`) фокус не перехватывается и не возвращается — иначе после клика мышью фокус «прыгал» бы в календарь;
+  - то же правило про мышь передаётся ловушке мобильной шторки `Puller` через `pullerProps.focusTrapProps`: после тапа фокус не уходит в шторку и при закрытии не возвращается на поле. Без мыши опции не передаются вовсе: явный `initialFocus: undefined` перетёр бы фокус на контейнер шторки из `PullerInner`;
   - `clickOutsideDeactivates: true`; `fallbackFocus` — контейнер календаря внутри ловушки (`tabIndex={-1}`), поэтому при отсутствии tabbable-элементов фокус остаётся внутри диалога. Задаётся ленивой функцией, т.к. на момент рендера ref ещё не заполнен; целевой элемент и `document.body` оставлены запасными вариантами, потому что focus-trap бросает исключение на пустом fallback.
 - `Escape` на корневом элементе закрывает календарь (только когда он открыт), после чего вызывается пользовательский `onKeyDown`.
 - `mousedown` вне корневого элемента и вне дропдауна закрывает календарь; клик внутри календаря — нет.
@@ -132,7 +133,8 @@ version: "1.0"
 
 | Дата | Изменение |
 |---|---|
-| 2026-10-21 | Переход на `Puller` (TRIPLEX-961): мобильная версия собрана из частей `Puller` (бывший `DropdownMobile*`). |
-| 2026-09-07 | В потребители базы добавлен `ChipMonthYearPicker` (чип-фильтр с `pickType` `MONTH_YEAR`) |
-| 2026-08-24 | `DatePickerExtendedContext` и `IDatePickerExtendedContext` экспортируются из barrel — целевой элемент можно написать снаружи библиотеки. `adaptiveMode` исключён из `IDatePickerExtendedProps` (ломающее изменение, затрагивает также `DateField`, `MonthYearField`, `ChipDatePicker`) |
-| 2026-08-20 | Создан документ. AI-рефакторинг, unit-тесты (`__tests__/DatePickerExtended.test.tsx`), stories по modern pattern. Исправлено: `yesterdayButtonProps` / `tomorrowButtonProps` пробрасываются в `Calendar`, `adaptiveMode` больше не попадает в DOM |
+| 2026-08-20 | Создан документ. AI-рефакторинг, unit-тесты (`__tests__/DatePickerExtended.test.tsx`), stories по modern pattern. Исправлено: `yesterdayButtonProps` / `tomorrowButtonProps` пробрасываются в `Calendar`, `adaptiveMode` больше не попадает в DOM. |
+| 2026-08-24 | `DatePickerExtendedContext` и `IDatePickerExtendedContext` экспортируются из barrel — целевой элемент можно написать снаружи библиотеки. `adaptiveMode` исключён из `IDatePickerExtendedProps` (ломающее изменение, затрагивает также `DateField`, `MonthYearField`, `ChipDatePicker`). |
+| 2026-09-07 | В потребители базы добавлен `ChipMonthYearPicker` (чип-фильтр с `pickType` `MONTH_YEAR`). |
+| 2026-10-21 | Переход на `Puller`: мобильная версия собрана из частей `Puller` — бывшего `DropdownMobile*` (TRIPLEX-961). |
+| 2026-11-25 | Шторка `Puller` получила ловушку фокуса; при открытии мышью (`mouseUsedRef`) ей, как и `FocusTrap` календаря, передаются `initialFocus: false` и `returnFocusOnDeactivate: false` — после открытия тапом фокус не уходит в шторку и не возвращается на поле. Затрагивает `DateField`, `MonthYearField`, `ChipDatePicker`, `ChipMonthYearPicker` (TRIPLEX-1054). |

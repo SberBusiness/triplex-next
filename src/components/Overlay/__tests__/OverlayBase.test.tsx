@@ -112,6 +112,36 @@ describe("OverlayBase", () => {
         expect(onOpen).toHaveBeenCalledTimes(2);
     });
 
+    it("passes the closing and opening flags in the same render as the opened change", () => {
+        type TFlags = Pick<IOverlayChildrenProvideProps, "opened" | "opening" | "closing">;
+        const received: TFlags[] = [];
+        // React может вызвать render-функцию несколько раз за переход: каждый вызов должен видеть новые флаги.
+        const expectEveryRender = (expected: TFlags) => {
+            expect(received).not.toHaveLength(0);
+            received.forEach((flags) => expect(flags).toEqual(expected));
+        };
+        const renderOverlay = (opened: boolean) => (
+            <OverlayBase direction={EOverlayDirection.RIGHT} opened={opened} setOpened={vi.fn()}>
+                {({ opened: openedProp, opening, closing }) => {
+                    received.push({ opened: openedProp, opening, closing });
+                    return <div />;
+                }}
+            </OverlayBase>
+        );
+
+        const { rerender } = render(renderOverlay(true));
+
+        received.length = 0;
+        rerender(renderOverlay(false));
+
+        expectEveryRender({ opened: false, opening: false, closing: true });
+
+        received.length = 0;
+        rerender(renderOverlay(true));
+
+        expectEveryRender({ opened: true, opening: true, closing: false });
+    });
+
     it("does not call lifecycle callbacks on initial mount when opened is false", () => {
         const onOpen = vi.fn();
         const onOpening = vi.fn();

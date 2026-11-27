@@ -13,13 +13,6 @@ export interface IMultiselectFieldDropdownProps extends IDropdownProps {
 }
 
 /**
- * Заглушка на случай, когда потребитель не передал pullerProps: Dropdown включает
- * мобильную версию по truthiness этого prop'а, поэтому непустой объект нужен всегда —
- * без него на мобильной ширине отрендерился бы десктопный выпадающий блок.
- */
-const ALWAYS_PULLER_PROPS: NonNullable<IDropdownProps["pullerProps"]> = {};
-
-/**
  * Компонент выпадающего блока мульти-списка.
  *
  * Оборачивает Dropdown в FocusTrap, поэтому фокус не уходит за пределы блока,
@@ -36,10 +29,29 @@ export const MultiselectFieldDropdown = Object.assign(
                 }
             }, [opened, mouseUsedRef]);
 
+            // После открытия мышью фокус на поле не возвращается — иначе клик вне блока снова подсветил бы поле выбора.
+            // Ловушки читают опцию при монтировании, то есть при открытии, когда mouseUsedRef уже выставлен.
+            const returnFocusOnDeactivate = !mouseUsedRef.current;
+
+            // Объект нужен всегда: Dropdown включает мобильную версию по truthiness pullerProps.
+            // Ловушка Puller отключена (фокус держит FocusTrap ниже), если её не включили явно (`active: true`).
+            // Исключение — свои children шторки: они вне FocusTrap, поэтому ловушка Puller остаётся,
+            // а её возврат фокуса подчиняется тому же правилу, что и у FocusTrap ниже.
+            const pullerFocusTrapProps = pullerProps?.focusTrapProps;
+            const resolvedPullerProps: NonNullable<IDropdownProps["pullerProps"]> = {
+                ...pullerProps,
+                focusTrapProps: pullerProps?.children
+                    ? {
+                          ...pullerFocusTrapProps,
+                          focusTrapOptions: { returnFocusOnDeactivate, ...pullerFocusTrapProps?.focusTrapOptions },
+                      }
+                    : { ...pullerFocusTrapProps, active: pullerFocusTrapProps?.active ?? false },
+            };
+
             return (
                 <Dropdown
                     width={EDropdownWidth.MIN_TARGET}
-                    pullerProps={pullerProps ?? ALWAYS_PULLER_PROPS}
+                    pullerProps={resolvedPullerProps}
                     targetRef={targetRef}
                     opened={opened}
                     size={size}
@@ -51,9 +63,7 @@ export const MultiselectFieldDropdown = Object.assign(
                         focusTrapOptions={{
                             clickOutsideDeactivates: true,
                             preventScroll: true,
-                            // После открытия мышью фокус на поле не возвращается — иначе клик
-                            // вне блока снова подсветил бы поле выбора.
-                            returnFocusOnDeactivate: !mouseUsedRef.current,
+                            returnFocusOnDeactivate,
                             ...focusTrapProps?.focusTrapOptions,
                         }}
                     >

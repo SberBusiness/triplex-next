@@ -85,8 +85,11 @@ off-canvas) над контейнером или страницей.
 Низкоуровневый headless-компонент (render-prop, **без** `forwardRef` — ничего не
 рендерит сам, возвращает `children(provideProps)`). Единый источник истины по
 флагам `opened`/`opening`/`closing` и оркестратор колбэков жизненного цикла.
-Использует `useLayoutEffect` (не `useEffect`) при смене `opened`, чтобы избежать
-мерцания при закрытии.
+При смене `opened` флаги `opening` / `closing` обновляются прямо в рендере
+(паттерн «adjusting state when a prop changes»), а не в эффекте: потомки никогда
+не получают устаревшую комбинацию вроде `opened={false}` при `closing={false}`.
+Иначе потомок, который скрывает себя по `!opened && !opening && !closing`
+(`PullerInner`), на один рендер размонтировал бы содержимое.
 
 ---
 
@@ -130,7 +133,7 @@ Box-shadow панели и тайминги transition (`0.3s ease-in-out`) за
 ### Гарантия однократного вызова lifecycle-колбэков
 
 `OverlayBase` вызывает каждый из `onOpening` / `onClosing` / `onOpen` / `onClose`
-**ровно один раз** за переход. `useLayoutEffect([opened])` только выставляет
+**ровно один раз** за переход. Смена `opened` в рендере только выставляет
 флаги `opening` / `closing`, а сами колбэки вызываются исключительно в
 `useEffect([opening])` / `useEffect([closing])`. Однократность закреплена
 unit-тестами (`toHaveBeenCalledTimes(1)`).
@@ -214,6 +217,7 @@ Visual baseline для `components-overlay--visual-tests` генерируетс
 
 | Дата | Изменение |
 |---|---|
+| 2026-11-26 | `OverlayBase` выставляет `opening` / `closing` в том же рендере, что и смену `opened`, а не в `useLayoutEffect`: потомки больше не получают устаревшие флаги, и содержимое `Puller` не монтируется заново в начале закрытия (TRIPLEX-1054). |
 | 2026-08-27 | `OverlayBase` вызывает `onOpen` при монтировании с `opened={true}` — раньше первый рендер гасил все колбэки, и оверлей, смонтированный открытым, не сообщал об этом потребителю (release notes 1.44.0). |
 | 2026-06-17 | Создан документ. `Overlay` переведён на `forwardRef` (ref → корневой `div`, аддитивно, release notes 1.34.0). Дедуплицирован флаг `closing` (единый источник — `OverlayBase`). Codestyle/JSDoc cleanup в 4 файлах. Добавлены 4 unit-тест-файла. Исправлен двойной вызов `onClosing`/`onOpening` за переход — теперь ровно один раз (закреплено `toHaveBeenCalledTimes(1)`). |
 | 2026-09-29 | Аудит симметрии `related` (TRI-156): из `related` убраны имена без строки в `docs/ai/ROADMAP.md` (`OverlayBase`, `OverlayMask`, `OverlayPanel`, `DropdownMobile`); из `related` убраны несимметричные имена (`ModalWindow`). Пояснения к убранным именам сохранены прозой в «Связанные компоненты»; публичный API и поведение не затронуты. |

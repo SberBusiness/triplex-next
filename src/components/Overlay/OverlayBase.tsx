@@ -83,7 +83,7 @@ export const OverlayBase: React.FC<IOverlayBaseProps> = ({
     // Флаг, в текущий момент оверлей открывается.
     const [opening, setOpening] = useState(false);
     // Предыдущее состояние opened.
-    const prevOpened = useRef(opened);
+    const [prevOpened, setPrevOpened] = useState(opened);
     // Флаг первого рендера. Эффекты по [closing]/[opening] не должны срабатывать на маунте.
     const isFirstRender = useRef(true);
     // Актуальные колбэки. Хранятся в ref, чтобы эффекты зависели только от своих state-триггеров.
@@ -94,18 +94,19 @@ export const OverlayBase: React.FC<IOverlayBaseProps> = ({
         callbacks.current = { onClose, onClosing, onOpen, onOpening };
     });
 
-    // Здесь намеренно используется useLayoutEffect, а не useEffect, иначе в браузере может быть мерцание при закрытии.
-    useLayoutEffect(() => {
-        if (prevOpened.current && !opened) {
-            setOpening(false); // opened меняется в процессе анимации открытия.
-            setClosing(true);
-        } else if (!prevOpened.current && opened) {
-            setClosing(false); // opened меняется в процессе анимации закрытия.
-            setOpening(true);
-        }
+    // Флаги обновляются в рендере, а не в эффекте: иначе потомки на один рендер получат opened={false} при
+    // closing={false}, и Puller размонтирует содержимое. В children передаются вычисленные значения: React вызывает
+    // render-функцию и в том проходе, где вызван setState, — старые флаги не должны попасть даже туда.
+    // Противоположный флаг сбрасывается: opened может смениться посреди другой анимации.
+    const openedChanged = prevOpened !== opened;
+    const currentClosing = openedChanged ? !opened : closing;
+    const currentOpening = openedChanged ? opened : opening;
 
-        prevOpened.current = opened;
-    }, [opened]);
+    if (openedChanged) {
+        setPrevOpened(opened);
+        setClosing(currentClosing);
+        setOpening(currentOpening);
+    }
 
     useEffect(() => {
         if (isFirstRender.current) {
@@ -145,5 +146,13 @@ export const OverlayBase: React.FC<IOverlayBaseProps> = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    return children({ closing, direction, opened, opening, setClosing, setOpened, setOpening });
+    return children({
+        closing: currentClosing,
+        direction,
+        opened,
+        opening: currentOpening,
+        setClosing,
+        setOpened,
+        setOpening,
+    });
 };

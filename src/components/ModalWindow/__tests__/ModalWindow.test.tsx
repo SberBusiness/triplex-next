@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, cleanup } from "@testing-library/react";
+import { act, render, screen, cleanup } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { ModalWindow } from "../ModalWindow";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
@@ -436,7 +436,9 @@ describe("ModalWindow", () => {
     });
 
     describe("onExited Callback", () => {
-        it("should call onExited callback when modal closes", async () => {
+        it("should call onExited callback when modal closes", () => {
+            // Мок CSSTransition вызывает onExited по таймеру: фейковые таймеры прогоняют его без ожидания.
+            vi.useFakeTimers();
             const onExited = vi.fn();
 
             const { rerender } = render(
@@ -454,8 +456,7 @@ describe("ModalWindow", () => {
                 </ModalWindow>,
             );
 
-            // Wait for the exit animation to complete
-            await new Promise((resolve) => setTimeout(resolve, 0));
+            act(() => vi.runAllTimers());
 
             expect(onExited).toHaveBeenCalledTimes(1);
         });

@@ -6,6 +6,7 @@ import { Suggest } from "../Suggest";
 import { SuggestMobileDropdownContent } from "../SuggestMobileDropdownContent";
 import { ISuggestOption, ISuggestProps } from "../types";
 import { EComponentSize } from "../../../enums/EComponentSize";
+import { EVENT_KEY_CODES } from "../../../utils/keyboard";
 
 const OPTIONS: ISuggestOption[] = [
     { id: "a", label: "Первая опция" },
@@ -78,6 +79,22 @@ describe("SuggestMobileDropdownContent", () => {
         await user.click(screen.getAllByRole("option")[1]);
 
         expect(onSelect).toHaveBeenCalledWith(OPTIONS[1]);
+    });
+
+    test("selects the active option from the input only on Enter, leaving Space to the input", () => {
+        const onSelect = vi.fn();
+
+        renderContent({ onSelect });
+
+        const input = screen.getByRole("textbox");
+        fireEvent.keyDown(input, { keyCode: EVENT_KEY_CODES.ARROW_DOWN });
+
+        const spaceNotPrevented = fireEvent.keyDown(input, { keyCode: EVENT_KEY_CODES.SPACE });
+        expect(spaceNotPrevented).toBe(true);
+        expect(onSelect).not.toHaveBeenCalled();
+
+        fireEvent.keyDown(input, { keyCode: EVENT_KEY_CODES.ENTER });
+        expect(onSelect).toHaveBeenCalledWith(OPTIONS[0]);
     });
 
     test("calls onFilter with the typed value", async () => {

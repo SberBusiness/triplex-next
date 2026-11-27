@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterAll, beforeAll, describe, expect, it, onTestFinished, vi } from "vitest";
 import { SuggestFieldMobile } from "../mobile/SuggestFieldMobile";
@@ -74,20 +74,19 @@ afterAll(() => {
     vi.unstubAllGlobals();
 });
 
-type TRenderProps = Partial<ISuggestFieldMobileProps> & Pick<ISuggestFieldMobileProps, "onSelect" | "onFilter">;
+const getFieldProps = (): ISuggestFieldMobileProps => ({
+    value: undefined,
+    options: OPTIONS,
+    label: "Label",
+    tooltipHint: "Hint",
+    tooltipOpen: false,
+    inputProps: {},
+    onSelect: vi.fn(),
+    onFilter: vi.fn(),
+});
 
-const renderField = (props: TRenderProps) =>
-    render(
-        <SuggestFieldMobile
-            value={undefined}
-            options={OPTIONS}
-            label="Label"
-            tooltipHint="Hint"
-            tooltipOpen={false}
-            inputProps={{}}
-            {...props}
-        />,
-    );
+const renderField = (props: Partial<ISuggestFieldMobileProps> = {}) =>
+    render(<SuggestFieldMobile {...getFieldProps()} {...props} />);
 
 /** Поле ввода самого SuggestField — единственный combobox на странице. */
 const getTarget = () => screen.getByRole("combobox");
@@ -104,35 +103,49 @@ const openDropdown = () => fireEvent.focus(getTarget());
  */
 const getDropdownCloseButton = () => screen.getByRole("button", { name: "" });
 
+const closeByEscape = () => fireEvent.keyDown(getDropdownInput(), { key: "Escape" });
+
+/**
+ * Открывает дропдаун настоящим фокусом поля, закрывает (по умолчанию кнопкой) и дожидается возврата фокуса в поле.
+ * Именно focus(), а не fireEvent.focus: ловушка Puller запоминает активный элемент, чтобы вернуть на него фокус.
+ * Закрывать можно только после асинхронной активации ловушки — её признак: фокус в поле ввода дропдауна.
+ */
+const openByRealFocusAndClose = async (close = () => fireEvent.click(getDropdownCloseButton())) => {
+    act(() => getTarget().focus());
+    await waitFor(() => expect(getDropdownInput()).toHaveFocus());
+    close();
+    await waitFor(() => expect(getTarget()).toHaveFocus());
+};
+
 describe("SuggestFieldMobile", () => {
     describe("trigger input", () => {
         it("is read-only: the value is picked in the dropdown", () => {
-            renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField();
 
             expect(getTarget()).toHaveAttribute("readonly");
         });
 
         it("passes label and placeholder to the input", () => {
-            renderField({ placeholder: "Placeholder", onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField({ placeholder: "Placeholder" });
 
             expect(screen.getByLabelText("Label")).toBe(getTarget());
             expect(getTarget()).toHaveAttribute("placeholder", "Placeholder");
         });
 
         it("shows the label of the selected option", () => {
-            renderField({ value: OPTIONS[1], onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField({ value: OPTIONS[1] });
 
             expect(getTarget()).toHaveValue(OPTIONS[1].label);
         });
 
         it("is empty without a selected value", () => {
-            renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField();
 
             expect(getTarget()).toHaveValue("");
         });
 
         it("aria-expanded reflects the dropdown state", () => {
-            renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField();
 
             expect(getTarget()).toHaveAttribute("aria-expanded", "false");
 
@@ -145,8 +158,94 @@ describe("SuggestFieldMobile", () => {
             expect(getTarget()).toHaveAttribute("aria-expanded", "false");
         });
 
+        it("returns focus to the trigger on close without reopening the dropdown", async () => {
+            const onFocus = vi.fn();
+            renderField({ inputProps: { onFocus } });
+
+            await openByRealFocusAndClose();
+
+            expect(getTarget()).toHaveFocus();
+            expect(getTarget()).toHaveAttribute("aria-expanded", "false");
+            // Возвратный фокус — настоящий фокус поля: обработчик потребителя вызывается.
+            expect(onFocus).toHaveBeenCalledTimes(2);
+        });
+
+        it("opens the dropdown again on the next focus after the focus has been returned", async () => {
+            renderField();
+
+            await openByRealFocusAndClose();
+
+            act(() => getTarget().blur());
+            act(() => getTarget().focus());
+
+            expect(getTarget()).toHaveAttribute("aria-expanded", "true");
+        });
+
+        it("opens the dropdown again on a tap of the field that kept the returned focus", async () => {
+            const onClick = vi.fn();
+            renderField({ inputProps: { onClick } });
+
+            await openByRealFocusAndClose();
+
+            fireEvent.click(getTarget());
+
+            expect(getTarget()).toHaveAttribute("aria-expanded", "true");
+            expect(onClick).toHaveBeenCalledTimes(1);
+        });
+
+        it.each([
+            { key: "ArrowDown", outcome: "opens" },
+            { key: "ArrowUp", outcome: "opens" },
+            { key: "Enter", outcome: "does not open" },
+        ])(
+            "$outcome the dropdown again on $key in the field that kept the returned focus",
+            async ({ key, outcome }) => {
+                const opens = outcome === "opens";
+                const onKeyDown = vi.fn();
+                renderField({ inputProps: { onKeyDown } });
+
+                await openByRealFocusAndClose();
+
+                // fireEvent возвращает false после preventDefault: открывающие клавиши
+                // отменяют действие по умолчанию, чтобы стрелки не прокручивали страницу.
+                const defaultPrevented = !fireEvent.keyDown(getTarget(), { key });
+
+                expect(getTarget()).toHaveAttribute("aria-expanded", String(opens));
+                expect(defaultPrevented).toBe(opens);
+                expect(onKeyDown).toHaveBeenCalledTimes(1);
+            },
+        );
+
+        it("opens the dropdown again on ArrowDown after closing it with Escape", async () => {
+            renderField();
+
+            await openByRealFocusAndClose(closeByEscape);
+
+            // Возврат фокуса после Escape сам шторку не открывает.
+            expect(getTarget()).toHaveAttribute("aria-expanded", "false");
+
+            fireEvent.keyDown(getTarget(), { key: "ArrowDown" });
+
+            expect(getTarget()).toHaveAttribute("aria-expanded", "true");
+        });
+
+        it("calls the consumer onDeactivate and onPostDeactivate of the dropdown focus trap", async () => {
+            const onDeactivate = vi.fn();
+            const onPostDeactivate = vi.fn();
+            renderField({
+                dropdownProps: {
+                    pullerProps: { focusTrapProps: { focusTrapOptions: { onDeactivate, onPostDeactivate } } },
+                },
+            });
+
+            await openByRealFocusAndClose();
+
+            expect(onPostDeactivate).toHaveBeenCalledTimes(1);
+            expect(onDeactivate).toHaveBeenCalledTimes(1);
+        });
+
         it("shows a loader in the field when loading", () => {
-            renderField({ loading: true, onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField({ loading: true });
 
             expect(screen.getByLabelText("loading")).toBeInTheDocument();
         });
@@ -154,7 +253,7 @@ describe("SuggestFieldMobile", () => {
         it("scrolls the input to the center of the screen after the dropdown closes", () => {
             // В iOS открытие мобильного дропдауна уводит страницу вверх.
             const scrollIntoView = vi.mocked(Element.prototype.scrollIntoView);
-            renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField();
 
             openDropdown();
             scrollIntoView.mockClear();
@@ -165,7 +264,7 @@ describe("SuggestFieldMobile", () => {
 
         it("calls inputProps.onFocus along with opening the dropdown", () => {
             const onFocus = vi.fn();
-            renderField({ inputProps: { onFocus }, onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField({ inputProps: { onFocus } });
 
             openDropdown();
 
@@ -173,62 +272,48 @@ describe("SuggestFieldMobile", () => {
             expect(getTarget()).toHaveAttribute("aria-expanded", "true");
         });
 
-        it("clear button resets the value and the filter and calls onClear", async () => {
+        it.each([
+            {
+                scenario: "resets the value and the filter",
+                value: OPTIONS[0],
+                selectCalls: [[undefined]],
+                filterCalls: [[""]],
+            },
+            {
+                scenario: "with an empty label resets the value but not the filter",
+                value: { id: "empty", label: "" },
+                selectCalls: [[undefined]],
+                filterCalls: [],
+            },
+            {
+                scenario: "without a value resets nothing",
+                value: undefined,
+                selectCalls: [],
+                filterCalls: [],
+            },
+        ])("clear button $scenario and calls onClear", async ({ value, selectCalls, filterCalls }) => {
             const user = userEvent.setup();
             const onSelect = vi.fn();
             const onFilter = vi.fn();
             const onClear = vi.fn();
-            renderField({ value: OPTIONS[0], onClear, onSelect, onFilter });
+            renderField({ value, onClear, onSelect, onFilter });
 
             await user.click(screen.getByRole("button"));
 
-            expect(onSelect).toHaveBeenCalledWith(undefined);
-            expect(onFilter).toHaveBeenCalledWith("");
-            expect(onClear).toHaveBeenCalledTimes(1);
-        });
-
-        it("clear button with an empty label resets the value but not the filter", async () => {
-            const user = userEvent.setup();
-            const onSelect = vi.fn();
-            const onFilter = vi.fn();
-            const onClear = vi.fn();
-            renderField({ value: { id: "empty", label: "" }, onClear, onSelect, onFilter });
-
-            await user.click(screen.getByRole("button"));
-
-            expect(onSelect).toHaveBeenCalledWith(undefined);
-            expect(onFilter).not.toHaveBeenCalled();
-            expect(onClear).toHaveBeenCalledTimes(1);
-        });
-
-        it("clear button without a value calls only onClear", async () => {
-            const user = userEvent.setup();
-            const onSelect = vi.fn();
-            const onFilter = vi.fn();
-            const onClear = vi.fn();
-            renderField({ onClear, onSelect, onFilter });
-
-            await user.click(screen.getByRole("button"));
-
-            expect(onSelect).not.toHaveBeenCalled();
-            expect(onFilter).not.toHaveBeenCalled();
+            expect(onSelect.mock.calls).toEqual(selectCalls);
+            expect(onFilter.mock.calls).toEqual(filterCalls);
             expect(onClear).toHaveBeenCalledTimes(1);
         });
 
         it("does not render the clear button without onClear", () => {
-            renderField({ value: OPTIONS[0], onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField({ value: OPTIONS[0] });
 
             expect(screen.queryByRole("button")).not.toBeInTheDocument();
         });
 
         it("applies className, data-test-id and the input data-test-id suffix", () => {
             // Суффикс захардкожен, а не взят из DataTestId: на него опираются e2e.
-            const { container } = renderField({
-                className: "custom-class",
-                "data-test-id": "suggest",
-                onSelect: vi.fn(),
-                onFilter: vi.fn(),
-            });
+            const { container } = renderField({ className: "custom-class", "data-test-id": "suggest" });
 
             expect(container.querySelector(".custom-class")).not.toBeNull();
             expect(container.querySelector('[data-test-id="suggest"]')).not.toBeNull();
@@ -238,13 +323,13 @@ describe("SuggestFieldMobile", () => {
 
     describe("dropdown", () => {
         it("does not render the dropdown content before focus", () => {
-            renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField();
 
             expect(screen.queryByRole("option")).not.toBeInTheDocument();
         });
 
         it("renders all options after focus", () => {
-            renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField();
 
             openDropdown();
 
@@ -254,7 +339,7 @@ describe("SuggestFieldMobile", () => {
         });
 
         it("marks the selected option", () => {
-            renderField({ value: OPTIONS[1], onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField({ value: OPTIONS[1] });
 
             openDropdown();
 
@@ -265,7 +350,7 @@ describe("SuggestFieldMobile", () => {
 
         it("typing in the dropdown calls onFilter", () => {
             const onFilter = vi.fn();
-            renderField({ onSelect: vi.fn(), onFilter });
+            renderField({ onFilter });
 
             openDropdown();
             fireEvent.change(getDropdownInput(), { target: { value: "fir" } });
@@ -275,7 +360,7 @@ describe("SuggestFieldMobile", () => {
 
         it("selecting an option calls onSelect and closes the dropdown", () => {
             const onSelect = vi.fn();
-            renderField({ onSelect, onFilter: vi.fn() });
+            renderField({ onSelect });
 
             openDropdown();
             fireEvent.click(screen.getByText(OPTIONS[1].label));
@@ -299,7 +384,7 @@ describe("SuggestFieldMobile", () => {
             },
         ])("closing after $scenario keeps the value", ({ props, editInput }) => {
             const onSelect = vi.fn();
-            renderField({ value: OPTIONS[0], onSelect, onFilter: vi.fn(), ...props });
+            renderField({ value: OPTIONS[0], onSelect, ...props });
 
             openDropdown();
             editInput();
@@ -311,7 +396,7 @@ describe("SuggestFieldMobile", () => {
 
         it("reopening during the close animation does not bring back the erased input", () => {
             // Содержимое ещё смонтировано, автофокус не срабатывает — поле сбрасывается на закрытии.
-            renderField({ value: OPTIONS[0], onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField({ value: OPTIONS[0] });
 
             openDropdown();
             fireEvent.change(getDropdownInput(), { target: { value: "" } });
@@ -323,20 +408,11 @@ describe("SuggestFieldMobile", () => {
 
         it("shows the label of the newly selected option in the dropdown input, not the previous one", () => {
             // Сброс поля на закрытии не должен перетереть label только что выбранной опции.
+            const fieldProps = getFieldProps();
             const ControlledField = () => {
                 const [value, setValue] = React.useState<ISuggestFieldOption | undefined>(OPTIONS[0]);
 
-                return (
-                    <SuggestFieldMobile
-                        value={value}
-                        options={OPTIONS}
-                        tooltipHint="Hint"
-                        tooltipOpen={false}
-                        inputProps={{}}
-                        onSelect={setValue}
-                        onFilter={vi.fn()}
-                    />
-                );
+                return <SuggestFieldMobile {...fieldProps} value={value} onSelect={setValue} />;
             };
             render(<ControlledField />);
 
@@ -347,13 +423,20 @@ describe("SuggestFieldMobile", () => {
             expect(getDropdownInput()).toHaveValue(OPTIONS[1].label);
         });
 
-        it("reopening after the close animation does not bring back the erased input", () => {
-            renderField({ value: OPTIONS[0], onSelect: vi.fn(), onFilter: vi.fn() });
+        it("reopening after the close animation does not bring back the erased input", async () => {
+            const onPostDeactivate = vi.fn();
+            renderField({
+                value: OPTIONS[0],
+                dropdownProps: { pullerProps: { focusTrapProps: { focusTrapOptions: { onPostDeactivate } } } },
+            });
 
             openDropdown();
             fireEvent.change(getDropdownInput(), { target: { value: "" } });
             fireEvent.click(getDropdownCloseButton());
             finishCloseAnimation();
+            // Ловушка шторки завершает деактивацию (возврат фокуса) асинхронно: до onPostDeactivate фокус
+            // поля считается возвратным и шторку не открывает. Пользователь раньше и не успеет.
+            await waitFor(() => expect(onPostDeactivate).toHaveBeenCalled());
             openDropdown();
 
             expect(getDropdownInput()).toHaveValue(OPTIONS[0].label);
@@ -361,7 +444,7 @@ describe("SuggestFieldMobile", () => {
 
         it("clearInputOnFocus clears the dropdown input that is autofocused on open and resets the filter", () => {
             const onFilter = vi.fn();
-            renderField({ value: OPTIONS[0], clearInputOnFocus: true, onSelect: vi.fn(), onFilter });
+            renderField({ value: OPTIONS[0], clearInputOnFocus: true, onFilter });
 
             openDropdown();
 
@@ -370,7 +453,7 @@ describe("SuggestFieldMobile", () => {
         });
 
         it("keeps the selected label in the dropdown input without clearInputOnFocus", () => {
-            renderField({ value: OPTIONS[0], onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField({ value: OPTIONS[0] });
 
             openDropdown();
             fireEvent.focus(getDropdownInput());
@@ -381,7 +464,7 @@ describe("SuggestFieldMobile", () => {
         // Поле ввода и отфильтрованный список не должны расходиться после возврата фокуса.
         it("refocusing the dropdown input keeps the typed query without clearInputOnFocus", () => {
             const onFilter = vi.fn();
-            renderField({ value: OPTIONS[0], onSelect: vi.fn(), onFilter });
+            renderField({ value: OPTIONS[0], onFilter });
 
             openDropdown();
             fireEvent.change(getDropdownInput(), { target: { value: "sec" } });
@@ -394,7 +477,7 @@ describe("SuggestFieldMobile", () => {
 
         it("refocusing the dropdown input with clearInputOnFocus clears the typed query and the filter", () => {
             const onFilter = vi.fn();
-            renderField({ value: OPTIONS[0], clearInputOnFocus: true, onSelect: vi.fn(), onFilter });
+            renderField({ value: OPTIONS[0], clearInputOnFocus: true, onFilter });
 
             openDropdown();
             fireEvent.change(getDropdownInput(), { target: { value: "sec" } });
@@ -407,7 +490,7 @@ describe("SuggestFieldMobile", () => {
 
         it("clearInputOnFocus does not call onFilter when the dropdown input is already empty", () => {
             const onFilter = vi.fn();
-            renderField({ onSelect: vi.fn(), onFilter, clearInputOnFocus: true });
+            renderField({ onFilter, clearInputOnFocus: true });
 
             openDropdown();
 
@@ -415,7 +498,7 @@ describe("SuggestFieldMobile", () => {
         });
 
         it("tooltipOpen shows the hint instead of the list", () => {
-            renderField({ tooltipOpen: true, onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField({ tooltipOpen: true });
 
             openDropdown();
 
@@ -425,7 +508,7 @@ describe("SuggestFieldMobile", () => {
 
         it("calls onScrollEnd when the list is scrolled to the end", () => {
             const onScrollEnd = vi.fn();
-            renderField({ onScrollEnd, onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField({ onScrollEnd });
 
             openDropdown();
             scrollBodyToEnd();
@@ -435,7 +518,7 @@ describe("SuggestFieldMobile", () => {
 
         it("does not call onScrollEnd while the list is loading", () => {
             const onScrollEnd = vi.fn();
-            renderField({ onScrollEnd, dropdownListLoading: true, onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField({ onScrollEnd, dropdownListLoading: true });
 
             openDropdown();
             scrollBodyToEnd();
@@ -444,11 +527,7 @@ describe("SuggestFieldMobile", () => {
         });
 
         it("dropdownProps.pullerProps are passed to the puller without replacing its content", () => {
-            renderField({
-                dropdownProps: { pullerProps: { className: "custom-puller" } },
-                onSelect: vi.fn(),
-                onFilter: vi.fn(),
-            });
+            renderField({ dropdownProps: { pullerProps: { className: "custom-puller" } } });
 
             openDropdown();
 
@@ -458,11 +537,7 @@ describe("SuggestFieldMobile", () => {
 
         it("ignores desktop dropdownProps and does not pass them to the DOM", () => {
             const consoleError = spyConsoleError();
-            renderField({
-                dropdownProps: { className: "custom-dropdown" },
-                onSelect: vi.fn(),
-                onFilter: vi.fn(),
-            });
+            renderField({ dropdownProps: { className: "custom-dropdown" } });
 
             openDropdown();
 
@@ -474,7 +549,7 @@ describe("SuggestFieldMobile", () => {
         it("dropdownProps.onOpen and onClose are called when the puller opens and closes", () => {
             const onOpen = vi.fn();
             const onClose = vi.fn();
-            renderField({ dropdownProps: { onOpen, onClose }, onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField({ dropdownProps: { onOpen, onClose } });
 
             expect(onOpen).not.toHaveBeenCalled();
 
@@ -492,7 +567,7 @@ describe("SuggestFieldMobile", () => {
         it("opens the puller with options regardless of the screen width", () => {
             mockScreen(false);
             onTestFinished(() => mockScreen());
-            renderField({ onSelect: vi.fn(), onFilter: vi.fn() });
+            renderField();
 
             openDropdown();
 

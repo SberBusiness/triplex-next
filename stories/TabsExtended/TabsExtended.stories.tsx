@@ -206,6 +206,8 @@ export const VisualTests: StoryObj<typeof TabsExtended> = {
         const tabs = await canvas.findAllByRole("tab");
 
         // Клик задаёт точку отсчёта, переход по Tab включает :focus-visible на следующем табе.
+        // На xs открытый Dropdown — это Puller с ловушкой фокуса: Tab уводит фокус на кнопку закрытия шторки,
+        // поэтому focus-visible на табе попадает в скриншот только на xl.
         await userEvent.click(tabs[0]);
         await userEvent.tab();
     },

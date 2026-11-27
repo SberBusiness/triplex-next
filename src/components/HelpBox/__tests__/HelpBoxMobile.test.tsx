@@ -1,11 +1,21 @@
 import React from "react";
 import { describe, it, expect, vi, beforeAll } from "vitest";
 import { render, screen, within } from "@testing-library/react";
+import type { FocusTrapProps } from "focus-trap-react";
 import { HelpBox } from "../HelpBox";
 import { ETooltipSize } from "../../Tooltip/enums";
 
 vi.mock("focus-trap-react", () => {
-    const FocusTrap = ({ children }: { children?: React.ReactNode }) => <div data-testid="focus-trap">{children}</div>;
+    // Ловушки различаем по props: HelpBox передаёт containerElements, Puller — шторку в children.
+    const FocusTrap = ({
+        active,
+        children,
+        containerElements,
+    }: Pick<FocusTrapProps, "active" | "children" | "containerElements">) => (
+        <div data-testid={containerElements ? "helpbox-focus-trap" : "puller-focus-trap"} data-active={active}>
+            {children}
+        </div>
+    );
     return { FocusTrap, default: FocusTrap };
 });
 
@@ -70,7 +80,7 @@ describe("HelpBox (мобильная версия)", () => {
         expect(screen.getByText("Контент подсказки")).toBeInTheDocument();
     });
 
-    it("does not render focus trap on mobile", () => {
+    it("delegates focus trapping to Puller on mobile", () => {
         render(
             <HelpBox
                 tooltipSize={ETooltipSize.LG}
@@ -82,6 +92,10 @@ describe("HelpBox (мобильная версия)", () => {
             </HelpBox>,
         );
 
-        expect(screen.queryByTestId("focus-trap")).not.toBeInTheDocument();
+        // Собственная ловушка HelpBox — только для desktop; на mobile фокус удерживает шторка Puller.
+        expect(screen.queryByTestId("helpbox-focus-trap")).not.toBeInTheDocument();
+        const pullerFocusTrap = screen.getByTestId("puller-focus-trap");
+        expect(pullerFocusTrap).toHaveAttribute("data-active", "true");
+        expect(pullerFocusTrap).toContainElement(screen.getByRole("dialog"));
     });
 });

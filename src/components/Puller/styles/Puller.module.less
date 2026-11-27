@@ -7,6 +7,10 @@
     bottom: 0;
     left: 0;
     z-index: @z-index-dropdown;
+
+    &.closing {
+        pointer-events: none;
+    }
 }
 
 .pullerBackdrop {
@@ -88,6 +92,7 @@
         background: var(--triplex-next-PullerList-Selected_Background);
     }
 
+    &.active,
     &:active {
         background-color: var(--triplex-next-PullerList-Active_Background);
     }

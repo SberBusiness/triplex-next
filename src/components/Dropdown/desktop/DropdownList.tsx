@@ -1,21 +1,19 @@
 import React, { useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 import { findLast } from "lodash-es";
-import { EVENT_KEY_CODES } from "@sberbusiness/triplex-next/utils/keyboard";
 import { LoaderSmall, ELoaderSmallTheme } from "@sberbusiness/triplex-next/components/Loader";
 import { EComponentSize } from "@sberbusiness/triplex-next/enums/EComponentSize";
-import { DropdownListItem } from "./DropdownListItem";
+import { DropdownListItem, IDropdownListItemProps } from "./DropdownListItem";
 import { DropdownListItemsContext, IDropdownListItemsContext } from "./DropdownListItemsContext";
+import { scrollListToItem, scrollListToTop } from "./utils";
+import { DropdownListContext } from "../DropdownListContext";
 import {
     TActiveListItemId,
+    createListKeyDownHandler,
     getListItemElement,
     getListItemsProps,
-    getNextActiveListItemId,
     resolveActiveListItemId,
-    scrollListToItem,
-    scrollListToTop,
-} from "./utils";
-import { DropdownListContext } from "../DropdownListContext";
+} from "../listUtils";
 import { createSizeToClassNameMap } from "../../../utils/classNameMaps";
 import { mergeRefs } from "../../../utils/refs";
 import styles from "../styles/DropdownDesktopList.module.less";
@@ -41,9 +39,6 @@ export interface IDropdownListComponent extends React.ForwardRefExoticComponent<
 // Соответствие размера имени класса.
 const sizeToClassNameMap = createSizeToClassNameMap(styles);
 
-/** Клавиши выбора активного элемента, если у элемента не задан keyCodesForSelection. */
-const KEY_CODES_FOR_SELECTION_DEFAULT = [EVENT_KEY_CODES.SPACE, EVENT_KEY_CODES.ENTER];
-
 /** Идентификатор служебного элемента списка с лоадером. */
 const LOADER_ITEM_ID = "dropdown-desktop-list-loader-item";
 
@@ -68,7 +63,7 @@ export const DropdownList: IDropdownListComponent = Object.assign(
         const containerRef = useRef<HTMLDivElement>(null);
         const combinedRef = useMemo(() => mergeRefs(ref, containerRef), [ref, containerRef]);
 
-        const listItemsProps = getListItemsProps(children);
+        const listItemsProps = getListItemsProps<IDropdownListItemProps>(children);
         const listItemIds = listItemsProps.map(({ id }) => id);
         // Если выбранных элементов несколько, берётся последний.
         const selectedListItemId = findLast(listItemsProps, ({ selected }) => !!selected)?.id;
@@ -89,10 +84,10 @@ export const DropdownList: IDropdownListComponent = Object.assign(
         }
 
         // Активный элемент хранится по id: при фильтрации и подгрузке опций подсветка остаётся на той же опции.
+        // Пока этой опции нет в списке, подсвечивается первая; когда опция вернётся, подсветка перейдёт на неё.
         const activeListItemId = resolveActiveListItemId(listItemIds, activeListItemIdState);
-        const activeListItemProps = listItemsProps.find(({ id }) => id === activeListItemId);
 
-        // Без зависимостей: обработчик замыкает актуальные id и props активного элемента, а регистрация —
+        // Без зависимостей: обработчик замыкает актуальные props элементов, а регистрация —
         // лишь запись в ref. Layout-эффект — чтобы следующее нажатие не застало устаревший активный элемент
         // (в React 17 пассивные эффекты выполняются после отрисовки).
         useLayoutEffect(() => {
@@ -100,45 +95,15 @@ export const DropdownList: IDropdownListComponent = Object.assign(
                 return;
             }
 
-            return registerKeyDownHandler((event) => {
-                if (event.keyCode === EVENT_KEY_CODES.ARROW_DOWN || event.keyCode === EVENT_KEY_CODES.ARROW_UP) {
-                    const nextActiveListItemId = getNextActiveListItemId(
-                        listItemIds,
-                        activeListItemId,
-                        event.keyCode === EVENT_KEY_CODES.ARROW_DOWN ? "next" : "previous",
-                    );
-
-                    // В списке без элементов перемещаться некуда: клавиша остаётся управляющему элементу.
-                    if (nextActiveListItemId === undefined) {
-                        return false;
-                    }
-
-                    event.preventDefault();
+            return registerKeyDownHandler(
+                createListKeyDownHandler(listItemsProps, activeListItemId, (nextActiveListItemId) => {
                     scrollListToItem(
                         containerRef.current,
                         getListItemElement(containerRef.current, nextActiveListItemId),
                     );
                     setActiveListItemId(nextActiveListItemId);
-
-                    return true;
-                }
-
-                if (!activeListItemProps) {
-                    return false;
-                }
-
-                const keyCodesForSelection =
-                    activeListItemProps.keyCodesForSelection ?? KEY_CODES_FOR_SELECTION_DEFAULT;
-
-                if (keyCodesForSelection.includes(event.keyCode)) {
-                    event.preventDefault();
-                    activeListItemProps.onSelect?.();
-
-                    return true;
-                }
-
-                return false;
-            });
+                }),
+            );
         });
 
         // Прокрутка списка к выбранному элементу при открытии.

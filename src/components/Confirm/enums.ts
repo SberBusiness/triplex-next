@@ -10,4 +10,6 @@ export enum EConfirmParentComponent {
     SIDE_OVERLAY_MD = "sideOverlayMD",
     /** LightBoxSideOverlay размера LG. */
     SIDE_OVERLAY_LG = "sideOverlayLG",
+    /** LightBoxSideOverlay размера XL. */
+    SIDE_OVERLAY_XL = "sideOverlayXL",
 }

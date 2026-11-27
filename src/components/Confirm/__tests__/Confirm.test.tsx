@@ -13,6 +13,7 @@ const PARENT_COMPONENT_CLASS_NAMES: Record<EConfirmParentComponent, string> = {
     [EConfirmParentComponent.SIDE_OVERLAY_SM]: "isInSideOverlaySM",
     [EConfirmParentComponent.SIDE_OVERLAY_MD]: "isInSideOverlayMD",
     [EConfirmParentComponent.SIDE_OVERLAY_LG]: "isInSideOverlayLG",
+    [EConfirmParentComponent.SIDE_OVERLAY_XL]: "isInSideOverlayXL",
 };
 
 describe("Confirm", () => {

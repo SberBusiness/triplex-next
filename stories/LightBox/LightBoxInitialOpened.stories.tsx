@@ -15,6 +15,8 @@ import { FocusTrapUtils } from "../../src/utils/focus/FocusTrapUtils";
 import { EComponentSize } from "../../src/enums/EComponentSize";
 import { Spoiler } from "../../src/components/Spoiler";
 import "./styles.less";
+import { ELightBoxSize } from "../../src/components/LightBox/enums";
+import { SideOverlayVisualTestsRender } from "./examples";
 
 const STORY_META_DESCRIPTION = `
 Компонент **LightBox** отображает крупный контент поверх страницы. Структура включает заголовок, тело, футер и дополнительные оверлеи.
@@ -24,6 +26,7 @@ const STORY_META_DESCRIPTION = `
 const meta = {
     title: "Components/LightBox/LightBoxInitialOpened",
     component: LightBox,
+    tags: ["visual-test", "!autodocs"],
     parameters: {
         layout: "fullscreen",
         docs: {
@@ -216,10 +219,33 @@ export const Default: Story = {
     render: () => <LightBoxInitialOpenedStory />,
     parameters: {
         controls: { disable: true },
-        docs: {
-            description: {
-                story: "Базовая конфигурация LightBox с активными контролами и липкими шапкой и футером.",
-            },
-        },
     },
+};
+
+// На XS все размеры выглядят одинаково, поэтому мобильный снимок остаётся у MD.
+const DESKTOP_SIDE_OVERLAY_VISUAL_PARAMETERS = {
+    testRunner: { skipViewports: ["xs"] },
+    controls: { disable: true },
+};
+
+export const SideOverlaySMVisualTests: Story = {
+    render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.SM} />,
+    parameters: DESKTOP_SIDE_OVERLAY_VISUAL_PARAMETERS,
+};
+
+export const SideOverlayMDVisualTests: Story = {
+    render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.MD} />,
+    parameters: {
+        controls: { disable: true },
+    },
+};
+
+export const SideOverlayLGVisualTests: Story = {
+    render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.LG} />,
+    parameters: DESKTOP_SIDE_OVERLAY_VISUAL_PARAMETERS,
+};
+
+export const SideOverlayXLVisualTests: Story = {
+    render: () => <SideOverlayVisualTestsRender size={ELightBoxSize.XL} />,
+    parameters: DESKTOP_SIDE_OVERLAY_VISUAL_PARAMETERS,
 };

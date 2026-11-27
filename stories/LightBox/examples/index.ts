@@ -21,3 +21,4 @@ export * from "./WithTopOverlayExample";
 export { default as WithTopOverlayExampleSource } from "./WithTopOverlayExample?raw";
 export * from "./WithTopOverlayInSideOverlayExample";
 export { default as WithTopOverlayInSideOverlayExampleSource } from "./WithTopOverlayInSideOverlayExample?raw";
+export { SideOverlayVisualTests as SideOverlayVisualTestsRender } from "./SideOverlayVisualTests";

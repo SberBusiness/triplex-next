@@ -273,7 +273,7 @@ afterEach(() => {
 
 ### Как работает
 
-- **Каждая story** автоматически снимается на двух viewport'ах: `xs` (575px) и `xl` (1200px).
+- По умолчанию каждая story снимается на двух viewport'ах: `xs` (575px) и `xl` (1200px). Отдельные viewport'ы можно исключить через `testRunner.skipViewports` в параметрах story.
 - Скриншоты сравниваются с baseline в `__screenshots__/`.
 - Baseline **только из Docker/CI** (Linux). Никогда не коммить скриншоты с локальной macOS.
 

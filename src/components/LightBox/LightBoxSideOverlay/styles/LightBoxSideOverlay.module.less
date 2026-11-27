@@ -52,7 +52,7 @@
         border-top-right-radius: @sideOverlayBorderRadius;
         background-color: var(--triplex-next-LightBox-SideOverlay_Background);
 
-        width: 1100px;
+        width: 1200px;
         max-width: calc(100% - 32px);
         margin: 16px auto 0;
         display: flex;
@@ -86,6 +86,12 @@
         max-width: 100%;
     }
 
+    &.xl .global-page {
+        width: @sideOverlayXLWidth;
+        // На мобильном устройстве, ширина не более ширины экрана.
+        max-width: 100%;
+    }
+
     .lightBoxSideOverlayBase {
         overflow: visible;
         bottom: auto;
@@ -95,21 +101,23 @@
     @media (max-width: @screen-sm-max) {
         .lightBoxSideOverlayContent {
             margin-top: 28px;
+            padding-top: 8px;
             max-width: 100%;
             border-top-left-radius: @sideOverlayBorderRadiusMobile;
             border-top-right-radius: @sideOverlayBorderRadiusMobile;
-        }
 
-        // На мобильных устройствах блок с кнопкой закрыть не должен уезжать на вторую строку.
-        .global-HeaderTitleControls {
-            position: absolute;
-            top: 0;
-            right: 0;
-        }
+            // На мобильных устройствах блок с кнопкой закрыть не должен уезжать на вторую строку.
+            .global-HeaderTitleControls {
+                position: absolute;
+                top: 0;
+                right: 0;
+                margin-top: 0;
+            }
 
-        .global-HeaderTitleContent {
-            // На мобильных устройствах отступ справа, чтобы не наезжать на кнопку закрыть.
-            padding-right: 40px !important;
+            .global-HeaderTitleContent {
+                // На мобильных устройствах отступ справа, чтобы не наезжать на кнопку закрыть.
+                padding-right: 52px;
+            }
         }
     }
 }

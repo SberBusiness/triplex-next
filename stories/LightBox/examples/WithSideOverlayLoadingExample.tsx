@@ -18,6 +18,7 @@ import {
     EIslandType,
     FocusTrapUtils,
     EComponentSize,
+    ELightBoxSize,
 } from "@sberbusiness/triplex-next";
 
 const POEM_LINES: string[] = [
@@ -74,7 +75,7 @@ export const WithSideOverlayLoadingExample = () => {
         <LightBox.SideOverlay
             key="sideOverlayLG"
             opened={openedSideOverlayLG}
-            size={EComponentSize.LG}
+            size={ELightBoxSize.LG}
             isTopLevelSideOverlayOpened={false}
             isLoading={isLoading}
         >

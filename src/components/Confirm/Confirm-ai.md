@@ -57,6 +57,7 @@ version: "1.0"
 | `SIDE_OVERLAY_SM` | `LightBoxSideOverlay` SM | 520px |
 | `SIDE_OVERLAY_MD` | `LightBoxSideOverlay` MD | 680px |
 | `SIDE_OVERLAY_LG` | `LightBoxSideOverlay` LG | 800px |
+| `SIDE_OVERLAY_XL` | `LightBoxSideOverlay` XL | 992px |
 
 `--lightBox-content-max-width` выставляет сам `LightBox` в зависимости от своего размера
 (664 / 864 / 1064 / 1264px), поэтому вариант `LIGHTBOX` подстраивается под лайтбокс, а не
@@ -122,7 +123,7 @@ version: "1.0"
   опираются тесты и accessibility-контракт.
 - **Публичный API:** `Confirm`, `IConfirmProps`, `IConfirmFC`, `EConfirmParentComponent`
   экспортируются из `src/components/Confirm/index.ts`. Значения enum — строки `lightBox`,
-  `sideOverlaySM`, `sideOverlayMD`, `sideOverlayLG`. Части доступны только как статики
+  `sideOverlaySM`, `sideOverlayMD`, `sideOverlayLG`, `sideOverlayXL`. Части доступны только как статики
   (`Confirm.Close` / `.Content` / `.Controls`), из barrel они не экспортируются — их типы
   (`IConfirmCloseProps`, `IConfirmContentProps`, `IConfirmControlsProps` и др.) живут в
   `components/`.
@@ -214,3 +215,4 @@ version: "1.0"
 | Дата | Изменение |
 |---|---|
 | 2026-09-15 | Создан документ. AI-рефакторинг: `Confirm`, `Confirm.Content`, `Confirm.Content.Title`, `Confirm.Content.SubTitle`, `Confirm.Controls` и `Confirm.Close` переведены с `React.FC` на `forwardRef` (статики сохранены через `Object.assign`), JSDoc на props, значениях `EConfirmParentComponent` и компонентах, `className` больше не идёт перед базовыми классами в `clsx`. Добавлены unit-тесты (34) и stories `stories/Confirm/`. Публичный API не изменён. |
+| 2026-11-27 | Добавлен `EConfirmParentComponent.SIDE_OVERLAY_XL` с максимальной шириной 992px. |

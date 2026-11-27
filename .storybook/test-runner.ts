@@ -77,14 +77,20 @@ const config: TestRunnerConfig = {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         await page.waitForFunction(() => typeof (globalThis as any).__getContext === "function", { timeout: 10000 });
         const storyContext = await getStoryContext(page, context);
+        const testRunner = storyContext.parameters?.testRunner;
 
-        if (storyContext.parameters?.testRunner?.skip) {
+        if (testRunner?.skip) {
             return;
         }
 
-        const hoverSelector: unknown = storyContext.parameters?.testRunner?.hoverSelector;
+        const hoverSelector: unknown = testRunner?.hoverSelector;
+        const skipViewports: unknown = testRunner?.skipViewports;
 
         for (const viewport of VISUAL_TEST_VIEWPORTS) {
+            if (Array.isArray(skipViewports) && skipViewports.includes(viewport.name)) {
+                continue;
+            }
+
             await page.setViewportSize({ width: viewport.width, height: 768 });
             await remountAndSettle(page, context.id);
 

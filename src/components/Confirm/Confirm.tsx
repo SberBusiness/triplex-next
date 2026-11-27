@@ -40,6 +40,7 @@ const PARENT_COMPONENT_TO_CLASS_NAME_MAP: Record<EConfirmParentComponent, string
     [EConfirmParentComponent.SIDE_OVERLAY_SM]: styles.isInSideOverlaySM,
     [EConfirmParentComponent.SIDE_OVERLAY_MD]: styles.isInSideOverlayMD,
     [EConfirmParentComponent.SIDE_OVERLAY_LG]: styles.isInSideOverlayLG,
+    [EConfirmParentComponent.SIDE_OVERLAY_XL]: styles.isInSideOverlayXL,
 };
 
 /**

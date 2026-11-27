@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import React from "react";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { LightBoxSideOverlay } from "../LightBoxSideOverlay/LightBoxSideOverlay";
-import { EComponentSize } from "../../../enums/EComponentSize";
+import { ELightBoxSize } from "../enums";
 import styles from "../LightBoxSideOverlay/styles/LightBoxSideOverlay.module.less";
 import loaderStyles from "../LightBoxSideOverlay/styles/LightBoxSideOverlayLoader.module.less";
 
@@ -54,9 +54,10 @@ describe("LightBoxSideOverlay", () => {
     });
 
     it.each([
-        [EComponentSize.SM, "sm"],
-        [EComponentSize.MD, "md"],
-        [EComponentSize.LG, "lg"],
+        [ELightBoxSize.SM, "sm"],
+        [ELightBoxSize.MD, "md"],
+        [ELightBoxSize.LG, "lg"],
+        [ELightBoxSize.XL, "xl"],
     ])("applies size class for size %s", (size, expectedClass) => {
         render(
             <LightBoxSideOverlay opened size={size}>

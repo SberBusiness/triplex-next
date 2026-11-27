@@ -1,26 +1,14 @@
-/** Тип SmartSpot. Задаёт цвета и набор пятен. */
-export enum ESmartSpotType {
-    /** Успешное завершение. */
-    SUCCESS = "success",
-    /** Предупреждение. */
-    WARNING = "warning",
-    /** Ошибка. */
-    ERROR = "error",
-    /** Ожидание, системный статус. */
-    WAITING = "waiting",
-}
-
 /** Пресет анимации SmartSpot. */
 export enum ESmartSpotAnimation {
-    /** Медленный дрейф слоя пятен по эллипсу. */
+    /** Медленный дрейф фигуры по эллипсу. */
     DRIFT = "drift",
-    /** Пульсация размера каждого пятна. */
+    /** Пульсация размера фигуры. */
     BREATHING = "breathing",
     /** Без анимации. */
     NONE = "none",
 }
 
-/** Форма пятен SmartSpot. */
+/** Форма пятна SmartSpot. */
 export enum ESmartSpotShape {
     /** Круг. */
     CIRCLE = "circle",

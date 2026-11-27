@@ -1,10 +1,9 @@
-export { Playground as PlaygroundRender, type PlaygroundArgs } from "./Playground";
+export { Playground as PlaygroundRender, PLAYGROUND_COLORS, type PlaygroundArgs } from "./Playground";
 export { Default as DefaultRender } from "./Default";
 export { default as DefaultSource } from "./Default?raw";
-export { Types as TypesRender } from "./Types";
-export { default as TypesSource } from "./Types?raw";
 export { Shapes as ShapesRender } from "./Shapes";
 export { default as ShapesSource } from "./Shapes?raw";
 export { Animations as AnimationsRender } from "./Animations";
 export { default as AnimationsSource } from "./Animations?raw";
-export { VisualTests as VisualTestsRender } from "./VisualTests";
+export { Example as ExampleRender } from "./Example";
+export { default as ExampleSource } from "./Example?raw";

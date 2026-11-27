@@ -1,13 +1,13 @@
 import { BREATHING_PRESET, DRIFT_PRESET } from "./consts";
 import { ESmartSpotAnimation } from "./enums";
 
-/** Кадр анимации: сдвиг слоя пятен и масштаб каждого пятна. */
+/** Кадр анимации: сдвиг и масштаб фигуры. */
 export interface ISmartSpotFrame {
-    /** Сдвиг слоя пятен по горизонтали, px. */
+    /** Сдвиг фигуры по горизонтали, px. */
     x: number;
-    /** Сдвиг слоя пятен по вертикали, px. */
+    /** Сдвиг фигуры по вертикали, px. */
     y: number;
-    /** Масштаб каждого пятна. */
+    /** Масштаб фигуры. */
     scale: number;
 }
 
@@ -38,7 +38,7 @@ export const getSmartSpotDuration = (animation: ESmartSpotAnimation, duration?: 
 
 /**
  * Возвращает кадр анимации в момент t (мс).
- * Drift двигает слой пятен по эллипсу, Breathing масштабирует каждое пятно, None — статичный кадр.
+ * Drift двигает фигуру по эллипсу, Breathing масштабирует её на месте, None — статичный кадр.
  * distance и duration переопределяют значения пресета; пропорции эллипса сохраняются.
  */
 export const getSmartSpotFrame = (
